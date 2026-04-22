@@ -22,7 +22,7 @@
     </script>
     <title>Login — G11 Fashion & Toys</title>
 </head>
-<body class="font-inter min-h-screen overflow-x-hidden relative bg-slate-900">
+<body class="font-inter min-h-screen overflow-x-hidden relative bg-slate-50">
 
     <!-- Toast Container -->
     <div id="toastContainer" class="fixed top-5 right-5 z-[9999] max-w-sm space-y-2 pointer-events-none"></div>
@@ -47,41 +47,17 @@
     </script>
     {% endif %}
 
-    <!-- ══════ FULL-PAGE 3D ANIMATED BACKGROUND ══════ -->
-    <div class="lg-bg-wrapper">
-        <!-- Gradient overlay -->
-        <div class="absolute inset-0 bg-gradient-to-br from-slate-900/95 via-indigo-950/90 to-slate-900/95 z-[1]"></div>
-
-        <!-- Particle canvas (full screen) -->
-        <canvas id="loginParticles" class="absolute inset-0 w-full h-full z-[2] pointer-events-none"></canvas>
-
-        <!-- Floating geometric shapes -->
-        <div class="absolute inset-0 z-[3] overflow-hidden pointer-events-none" aria-hidden="true">
-            <div class="lg-shape lg-shape-1"></div>
-            <div class="lg-shape lg-shape-2"></div>
-            <div class="lg-shape lg-shape-3"></div>
-            <div class="lg-shape lg-shape-4"></div>
-            <div class="lg-shape lg-shape-5"></div>
-            <div class="lg-shape lg-shape-6"></div>
-            <div class="lg-shape lg-shape-7"></div>
-            <div class="lg-shape lg-shape-8"></div>
-        </div>
-
-        <!-- Animated grid lines -->
-        <div class="lg-grid-overlay"></div>
-    </div>
-
     <!-- ══════ LOGIN FORM CARD ══════ -->
     <div class="relative z-10 min-h-screen flex items-center justify-center px-4 py-12">
         <div class="lg-card reveal-lg" style="--d:0">
 
             <!-- Header -->
             <div class="text-center mb-8 reveal-lg" style="--d:1">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/30 mb-4">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-500 to-blue-600 shadow-lg shadow-sky-500/30 mb-4">
                     <i class="bi bi-shield-lock-fill text-white text-2xl"></i>
                 </div>
-                <h1 class="text-2xl font-extrabold text-white tracking-tight">Welcome Back</h1>
-                <p class="text-white/50 text-sm mt-1">Sign in to your G11 account</p>
+                <h1 class="text-2xl font-extrabold text-slate-800 tracking-tight">Welcome Back</h1>
+                <p class="text-slate-500 text-sm mt-1">Sign in to your G11 account</p>
             </div>
 
             <!-- Google OAuth Button -->
@@ -99,9 +75,9 @@
 
             <!-- Divider -->
             <div class="flex items-center gap-3 my-6 reveal-lg" style="--d:3">
-                <div class="flex-1 h-px bg-white/10"></div>
-                <span class="text-white/30 text-xs font-medium uppercase tracking-wider">or sign in with email</span>
-                <div class="flex-1 h-px bg-white/10"></div>
+                <div class="flex-1 h-px bg-slate-200"></div>
+                <span class="text-slate-400 text-xs font-medium uppercase tracking-wider">or sign in with email</span>
+                <div class="flex-1 h-px bg-slate-200"></div>
             </div>
 
             <!-- Login Form -->
@@ -129,10 +105,10 @@
                 <!-- Remember & Forgot -->
                 <div class="flex items-center justify-between reveal-lg" style="--d:6">
                     <label class="flex items-center gap-2 cursor-pointer group">
-                        <input type="checkbox" name="remember" class="w-4 h-4 rounded border-white/20 bg-white/5 text-indigo-500 focus:ring-indigo-500/40">
-                        <span class="text-white/40 text-sm group-hover:text-white/60 transition-colors">Remember me</span>
+                        <input type="checkbox" name="remember" class="w-4 h-4 rounded border-slate-300 bg-white text-sky-600 focus:ring-sky-500/40">
+                        <span class="text-slate-500 text-sm group-hover:text-slate-700 transition-colors">Remember me</span>
                     </label>
-                    <a href="{% url 'password_reset' %}" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium transition-colors">
+                    <a href="{% url 'password_reset' %}" class="text-sky-600 hover:text-sky-700 text-sm font-medium transition-colors">
                         Forgot password?
                     </a>
                 </div>
@@ -147,11 +123,11 @@
 
             <!-- Footer Links -->
             <div class="text-center mt-8 space-y-2 reveal-lg" style="--d:8">
-                <p class="text-white/40 text-sm">
+                <p class="text-slate-500 text-sm">
                     Don't have an account?
-                    <a href="{% url 'signup' %}" class="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors">Sign Up</a>
+                    <a href="{% url 'signup' %}" class="text-sky-600 hover:text-sky-700 font-semibold transition-colors">Sign Up</a>
                 </p>
-                <a href="{% url 'index' %}" class="inline-flex items-center gap-1 text-white/30 hover:text-white/60 text-xs transition-colors">
+                <a href="{% url 'index' %}" class="inline-flex items-center gap-1 text-slate-500 hover:text-slate-700 text-xs transition-colors">
                     <i class="bi bi-arrow-left"></i> Back to Home
                 </a>
             </div>
@@ -162,75 +138,6 @@
     <script>
     (function() {
         'use strict';
-
-        /* ── Particle System ── */
-        var canvas = document.getElementById('loginParticles');
-        if (canvas) {
-            var ctx = canvas.getContext('2d');
-            var W, H, particles = [], mouse = { x: null, y: null };
-
-            function resize() {
-                W = canvas.width = window.innerWidth;
-                H = canvas.height = window.innerHeight;
-            }
-            resize();
-            window.addEventListener('resize', resize);
-
-            document.addEventListener('mousemove', function(e) {
-                mouse.x = e.clientX;
-                mouse.y = e.clientY;
-            });
-
-            function Particle() {
-                this.x = Math.random() * W;
-                this.y = Math.random() * H;
-                this.r = Math.random() * 2 + 0.5;
-                this.dx = (Math.random() - 0.5) * 0.5;
-                this.dy = (Math.random() - 0.5) * 0.5;
-                this.alpha = Math.random() * 0.5 + 0.2;
-            }
-
-            for (var i = 0; i < 80; i++) particles.push(new Particle());
-
-            function draw() {
-                ctx.clearRect(0, 0, W, H);
-                particles.forEach(function(p) {
-                    if (mouse.x !== null) {
-                        var mdx = p.x - mouse.x, mdy = p.y - mouse.y;
-                        var md = Math.sqrt(mdx * mdx + mdy * mdy);
-                        if (md < 120) {
-                            p.x += mdx / md * 1.5;
-                            p.y += mdy / md * 1.5;
-                        }
-                    }
-                    p.x += p.dx;
-                    p.y += p.dy;
-                    if (p.x < 0 || p.x > W) p.dx *= -1;
-                    if (p.y < 0 || p.y > H) p.dy *= -1;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(165,180,252,' + p.alpha + ')';
-                    ctx.fill();
-                });
-
-                for (var i = 0; i < particles.length; i++) {
-                    for (var j = i + 1; j < particles.length; j++) {
-                        var dx = particles[i].x - particles[j].x;
-                        var dy = particles[i].y - particles[j].y;
-                        var dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < 140) {
-                            ctx.beginPath();
-                            ctx.moveTo(particles[i].x, particles[i].y);
-                            ctx.lineTo(particles[j].x, particles[j].y);
-                            ctx.strokeStyle = 'rgba(165,180,252,' + (0.12 * (1 - dist / 140)) + ')';
-                            ctx.stroke();
-                        }
-                    }
-                }
-                requestAnimationFrame(draw);
-            }
-            draw();
-        }
 
         /* ── Password Toggle ── */
         window.togglePw = function(id, btn) {
