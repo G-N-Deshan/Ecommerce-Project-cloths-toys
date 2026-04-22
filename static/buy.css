@@ -6,6 +6,40 @@ html {
 }
 html::-webkit-scrollbar { display: none; }
 
+/* Fixed hero background and overlap layout */
+.buy-hero {
+    position: relative;
+    background-image: url('/media/cloths-page-background.jpg');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.buy-hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.buy-categories {
+    position: relative;
+    z-index: 15;
+    margin-top: -5.5rem;
+    background: transparent;
+}
+
+.buy-categories-shell {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 1.75rem;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.15);
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
 /* Messages */
 .messages {
     position: fixed;
@@ -96,6 +130,193 @@ html::-webkit-scrollbar { display: none; }
 @keyframes cardFadeUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* Category cards (Shop by Category) */
+.category-card {
+    position: relative;
+    isolation: isolate;
+    text-decoration: none;
+    transform: translateY(0) scale(1);
+    transition: transform 0.32s ease, box-shadow 0.32s ease, border-color 0.32s ease, background 0.32s ease;
+}
+
+.category-card--fashion {
+    background: linear-gradient(160deg, #eef4ff 0%, #ffffff 52%, #f0fdfa 100%);
+    border-color: #bfdbfe;
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.08);
+}
+
+.category-card--toys {
+    background: linear-gradient(160deg, #fff1f7 0%, #ffffff 52%, #fff7ed 100%);
+    border-color: #f9a8d4;
+    box-shadow: 0 8px 24px rgba(236, 72, 153, 0.09);
+}
+
+.category-card-glow {
+    position: absolute;
+    inset: -35% auto auto -25%;
+    width: 180px;
+    height: 180px;
+    border-radius: 999px;
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(10px) scale(0.8);
+    transition: opacity 0.32s ease, transform 0.32s ease;
+    z-index: -1;
+}
+
+.category-card--fashion .category-card-glow {
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.35), rgba(56, 189, 248, 0));
+}
+
+.category-card--toys .category-card-glow {
+    background: radial-gradient(circle, rgba(244, 114, 182, 0.34), rgba(244, 114, 182, 0));
+}
+
+.category-icon-wrap {
+    width: 80px;
+    height: 80px;
+    border-radius: 18px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.28s ease, box-shadow 0.28s ease, background 0.28s ease;
+}
+
+.category-card--fashion .category-icon-wrap {
+    background: #dbeafe;
+}
+
+.category-card--toys .category-icon-wrap {
+    background: #fce7f3;
+}
+
+.category-icon-img {
+    width: 2.5rem;
+    height: 2.5rem;
+    transition: transform 0.28s ease, filter 0.28s ease;
+}
+
+.category-title {
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: #1e293b;
+    transition: color 0.28s ease;
+}
+
+.category-subtitle {
+    margin-top: 0.35rem;
+    color: #64748b;
+    font-weight: 500;
+    transition: color 0.28s ease;
+}
+
+.category-cta {
+    margin-top: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    opacity: 0;
+    transform: translateY(9px);
+    transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+.category-card:hover,
+.category-card:focus-visible {
+    transform: translateY(-8px) scale(1.015);
+}
+
+.category-card:hover .category-card-glow,
+.category-card:focus-visible .category-card-glow {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.category-card:hover .category-icon-wrap,
+.category-card:focus-visible .category-icon-wrap {
+    transform: translateY(-3px) rotate(-5deg);
+}
+
+.category-card:hover .category-icon-img,
+.category-card:focus-visible .category-icon-img {
+    transform: scale(1.12);
+    filter: brightness(0) invert(1);
+}
+
+.category-card:hover .category-subtitle,
+.category-card:focus-visible .category-subtitle {
+    color: #475569;
+}
+
+.category-card:hover .category-cta,
+.category-card:focus-visible .category-cta {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.category-card--fashion:hover,
+.category-card--fashion:focus-visible {
+    border-color: #38bdf8;
+    box-shadow: 0 18px 38px rgba(14, 165, 233, 0.28);
+    background: linear-gradient(155deg, #dff4ff 0%, #eff6ff 45%, #ffffff 100%);
+}
+
+.category-card--fashion:hover .category-icon-wrap,
+.category-card--fashion:focus-visible .category-icon-wrap {
+    background: linear-gradient(145deg, #0ea5e9, #2563eb);
+    box-shadow: 0 12px 28px rgba(14, 165, 233, 0.34);
+}
+
+.category-card--fashion:hover .category-title,
+.category-card--fashion:focus-visible .category-title,
+.category-card--fashion .category-cta {
+    color: #0369a1;
+}
+
+.category-card--toys:hover,
+.category-card--toys:focus-visible {
+    border-color: #fb7185;
+    box-shadow: 0 18px 38px rgba(244, 63, 94, 0.26);
+    background: linear-gradient(155deg, #ffe5ef 0%, #fff1f2 45%, #ffffff 100%);
+}
+
+.category-card--toys:hover .category-icon-wrap,
+.category-card--toys:focus-visible .category-icon-wrap {
+    background: linear-gradient(145deg, #f43f5e, #ec4899);
+    box-shadow: 0 12px 28px rgba(244, 63, 94, 0.34);
+}
+
+.category-card--toys:hover .category-title,
+.category-card--toys:focus-visible .category-title,
+.category-card--toys .category-cta {
+    color: #be123c;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .category-card,
+    .category-card-glow,
+    .category-icon-wrap,
+    .category-icon-img,
+    .category-title,
+    .category-subtitle,
+    .category-cta {
+        transition: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .buy-hero {
+        background-attachment: scroll;
+        background-position: center center;
+    }
+
+    .buy-categories {
+        margin-top: -3rem;
+    }
 }
 
 /* Line clamp */

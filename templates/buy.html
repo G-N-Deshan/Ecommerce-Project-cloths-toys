@@ -40,8 +40,11 @@
     {% include 'cart.html' %}
 
     <!-- ═══ HERO ═══ -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 py-16 md:py-20">
-        <div class="absolute inset-0 opacity-10" style="background-image:url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221.5%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E');"></div>
+    <section class="buy-hero relative overflow-hidden py-16 md:py-20 min-h-[56vh] md:min-h-[64vh] flex items-center">
+        <div class="buy-hero-media absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-br from-indigo-700/84 via-purple-600/76 to-fuchsia-500/74"></div>
+            <div class="absolute inset-0 opacity-20" style="background-image:url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221.5%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E');"></div>
+        </div>
         <!-- 3D Floating shapes -->
         <div class="hero-float absolute top-8 left-[10%] w-16 h-16 bg-white/10 rounded-2xl backdrop-blur-sm border border-white/20"></div>
         <div class="hero-float absolute bottom-12 right-[15%] w-20 h-20 bg-white/10 rounded-full backdrop-blur-sm border border-white/20" style="animation-delay:1s"></div>
@@ -62,31 +65,33 @@
     </section>
 
     <!-- ═══ CATEGORIES ═══ -->
-    <section class="py-12 bg-white border-b border-slate-100" data-reveal="up">
-        <div class="container mx-auto px-6">
+    <section class="buy-categories py-12 border-b border-slate-100" data-reveal="up">
+        <div class="container mx-auto px-6 buy-categories-shell">
             <div class="text-center mb-8">
                 <h2 class="text-2xl md:text-3xl font-bold font-playfair text-slate-900">Shop by Category</h2>
                 <p class="text-slate-500 mt-2">Choose your favourite section</p>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
-                <a href="{% url 'cloths' %}" class="category-card group relative overflow-hidden bg-gradient-to-br from-indigo-50 to-white rounded-2xl border border-indigo-100 p-8 text-center hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-                    <div class="w-20 h-20 bg-indigo-100 group-hover:bg-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-all duration-300">
-                        <img src="{% static 'clothes.png' %}" alt="Cloths" class="w-10 h-10 group-hover:brightness-0 group-hover:invert transition-all duration-300" loading="lazy">
+                <a href="{% url 'cloths' %}" class="category-card category-card--fashion group relative overflow-hidden rounded-2xl border p-8 text-center">
+                    <span class="category-card-glow" aria-hidden="true"></span>
+                    <div class="category-icon-wrap">
+                        <img src="{% static 'clothes.png' %}" alt="Cloths" class="category-icon-img" loading="lazy">
                     </div>
-                    <h3 class="text-xl font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">Fashion & Cloths</h3>
-                    <p class="text-sm text-slate-400 mt-1">Men, Women & Kids</p>
-                    <span class="inline-flex items-center gap-1 text-indigo-600 text-sm font-semibold mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                        Explore <i class="bi bi-arrow-right"></i>
+                    <h3 class="category-title">Fashion & Cloths</h3>
+                    <p class="category-subtitle">Men, Women & Kids</p>
+                    <span class="category-cta" aria-hidden="true">
+                        Explore <i class="bi bi-arrow-up-right"></i>
                     </span>
                 </a>
-                <a href="{% url 'toys_page' %}" class="category-card group relative overflow-hidden bg-gradient-to-br from-pink-50 to-white rounded-2xl border border-pink-100 p-8 text-center hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-                    <div class="w-20 h-20 bg-pink-100 group-hover:bg-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-all duration-300">
-                        <img src="{% static 'teddy-bear.png' %}" alt="Toys" class="w-10 h-10 group-hover:brightness-0 group-hover:invert transition-all duration-300" loading="lazy">
+                <a href="{% url 'toys_page' %}" class="category-card category-card--toys group relative overflow-hidden rounded-2xl border p-8 text-center">
+                    <span class="category-card-glow" aria-hidden="true"></span>
+                    <div class="category-icon-wrap">
+                        <img src="{% static 'teddy-bear.png' %}" alt="Toys" class="category-icon-img" loading="lazy">
                     </div>
-                    <h3 class="text-xl font-bold text-slate-800 group-hover:text-pink-600 transition-colors">Toys & Games</h3>
-                    <p class="text-sm text-slate-400 mt-1">Fun for all ages</p>
-                    <span class="inline-flex items-center gap-1 text-pink-600 text-sm font-semibold mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                        Explore <i class="bi bi-arrow-right"></i>
+                    <h3 class="category-title">Toys & Games</h3>
+                    <p class="category-subtitle">Fun for all ages</p>
+                    <span class="category-cta" aria-hidden="true">
+                        Explore <i class="bi bi-arrow-up-right"></i>
                     </span>
                 </a>
             </div>
