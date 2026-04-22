@@ -1,403 +1,113 @@
 {% load static %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'navbar.css' %}">
+<link rel="stylesheet" href="{% static 'footer.css' %}">
+<link rel="stylesheet" href="{% static 'new_arrivals.css' %}">
+<link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
 
-<link rel="stylesheet" href="{% static 'navbar.css'%}">
-    <link rel="stylesheet" href="{% static 'footer.css'%}">
-   <link rel="stylesheet" href="{% static 'shop_offers.css'%}">
-   <link rel="stylesheet" href="{% static 'scroll-reveal.css'%}">
-<style>
-    .na-shapes { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-    .na-s { position: absolute; opacity: .12; animation: naFloat 8s ease-in-out infinite; }
-    .na-s--c { width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg,#6366f1,#818cf8); top: 8%; left: 5%; animation-duration: 7s; }
-    .na-s--sq { width: 70px; height: 70px; border-radius: 14px; background: linear-gradient(135deg,#ec4899,#f472b6); bottom: 12%; right: 6%; animation-delay: 2s; animation-duration: 9s; transform: rotate(45deg); }
-    .na-s--r { width: 80px; height: 80px; border-radius: 50%; border: 4px solid rgba(245,158,11,.18); top: 45%; right: 12%; animation-delay: 3.5s; animation-duration: 10s; }
-    .na-s--rise1 { width: 50px; height: 50px; border-radius: 50%; border: 3px solid rgba(99,102,241,.2); bottom: 30%; left: 10%; animation: naRise 9s ease-in-out infinite; opacity: .15; }
-    .na-s--rise2 { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, rgba(168,85,247,.12), rgba(236,72,153,.08)); top: 20%; right: 5%; animation: naRise 7s ease-in-out infinite 2s; opacity: .15; }
-    .na-s--sparkle1 { width: 60px; height: 60px; border-radius: 50%; background: radial-gradient(circle, rgba(251,191,36,.18) 0%, transparent 70%); top: 60%; left: 3%; animation: naSparkle 5s ease-in-out infinite; opacity: .2; }
-    .na-s--sparkle2 { width: 45px; height: 45px; border-radius: 50%; background: radial-gradient(circle, rgba(99,102,241,.15) 0%, transparent 70%); bottom: 8%; right: 20%; animation: naSparkle 6s ease-in-out infinite 1.5s; opacity: .18; }
-    .na-s--streak { width: 90px; height: 2px; background: linear-gradient(90deg, transparent, rgba(165,180,252,.25), transparent); top: 35%; left: 20%; animation: naStreakMove 7s ease-in-out infinite; opacity: .2; }
-    @keyframes naFloat {
-        0%,100% { transform: translateY(0) rotate(0deg); }
-        25% { transform: translateY(-24px) rotate(5deg); }
-        50% { transform: translateY(-38px) rotate(-4deg); }
-        75% { transform: translateY(-14px) rotate(3deg); }
-    }
-    @keyframes naRise {
-        0%, 100% { transform: translateY(0) scale(1); }
-        50% { transform: translateY(-40px) scale(1.1); }
-    }
-    @keyframes naSparkle {
-        0%, 100% { transform: scale(1); opacity: .1; }
-        50% { transform: scale(1.5); opacity: .3; }
-    }
-    @keyframes naStreakMove {
-        0%, 100% { transform: translateX(0) scaleX(1); opacity: 0; }
-        50% { transform: translateX(60px) scaleX(1.8); opacity: .25; }
-    }
-    .arrivals { position: relative; z-index: 1; }
-    .arrival-card { animation: naCardUp .5s ease-out both; }
-    .arrival-card:nth-child(1) { animation-delay: .05s; }
-    .arrival-card:nth-child(2) { animation-delay: .12s; }
-    .arrival-card:nth-child(3) { animation-delay: .19s; }
-    .arrival-card:nth-child(4) { animation-delay: .26s; }
-    .arrival-card:nth-child(5) { animation-delay: .33s; }
-    .arrival-card:nth-child(6) { animation-delay: .40s; }
-    @keyframes naCardUp {
-        from { opacity: 0; transform: translateY(24px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    center h1 { position: relative; z-index: 1; }
-</style>
-     
-{% include 'navbar.html'%}
+{% include 'navbar.html' %}
 
-<!-- 3D Floating Shapes -->
-<div class="na-shapes" aria-hidden="true">
-    <div class="na-s na-s--c"></div>
-    <div class="na-s na-s--sq"></div>
-    <div class="na-s na-s--r"></div>
-    <div class="na-s na-s--rise1"></div>
-    <div class="na-s na-s--rise2"></div>
-    <div class="na-s na-s--sparkle1"></div>
-    <div class="na-s na-s--sparkle2"></div>
-    <div class="na-s na-s--streak"></div>
-</div>
+<section class="arrivals-hero" data-reveal="up">
+    <div class="arrivals-hero__overlay"></div>
+    <div class="arrivals-hero__content">
+        <p class="arrivals-eyebrow">Fresh Every Week</p>
+        <h1>New Arrivals You Will Want First</h1>
+        <p>Explore just-launched picks across kids, men, and women with quick search and smart sorting.</p>
+        <div class="arrivals-stats">
+            <article>
+                <strong>{{ total_arrivals }}</strong>
+                <span>Total arrivals</span>
+            </article>
+            <article>
+                <strong>{{ total_filtered }}</strong>
+                <span>Showing now</span>
+            </article>
+            <article>
+                <strong>{{ kids_count|add:men_count|add:women_count }}</strong>
+                <span>Category stock</span>
+            </article>
+        </div>
+    </div>
+</section>
 
-<center><h1>New Arrivals Page</h1></center>
-
- <section class="arrivals" data-reveal="up">
-        <div class="section-top">
-            <div>
-                <p class="section-small">Just dropped</p>
-                <h2>Kids New Arrivals</h2>
-                <p class="section-sub">Fresh styles and playful toys your kids will love.</p>
-            </div>
-           
+<section class="arrivals-shell" data-reveal="up">
+    <form method="get" class="arrivals-toolbar">
+        <div class="arrivals-field arrivals-field--search">
+            <label for="arrivalsSearch">Search</label>
+            <input id="arrivalsSearch" type="text" name="search" value="{{ search_query }}" placeholder="Try: denim, cotton, bundle">
         </div>
 
-        <div class="arrivals-list">
+        <div class="arrivals-field">
+            <label for="arrivalsCategory">Category</label>
+            <select id="arrivalsCategory" name="category">
+                <option value="all" {% if selected_category == 'all' %}selected{% endif %}>All categories</option>
+                <option value="kids" {% if selected_category == 'kids' %}selected{% endif %}>Kids ({{ kids_count }})</option>
+                <option value="men" {% if selected_category == 'men' %}selected{% endif %}>Men ({{ men_count }})</option>
+                <option value="women" {% if selected_category == 'women' %}selected{% endif %}>Women ({{ women_count }})</option>
+            </select>
+        </div>
 
+        <div class="arrivals-field">
+            <label for="arrivalsSort">Sort</label>
+            <select id="arrivalsSort" name="sort">
+                <option value="latest" {% if selected_sort == 'latest' %}selected{% endif %}>Latest</option>
+                <option value="rating" {% if selected_sort == 'rating' %}selected{% endif %}>Top rated</option>
+                <option value="popular" {% if selected_sort == 'popular' %}selected{% endif %}>Most reviewed</option>
+            </select>
+        </div>
 
-            {%for item in kids_arrivals%}
+        <div class="arrivals-actions">
+            <button type="submit" class="arrivals-btn arrivals-btn--primary">Apply</button>
+            <a href="{% url 'new_arrivals' %}" class="arrivals-btn arrivals-btn--ghost">Reset</a>
+        </div>
+    </form>
 
-            <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="{{ item.imageUrl.url }}" alt="{{item.title}}" loading="lazy">
-                    <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-overlay"><span>Quick View</span></a>
-                    <span class="arrival-badge">{{item.offers_badge}}</span>
-                </div>
-                <h3><a href="{% url 'product_detail' 'arrival' item.id %}" style="color:inherit;text-decoration:none">{{item.title}}</a></h3>
-                <p>{{item.description}}</p>
+    <div class="arrivals-chips">
+        <span class="arrivals-chip">Category: {% if selected_category == 'all' %}All{% else %}{{ selected_category|title }}{% endif %}</span>
+        <span class="arrivals-chip">Sort: {{ selected_sort|title }}</span>
+        {% if search_query %}<span class="arrivals-chip">Search: {{ search_query }}</span>{% endif %}
+    </div>
+
+    {% if all_arrivals %}
+    <div class="arrivals-grid">
+        {% for item in all_arrivals %}
+        <article class="arrival-card">
+            <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-media">
+                <img src="{{ item.imageUrl.url }}" alt="{{ item.title }}" loading="lazy">
+                {% if item.offers_badge %}<span class="arrival-badge">{{ item.offers_badge }}</span>{% endif %}
+            </a>
+            <div class="arrival-content">
+                <h3><a href="{% url 'product_detail' 'arrival' item.id %}">{{ item.title }}</a></h3>
+                <p>{{ item.description }}</p>
                 {% with item_rating=item.avg_rating item_review_count=item.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
                 <div class="arrival-meta">
-                    <span class="price">{{item.price}}</span>
-                    <a href="{% url 'add_to_cart' 'arrival' item.id %}" class="arrival-btn" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}">Add to cart</a>
+                    <span class="arrival-price">{{ item.price }}</span>
+                    <span class="arrival-cat">{{ item.category|title }}</span>
                 </div>
-            </article>
-
-            {% endfor %}
-
-
-
-
-            <!-- <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="../../assets/images/10.jpeg" alt="New arrival outfit">
-                    <span class="arrival-badge">New</span>
+                <div class="arrival-actions">
+                    <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-link">View details</a>
+                    <a href="{% url 'add_to_cart' 'arrival' item.id %}" class="arrival-btn arrival-btn--dark" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}">Add to cart</a>
                 </div>
-                <h3>Rainbow Hoodie Set</h3>
-                <p>Cozy layers for cool evenings.</p>
-                <div class="arrival-meta">
-                    <span class="price">Rs. 3,200</span>
-                    <a href="/G11/Html/pages/add-to-cart.php?product_id=30" class="arrival-btn">Add to cart</a>
-                </div>
-            </article>
-
-            <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="../../assets/images/5.jpeg" alt="New arrival toy">
-                    <span class="arrival-badge">New</span>
-                </div>
-                <h3>Soft Buddy Plush</h3>
-                <p>Gentle, washable plush for toddlers.</p>
-                <div class="arrival-meta">
-                    <span class="price">Rs. 1,850</span>
-                    <a href="/G11/Html/pages/add-to-cart.php?product_id=31" class="arrival-btn">Add to cart</a>
-                </div>
-            </article>
-
-            <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="../../assets/images/3.jpeg" alt="New arrival dress">
-                    <span class="arrival-badge">New</span>
-                </div>
-                <h3>Sunny Day Dress</h3>
-                <p>Lightweight and breezy for playtime.</p>
-                <div class="arrival-meta">
-                    <span class="price">Rs. 2,900</span>
-                    <a href="/G11/Html/pages/add-to-cart.php?product_id=32" class="arrival-btn">Add to cart</a>
-                </div>
-            </article>
-
-            <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="../../assets/images/5.jpeg" alt="New arrival toy">
-                    <span class="arrival-badge">New</span>
-                </div>
-                <h3>Adventure Play Toy Car</h3>
-                <p>Colorful toy car designed to inspire imaginative play.</p>
-                <div class="arrival-meta">
-                    <span class="price">Rs. 2100</span>
-                    <a href="/G11/Html/pages/add-to-cart.php?product_id=31" class="arrival-btn">Add to cart</a>
-                </div>
-            </article>
-
-            <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="../../assets/images/3.jpeg" alt="New arrival dress">
-                    <span class="arrival-badge">New</span>
-                </div>
-                <h3>Kids Party Wear Set</h3>
-                <p>Stylish outfit perfect for birthdays and special events.</p>
-                <div class="arrival-meta">
-                    <span class="price">Rs. 3750</span>
-                    <a href="/G11/Html/pages/add-to-cart.php?product_id=32" class="arrival-btn">Add to cart</a>
-                </div>
-            </article> -->
-            
-        </div>
-
-    </section>
-
-
-
-
-    <section class="arrivals" data-reveal="up">
-        <div class="section-top">
-            <div>
-                <p class="section-small">Just dropped</p>
-                <h2>Mens New Arrivals</h2>
-                <p class="section-sub">Fresh styles your boys will love.</p>
             </div>
-           
-        </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="arrivals-empty">
+        <h3>No arrivals found</h3>
+        <p>Try another category, clear search, or switch sorting.</p>
+        <a href="{% url 'new_arrivals' %}" class="arrivals-btn arrivals-btn--primary">View all arrivals</a>
+    </div>
+    {% endif %}
+</section>
 
-        <div class="arrivals-list">
+{% with page_obj=all_arrivals %}
+{% include 'includes/pagination.html' %}
+{% endwith %}
 
-
-            
-            {%for item in men_arrivals%}
-
-            <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="{{ item.imageUrl.url }}" alt="{{item.title}}" loading="lazy">
-                    <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-overlay"><span>Quick View</span></a>
-                    <span class="arrival-badge">{{item.offers_badge}}</span>
-                </div>
-                <h3><a href="{% url 'product_detail' 'arrival' item.id %}" style="color:inherit;text-decoration:none">{{item.title}}</a></h3>
-                <p>{{item.description}}</p>
-                {% with item_rating=item.avg_rating item_review_count=item.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
-                <div class="arrival-meta">
-                    <span class="price">{{item.price}}</span>
-                    <a href="{% url 'add_to_cart' 'arrival' item.id %}" class="arrival-btn" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}">Add to cart</a>
-                </div>
-            </article>
-
-            {% endfor %}
-
-
-
-
-
-
-
-
-            <!-- <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="../../assets/images/10.jpeg" alt="New arrival outfit">
-                    <span class="arrival-badge">New</span>
-                </div>
-                <h3>Urban Flex T-Shirt</h3>
-                <p>Lightweight cotton t-shirt designed for everyday comfort and modern style.</p>
-                <div class="arrival-meta">
-                    <span class="price">Rs. 2,450</span>
-                    <a href="/G11/Html/pages/add-to-cart.php?product_id=30" class="arrival-btn">Add to cart</a>
-                </div>
-            </article>
-
-            <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="../../assets/images/5.jpeg" alt="New arrival toy">
-                    <span class="arrival-badge">New</span>
-                </div>
-                <h3>Smart Casual Linen Shirt</h3>
-                <p>Breathable linen shirt perfect for office and weekend wear.</p>
-                <div class="arrival-meta">
-                    <span class="price">Rs. 4,200</span>
-                    <a href="/G11/Html/pages/add-to-cart.php?product_id=31" class="arrival-btn">Add to cart</a>
-                </div>
-            </article>
-
-            <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="../../assets/images/3.jpeg" alt="New arrival dress">
-                    <span class="arrival-badge">New</span>
-                </div>
-                <h3>Street Fit Denim Jeans</h3>
-                <p>Durable denim with a relaxed fit for daily use and travel.</p>
-                <div class="arrival-meta">
-                    <span class="price">Rs. 5,600</span>
-                    <a href="/G11/Html/pages/add-to-cart.php?product_id=32" class="arrival-btn">Add to cart</a>
-                </div>
-            </article>
-
-            <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="../../assets/images/5.jpeg" alt="New arrival toy">
-                    <span class="arrival-badge">New</span>
-                </div>
-                <h3>Comfort Jogger Pants</h3>
-                <p>Soft stretch joggers designed for movement and relaxation.</p>
-                <div class="arrival-meta">
-                    <span class="price">Rs. 3,800</span>
-                    <a href="/G11/Html/pages/add-to-cart.php?product_id=31" class="arrival-btn">Add to cart</a>
-                </div>
-            </article>
-
-            <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="../../assets/images/3.jpeg" alt="New arrival dress">
-                    <span class="arrival-badge">New</span>
-                </div>
-                <h3>Classic Polo T-Shirt</h3>
-                <p>Minimal design polo that works for casual and semi-formal looks.</p>
-                <div class="arrival-meta">
-                    <span class="price">Rs. 3100</span>
-                    <a href="/G11/Html/pages/add-to-cart.php?product_id=32" class="arrival-btn">Add to cart</a>
-                </div>
-            </article> -->
-            
-        </div>
-
-    </section>
-
-
-
-
-
-
-    <section class="arrivals" data-reveal="up">
-        <div class="section-top">
-            <div>
-                <p class="section-small">Just dropped</p>
-                <h2>Womens New Arrivals</h2>
-                <p class="section-sub">Fresh styles your girls will love.</p>
-            </div>
-           
-        </div>
-
-        <div class="arrivals-list">
-
-
-
-
-
-            
-            {%for item in women_arrivals%}
-
-            <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="{{ item.imageUrl.url }}" alt="{{item.title}}">
-                    <span class="arrival-badge">{{item.offers_badge}}</span>
-                </div>
-                <h3>{{item.title}}</h3>
-                <p>{{item.description}}</p>
-                {% with item_rating=item.avg_rating item_review_count=item.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
-                <div class="arrival-meta">
-                    <span class="price">{{item.price}}</span>
-                    <a href="{% url 'add_to_cart' 'arrival' item.id %}" class="arrival-btn" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}">Add to cart</a>
-                </div>
-            </article>
-
-            {% endfor %}
-
-
-
-
-
-            <!-- <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="../../assets/images/10.jpeg" alt="New arrival outfit">
-                    <span class="arrival-badge">New</span>
-                </div>
-                <h3>Floral Summer Dress</h3>
-                <p>Lightweight floral dress designed for comfort and elegance.</p>
-                <div class="arrival-meta">
-                    <span class="price">Rs. 4950</span>
-                    <a href="/G11/Html/pages/add-to-cart.php?product_id=30" class="arrival-btn">Add to cart</a>
-                </div>
-            </article>
-
-            <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="../../assets/images/5.jpeg" alt="New arrival outfit">
-                    <span class="arrival-badge">New</span>
-                </div>
-                <h3>Soft Knit Casual Top</h3>
-                <p>Everyday casual top with breathable fabric and relaxed fit.</p>
-                <div class="arrival-meta">
-                    <span class="price">Rs. 2,750</span>
-                    <a href="/G11/Html/pages/add-to-cart.php?product_id=31" class="arrival-btn">Add to cart</a>
-                </div>
-            </article>
-
-            <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="../../assets/images/3.jpeg" alt="New arrival dress">
-                    <span class="arrival-badge">New</span>
-                </div>
-                <h3>Elegant Office Blouse</h3>
-                <p>Smart blouse perfect for office wear and formal occasions.</p>
-                <div class="arrival-meta">
-                    <span class="price">Rs. 3,900</span>
-                    <a href="/G11/Html/pages/add-to-cart.php?product_id=32" class="arrival-btn">Add to cart</a>
-                </div>
-            </article>
-
-            <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="../../assets/images/5.jpeg" alt="New arrival outfit">
-                    <span class="arrival-badge">New</span>
-                </div>
-                <h3>High-Rise Comfort Jeans</h3>
-                <p>Stretchable high-rise jeans designed for all-day wear.</p>
-                <div class="arrival-meta">
-                    <span class="price">Rs. 5200</span>
-                    <a href="/G11/Html/pages/add-to-cart.php?product_id=31" class="arrival-btn">Add to cart</a>
-                </div>
-            </article>
-
-            <article class="arrival-card">
-                <div class="arrival-media">
-                    <img src="../../assets/images/3.jpeg" alt="New arrival dress">
-                    <span class="arrival-badge">New</span>
-                </div>
-                <h3>Evening Party Dress</h3>
-                <p>Stylish party dress with premium fabric and modern cut.</p>
-                <div class="arrival-meta">
-                    <span class="price">Rs. 6800</span>
-                    <a href="/G11/Html/pages/add-to-cart.php?product_id=32" class="arrival-btn">Add to cart</a>
-                </div>
-            </article>
-             -->
-        </div>
-
-    </section>
-
-    {% with page_obj=all_arrivals %}
-    {% include 'includes/pagination.html' %}
-    {% endwith %}
-
-{% include 'footer.html'%}
+{% include 'footer.html' %}
 <script src="{% static 'cart_utils.js' %}"></script>
 <script src="{% static 'global.js' %}"></script>
-<script src="{% static 'scroll-reveal.js'%}"></script>
+<script src="{% static 'scroll-reveal.js' %}"></script>

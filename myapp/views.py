@@ -151,53 +151,91 @@ def buy(request):
     return render(request, 'buy.html', context)
 
 def shop_offers(request):
-    offer = Offers.objects.annotate(avg_rating=Avg('product_reviews__rating'), review_count=Count('product_reviews')).order_by('-id')
+    offers_qs = Offers.objects.annotate(
+        avg_rating=Avg('product_reviews__rating'),
+        review_count=Count('product_reviews')
+    ).order_by('-id')
+
     category = request.GET.get('category', 'all')
+    search = (request.GET.get('search') or '').strip()
+    sort = request.GET.get('sort', 'latest')
 
-    if category == 'kids':
-        filtered = offer.filter(category='kids')
-    elif category == 'men':
-        filtered = offer.filter(category='men')
-    elif category == 'women':
-        filtered = offer.filter(category='women')
+    filtered = offers_qs
+    if category in {'kids', 'men', 'women'}:
+        filtered = filtered.filter(category=category)
+
+    if search:
+        filtered = filtered.filter(
+            Q(title__icontains=search) |
+            Q(description__icontains=search) |
+            Q(offers_badge__icontains=search)
+        )
+
+    if sort == 'rating':
+        filtered = filtered.order_by('-avg_rating', '-review_count', '-id')
+    elif sort == 'popular':
+        filtered = filtered.order_by('-review_count', '-avg_rating', '-id')
     else:
-        filtered = offer
+        filtered = filtered.order_by('-id')
 
-    paginator = Paginator(filtered, 12)
+    paginator = Paginator(filtered, 9)
     page_obj = paginator.get_page(request.GET.get('page'))
 
     return render(request, 'shop_offers.html', {
-        'kids_offers': offer.filter(category='kids'),
-        'men_offers': offer.filter(category='men'),
-        'women_offers': offer.filter(category='women'),
         'all_offers': page_obj,
         'selected_category': category,
+        'search_query': search,
+        'selected_sort': sort,
         'is_paginated': paginator.num_pages > 1,
+        'total_offers': offers_qs.count(),
+        'total_filtered': filtered.count(),
+        'kids_count': offers_qs.filter(category='kids').count(),
+        'men_count': offers_qs.filter(category='men').count(),
+        'women_count': offers_qs.filter(category='women').count(),
     })
     
 def new_arrivals(request):
-    new_arrivals_qs = NewArrivals.objects.annotate(avg_rating=Avg('product_reviews__rating'), review_count=Count('product_reviews')).order_by('-id')
+    arrivals_qs = NewArrivals.objects.annotate(
+        avg_rating=Avg('product_reviews__rating'),
+        review_count=Count('product_reviews')
+    ).order_by('-id')
+
     category = request.GET.get('category', 'all')
+    search = (request.GET.get('search') or '').strip()
+    sort = request.GET.get('sort', 'latest')
 
-    if category == 'kids':
-        filtered = new_arrivals_qs.filter(category='kids')
-    elif category == 'men':
-        filtered = new_arrivals_qs.filter(category='men')
-    elif category == 'women':
-        filtered = new_arrivals_qs.filter(category='women')
+    filtered = arrivals_qs
+    if category in {'kids', 'men', 'women'}:
+        filtered = filtered.filter(category=category)
+
+    if search:
+        filtered = filtered.filter(
+            Q(title__icontains=search) |
+            Q(description__icontains=search) |
+            Q(offers_badge__icontains=search)
+        )
+
+    if sort == 'rating':
+        filtered = filtered.order_by('-avg_rating', '-review_count', '-id')
+    elif sort == 'popular':
+        filtered = filtered.order_by('-review_count', '-avg_rating', '-id')
     else:
-        filtered = new_arrivals_qs
+        filtered = filtered.order_by('-id')
 
-    paginator = Paginator(filtered, 12)
+    paginator = Paginator(filtered, 9)
     page_obj = paginator.get_page(request.GET.get('page'))
 
     return render(request, 'new_arrivals.html', {
-        'kids_arrivals': new_arrivals_qs.filter(category='kids'),
-        'men_arrivals': new_arrivals_qs.filter(category='men'),
-        'women_arrivals': new_arrivals_qs.filter(category='women'),
         'all_arrivals': page_obj,
         'selected_category': category,
+        'search_query': search,
+        'selected_sort': sort,
         'is_paginated': paginator.num_pages > 1,
+        'total_arrivals': arrivals_qs.count(),
+        'total_filtered': filtered.count(),
+        'kids_count': arrivals_qs.filter(category='kids').count(),
+        'men_count': arrivals_qs.filter(category='men').count(),
+        'women_count': arrivals_qs.filter(category='women').count(),
     })
 
 

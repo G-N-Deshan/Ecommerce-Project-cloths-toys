@@ -137,6 +137,12 @@ html::-webkit-scrollbar { display: none; }
     position: relative;
     isolation: isolate;
     text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.35rem;
+    min-height: 280px;
     transform: translateY(0) scale(1);
     transition: transform 0.32s ease, box-shadow 0.32s ease, border-color 0.32s ease, background 0.32s ease;
 }
@@ -200,21 +206,27 @@ html::-webkit-scrollbar { display: none; }
 }
 
 .category-title {
+    margin: 0.2rem 0 0;
     font-size: 1.55rem;
     font-weight: 800;
     color: #1e293b;
+    text-align: center;
+    line-height: 1.15;
     transition: color 0.28s ease;
 }
 
 .category-subtitle {
-    margin-top: 0.35rem;
+    margin-top: 0.2rem;
     color: #64748b;
     font-weight: 500;
+    text-align: center;
+    min-height: 1.4rem;
     transition: color 0.28s ease;
 }
 
 .category-cta {
-    margin-top: 0.95rem;
+    margin-top: auto;
+    padding-top: 0.8rem;
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
@@ -733,6 +745,20 @@ html::-webkit-scrollbar { display: none; }
 
     .buy-categories {
         margin-top: -3rem;
+    }
+
+    .buy-categories-shell {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .category-card {
+        min-height: 250px;
+        padding: 1.4rem 1rem;
+    }
+
+    .category-title {
+        font-size: 1.35rem;
     }
 
     .buy-sticky-filter {

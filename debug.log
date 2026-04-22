@@ -6379,3 +6379,15 @@ INFO 2026-04-23 00:37:10,898 autoreload 9572 17556 Watching for file changes wit
 WARNING 2026-04-23 00:42:38,433 log 9572 27420 Not Found: /favicon.ico
 INFO 2026-04-23 00:44:17,070 autoreload 9572 17556 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
 INFO 2026-04-23 00:44:18,413 autoreload 30184 29976 Watching for file changes with StatReloader
+INFO 2026-04-23 00:47:55,423 autoreload 30184 29976 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-23 00:47:56,666 autoreload 26300 27908 Watching for file changes with StatReloader
+WARNING 2026-04-23 00:51:40,160 log 26300 26968 Not Found: /favicon.ico
+WARNING 2026-04-23 00:53:40,232 log 26300 19636 Not Found: /favicon.ico
+WARNING 2026-04-23 00:55:42,247 log 26300 15828 Not Found: /favicon.ico
+WARNING 2026-04-23 00:59:15,605 log 26300 19636 Not Found: /favicon.ico
+INFO 2026-04-23 00:59:50,330 autoreload 26300 27908 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-23 00:59:51,524 autoreload 24624 30064 Watching for file changes with StatReloader
+INFO 2026-04-23 01:01:04,575 autoreload 24624 30064 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-23 01:01:05,855 autoreload 23892 22660 Watching for file changes with StatReloader
+INFO 2026-04-23 01:04:14,044 autoreload 23892 22660 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-23 01:04:15,203 autoreload 26644 1716 Watching for file changes with StatReloader
