@@ -21,10 +21,14 @@
                 <button><a href="{% url 'contact_us' %}" class="nav-link nav-link--contact">Contact</a></button>
                 <button><a href="{% url 'about' %}" class="nav-link nav-link--about">About</a></button>
                 
-                <!-- Search -->
-                <form action="{% url 'search' %}" method="GET" class="nav-search-form" style="display:inline-flex;align-items:center;margin:0 0.5rem;position:relative">
-                    <input type="text" name="q" placeholder="Search..." class="nav-search-input" style="padding:0.35rem 2.2rem 0.35rem 0.75rem;border:2px solid rgba(255,255,255,0.3);border-radius:20px;background:rgba(255,255,255,0.1);color:#fff;font-size:0.85rem;width:150px;outline:none;transition:all 0.3s">
-                    <button type="submit" style="position:absolute;right:4px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:0.75rem;padding:0;line-height:1" title="Search">🔍</button>
+                <!-- Search (icon-first, reveal on hover/focus) -->
+                <form action="{% url 'search' %}" method="GET" class="nav-search-form" aria-label="Search products">
+                    <input type="text" name="q" placeholder="Search products" class="nav-search-input" aria-label="Search query">
+                    <button type="submit" class="nav-search-btn" title="Search" aria-label="Search">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M10.5 4a6.5 6.5 0 1 0 4.05 11.58l4.44 4.44a1 1 0 0 0 1.42-1.42l-4.44-4.44A6.5 6.5 0 0 0 10.5 4zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z"></path>
+                        </svg>
+                    </button>
                 </form>
 
                 <!-- Cart Icon - Only for authenticated users -->

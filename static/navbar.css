@@ -64,7 +64,7 @@ body{
     font-size: 1.2rem;
     font-weight: 300;
     margin-right: 3rem;
-    color: #000000;
+    color: #1e293b;
     text-decoration: none;
     letter-spacing: 0.2rem;
     background-color: transparent;
@@ -77,28 +77,28 @@ body{
 }
 
 .section-0 .navbar .nav-link:hover{
-    background-color: #eef2ff;
+    background-color: #ecfeff;
     transform: scale(1.05);
 }
 
 .section-0 .navbar .nav-link--home:hover{
-    color: #6366f1;
+    color: #0f766e;
 }
 
 .section-0 .navbar .nav-link--vehicles:hover{
-    color: #6366f1;
+    color: #0f766e;
 }
 
 .section-0 .navbar .nav-link--reviews:hover{
-    color: #6366f1;
+    color: #0f766e;
 }
 
 .section-0 .navbar .nav-link--contact:hover{
-    color: #6366f1;
+    color: #0f766e;
 }
 
 .section-0 .navbar .nav-link--about:hover{
-    color: #6366f1;
+    color: #0f766e;
 }
 
 .section-0 .navbar .nav-link--home{
@@ -132,7 +132,7 @@ body{
 }
 
 .section-0 .navbar .nav-link--login:hover{
-    color: #6366f1;
+    color: #0f766e;
 }
 
 .section-0 .navbar .nav-link--login{
@@ -194,6 +194,96 @@ body{
     background-color: transparent;
     border: none;
     cursor: pointer;
+}
+
+/* Search in navbar: icon only by default, input revealed on hover/focus */
+.nav-search-form {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 0 0.5rem;
+    position: relative;
+    width: 2.6rem;
+    height: 2.6rem;
+    padding: 0.2rem;
+    border-radius: 999px;
+    border: 1px solid #bae6fd;
+    background: #f0f9ff;
+    transition: width 0.28s ease, background-color 0.28s ease, box-shadow 0.28s ease;
+    overflow: hidden;
+}
+
+.nav-search-input {
+    width: 0;
+    opacity: 0;
+    border: none;
+    background: transparent;
+    color: #0f172a;
+    font-size: 0.9rem;
+    outline: none;
+    pointer-events: none;
+    transition: width 0.22s ease, opacity 0.2s ease;
+}
+
+.nav-search-input::placeholder {
+    color: #64748b;
+}
+
+.nav-search-btn {
+    width: 2.1rem;
+    height: 2.1rem;
+    border: none;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    flex: 0 0 2.1rem;
+    background: linear-gradient(135deg, #0891b2, #0ea5e9);
+    box-shadow: 0 6px 14px rgba(14, 165, 233, 0.35);
+}
+
+.nav-search-btn svg {
+    width: 1.05rem;
+    height: 1.05rem;
+    fill: #ffffff;
+}
+
+.nav-search-form:hover,
+.nav-search-form:focus-within {
+    width: 15rem;
+    background: #ffffff;
+    box-shadow: 0 7px 20px rgba(2, 132, 199, 0.22);
+}
+
+.nav-search-form:hover .nav-search-input,
+.nav-search-form:focus-within .nav-search-input {
+    width: 10.9rem;
+    opacity: 1;
+    pointer-events: auto;
+    margin-right: 0.45rem;
+}
+
+.nav-search-form:focus-within {
+    border-color: #38bdf8;
+}
+
+.nav-search-btn:hover {
+    transform: translateY(-1px);
+}
+
+@media (hover: none) {
+    .nav-search-form {
+        width: 12.5rem;
+        background: #ffffff;
+    }
+
+    .nav-search-input {
+        width: 8.6rem;
+        opacity: 1;
+        pointer-events: auto;
+        margin-right: 0.4rem;
+    }
 }
 
 /* Cart Icon Container */
