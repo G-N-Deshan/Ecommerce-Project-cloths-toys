@@ -16,9 +16,7 @@
 <body>
 
     {%include 'navbar.html'%}
-
-
-    
+    {% include 'cart.html' %}
 
 <div class="section-9">
         <div class="section-9__overlay"></div>
@@ -34,8 +32,226 @@
             <div class="shape shape--streak"></div>
         </div>
         <div class="section-9__content">
-            <h1 class="section-9__title">Cloths</h1>
-            <p class="section-9__subtitle">Explore curated styles for every age and occasion.</p>
+            <h1 class="section-9__title">Clothing Collection</h1>
+            <p class="section-9__subtitle">Discover best-selling fits with smarter filters, trusted reviews, and quick actions.</p>
+
+            <div class="cloths-kpi" data-reveal="up">
+                <div class="kpi-card">
+                    <strong>{{ products_count }}</strong>
+                    <span>Products</span>
+                </div>
+                <div class="kpi-card">
+                    <strong>${{ price_min|floatformat:0 }} - ${{ price_max|floatformat:0 }}</strong>
+                    <span>Price Range</span>
+                </div>
+                <div class="kpi-card">
+                    <strong>Free Delivery</strong>
+                    <span>Above $49</span>
+                </div>
+            </div>
+
+            <a href="#clothsCatalog" class="hero-primary-cta">Shop Clothing</a>
+        </div>
+    </div>
+
+    <section class="catalog-toolbar" id="clothsCatalog" data-reveal="up">
+        <div class="catalog-toolbar__inner">
+            <form method="get" class="filter-form">
+                <div class="filter-grid">
+                    <div class="filter-control filter-control--wide">
+                        <label for="q">Search</label>
+                        <input id="q" name="q" type="text" value="{{ search_query }}" placeholder="Search by product name or style">
+                    </div>
+
+                    <div class="filter-control">
+                        <label for="category">Category</label>
+                        <select id="category" name="category">
+                            <option value="all" {% if selected_category == 'all' %}selected{% endif %}>All</option>
+                            <option value="men" {% if selected_category == 'men' %}selected{% endif %}>Men ({{ category_counts.men }})</option>
+                            <option value="women" {% if selected_category == 'women' %}selected{% endif %}>Women ({{ category_counts.women }})</option>
+                            <option value="kids" {% if selected_category == 'kids' %}selected{% endif %}>Kids ({{ category_counts.kids }})</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-control">
+                        <label for="subcategory">Subcategory</label>
+                        <select id="subcategory" name="subcategory">
+                            <option value="all" {% if selected_subcategory == 'all' %}selected{% endif %}>All Styles</option>
+                            {% for value, label in subcategory_options %}
+                            <option value="{{ value }}" {% if selected_subcategory == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="filter-control">
+                        <label for="sort">Sort By</label>
+                        <select id="sort" name="sort">
+                            <option value="featured" {% if selected_sort == 'featured' %}selected{% endif %}>Featured</option>
+                            <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                            <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                            <option value="name_asc" {% if selected_sort == 'name_asc' %}selected{% endif %}>Name: A to Z</option>
+                            <option value="name_desc" {% if selected_sort == 'name_desc' %}selected{% endif %}>Name: Z to A</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="toolbar-actions">
+                    <button type="submit" class="btn-filter">Apply Filters</button>
+                    <a href="{% url 'cloths' %}" class="btn-reset">Reset</a>
+                </div>
+            </form>
+
+            <div class="toolbar-meta">
+                <p class="catalog-count">Showing {{ cloths_items|length }} of {{ products_count }} products</p>
+                <div class="toolbar-note">Tip: Use sort + subcategory together for faster product discovery.</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="catalog-section" data-reveal="up">
+        {% if cloths_items %}
+        <div class="catalog-grid">
+            {% for cloth in cloths_items %}
+            <article class="product-card" data-product-card>
+                <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="product-card__image-wrap">
+                    <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" class="product-card__image" loading="lazy">
+                    {% if cloth.discount_text %}
+                    <span class="product-badge">{{ cloth.discount_text }}</span>
+                    {% endif %}
+                </a>
+
+                <div class="product-card__content">
+                    <div class="product-meta-top">
+                        <span class="product-category">{{ cloth.get_category_display }}</span>
+                        {% if cloth.review_count %}
+                        <span class="product-rating">{{ cloth.avg_rating|floatformat:1 }} ({{ cloth.review_count }})</span>
+                        {% else %}
+                        <span class="product-rating">No reviews yet</span>
+                        {% endif %}
+                    </div>
+
+                    <h3>{{ cloth.name }}</h3>
+                    <p>{{ cloth.desccription|truncatechars:95 }}</p>
+
+                    <div class="product-price-row">
+                        <strong class="price-current">{{ cloth.price2|default:cloth.price1|default:cloth.price }}</strong>
+                        {% if cloth.price1 and cloth.price2 %}
+                        <span class="price-old">{{ cloth.price1 }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="product-actions">
+                        <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="btn-view">Quick View</a>
+                        <button class="btn-add" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}">Add to Cart</button>
+                    </div>
+
+                    <div class="compare-row">
+                        <button
+                            class="btn-compare"
+                            data-compare-toggle
+                            data-product-id="{{ cloth.id }}"
+                            data-product-name="{{ cloth.name|escape }}"
+                            data-product-price="{{ cloth.price2|default:cloth.price1|default:cloth.price|escape }}"
+                            data-product-category="{{ cloth.get_category_display|escape }}"
+                            data-product-subcategory="{{ cloth.get_subcategory_display|default:'N/A'|escape }}"
+                            data-product-material="{{ cloth.material|default:'N/A'|escape }}"
+                            data-product-sizes="{{ cloth.sizes_available|default:'N/A'|escape }}"
+                            data-product-image="{{ cloth.imageUrl.url|escape }}"
+                            data-product-url="{% url 'product_detail' 'cloth' cloth.id %}">
+                            Compare
+                        </button>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+
+        {% if is_paginated %}
+        <div class="pagination-wrap">
+            {% if cloths_items.has_previous %}
+            <a href="?page={{ cloths_items.previous_page_number }}&q={{ search_query }}&category={{ selected_category }}&subcategory={{ selected_subcategory }}&sort={{ selected_sort }}" class="pagination-btn">Previous</a>
+            {% endif %}
+            <span class="pagination-state">Page {{ cloths_items.number }} of {{ cloths_items.paginator.num_pages }}</span>
+            {% if cloths_items.has_next %}
+            <a href="?page={{ cloths_items.next_page_number }}&q={{ search_query }}&category={{ selected_category }}&subcategory={{ selected_subcategory }}&sort={{ selected_sort }}" class="pagination-btn">Next</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% else %}
+        <div class="catalog-empty">
+            <h3>No products found</h3>
+            <p>Try another category, search term, or remove some filters.</p>
+            <a href="{% url 'cloths' %}" class="btn-reset">Show All Clothing</a>
+        </div>
+        {% endif %}
+    </section>
+
+    <section class="social-proof-section" data-reveal="up">
+        <div class="social-proof-inner">
+            <div class="social-proof-header">
+                <h2>Most Loved by Customers</h2>
+                <p>Top-rated products based on verified customer reviews.</p>
+            </div>
+
+            <div class="mini-grid">
+                {% for item in top_rated_products %}
+                <article class="mini-product-card">
+                    <a href="{% url 'product_detail' 'cloth' item.id %}">
+                        <img src="{{ item.imageUrl.url }}" alt="{{ item.name }}" loading="lazy">
+                    </a>
+                    <div>
+                        <h3>{{ item.name }}</h3>
+                        <p>{{ item.avg_rating|floatformat:1 }} stars from {{ item.review_count }} reviews</p>
+                        <span>{{ item.price2|default:item.price1|default:item.price }}</span>
+                    </div>
+                </article>
+                {% empty %}
+                <p class="mini-empty">No review data yet. Your first review can set the trend.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="recommend-section" data-reveal="up" id="recommendationsSection">
+        <div class="recommend-inner">
+            <div class="social-proof-header">
+                <h2 id="recommendTitle">Recommended For You</h2>
+                <p id="recommendSubtitle">Smart picks based on what customers explore the most.</p>
+            </div>
+
+            <div class="mini-grid mini-grid--recommend">
+                {% for item in recommended_products %}
+                <article class="mini-product-card" data-recommend-item data-category="{{ item.category }}" data-subcategory="{{ item.subcategory }}">
+                    <a href="{% url 'product_detail' 'cloth' item.id %}">
+                        <img src="{{ item.imageUrl.url }}" alt="{{ item.name }}" loading="lazy">
+                    </a>
+                    <div>
+                        <h3>{{ item.name }}</h3>
+                        <p>{{ item.get_category_display }}{% if item.subcategory %} - {{ item.get_subcategory_display }}{% endif %}</p>
+                        <span>{{ item.price2|default:item.price1|default:item.price }}</span>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="recent-section" id="recentlyViewedSection" style="display:none" data-reveal="up">
+        <div class="recommend-inner">
+            <div class="social-proof-header">
+                <h2>Recently Viewed</h2>
+                <p>Continue from where you left off.</p>
+            </div>
+            <div class="rv-grid mini-grid"></div>
+        </div>
+    </section>
+
+    <section class="section-9 section-9--secondary" data-reveal="up">
+        <div class="section-9__overlay"></div>
+        <div class="section-9__content">
+            <h2 class="section-9__title section-9__title--small">Shop By Audience</h2>
+            <p class="section-9__subtitle">Jump directly into curated clothing collections.</p>
 
             <div class="selection-section" data-reveal="up" data-reveal-stagger>
                 <div class="card mens-card">
@@ -63,28 +279,69 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <section  class="section-8" data-reveal="up">
+    <section class="section-8" data-reveal="up">
         <div class="section-8__content">
-            <h2 class="section-8__title">Our Brands</h2>
-            <p class="section-8__subtitle">Trusted labels we proudly carry.</p>
+            <h2 class="section-8__title">Quick Shop Hub</h2>
+            <p class="section-8__subtitle">Jump to curated entry points based on what customers shop most.</p>
 
-            <div class="brand-grid">
-                <div class="brand-circle">Nike</div>
-                <div class="brand-circle">Adidas</div>
-                <div class="brand-circle">Puma</div>
-                <div class="brand-circle">Zara</div>
-                <div class="brand-circle">H&M</div>
-                <div class="brand-circle">Levi’s</div>
-                <div class="brand-circle">Gap</div>
-                <div class="brand-circle">Uniqlo</div>
+            <div class="brand-grid quick-hub-grid">
+                <a class="quick-hub-card" href="{% url 'cloths' %}?category=men&subcategory=shirts&sort=featured">
+                    <strong>Men Shirts</strong>
+                    <span>Office-ready and casual fits</span>
+                </a>
+                <a class="quick-hub-card" href="{% url 'cloths' %}?category=women&subcategory=dresses&sort=featured">
+                    <strong>Women Dresses</strong>
+                    <span>Trending silhouettes for events</span>
+                </a>
+                <a class="quick-hub-card" href="{% url 'cloths' %}?category=kids&sort=featured">
+                    <strong>Kids Essentials</strong>
+                    <span>Comfort-first picks for daily wear</span>
+                </a>
+                <a class="quick-hub-card" href="{% url 'cloths' %}?subcategory=accessories&sort=price_asc">
+                    <strong>Accessories</strong>
+                    <span>Complete the outfit in one tap</span>
+                </a>
+            </div>
+
+            <div class="quick-hub-actions">
+                <a href="{% url 'buy' %}" class="quick-hub-btn">View Full Store</a>
+                <a href="{% url 'contact_us' %}" class="quick-hub-btn quick-hub-btn--alt">Need Styling Help?</a>
             </div>
         </div>
     </section>
 
  {%include 'footer.html'%}
+     <script src="{% static 'cart_utils.js' %}"></script>
     <script src="{% static 'global.js' %}"></script>
+    <script src="{% static 'cloths-page.js' %}"></script>
     <script src="{% static 'scroll-reveal.js'%}"></script>
+
+    <div class="compare-bar" id="compareBar" hidden>
+        <div class="compare-bar__inner">
+            <div>
+                <strong>Compare Products</strong>
+                <p id="compareCount">0 of 3 selected</p>
+            </div>
+            <div class="compare-bar__actions">
+                <button id="compareOpenBtn" class="btn-filter" type="button">Compare Now</button>
+                <button id="compareClearBtn" class="btn-reset" type="button">Clear</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="compare-modal" id="compareModal" hidden>
+        <div class="compare-modal__backdrop" id="compareBackdrop"></div>
+        <div class="compare-modal__panel">
+            <div class="compare-modal__head">
+                <h3>Product Comparison</h3>
+                <button id="compareCloseBtn" type="button">Close</button>
+            </div>
+            <div class="compare-table-wrap">
+                <table class="compare-table" id="compareTable"></table>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

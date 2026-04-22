@@ -494,7 +494,123 @@ def product_detail(request, product_type, product_id):
 
 
 def cloths(request):
-    return render(request, 'cloths.html')
+    queryset = Cloths.objects.all().annotate(
+        avg_rating=Avg('product_reviews__rating'),
+        review_count=Count('product_reviews'),
+    )
+
+    search = request.GET.get('q', '').strip()
+    category = request.GET.get('category', 'all')
+    subcategory = request.GET.get('subcategory', 'all')
+    sort = request.GET.get('sort', 'featured')
+
+    if search:
+        queryset = queryset.filter(
+            Q(name__icontains=search)
+            | Q(desccription__icontains=search)
+            | Q(subcategory__icontains=search)
+        )
+
+    if category == 'kids':
+        queryset = queryset.filter(category__in=['kids-men', 'kids-girl'])
+    elif category in ['men', 'women', 'kids-men', 'kids-girl']:
+        queryset = queryset.filter(category=category)
+
+    if subcategory and subcategory != 'all':
+        queryset = queryset.filter(subcategory=subcategory)
+
+    items = list(queryset)
+    for item in items:
+        item.numeric_price = parse_catalog_price(item.price2 or item.price1 or item.price)
+
+    if sort == 'price_asc':
+        items.sort(key=lambda item: item.numeric_price)
+    elif sort == 'price_desc':
+        items.sort(key=lambda item: item.numeric_price, reverse=True)
+    elif sort == 'name_asc':
+        items.sort(key=lambda item: item.name.lower())
+    elif sort == 'name_desc':
+        items.sort(key=lambda item: item.name.lower(), reverse=True)
+    elif sort == 'oldest':
+        items.sort(key=lambda item: item.id)
+    else:
+        items.sort(key=lambda item: item.id, reverse=True)
+
+    paginator = Paginator(items, 12)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
+    top_rated_qs = Cloths.objects.annotate(
+        avg_rating=Avg('product_reviews__rating'),
+        review_count=Count('product_reviews'),
+    ).filter(review_count__gt=0).order_by('-avg_rating', '-review_count', '-id')[:4]
+
+    recommended_qs = Cloths.objects.annotate(
+        avg_rating=Avg('product_reviews__rating'),
+        review_count=Count('product_reviews'),
+    )
+
+    if category == 'kids':
+        recommended_qs = recommended_qs.filter(category__in=['kids-men', 'kids-girl'])
+    elif category in ['men', 'women', 'kids-men', 'kids-girl']:
+        recommended_qs = recommended_qs.filter(category=category)
+
+    if subcategory and subcategory != 'all':
+        recommended_qs = recommended_qs.filter(subcategory=subcategory)
+
+    recommended_items = list(recommended_qs.exclude(id__in=[item.id for item in page_obj]).order_by('-id')[:8])
+    if len(recommended_items) < 8:
+        fallback_items = Cloths.objects.annotate(
+            avg_rating=Avg('product_reviews__rating'),
+            review_count=Count('product_reviews'),
+        ).exclude(id__in=[item.id for item in recommended_items]).order_by('-id')[:8 - len(recommended_items)]
+        recommended_items.extend(list(fallback_items))
+
+    for item in top_rated_qs:
+        item.numeric_price = parse_catalog_price(item.price2 or item.price1 or item.price)
+    for item in recommended_items:
+        item.numeric_price = parse_catalog_price(item.price2 or item.price1 or item.price)
+
+    all_items = Cloths.objects.all()
+    category_counts = {
+        'men': all_items.filter(category='men').count(),
+        'women': all_items.filter(category='women').count(),
+        'kids': all_items.filter(category__in=['kids-men', 'kids-girl']).count(),
+    }
+
+    available_subcategories = set(
+        Cloths.objects.exclude(subcategory='').values_list('subcategory', flat=True)
+    )
+    subcategory_options = [
+        option for option in Cloths.SUBCATEGORY_CHOICES
+        if option[0] and option[0] in available_subcategories
+    ]
+
+    prices = [item.numeric_price for item in items if item.numeric_price > 0]
+    min_price = min(prices) if prices else 0
+    max_price = max(prices) if prices else 0
+
+    cart_count = 0
+    try:
+        cart_count = get_or_create_cart(request).get_item_count()
+    except Exception:
+        cart_count = 0
+
+    return render(request, 'cloths.html', {
+        'cloths_items': page_obj,
+        'is_paginated': paginator.num_pages > 1,
+        'selected_category': category,
+        'selected_subcategory': subcategory,
+        'selected_sort': sort,
+        'search_query': search,
+        'subcategory_options': subcategory_options,
+        'category_counts': category_counts,
+        'products_count': len(items),
+        'price_min': min_price,
+        'price_max': max_price,
+        'top_rated_products': top_rated_qs,
+        'recommended_products': recommended_items,
+        'cart_count': cart_count,
+    })
 
 def toys(request):  
     return render(request, 'toys.html')
