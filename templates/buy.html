@@ -98,6 +98,53 @@
         </div>
     </section>
 
+    <section class="buy-sticky-filter" id="buyStickyFilter" data-reveal="up">
+        <div class="container mx-auto px-6">
+            <div class="buy-sticky-filter__panel">
+                <div class="buy-filter-grid">
+                    <div class="buy-filter-field buy-filter-field--wide">
+                        <label for="buySearchInput">Search</label>
+                        <input id="buySearchInput" type="text" placeholder="Search offers and arrivals...">
+                    </div>
+                    <div class="buy-filter-field">
+                        <label for="buyTypeSelect">Type</label>
+                        <select id="buyTypeSelect">
+                            <option value="all">All</option>
+                            <option value="offer">Offers</option>
+                            <option value="arrival">New Arrivals</option>
+                        </select>
+                    </div>
+                    <div class="buy-filter-field">
+                        <label for="buyCategorySelect">Category</label>
+                        <select id="buyCategorySelect">
+                            <option value="all">All</option>
+                            <option value="kids">Kids</option>
+                            <option value="men">Men</option>
+                            <option value="women">Women</option>
+                        </select>
+                    </div>
+                    <div class="buy-filter-field">
+                        <label for="buySortSelect">Sort</label>
+                        <select id="buySortSelect">
+                            <option value="featured">Featured</option>
+                            <option value="price_low">Price: Low to High</option>
+                            <option value="price_high">Price: High to Low</option>
+                            <option value="rating_high">Top Rated</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="buy-filter-meta">
+                    <div id="buyActiveChips" class="buy-active-chips"></div>
+                    <div class="buy-filter-right">
+                        <p id="buyResultCount" class="buy-result-count">Showing {{ total_products }} products</p>
+                        <button id="buyFilterReset" type="button" class="buy-reset-btn">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- ═══ HOT OFFERS ═══ -->
     <section class="py-14 bg-slate-50" data-reveal="left">
         <div class="container mx-auto px-6">
@@ -112,17 +159,30 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {% for offer in offers|slice:":6" %}
-                <article class="product-card group bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="offersGrid">
+                {% for offer in offers %}
+                <article
+                    class="product-card js-buy-product group bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+                    data-kind="offer"
+                    data-id="{{ offer.id }}"
+                    data-category="{{ offer.category }}"
+                    data-name="{{ offer.title|escape }}"
+                    data-description="{{ offer.description|escape }}"
+                    data-price="{{ offer.price1|default:offer.price2|default:'0'|escape }}"
+                    data-rating="{{ offer.avg_rating|default:0 }}"
+                    data-image="{{ offer.imageUrl.url|escape }}"
+                    data-url="{% url 'product_detail' 'offer' offer.id %}"
+                    data-stock="{{ offer.stock_text|default:''|escape }}"
+                    data-badge="{{ offer.offers_badge|default:''|escape }}">
                     <div class="relative overflow-hidden">
                         {% if offer.offers_badge %}
                         <span class="absolute top-3 right-3 z-10 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full animate-pulse">{{ offer.offers_badge }}</span>
                         {% endif %}
                         <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }}" class="w-full h-56 object-contain bg-slate-50 p-4 group-hover:scale-105 transition-transform duration-500" loading="lazy">
-                        <a href="{% url 'product_detail' 'offer' offer.id %}" class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span class="px-5 py-2 bg-white text-slate-800 font-semibold rounded-full text-sm hover:scale-105 transition-transform">Quick View</span>
-                        </a>
+                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 gap-2">
+                            <button type="button" class="px-5 py-2 bg-white text-slate-800 font-semibold rounded-full text-sm hover:scale-105 transition-transform js-quick-view">Quick View</button>
+                            <a href="{% url 'product_detail' 'offer' offer.id %}" class="px-5 py-2 bg-indigo-600 text-white font-semibold rounded-full text-sm hover:scale-105 transition-transform">Details</a>
+                        </div>
                     </div>
                     <div class="p-5">
                         <h3 class="font-bold text-slate-800 text-lg mb-1">
@@ -144,6 +204,7 @@
                         <button class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-indigo-500/30 hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2" data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}">
                             <i class="bi bi-cart-plus"></i> {{ offer.button_text }}
                         </button>
+                        <button type="button" class="buy-compare-btn js-compare-toggle">Compare</button>
                     </div>
                 </article>
                 {% endfor %}
@@ -165,17 +226,30 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {% for item in kids_arrivals|slice:":6" %}
-                <article class="product-card group bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="arrivalsGrid">
+                {% for item in kids_arrivals %}
+                <article
+                    class="product-card js-buy-product group bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+                    data-kind="arrival"
+                    data-id="{{ item.id }}"
+                    data-category="{{ item.category }}"
+                    data-name="{{ item.title|escape }}"
+                    data-description="{{ item.description|escape }}"
+                    data-price="{{ item.price|default:'0'|escape }}"
+                    data-rating="{{ item.avg_rating|default:0 }}"
+                    data-image="{{ item.imageUrl.url|escape }}"
+                    data-url="{% url 'product_detail' 'arrival' item.id %}"
+                    data-stock=""
+                    data-badge="{{ item.offers_badge|default:''|escape }}">
                     <div class="relative overflow-hidden bg-slate-50 rounded-t-2xl">
                         {% if item.offers_badge %}
                         <span class="absolute bottom-3 left-3 z-10 px-3 py-1 bg-emerald-500 text-white text-xs font-bold rounded-full">{{ item.offers_badge }}</span>
                         {% endif %}
                         <img src="{{ item.imageUrl.url }}" alt="{{ item.title }}" class="w-full h-56 object-contain p-4 group-hover:scale-105 transition-transform duration-500" loading="lazy">
-                        <a href="{% url 'product_detail' 'arrival' item.id %}" class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span class="px-5 py-2 bg-white text-slate-800 font-semibold rounded-full text-sm hover:scale-105 transition-transform">Quick View</span>
-                        </a>
+                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 gap-2">
+                            <button type="button" class="px-5 py-2 bg-white text-slate-800 font-semibold rounded-full text-sm hover:scale-105 transition-transform js-quick-view">Quick View</button>
+                            <a href="{% url 'product_detail' 'arrival' item.id %}" class="px-5 py-2 bg-indigo-600 text-white font-semibold rounded-full text-sm hover:scale-105 transition-transform">Details</a>
+                        </div>
                     </div>
                     <div class="p-5">
                         <h3 class="font-bold text-slate-800 text-lg mb-1">
@@ -189,6 +263,7 @@
                                 <i class="bi bi-cart-plus"></i> Add to cart
                             </button>
                         </div>
+                        <button type="button" class="buy-compare-btn js-compare-toggle">Compare</button>
                     </div>
                 </article>
                 {% endfor %}
@@ -196,8 +271,119 @@
         </div>
     </section>
 
+    <section class="buy-social-proof py-14 bg-slate-50" data-reveal="up">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="proof-block">
+                    <h3>Top Rated Offers</h3>
+                    <p>Products customers consistently love.</p>
+                    <div class="proof-mini-grid">
+                        {% for offer in top_rated_offers %}
+                        <a href="{% url 'product_detail' 'offer' offer.id %}" class="proof-mini-item">
+                            <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }}" loading="lazy">
+                            <div>
+                                <strong>{{ offer.title }}</strong>
+                                <span>{{ offer.avg_rating|floatformat:1 }} stars • {{ offer.review_count }} reviews</span>
+                            </div>
+                        </a>
+                        {% empty %}
+                        <p class="proof-empty">No rating data yet for offers.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="proof-block">
+                    <h3>Most Reviewed New Arrivals</h3>
+                    <p>Fresh picks validated by customer feedback.</p>
+                    <div class="proof-mini-grid">
+                        {% for item in most_reviewed_arrivals %}
+                        <a href="{% url 'product_detail' 'arrival' item.id %}" class="proof-mini-item">
+                            <img src="{{ item.imageUrl.url }}" alt="{{ item.title }}" loading="lazy">
+                            <div>
+                                <strong>{{ item.title }}</strong>
+                                <span>{{ item.avg_rating|floatformat:1 }} stars • {{ item.review_count }} reviews</span>
+                            </div>
+                        </a>
+                        {% empty %}
+                        <p class="proof-empty">No rating data yet for arrivals.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="buy-personalized py-14 bg-white" data-reveal="up" id="buyPersonalizedSection" hidden>
+        <div class="container mx-auto px-6">
+            <div class="proof-block">
+                <h3 id="buyRecoTitle">Recommended For You</h3>
+                <p id="buyRecoSubtitle">Personalized based on your recent interactions.</p>
+                <div class="proof-mini-grid" id="buyPersonalizedGrid"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="buy-recent py-14 bg-slate-50" data-reveal="up" id="buyRecentlyViewedSection" hidden>
+        <div class="container mx-auto px-6">
+            <div class="proof-block">
+                <h3>Recently Viewed</h3>
+                <p>Pick up from where you left off.</p>
+                <div class="proof-mini-grid" id="buyRecentlyViewedGrid"></div>
+            </div>
+        </div>
+    </section>
+
     {% include 'footer.html' %}
+
+    <div class="buy-quick-view" id="buyQuickView" hidden>
+        <div class="buy-quick-view__backdrop" data-qv-close></div>
+        <div class="buy-quick-view__panel">
+            <button type="button" class="buy-quick-view__close" data-qv-close>Close</button>
+            <div class="buy-quick-view__body">
+                <img id="buyQvImage" src="" alt="">
+                <div>
+                    <span id="buyQvKind" class="qv-kind"></span>
+                    <h3 id="buyQvTitle"></h3>
+                    <p id="buyQvDesc"></p>
+                    <div class="qv-meta">
+                        <strong id="buyQvPrice"></strong>
+                        <span id="buyQvRating"></span>
+                    </div>
+                    <p id="buyQvStock" class="qv-stock"></p>
+                    <a id="buyQvLink" href="#" class="qv-link">Go to product details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="buy-compare-bar" id="buyCompareBar" hidden>
+        <div class="buy-compare-bar__inner">
+            <div>
+                <strong>Compare Products</strong>
+                <p id="buyCompareCount">0 of 3 selected</p>
+            </div>
+            <div class="buy-compare-actions">
+                <button id="buyCompareNow" type="button" class="buy-filter-btn">Compare Now</button>
+                <button id="buyCompareClear" type="button" class="buy-reset-btn">Clear</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="buy-compare-modal" id="buyCompareModal" hidden>
+        <div class="buy-compare-modal__backdrop" data-compare-close></div>
+        <div class="buy-compare-modal__panel">
+            <div class="buy-compare-modal__head">
+                <h4>Product Comparison</h4>
+                <button type="button" data-compare-close>Close</button>
+            </div>
+            <div class="buy-compare-table-wrap">
+                <table id="buyCompareTable" class="buy-compare-table"></table>
+            </div>
+        </div>
+    </div>
+
     <script src="{% static 'cart_utils.js' %}"></script>
+    <script src="{% static 'buy-page.js' %}"></script>
     <script src="{% static 'global.js' %}"></script>
     <script src="{% static 'scroll-reveal.js' %}"></script>
 </body>

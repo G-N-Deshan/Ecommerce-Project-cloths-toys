@@ -6374,3 +6374,8 @@ django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\to
 WARNING 2026-04-23 00:19:17,609 log 13736 19168 Not Found: /media/toys-hero.jpg
 INFO 2026-04-23 00:23:40,050 autoreload 13736 25788 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
 INFO 2026-04-23 00:23:41,358 autoreload 26016 30376 Watching for file changes with StatReloader
+INFO 2026-04-23 00:37:09,594 autoreload 26016 30376 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-23 00:37:10,898 autoreload 9572 17556 Watching for file changes with StatReloader
+WARNING 2026-04-23 00:42:38,433 log 9572 27420 Not Found: /favicon.ico
+INFO 2026-04-23 00:44:17,070 autoreload 9572 17556 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-23 00:44:18,413 autoreload 30184 29976 Watching for file changes with StatReloader

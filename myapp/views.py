@@ -126,6 +126,9 @@ def contact(request):
 def buy(request):
     offers = Offers.objects.annotate(avg_rating=Avg('product_reviews__rating'), review_count=Count('product_reviews')).order_by('-id')
     arrivals = NewArrivals.objects.annotate(avg_rating=Avg('product_reviews__rating'), review_count=Count('product_reviews')).order_by('-id')
+
+    top_rated_offers = offers.filter(review_count__gt=0).order_by('-avg_rating', '-review_count', '-id')[:4]
+    most_reviewed_arrivals = arrivals.filter(review_count__gt=0).order_by('-review_count', '-avg_rating', '-id')[:4]
     
     # Get cart count
     cart_count = 0
@@ -139,6 +142,9 @@ def buy(request):
     context = {
         'offers': offers,
         'kids_arrivals': arrivals,
+        'top_rated_offers': top_rated_offers,
+        'most_reviewed_arrivals': most_reviewed_arrivals,
+        'total_products': offers.count() + arrivals.count(),
         'cart_count': cart_count,
     }
     
