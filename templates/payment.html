@@ -1,0 +1,394 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Secure Payment — KidZone{% endblock %}
+
+{% block extra_css %}
+<style>
+    .pay-hero {
+        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4338ca 100%);
+        min-height: 100vh;
+        padding: 2rem;
+    }
+    .pay-card {
+        background: rgba(255,255,255,0.07);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 1.5rem;
+    }
+    .pay-glass {
+        background: rgba(255,255,255,0.95);
+        border-radius: 1.25rem;
+        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+    }
+    .pay-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .pay-item:last-child { border-bottom: none; }
+    .pay-item img {
+        width: 56px;
+        height: 56px;
+        border-radius: 0.75rem;
+        object-fit: cover;
+    }
+    .pay-btn {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 1rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        width: 100%;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+    .pay-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(99,102,241,0.4); }
+    .pay-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .pay-btn-cod {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+    .pay-btn-cod:hover { box-shadow: 0 10px 40px rgba(245,158,11,0.4); }
+    .pay-methods { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .pay-method {
+        flex: 1;
+        padding: 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 1rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: white;
+    }
+    .pay-method.active {
+        border-color: #6366f1;
+        background: #f0f0ff;
+        box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+    }
+    .pay-method:hover { border-color: #a5b4fc; }
+    .pay-method i { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
+    .section-anim { animation: fadeUp 0.6s ease both; }
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .pay-field { width: 100%; padding: 0.75rem 1rem; border: 2px solid #e2e8f0; border-radius: 0.75rem; font-size: 0.95rem; transition: border-color 0.2s; }
+    .pay-field:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+    .pay-label { display: block; font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .trust-badge { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.06); border-radius: 0.75rem; font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+    .summary-row { display: flex; justify-content: space-between; padding: 0.5rem 0; }
+    .summary-total { font-size: 1.4rem; font-weight: 800; color: #6366f1; }
+    .spinner-payment { display: none; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid white; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="bg-slate-50 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 py-3">
+        <nav class="flex items-center gap-2 text-sm text-slate-500">
+            <a href="{% url 'index' %}" class="hover:text-indigo-600 transition">Home</a>
+            <i class="bi bi-chevron-right text-xs"></i>
+            <a href="{% url 'cart_details' %}" class="hover:text-indigo-600 transition">Cart</a>
+            <i class="bi bi-chevron-right text-xs"></i>
+            <span class="text-indigo-600 font-semibold">Payment</span>
+        </nav>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<style>
+    .pm-shapes { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .pm-s { position: absolute; opacity: .08; }
+    .pm-s--c1 { width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(135deg,rgba(99,102,241,.15),rgba(168,85,247,.08)); top: 8%; left: 5%; animation: pmGlow 6s ease-in-out infinite; }
+    .pm-s--c2 { width: 55px; height: 55px; border-radius: 50%; border: 3px solid rgba(16,185,129,.1); bottom: 18%; right: 8%; animation: pmGlow 8s ease-in-out infinite 2s; }
+    .pm-s--sq1 { width: 60px; height: 60px; border-radius: 14px; background: linear-gradient(135deg,rgba(16,185,129,.12),rgba(52,211,153,.06)); top: 45%; right: 5%; animation: pmShield 9s ease-in-out infinite; transform: rotate(45deg); }
+    .pm-s--sq2 { width: 40px; height: 40px; border-radius: 10px; border: 2px solid rgba(99,102,241,.08); bottom: 35%; left: 12%; animation: pmShield 11s ease-in-out infinite reverse; }
+    .pm-s--glow1 { width: 70px; height: 70px; border-radius: 50%; background: radial-gradient(circle, rgba(16,185,129,.1), transparent 70%); top: 25%; right: 25%; animation: pmGlow 5s ease-in-out infinite; }
+    .pm-s--glow2 { width: 45px; height: 45px; border-radius: 50%; background: radial-gradient(circle, rgba(99,102,241,.08), transparent 70%); bottom: 50%; left: 35%; animation: pmGlow 7s ease-in-out infinite 3s; }
+    .pm-s--dot1 { width: 18px; height: 18px; border-radius: 50%; background: rgba(251,191,36,.14); top: 60%; left: 8%; animation: pmShield 6s ease-in-out infinite 1s; }
+    .pm-s--dot2 { width: 14px; height: 14px; border-radius: 50%; background: rgba(16,185,129,.12); top: 15%; left: 50%; animation: pmShield 7s ease-in-out infinite 2.5s; }
+    @keyframes pmGlow {
+        0%, 100% { transform: scale(1); opacity: .08; }
+        50% { transform: scale(1.4); opacity: .02; }
+    }
+    @keyframes pmShield {
+        0%,100% { transform: translateY(0) rotate(0deg); opacity: .08; }
+        25% { transform: translateY(-18px) rotate(4deg); opacity: .12; }
+        50% { transform: translateY(-28px) rotate(-3deg); opacity: .06; }
+        75% { transform: translateY(-10px) rotate(2deg); opacity: .1; }
+    }
+</style>
+<div class="pm-shapes" aria-hidden="true">
+    <div class="pm-s pm-s--c1"></div>
+    <div class="pm-s pm-s--c2"></div>
+    <div class="pm-s pm-s--sq1"></div>
+    <div class="pm-s pm-s--sq2"></div>
+    <div class="pm-s pm-s--glow1"></div>
+    <div class="pm-s pm-s--glow2"></div>
+    <div class="pm-s pm-s--dot1"></div>
+    <div class="pm-s pm-s--dot2"></div>
+</div>
+<div class="pay-hero">
+    <!-- Trust Bar -->
+    <div class="max-w-5xl mx-auto mb-6 flex flex-wrap justify-center gap-4">
+        <div class="trust-badge"><i class="bi bi-shield-lock-fill text-emerald-400"></i> SSL Encrypted</div>
+        <div class="trust-badge"><i class="bi bi-credit-card-fill text-blue-400"></i> Secure Payments</div>
+        <div class="trust-badge"><i class="bi bi-arrow-counterclockwise text-amber-400"></i> 30-Day Returns</div>
+        <div class="trust-badge"><i class="bi bi-truck text-purple-400"></i> Free Shipping 5000+</div>
+    </div>
+
+    <div class="max-w-5xl mx-auto grid lg:grid-cols-5 gap-6">
+        <!-- ── Left: Order Summary ── -->
+        <div class="lg:col-span-2 pay-card p-6 section-anim" style="animation-delay:0.1s">
+            <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                <i class="bi bi-bag-check-fill text-amber-400"></i> Order Summary
+            </h2>
+            <div class="space-y-1 mb-4">
+                {% for item in cart_items %}
+                <div class="pay-item">
+                    <img src="{{ item.image }}" alt="{{ item.name }}" loading="lazy">
+                    <div class="flex-1 min-w-0">
+                        <p class="text-white text-sm font-semibold truncate">{{ item.name }}</p>
+                        <p class="text-white/50 text-xs">Qty: {{ item.quantity }}</p>
+                    </div>
+                    <span class="text-amber-400 font-bold text-sm whitespace-nowrap">Rs. {{ item.subtotal|floatformat:2 }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="border-t border-white/10 pt-3 space-y-1">
+                <div class="summary-row text-white/70 text-sm"><span>Subtotal</span><span>Rs. {{ subtotal|floatformat:2 }}</span></div>
+                <div class="summary-row text-white/70 text-sm"><span>Tax (10%)</span><span>Rs. {{ tax|floatformat:2 }}</span></div>
+                <div class="summary-row text-white/70 text-sm"><span>Shipping</span><span>Rs. {{ shipping|floatformat:2 }}</span></div>
+                <div class="summary-row border-t border-white/10 pt-2 mt-2">
+                    <span class="text-white font-bold text-lg">Total</span>
+                    <span class="summary-total text-amber-400">Rs. {{ total|floatformat:2 }}</span>
+                </div>
+            </div>
+            <!-- Coupon -->
+            <div class="mt-4">
+                <div class="flex gap-2">
+                    <input type="text" id="couponInput" placeholder="Coupon code" class="flex-1 px-3 py-2 rounded-lg bg-white/10 border border-white/15 text-white placeholder:text-white/40 text-sm focus:outline-none focus:border-indigo-400">
+                    <button onclick="applyCoupon()" class="px-4 py-2 rounded-lg bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-semibold transition">Apply</button>
+                </div>
+                <p id="couponMsg" class="text-xs mt-1.5 hidden"></p>
+            </div>
+        </div>
+
+        <!-- ── Right: Payment Form ── -->
+        <div class="lg:col-span-3 pay-glass p-8 section-anim" style="animation-delay:0.2s">
+            <h2 class="text-xl font-bold text-slate-900 mb-1">Complete Your Payment</h2>
+            <p class="text-slate-500 text-sm mb-6">Choose your preferred payment method</p>
+
+            <!-- Payment Methods -->
+            <div class="pay-methods">
+                <div class="pay-method active" onclick="selectMethod('stripe')" data-method="stripe">
+                    <i class="bi bi-credit-card-2-front-fill text-indigo-600"></i>
+                    <span class="text-sm font-semibold text-slate-700">Card / Stripe</span>
+                </div>
+                <div class="pay-method" onclick="selectMethod('cod')" data-method="cod">
+                    <i class="bi bi-cash-stack text-emerald-600"></i>
+                    <span class="text-sm font-semibold text-slate-700">Cash on Delivery</span>
+                </div>
+            </div>
+
+            <!-- Shipping Info -->
+            <div class="mb-6">
+                <h3 class="text-sm font-bold text-slate-800 mb-3 uppercase tracking-wider">Shipping Information</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="col-span-2 sm:col-span-1">
+                        <label class="pay-label">Full Name</label>
+                        <input type="text" id="payFullName" class="pay-field" value="{{ user.get_full_name|default:user.username }}" required>
+                    </div>
+                    <div class="col-span-2 sm:col-span-1">
+                        <label class="pay-label">Email</label>
+                        <input type="email" id="payEmail" class="pay-field" value="{{ user.email }}" required>
+                    </div>
+                    <div class="col-span-2 sm:col-span-1">
+                        <label class="pay-label">Phone</label>
+                        <input type="tel" id="payPhone" class="pay-field" required>
+                    </div>
+                    <div class="col-span-2 sm:col-span-1">
+                        <label class="pay-label">City</label>
+                        <input type="text" id="payCity" class="pay-field" required>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="pay-label">Address</label>
+                        <input type="text" id="payAddress" class="pay-field" required>
+                    </div>
+                    <div>
+                        <label class="pay-label">Postal Code</label>
+                        <input type="text" id="payPostalCode" class="pay-field" required>
+                    </div>
+                    <div>
+                        <label class="pay-label">Country</label>
+                        <input type="text" id="payCountry" class="pay-field" value="Sri Lanka" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pay Button (Stripe) -->
+            <div id="stripeSection">
+                <button id="stripePayBtn" onclick="handleStripePay()" class="pay-btn">
+                    <i class="bi bi-lock-fill"></i>
+                    <span>Pay Rs. {{ total|floatformat:2 }} Securely</span>
+                    <div class="spinner-payment" id="stripeSpinner"></div>
+                </button>
+                <p class="text-center text-xs text-slate-400 mt-3">You'll be redirected to Stripe's secure checkout</p>
+            </div>
+
+            <!-- Pay Button (COD) -->
+            <div id="codSection" class="hidden">
+                <button id="codPayBtn" onclick="handleCodPay()" class="pay-btn pay-btn-cod">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Place Order — Cash on Delivery</span>
+                    <div class="spinner-payment" id="codSpinner"></div>
+                </button>
+                <p class="text-center text-xs text-slate-400 mt-3">Pay when your order arrives at your doorstep</p>
+            </div>
+
+            <!-- Security Assurance -->
+            <div class="mt-8 flex items-center justify-center gap-6 text-slate-400 text-xs">
+                <span><i class="bi bi-shield-fill-check text-emerald-500"></i> PCI Compliant</span>
+                <span><i class="bi bi-lock-fill text-indigo-500"></i> 256-bit SSL</span>
+                <span><i class="bi bi-arrow-repeat text-amber-500"></i> Refund Policy</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+const stripe = Stripe('{{ stripe_publishable_key }}');
+let selectedMethod = 'stripe';
+
+function selectMethod(method) {
+    selectedMethod = method;
+    document.querySelectorAll('.pay-method').forEach(el => {
+        el.classList.toggle('active', el.dataset.method === method);
+    });
+    document.getElementById('stripeSection').classList.toggle('hidden', method !== 'stripe');
+    document.getElementById('codSection').classList.toggle('hidden', method !== 'cod');
+}
+
+function getShippingData() {
+    return {
+        full_name: document.getElementById('payFullName').value.trim(),
+        email: document.getElementById('payEmail').value.trim(),
+        phone: document.getElementById('payPhone').value.trim(),
+        address: document.getElementById('payAddress').value.trim(),
+        city: document.getElementById('payCity').value.trim(),
+        postal_code: document.getElementById('payPostalCode').value.trim(),
+        country: document.getElementById('payCountry').value.trim(),
+        coupon_code: document.getElementById('couponInput').value.trim(),
+    };
+}
+
+function validateShipping() {
+    const d = getShippingData();
+    if (!d.full_name || !d.email || !d.phone || !d.address || !d.city || !d.postal_code || !d.country) {
+        showToast('Please fill in all shipping fields', 'warning');
+        return false;
+    }
+    return true;
+}
+
+function handleStripePay() {
+    if (!validateShipping()) return;
+    const btn = document.getElementById('stripePayBtn');
+    const spinner = document.getElementById('stripeSpinner');
+    btn.disabled = true;
+    spinner.style.display = 'block';
+
+    fetch('/create-checkout-session/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
+        body: JSON.stringify(getShippingData()),
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.sessionId) {
+            stripe.redirectToCheckout({ sessionId: data.sessionId });
+        } else {
+            showToast(data.error || 'Failed to create session', 'error');
+            btn.disabled = false;
+            spinner.style.display = 'none';
+        }
+    })
+    .catch(() => {
+        showToast('Network error', 'error');
+        btn.disabled = false;
+        spinner.style.display = 'none';
+    });
+}
+
+function handleCodPay() {
+    if (!validateShipping()) return;
+    const btn = document.getElementById('codPayBtn');
+    const spinner = document.getElementById('codSpinner');
+    btn.disabled = true;
+    spinner.style.display = 'block';
+
+    const formData = new FormData();
+    const d = getShippingData();
+    Object.keys(d).forEach(k => formData.append(k, d[k]));
+    formData.append('payment_method', 'cash_on_delivery');
+
+    fetch('/checkout/', {
+        method: 'POST',
+        headers: { 'X-CSRFToken': getCsrfToken() },
+        body: formData,
+    })
+    .then(r => {
+        if (r.redirected) {
+            window.location.href = r.url;
+        } else {
+            showToast('Order placed!', 'success');
+            setTimeout(() => window.location.href = '/', 1500);
+        }
+    })
+    .catch(() => {
+        showToast('Something went wrong', 'error');
+        btn.disabled = false;
+        spinner.style.display = 'none';
+    });
+}
+
+function applyCoupon() {
+    const code = document.getElementById('couponInput').value.trim();
+    const msg = document.getElementById('couponMsg');
+    if (!code) return;
+
+    fetch('/validate-coupon/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
+        body: JSON.stringify({ code: code, subtotal: {{ subtotal }} }),
+    })
+    .then(r => r.json())
+    .then(data => {
+        msg.classList.remove('hidden');
+        if (data.valid) {
+            msg.className = 'text-xs mt-1.5 text-emerald-400';
+            msg.textContent = `✓ Coupon applied! Discount: Rs. ${data.discount.toFixed(2)}`;
+        } else {
+            msg.className = 'text-xs mt-1.5 text-red-400';
+            msg.textContent = data.error;
+        }
+    });
+}
+
+function getCsrfToken() {
+    const c = document.cookie.split(';').find(c => c.trim().startsWith('csrftoken='));
+    return c ? c.split('=')[1] : '';
+}
+</script>
+{% endblock %}

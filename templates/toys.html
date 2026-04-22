@@ -1,0 +1,264 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Toys - Fun & Learning</title>
+    <link rel="stylesheet" href="{% static 'navbar.css'%}">
+    <link rel="stylesheet" href="{%static 'footer.css'%}">
+    <link rel="stylesheet" href="{%static 'toys.css'%}">
+    <link rel="stylesheet" href="{%static 'scroll-reveal.css'%}">
+</head>
+<body>
+
+    {%include 'navbar.html'%}
+
+    <!-- Hero Section -->
+    <section class="toys-hero">
+        <div class="toys-hero__overlay"></div>
+        <!-- 3D Floating Shapes -->
+        <div class="hero-shapes" aria-hidden="true">
+            <div class="shape shape--circle"></div>
+            <div class="shape shape--square"></div>
+            <div class="shape shape--triangle"></div>
+            <div class="shape shape--dot"></div>
+            <div class="shape shape--ring"></div>
+            <div class="shape shape--spin1"></div>
+            <div class="shape shape--bounce1"></div>
+            <div class="shape shape--star"></div>
+        </div>
+        <div class="toys-hero__content">
+            <h1 class="toys-hero__title">Where Fun Meets Learning</h1>
+            <p class="toys-hero__subtitle">Discover amazing toys that spark imagination and inspire creativity</p>
+            <div class="toys-hero__buttons">
+                <a href="#featured" class="btn-primary">Shop Bestsellers</a>
+                <a href="#all-toys" class="btn-secondary">Browse All Toys</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Filter Section -->
+    <section class="filter-section" data-reveal="up">
+        <div class="filter-container">
+            <h2 class="filter-title">Shop by Category</h2>
+            <div class="filter-buttons">
+                <a href="?category=all" class="filter-btn {% if selected_category == 'all' %}active{% endif %}">
+                    <span class="filter-icon">🎯</span>
+                    All Toys
+                </a>
+                <a href="?category=educational" class="filter-btn {% if selected_category == 'educational' %}active{% endif %}">
+                    <span class="filter-icon">📚</span>
+                    Educational
+                </a>
+                <a href="?category=outdoor" class="filter-btn {% if selected_category == 'outdoor' %}active{% endif %}">
+                    <span class="filter-icon">⚽</span>
+                    Outdoor
+                </a>
+                <a href="?category=creative" class="filter-btn {% if selected_category == 'creative' %}active{% endif %}">
+                    <span class="filter-icon">🎨</span>
+                    Creative
+                </a>
+                <a href="?category=electronic" class="filter-btn {% if selected_category == 'electronic' %}active{% endif %}">
+                    <span class="filter-icon">🎮</span>
+                    Electronic
+                </a>
+                <a href="?category=plush" class="filter-btn {% if selected_category == 'plush' %}active{% endif %}">
+                    <span class="filter-icon">🧸</span>
+                    Plush
+                </a>
+                <a href="?category=building" class="filter-btn {% if selected_category == 'building' %}active{% endif %}">
+                    <span class="filter-icon">🧱</span>
+                    Building
+                </a>
+            </div>
+
+            <h3 class="filter-subtitle">Shop by Age</h3>
+            <div class="age-filter">
+                <a href="?age=all" class="age-btn {% if selected_age == 'all' %}active{% endif %}">All Ages</a>
+                <a href="?age=0-2" class="age-btn {% if selected_age == '0-2' %}active{% endif %}">0-2 years</a>
+                <a href="?age=3-5" class="age-btn {% if selected_age == '3-5' %}active{% endif %}">3-5 years</a>
+                <a href="?age=6-8" class="age-btn {% if selected_age == '6-8' %}active{% endif %}">6-8 years</a>
+                <a href="?age=9-12" class="age-btn {% if selected_age == '9-12' %}active{% endif %}">9-12 years</a>
+                <a href="?age=13+" class="age-btn {% if selected_age == '13+' %}active{% endif %}">13+ years</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Toys Section -->
+    <section class="featured-section" id="featured" data-reveal="left">
+        <h2 class="section-title">✨ Bestsellers</h2>
+        <p class="section-subtitle">Most loved toys by kids and parents</p>
+        <div class="toys-grid">
+            {% for toy in featured_toys %}
+            <div class="toy-card">
+                {% if toy.is_bestseller %}
+                <span class="toy-badge bestseller">🔥 Bestseller</span>
+                {% endif %}
+                <div class="toy-image">
+                    <img src="{{ toy.imageUrl.url }}" alt="{{ toy.name }}" loading="lazy">
+                    <div class="toy-overlay">
+                        <a href="{% url 'product_detail' 'toy' toy.id %}" class="quick-view-btn">Quick View</a>
+                    </div>
+                </div>
+                <div class="toy-content">
+                    <span class="toy-category">{{ toy.get_category_display }}</span>
+                    <h3><a href="{% url 'product_detail' 'toy' toy.id %}" style="color:inherit;text-decoration:none">{{ toy.name }}</a></h3>
+                    <div class="toy-rating">
+                        {% with item_rating=toy.avg_rating item_review_count=toy.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
+                    </div>
+                    <p class="toy-age">Age: {{ toy.get_age_range_display }}</p>
+                    <div class="price-container">
+                        <span class="price-current">Rs {{ toy.price }}</span>
+                        {% if toy.original_price %}
+                        <span class="price-old">Rs {{ toy.original_price }}</span>
+                        <span class="discount-badge">{{ toy.discount_percentage }}% OFF</span>
+                        {% endif %}
+                    </div>
+                    <a
+                        href="{% url 'add_to_cart' 'toy' toy.id %}"
+                        class="add-to-cart-btn"
+                        data-add-to-cart
+                        data-item-type="toy"
+                        data-item-id="{{ toy.id }}"
+                    >Add to Cart</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- New Arrivals Section -->
+    <section class="new-arrivals-section" data-reveal="right">
+        <h2 class="section-title">🎁 New Arrivals</h2>
+        <p class="section-subtitle">Fresh toys just added to our collection</p>
+        <div class="toys-grid">
+            {% for toy in new_toys %}
+            <div class="toy-card">
+                {% if toy.is_new %}
+                <span class="toy-badge new">✨ New</span>
+                {% endif %}
+                <div class="toy-image">
+                    <img src="{{ toy.imageUrl.url }}" alt="{{ toy.name }}" loading="lazy">
+                    <div class="toy-overlay">
+                        <a href="{% url 'product_detail' 'toy' toy.id %}" class="quick-view-btn">Quick View</a>
+                    </div>
+                </div>
+                <div class="toy-content">
+                    <span class="toy-category">{{ toy.get_category_display }}</span>
+                    <h3><a href="{% url 'product_detail' 'toy' toy.id %}" style="color:inherit;text-decoration:none">{{ toy.name }}</a></h3>
+                    <div class="toy-rating">
+                        {% with item_rating=toy.avg_rating item_review_count=toy.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
+                    </div>
+                    <p class="toy-age">Age: {{ toy.get_age_range_display }}</p>
+                    <div class="price-container">
+                        <span class="price-current">Rs {{ toy.price }}</span>
+                        {% if toy.original_price %}
+                        <span class="price-old">Rs {{ toy.original_price }}</span>
+                        <span class="discount-badge">{{ toy.discount_percentage }}% OFF</span>
+                        {% endif %}
+                    </div>
+                    <a
+                        href="{% url 'add_to_cart' 'toy' toy.id %}"
+                        class="add-to-cart-btn"
+                        data-add-to-cart
+                        data-item-type="toy"
+                        data-item-id="{{ toy.id }}"
+                    >Add to Cart</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- All Toys Section -->
+    <section class="all-toys-section" id="all-toys" data-reveal="up">
+        <h2 class="section-title">🎪 All Toys</h2>
+        <p class="section-subtitle">{{ toys.count }} amazing toys to choose from</p>
+        <div class="toys-grid">
+            {% for toy in toys %}
+            <div class="toy-card">
+                {% if toy.is_bestseller %}
+                <span class="toy-badge bestseller">🔥 Bestseller</span>
+                {% elif toy.is_new %}
+                <span class="toy-badge new">✨ New</span>
+                {% endif %}
+                <div class="toy-image">
+                    <img src="{{ toy.imageUrl.url }}" alt="{{ toy.name }}" loading="lazy">
+                    <div class="toy-overlay">
+                        <a href="{% url 'product_detail' 'toy' toy.id %}" class="quick-view-btn">Quick View</a>
+                    </div>
+                </div>
+                <div class="toy-content">
+                    <span class="toy-category">{{ toy.get_category_display }}</span>
+                    <h3><a href="{% url 'product_detail' 'toy' toy.id %}" style="color:inherit;text-decoration:none">{{ toy.name }}</a></h3>
+                    <div class="toy-rating">
+                        {% with item_rating=toy.avg_rating item_review_count=toy.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
+                    </div>
+                    <p class="toy-age">Age: {{ toy.get_age_range_display }}</p>
+                    <div class="price-container">
+                        <span class="price-current">Rs {{ toy.price }}</span>
+                        {% if toy.original_price %}
+                        <span class="price-old">Rs {{ toy.original_price }}</span>
+                        <span class="discount-badge">{{ toy.discount_percentage }}% OFF</span>
+                        {% endif %}
+                    </div>
+                    <a
+                        href="{% url 'add_to_cart' 'toy' toy.id %}"
+                        class="add-to-cart-btn"
+                        data-add-to-cart
+                        data-item-type="toy"
+                        data-item-id="{{ toy.id }}"
+                    >Add to Cart</a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-toys">
+                <h3>😕 No toys found</h3>
+                <p>Try selecting a different category or age range</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    {% with page_obj=toys %}
+    {% include 'includes/pagination.html' %}
+    {% endwith %}
+
+    <!-- Benefits Section -->
+    <section class="benefits-section" data-reveal="up" data-reveal-stagger>
+        <div class="benefits-container">
+            <div class="benefit-card">
+                <div class="benefit-icon">🎯</div>
+                <h3>Educational Value</h3>
+                <p>Toys that teach while they entertain</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">✅</div>
+                <h3>Safety Certified</h3>
+                <p>All toys meet international safety standards</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🚚</div>
+                <h3>Fast Delivery</h3>
+                <p>Get your toys delivered within 3-5 days</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🔄</div>
+                <h3>Easy Returns</h3>
+                <p>30-day hassle-free return policy</p>
+            </div>
+        </div>
+    </section>
+
+    {%include 'footer.html'%}
+
+    <script src="{% static 'cart_utils.js' %}"></script>
+    <script src="{% static 'toys.js' %}"></script>
+    <script src="{% static 'global.js' %}"></script>
+    <script src="{%static 'scroll-reveal.js'%}"></script>
+</body>
+</html>

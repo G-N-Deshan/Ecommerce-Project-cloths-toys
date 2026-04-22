@@ -1,0 +1,365 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Women's Clothing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'footer.css' %}">
+    <style>
+        :root {
+            --rose-1: #f43f5e;
+            --rose-2: #fb7185;
+            --peach: #fb923c;
+            --sand: #fffbeb;
+            --ink: #111827;
+            --slate: #475569;
+        }
+
+        body {
+            font-family: "Manrope", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 15% 5%, rgba(251, 113, 133, 0.16) 0%, transparent 32%),
+                radial-gradient(circle at 92% 18%, rgba(251, 146, 60, 0.18) 0%, transparent 30%),
+                linear-gradient(180deg, #fff8f5 0%, #fffdf7 45%, #f8fafc 100%);
+        }
+
+        .hero-title {
+            font-family: "Playfair Display", serif;
+            letter-spacing: 0.2px;
+        }
+
+        .glass-panel {
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.78);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+        }
+
+        .hero-panel {
+            background:
+                linear-gradient(130deg, rgba(255, 255, 255, 0.74), rgba(255, 247, 237, 0.72)),
+                url('{% static "kids-card-page-background.jpg" %}') center/cover no-repeat;
+        }
+
+        .hero-panel::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cg fill='none' stroke='rgba(190,24,93,0.14)' stroke-width='2'%3E%3Cpath d='M12 78h62M146 36h58M128 178h72'/%3E%3Ccircle cx='56' cy='152' r='22'/%3E%3Ccircle cx='176' cy='108' r='16'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 240px 240px;
+            mix-blend-mode: soft-light;
+            pointer-events: none;
+        }
+
+        .tabs-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(244, 63, 94, 0.4) transparent;
+        }
+
+        .tabs-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .tabs-scroll::-webkit-scrollbar-thumb {
+            background: rgba(244, 63, 94, 0.42);
+            border-radius: 999px;
+        }
+
+        .tab-btn {
+            border-radius: 999px;
+            border: 1px solid #fecdd3;
+            padding: 9px 16px;
+            white-space: nowrap;
+            font-weight: 700;
+            color: #9f1239;
+            background: #fff;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover,
+        .tab-btn.active {
+            color: #fff;
+            border-color: transparent;
+            background: linear-gradient(135deg, var(--rose-1), var(--peach));
+            box-shadow: 0 10px 22px rgba(244, 63, 94, 0.28);
+            transform: translateY(-1px);
+        }
+
+        .product-card {
+            border-radius: 18px;
+            border: 1px solid #fee2e2;
+            background: #fff;
+            overflow: hidden;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 18px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        .section-anchor {
+            scroll-margin-top: 100px;
+        }
+
+        .section-shell {
+            background-image:
+                linear-gradient(140deg, rgba(244, 63, 94, 0.05), rgba(251, 146, 60, 0.07)),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='rgba(244,63,94,0.09)' stroke-width='1.5'%3E%3Ccircle cx='36' cy='36' r='16'/%3E%3Cpath d='M95 20h60M20 100h50M122 140h38'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: auto, 220px 220px;
+        }
+
+        .pill {
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            background: #fff1f2;
+            color: #be123c;
+            border: 1px solid #fecdd3;
+        }
+
+        /* 3D Floating Shapes */
+        @keyframes pgFloat {
+            0%,100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-22px) rotate(5deg); }
+            50% { transform: translateY(-36px) rotate(-4deg); }
+            75% { transform: translateY(-14px) rotate(3deg); }
+        }
+        @keyframes wcSwirl {
+            0% { transform: rotate(0deg) translateX(18px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(18px) rotate(-360deg); }
+        }
+        @keyframes wcBloom {
+            0%,100% { transform: scale(1); border-radius:50%; opacity:.08; }
+            50% { transform: scale(1.3); border-radius:30% 70% 70% 30%/30% 30% 70% 70%; opacity:.2; }
+        }
+        @keyframes cardUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .glass-panel article { animation: cardUp .5s ease-out both; }
+        .glass-panel article:nth-child(2) { animation-delay: .06s; }
+        .glass-panel article:nth-child(3) { animation-delay: .12s; }
+        .glass-panel article:nth-child(4) { animation-delay: .18s; }
+    </style>
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <main class="mx-auto w-[94%] max-w-7xl pb-16">
+        <section class="relative overflow-hidden rounded-[30px] mt-4 md:mt-6 px-6 md:px-10 py-14 md:py-20 glass-panel hero-panel">
+            <div class="absolute -top-12 -left-8 w-56 h-56 bg-rose-200/45 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-10 right-0 w-64 h-64 bg-orange-200/50 rounded-full blur-2xl"></div>
+            <!-- 3D Floating Shapes -->
+            <div class="absolute top-[10%] left-[6%] w-24 h-24 rounded-full bg-rose-400/10 pointer-events-none" style="animation:pgFloat 7s ease-in-out infinite"></div>
+            <div class="absolute bottom-[12%] right-[7%] w-16 h-16 rounded-2xl bg-orange-300/10 rotate-45 pointer-events-none" style="animation:pgFloat 9s 2s ease-in-out infinite"></div>
+            <div class="absolute top-[25%] right-[18%] w-20 h-20 rounded-full border-4 border-rose-300/10 pointer-events-none" style="animation:pgFloat 10s 3.5s ease-in-out infinite"></div>
+            <div class="absolute top-[50%] left-[4%] w-14 h-14 rounded-full border-2 border-rose-400/12 pointer-events-none" style="animation:wcSwirl 12s linear infinite"></div>
+            <div class="absolute top-[18%] right-[5%] w-10 h-10 rounded-full bg-pink-300/10 pointer-events-none" style="animation:wcSwirl 10s 2s linear infinite"></div>
+            <div class="absolute bottom-[25%] left-[12%] w-16 h-16 rounded-full bg-rose-200/10 pointer-events-none" style="animation:wcBloom 8s ease-in-out infinite"></div>
+            <div class="absolute bottom-[8%] left-[25%] w-12 h-12 rounded-xl border-2 border-orange-300/10 pointer-events-none" style="animation:wcBloom 6s 1.5s ease-in-out infinite"></div>
+            <div class="absolute top-[60%] right-[15%] w-8 h-8 rounded-full bg-rose-300/8 pointer-events-none" style="animation:pgFloat 6s 1s ease-in-out infinite"></div>
+            <div class="relative z-10 text-center max-w-3xl mx-auto">
+                <span class="inline-flex items-center rounded-full border border-rose-200 bg-white px-4 py-1 text-sm font-semibold text-rose-700">Women's Collection 2026</span>
+                <h1 class="hero-title mt-5 text-4xl md:text-6xl font-bold text-slate-900">Style That Moves With Your Day</h1>
+                <p class="mt-5 text-slate-600 leading-7 md:text-lg">From soft essentials to statement pieces, discover a cleaner, faster shopping flow with smart filtering, sorting, and section navigation.</p>
+                <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+                    <a href="#controls" class="rounded-full bg-gradient-to-r from-rose-500 to-orange-400 px-6 py-3 text-white font-bold shadow-lg shadow-rose-300/40">Explore Filters</a>
+                    <a href="#catalog" class="rounded-full border border-rose-200 bg-white px-6 py-3 text-rose-700 font-bold">Jump To Products</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="controls" class="mt-6 md:mt-8 rounded-2xl glass-panel p-4 md:p-6" data-reveal="up">
+            <form method="get" action="{% url 'women_cloths' %}" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-3">
+                <div class="xl:col-span-2">
+                    <label class="text-sm font-bold text-slate-600">Search</label>
+                    <input id="quickSearch" type="text" name="q" value="{{ search_query }}" placeholder="Search by product name" class="mt-1 h-11 w-full rounded-xl border border-rose-200 bg-white px-3 outline-none focus:ring-2 focus:ring-rose-300">
+                </div>
+
+                <div>
+                    <label class="text-sm font-bold text-slate-600">Subcategory</label>
+                    <select name="subcategory" class="mt-1 h-11 w-full rounded-xl border border-rose-200 bg-white px-3 outline-none focus:ring-2 focus:ring-rose-300">
+                        <option value="all" {% if selected_subcategory == 'all' %}selected{% endif %}>All</option>
+                        {% for value, label in filter_subcategories %}
+                        <option value="{{ value }}" {% if selected_subcategory == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-sm font-bold text-slate-600">Min Price</label>
+                    <input type="number" min="0" step="1" name="min_price" value="{{ selected_min_price }}" placeholder="0" class="mt-1 h-11 w-full rounded-xl border border-rose-200 bg-white px-3 outline-none focus:ring-2 focus:ring-rose-300">
+                </div>
+
+                <div>
+                    <label class="text-sm font-bold text-slate-600">Max Price</label>
+                    <input type="number" min="0" step="1" name="max_price" value="{{ selected_max_price }}" placeholder="5000" class="mt-1 h-11 w-full rounded-xl border border-rose-200 bg-white px-3 outline-none focus:ring-2 focus:ring-rose-300">
+                </div>
+
+                <div>
+                    <label class="text-sm font-bold text-slate-600">Sort</label>
+                    <select name="sort" onchange="this.form.submit()" class="mt-1 h-11 w-full rounded-xl border border-rose-200 bg-white px-3 outline-none focus:ring-2 focus:ring-rose-300">
+                        <option value="featured" {% if selected_sort == 'featured' %}selected{% endif %}>Featured</option>
+                        <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price low-high</option>
+                        <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price high-low</option>
+                        <option value="name_asc" {% if selected_sort == 'name_asc' %}selected{% endif %}>Name A-Z</option>
+                        <option value="name_desc" {% if selected_sort == 'name_desc' %}selected{% endif %}>Name Z-A</option>
+                        <option value="oldest" {% if selected_sort == 'oldest' %}selected{% endif %}>Oldest</option>
+                    </select>
+                </div>
+
+                <div class="xl:col-span-6 flex flex-wrap gap-2 pt-1">
+                    <button type="submit" class="rounded-xl bg-gradient-to-r from-rose-500 to-orange-400 px-5 py-2.5 text-white font-bold">Apply Filters</button>
+                    <a href="{% url 'women_cloths' %}" class="rounded-xl border border-rose-200 bg-white px-5 py-2.5 text-rose-700 font-bold">Reset</a>
+                </div>
+            </form>
+        </section>
+
+        <section id="catalog" class="mt-5 md:mt-6" data-reveal="up">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="pill">{{ women_cloths|length }} products</span>
+                    <span class="pill" id="liveCount">{{ women_cloths|length }} visible</span>
+                </div>
+                <p class="text-sm text-slate-500">Tap tabs to scroll to each section.</p>
+            </div>
+
+            <div class="tabs-scroll flex gap-2 overflow-x-auto pb-2" id="sectionTabs">
+                <button type="button" class="tab-btn active" data-scroll-target="top">Top</button>
+                {% for section in sections %}
+                <button type="button" class="tab-btn" data-scroll-target="{{ section.slug }}-section">{{ section.label }} ({{ section.items|length }})</button>
+                {% endfor %}
+            </div>
+
+            <div id="top" data-observe="top" class="section-anchor"></div>
+
+            {% if sections %}
+                {% for section in sections %}
+                <section id="{{ section.slug }}-section" data-observe="{{ section.slug }}-section" class="section-anchor section-shell mt-5 rounded-2xl border border-rose-100 bg-white/85 p-4 md:p-5">
+                    <div class="flex flex-wrap items-end justify-between gap-2 mb-4">
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900">{{ section.label }}</h2>
+                        <span class="text-sm font-semibold text-slate-500">{{ section.items|length }} items</span>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        {% for cloth in section.items %}
+                        <article class="product-card product-item" data-name="{{ cloth.name|lower }}" data-price="{{ cloth.numeric_price }}">
+                            <div class="aspect-[4/5] bg-rose-50 overflow-hidden relative group">
+                                <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
+                                <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <span class="bg-white text-slate-900 px-5 py-2.5 rounded-lg font-bold text-sm hover:scale-105 transition-transform">Quick View</span>
+                                </a>
+                            </div>
+                            <div class="p-4 grid gap-2">
+                                <h3 class="font-extrabold text-slate-900 leading-6"><a href="{% url 'product_detail' 'cloth' cloth.id %}" class="hover:text-rose-600 transition-colors" style="color:inherit;text-decoration:none">{{ cloth.name }}</a></h3>
+                                <p class="text-xs uppercase tracking-wide font-semibold text-slate-500">{{ cloth.get_subcategory_display|default:'Featured Style' }}</p>
+                                {% with item_rating=cloth.avg_rating item_review_count=cloth.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="text-lg font-extrabold text-slate-900">Rs {{ cloth.price2|default:cloth.price1|default:cloth.price }}</span>
+                                    {% if cloth.price1 and cloth.price2 %}
+                                    <span class="text-sm text-slate-400 line-through">Rs {{ cloth.price1 }}</span>
+                                    {% endif %}
+                                    {% if cloth.discount_text %}
+                                    <span class="pill">{{ cloth.discount_text }}</span>
+                                    {% endif %}
+                                </div>
+                                <div class="grid grid-cols-[1fr_auto] gap-2 pt-1">
+                                    <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="rounded-lg border border-rose-200 bg-rose-50 py-2 text-center text-sm font-bold text-rose-700">View</a>
+                                    <button class="rounded-lg bg-gradient-to-r from-rose-500 to-orange-400 px-3 py-2 text-sm font-bold text-white" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}">Add</button>
+                                </div>
+                            </div>
+                        </article>
+                        {% endfor %}
+                    </div>
+                </section>
+                {% endfor %}
+            {% else %}
+                <section class="mt-5 rounded-2xl border border-dashed border-rose-200 bg-white p-10 text-center">
+                    <h2 class="text-2xl font-extrabold text-slate-900">No products found</h2>
+                    <p class="mt-2 text-slate-500">Try changing your search or clearing filters.</p>
+                    <a href="{% url 'women_cloths' %}" class="inline-block mt-4 rounded-xl bg-gradient-to-r from-rose-500 to-orange-400 px-5 py-2.5 text-white font-bold">Reset Filters</a>
+                </section>
+            {% endif %}
+        </section>
+    </main>
+
+    {% include 'footer.html' %}
+
+    <script src="{% static 'cart_utils.js' %}"></script>
+    <script>
+        (function () {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const sections = document.querySelectorAll('[data-observe]');
+            const searchInput = document.getElementById('quickSearch');
+            const products = document.querySelectorAll('.product-item');
+            const liveCount = document.getElementById('liveCount');
+
+            function updateVisibleCount() {
+                const visible = Array.from(products).filter((item) => item.style.display !== 'none').length;
+                if (liveCount) {
+                    liveCount.textContent = visible + ' visible';
+                }
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('input', function () {
+                    const q = this.value.trim().toLowerCase();
+                    products.forEach((item) => {
+                        const name = (item.getAttribute('data-name') || '').toLowerCase();
+                        item.style.display = !q || name.includes(q) ? '' : 'none';
+                    });
+                    updateVisibleCount();
+                });
+            }
+
+            tabs.forEach((tab) => {
+                tab.addEventListener('click', function () {
+                    const targetId = this.getAttribute('data-scroll-target');
+                    const target = document.getElementById(targetId);
+                    if (!target) return;
+
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    tabs.forEach((btn) => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            if (sections.length) {
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            if (!entry.isIntersecting) return;
+                            const id = entry.target.getAttribute('data-observe');
+                            tabs.forEach((tab) => {
+                                tab.classList.toggle('active', tab.getAttribute('data-scroll-target') === id);
+                            });
+                        });
+                    },
+                    { threshold: 0.3 }
+                );
+
+                sections.forEach((section) => observer.observe(section));
+            }
+
+            updateVisibleCount();
+        })();
+    </script>
+
+    {% with page_obj=women_cloths %}
+    {% include 'includes/pagination.html' %}
+    {% endwith %}
+
+    <script src="{% static 'global.js' %}"></script>
+    <script src="{% static 'scroll-reveal.js' %}"></script>
+</body>
+</html>

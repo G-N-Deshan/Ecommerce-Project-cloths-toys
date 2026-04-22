@@ -1,0 +1,472 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - G11 Fashion & Toys</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'footer.css' %}">
+    <link rel="stylesheet" href="{% static 'contact.css' %}">
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
+    <style>
+        .ct-ripple { animation: ctRipple 6s ease-in-out infinite; opacity: 0.15; }
+        .ct-drift { animation: ctDrift 8s ease-in-out infinite; opacity: 0.12; }
+        @keyframes ctRipple {
+            0%, 100% { transform: scale(1); opacity: 0.1; }
+            50% { transform: scale(1.6); opacity: 0.25; }
+        }
+        @keyframes ctDrift {
+            0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+            25% { transform: translateX(10px) translateY(-18px) rotate(5deg); }
+            50% { transform: translateX(-8px) translateY(-30px) rotate(-3deg); }
+            75% { transform: translateX(6px) translateY(-12px) rotate(4deg); }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: { extend: { fontFamily: { inter: ['Inter'], playfair: ['Playfair Display'] } } }
+        }
+    </script>
+</head>
+<body class="font-inter bg-[#fafafa] text-slate-800" style="display:block">
+
+    {% include 'navbar.html' %}
+    {% include 'cart.html' %}
+
+    <!-- ═══ HERO ═══ -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-500 py-16 md:py-20">
+        <div class="absolute inset-0 opacity-10" style="background-image:url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221.5%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E');"></div>
+        <!-- Floating shapes -->
+        <div class="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full blur-xl animate-pulse"></div>
+        <div class="absolute bottom-10 right-20 w-32 h-32 bg-white/10 rounded-full blur-2xl animate-pulse" style="animation-delay:1s"></div>
+        <div class="absolute top-1/2 right-10 w-16 h-16 bg-white/10 rounded-full blur-xl animate-pulse" style="animation-delay:2s"></div>
+        <div class="ct-ripple absolute top-[20%] right-[12%] w-14 h-14 rounded-full border-2 border-white/15 pointer-events-none"></div>
+        <div class="ct-ripple absolute bottom-[25%] left-[8%] w-10 h-10 rounded-full border-2 border-white/10 pointer-events-none" style="animation-delay:1.5s"></div>
+        <div class="ct-drift absolute top-[60%] left-[3%] w-12 h-12 rounded-xl bg-white/8 border border-white/10 pointer-events-none"></div>
+        <div class="ct-drift absolute top-[15%] right-[5%] w-16 h-16 rounded-2xl border-2 border-white/10 pointer-events-none" style="animation-delay:2.5s"></div>
+        <div class="ct-ripple absolute bottom-[15%] right-[30%] w-8 h-8 rounded-full bg-white/8 pointer-events-none" style="animation-delay:3s"></div>
+
+        <div class="container mx-auto px-6 relative z-10 text-center">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/15 border border-white/20 text-white font-semibold rounded-full text-sm mb-6 backdrop-blur-sm">
+                <i class="bi bi-headset text-emerald-200"></i> 24/7 Support
+            </span>
+            <h1 class="text-4xl md:text-6xl font-black text-white font-playfair mb-4">Get in Touch</h1>
+            <p class="text-lg text-white/80 max-w-2xl mx-auto mb-8">We're here to help with orders, questions, and everything in between. Reach out and we'll respond quickly.</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#contactForm" class="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-emerald-700 font-bold rounded-full hover:shadow-xl hover:scale-105 transition-all duration-300">
+                    <i class="bi bi-pencil-square"></i> Write a Message
+                </a>
+                <a href="#faq" class="inline-flex items-center gap-2 px-8 py-3.5 border-2 border-white/40 text-white font-bold rounded-full hover:bg-white/15 transition-all duration-300">
+                    <i class="bi bi-question-circle"></i> View FAQ
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ INFO CARDS ═══ -->
+    <section class="py-10 bg-white border-b border-slate-100" data-reveal="up" data-reveal-stagger>
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+                <div class="info-card group p-6 bg-gradient-to-br from-emerald-50 to-white rounded-2xl border border-emerald-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-12 h-12 bg-emerald-100 group-hover:bg-emerald-500 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300">
+                        <i class="bi bi-geo-alt-fill text-xl text-emerald-600 group-hover:text-white transition-colors duration-300"></i>
+                    </div>
+                    <h3 class="font-extrabold text-slate-900 mb-1">Our Address</h3>
+                    <p class="text-slate-500 text-sm">123 Fashion Street<br>New York, NY 10001</p>
+                </div>
+                <div class="info-card group p-6 bg-gradient-to-br from-blue-50 to-white rounded-2xl border border-blue-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-12 h-12 bg-blue-100 group-hover:bg-blue-500 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300">
+                        <i class="bi bi-telephone-fill text-xl text-blue-600 group-hover:text-white transition-colors duration-300"></i>
+                    </div>
+                    <h3 class="font-extrabold text-slate-900 mb-1">Phone</h3>
+                    <p class="text-slate-500 text-sm">+1 (555) 123-4567<br>Mon - Fri: 9AM to 6PM</p>
+                </div>
+                <div class="info-card group p-6 bg-gradient-to-br from-purple-50 to-white rounded-2xl border border-purple-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-12 h-12 bg-purple-100 group-hover:bg-purple-500 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300">
+                        <i class="bi bi-envelope-fill text-xl text-purple-600 group-hover:text-white transition-colors duration-300"></i>
+                    </div>
+                    <h3 class="font-extrabold text-slate-900 mb-1">Email</h3>
+                    <p class="text-slate-500 text-sm">support@g11fashion.com<br>info@g11fashion.com</p>
+                </div>
+                <div class="info-card group p-6 bg-gradient-to-br from-amber-50 to-white rounded-2xl border border-amber-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-12 h-12 bg-amber-100 group-hover:bg-amber-500 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300">
+                        <i class="bi bi-clock-fill text-xl text-amber-600 group-hover:text-white transition-colors duration-300"></i>
+                    </div>
+                    <h3 class="font-extrabold text-slate-900 mb-1">Response Time</h3>
+                    <p class="text-slate-500 text-sm">Under 24 hours reply<br>Priority for order issues</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ CONTACT FORM + SIDEBAR ═══ -->
+    <section id="contactForm" class="py-14 bg-gradient-to-b from-white to-slate-50" data-reveal="up">
+        <div class="container mx-auto px-6">
+            <div class="grid lg:grid-cols-[1.3fr_0.7fr] gap-8 items-start">
+
+                <!-- Form Column -->
+                <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-100 p-8 md:p-10">
+                    <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
+                        <div>
+                            <h2 class="text-3xl md:text-4xl font-bold font-playfair text-slate-900 mb-2">Send a Message</h2>
+                            <p class="text-slate-500">Include as much detail as possible for faster help.</p>
+                        </div>
+                        <span class="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full text-xs font-bold text-emerald-700">
+                            <i class="bi bi-shield-check"></i> Secure
+                        </span>
+                    </div>
+
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="mb-6 px-5 py-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 font-semibold flex items-center gap-3">
+                            <i class="bi bi-check-circle-fill text-xl"></i> {{ message }}
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <!-- Quick subject chips -->
+                    <div class="mb-6">
+                        <p class="text-sm font-bold text-slate-600 mb-3"><i class="bi bi-tag mr-1 text-emerald-500"></i> Quick Subject</p>
+                        <div class="flex flex-wrap gap-2" id="subjectChips">
+                            <button type="button" class="contact-chip-new px-4 py-2 rounded-full text-sm font-semibold border-2 border-slate-200 bg-white text-slate-600 hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200" data-subject="Order issue">
+                                <i class="bi bi-box-seam mr-1"></i> Order Issue
+                            </button>
+                            <button type="button" class="contact-chip-new px-4 py-2 rounded-full text-sm font-semibold border-2 border-slate-200 bg-white text-slate-600 hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200" data-subject="Shipping question">
+                                <i class="bi bi-truck mr-1"></i> Shipping
+                            </button>
+                            <button type="button" class="contact-chip-new px-4 py-2 rounded-full text-sm font-semibold border-2 border-slate-200 bg-white text-slate-600 hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200" data-subject="Return request">
+                                <i class="bi bi-arrow-return-left mr-1"></i> Return
+                            </button>
+                            <button type="button" class="contact-chip-new px-4 py-2 rounded-full text-sm font-semibold border-2 border-slate-200 bg-white text-slate-600 hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200" data-subject="Product question">
+                                <i class="bi bi-chat-left-text mr-1"></i> Product
+                            </button>
+                            <button type="button" class="contact-chip-new px-4 py-2 rounded-full text-sm font-semibold border-2 border-slate-200 bg-white text-slate-600 hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200" data-subject="Business inquiry">
+                                <i class="bi bi-briefcase mr-1"></i> Business
+                            </button>
+                        </div>
+                    </div>
+
+                    <form method="post" class="space-y-5" id="contactFormElement">
+                        {% csrf_token %}
+
+                        <div class="grid md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-600 mb-2"><i class="bi bi-person mr-1 text-emerald-500"></i> Full Name *</label>
+                                {{ form.name }}
+                                {% if form.name.errors %}{{ form.name.errors }}{% endif %}
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-600 mb-2"><i class="bi bi-envelope mr-1 text-emerald-500"></i> Email *</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}{{ form.email.errors }}{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-600 mb-2"><i class="bi bi-telephone mr-1 text-emerald-500"></i> Phone</label>
+                                {{ form.phone }}
+                                {% if form.phone.errors %}{{ form.phone.errors }}{% endif %}
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-600 mb-2"><i class="bi bi-tag mr-1 text-emerald-500"></i> Subject *</label>
+                                {{ form.subject }}
+                                {% if form.subject.errors %}{{ form.subject.errors }}{% endif %}
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="text-sm font-bold text-slate-600"><i class="bi bi-chat-left-dots mr-1 text-emerald-500"></i> Message *</label>
+                                <span class="text-xs text-slate-400"><span id="msgCount">0</span>/600</span>
+                            </div>
+                            {{ form.message }}
+                            {% if form.message.errors %}{{ form.message.errors }}{% endif %}
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-lg rounded-2xl hover:shadow-xl hover:shadow-emerald-500/30 hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
+                            <i class="bi bi-send-fill"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="space-y-6">
+                    <!-- Map card -->
+                    <div class="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
+                        <div class="p-6 pb-4">
+                            <h3 class="text-xl font-bold font-playfair text-slate-900 flex items-center gap-2">
+                                <i class="bi bi-pin-map-fill text-emerald-500"></i> Visit Our Studio
+                            </h3>
+                            <p class="text-slate-500 text-sm mt-1">Find us at our main support office.</p>
+                        </div>
+                        <div class="px-6 pb-6">
+                            <div class="overflow-hidden rounded-xl border border-slate-100">
+                                <iframe
+                                    title="Office location"
+                                    src="https://www.openstreetmap.org/export/embed.html?bbox=-74.0125%2C40.7062%2C-73.9991%2C40.7162&amp;layer=mapnik"
+                                    width="100%"
+                                    height="240"
+                                    style="border:0;"
+                                    loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hours card -->
+                    <div class="bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
+                        <h3 class="text-xl font-bold font-playfair text-slate-900 flex items-center gap-2 mb-4">
+                            <i class="bi bi-calendar-week-fill text-emerald-500"></i> Service Hours
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between py-2 border-b border-dashed border-slate-100">
+                                <span class="font-semibold text-slate-700">Monday - Friday</span>
+                                <span class="text-sm font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">9:00 AM - 6:00 PM</span>
+                            </div>
+                            <div class="flex items-center justify-between py-2 border-b border-dashed border-slate-100">
+                                <span class="font-semibold text-slate-700">Saturday</span>
+                                <span class="text-sm font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-full">10:00 AM - 2:00 PM</span>
+                            </div>
+                            <div class="flex items-center justify-between py-2">
+                                <span class="font-semibold text-slate-700">Sunday</span>
+                                <span class="text-sm font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full">Closed</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social links -->
+                    <div class="bg-gradient-to-br from-emerald-600 to-teal-600 rounded-2xl shadow-lg p-6 text-white">
+                        <h3 class="text-xl font-bold font-playfair flex items-center gap-2 mb-3">
+                            <i class="bi bi-share-fill"></i> Follow Us
+                        </h3>
+                        <p class="text-white/70 text-sm mb-4">Stay connected for updates and offers.</p>
+                        <div class="flex gap-3">
+                            <a href="#" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center transition-colors">
+                                <i class="bi bi-facebook"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center transition-colors">
+                                <i class="bi bi-instagram"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center transition-colors">
+                                <i class="bi bi-twitter-x"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center transition-colors">
+                                <i class="bi bi-whatsapp"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FAQ ═══ -->
+    <section id="faq" class="py-14 bg-slate-50" data-reveal="up">
+        <div class="container mx-auto px-6">
+            <div class="max-w-3xl mx-auto">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl md:text-4xl font-bold font-playfair text-slate-900 mb-3">Frequently Asked Questions</h2>
+                    <p class="text-slate-500">Quick answers before you reach out.</p>
+                </div>
+
+                <div class="space-y-3" id="faqWrap">
+                    <div class="faq-item-new bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                        <button type="button" class="faq-btn-new w-full px-6 py-5 text-left flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center flex-shrink-0"><i class="bi bi-truck"></i></span>
+                                <span class="font-bold text-slate-800">How long does shipping take?</span>
+                            </div>
+                            <i class="bi bi-chevron-down text-slate-400 transition-transform duration-300 faq-icon"></i>
+                        </button>
+                        <div class="faq-answer-new px-6 overflow-hidden max-h-0 transition-all duration-300">
+                            <p class="pb-5 text-slate-600 pl-11">Standard shipping takes 5-7 business days. Express shipping is available for 2-3 business days at an additional cost.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item-new bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                        <button type="button" class="faq-btn-new w-full px-6 py-5 text-left flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center flex-shrink-0"><i class="bi bi-arrow-return-left"></i></span>
+                                <span class="font-bold text-slate-800">What is your return policy?</span>
+                            </div>
+                            <i class="bi bi-chevron-down text-slate-400 transition-transform duration-300 faq-icon"></i>
+                        </button>
+                        <div class="faq-answer-new px-6 overflow-hidden max-h-0 transition-all duration-300">
+                            <p class="pb-5 text-slate-600 pl-11">You can return unused items within 30 days of purchase. Contact support and we'll guide you through the return process quickly.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item-new bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                        <button type="button" class="faq-btn-new w-full px-6 py-5 text-left flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center flex-shrink-0"><i class="bi bi-globe"></i></span>
+                                <span class="font-bold text-slate-800">Do you offer international shipping?</span>
+                            </div>
+                            <i class="bi bi-chevron-down text-slate-400 transition-transform duration-300 faq-icon"></i>
+                        </button>
+                        <div class="faq-answer-new px-6 overflow-hidden max-h-0 transition-all duration-300">
+                            <p class="pb-5 text-slate-600 pl-11">Yes, we ship to many countries worldwide. Shipping fees and delivery times depend on the destination.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item-new bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                        <button type="button" class="faq-btn-new w-full px-6 py-5 text-left flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center flex-shrink-0"><i class="bi bi-geo-alt"></i></span>
+                                <span class="font-bold text-slate-800">How can I track my order?</span>
+                            </div>
+                            <i class="bi bi-chevron-down text-slate-400 transition-transform duration-300 faq-icon"></i>
+                        </button>
+                        <div class="faq-answer-new px-6 overflow-hidden max-h-0 transition-all duration-300">
+                            <p class="pb-5 text-slate-600 pl-11">After shipping, we'll email you a tracking link so you can follow your package status in real time.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item-new bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                        <button type="button" class="faq-btn-new w-full px-6 py-5 text-left flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center flex-shrink-0"><i class="bi bi-shield-lock"></i></span>
+                                <span class="font-bold text-slate-800">Is my payment information secure?</span>
+                            </div>
+                            <i class="bi bi-chevron-down text-slate-400 transition-transform duration-300 faq-icon"></i>
+                        </button>
+                        <div class="faq-answer-new px-6 overflow-hidden max-h-0 transition-all duration-300">
+                            <p class="pb-5 text-slate-600 pl-11">Absolutely. We use industry-standard encryption to keep your payment and personal information safe and secure.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item-new bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                        <button type="button" class="faq-btn-new w-full px-6 py-5 text-left flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-teal-100 text-teal-600 rounded-lg flex items-center justify-center flex-shrink-0"><i class="bi bi-percent"></i></span>
+                                <span class="font-bold text-slate-800">Do you have discount codes or offers?</span>
+                            </div>
+                            <i class="bi bi-chevron-down text-slate-400 transition-transform duration-300 faq-icon"></i>
+                        </button>
+                        <div class="faq-answer-new px-6 overflow-hidden max-h-0 transition-all duration-300">
+                            <p class="pb-5 text-slate-600 pl-11">Yes! Check our offers page for current deals. Subscribe to our newsletter for exclusive discount codes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+
+    <script>
+    (function(){
+        'use strict';
+
+        // Form input styling
+        const nameInput = document.getElementById('id_name');
+        const emailInput = document.getElementById('id_email');
+        const phoneInput = document.getElementById('id_phone');
+        const subjectInput = document.getElementById('id_subject');
+        const messageInput = document.getElementById('id_message');
+        const msgCount = document.getElementById('msgCount');
+
+        const inputClasses = ['w-full','px-4','py-3','rounded-xl','border','border-slate-200','bg-white','outline-none','transition-all','duration-200'];
+        [nameInput, emailInput, phoneInput, subjectInput].forEach(el => {
+            if(el) { el.classList.add(...inputClasses); el.style.fontSize = '15px'; }
+        });
+        if(messageInput) {
+            messageInput.classList.add('w-full','px-4','py-3','rounded-xl','border','border-slate-200','bg-white','outline-none','transition-all','duration-200');
+            messageInput.style.fontSize = '15px';
+            messageInput.style.minHeight = '140px';
+            messageInput.style.resize = 'vertical';
+        }
+
+        // Focus styles
+        document.querySelectorAll('#contactFormElement input, #contactFormElement textarea').forEach(el => {
+            el.addEventListener('focus', () => { el.style.borderColor = '#10b981'; el.style.boxShadow = '0 0 0 3px rgba(16,185,129,0.1)'; });
+            el.addEventListener('blur', () => { el.style.borderColor = '#e2e8f0'; el.style.boxShadow = 'none'; });
+        });
+
+        // Char counter
+        if(messageInput && msgCount){
+            const update = () => {
+                const len = messageInput.value.length;
+                msgCount.textContent = len;
+                msgCount.classList.toggle('text-red-600', len > 600);
+            };
+            update();
+            messageInput.addEventListener('input', update);
+        }
+
+        // Subject chips
+        const chips = document.querySelectorAll('#subjectChips .contact-chip-new');
+        chips.forEach(chip => {
+            chip.addEventListener('click', function(){
+                const subject = this.dataset.subject || '';
+                if(subjectInput) { subjectInput.value = subject; subjectInput.focus(); }
+                chips.forEach(c => {
+                    c.classList.remove('border-emerald-400','bg-emerald-50','text-emerald-700');
+                    c.classList.add('border-slate-200','text-slate-600');
+                });
+                this.classList.remove('border-slate-200','text-slate-600');
+                this.classList.add('border-emerald-400','bg-emerald-50','text-emerald-700');
+            });
+        });
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-btn-new').forEach(btn => {
+            btn.addEventListener('click', function(){
+                const item = this.closest('.faq-item-new');
+                const answer = item.querySelector('.faq-answer-new');
+                const icon = this.querySelector('.faq-icon');
+                const isOpen = answer.style.maxHeight && answer.style.maxHeight !== '0px';
+
+                // Close all
+                document.querySelectorAll('.faq-answer-new').forEach(a => { a.style.maxHeight = '0px'; });
+                document.querySelectorAll('.faq-icon').forEach(i => { i.style.transform = 'rotate(0deg)'; });
+                document.querySelectorAll('.faq-item-new').forEach(f => { f.classList.remove('ring-2','ring-emerald-200'); });
+
+                if(!isOpen){
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                    icon.style.transform = 'rotate(180deg)';
+                    item.classList.add('ring-2','ring-emerald-200');
+                }
+            });
+        });
+
+        // Submit loading state
+        const form = document.getElementById('contactFormElement');
+        const submitBtn = document.getElementById('submitBtn');
+        if(form && submitBtn){
+            form.addEventListener('submit', function(){
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Sending...';
+                submitBtn.classList.add('opacity-80');
+            });
+        }
+
+        // Scroll reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting){
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.info-card, .faq-item-new').forEach((el, i) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = `opacity 0.5s ease ${i * 0.08}s, transform 0.5s ease ${i * 0.08}s`;
+            observer.observe(el);
+        });
+    })();
+    </script>
+    <script src="{% static 'global.js' %}"></script>
+    <script src="{% static 'scroll-reveal.js' %}"></script>
+</body>
+</html>

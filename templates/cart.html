@@ -1,0 +1,12 @@
+{% load static %}
+
+{% if user.is_authenticated %}
+<div class="cart-container">
+    <a href="{% url 'cart_details' %}" class="cart-icon-btn" title="Shopping Cart">
+        <span class="cart-icon">🛒</span>
+        <span class="cart-badge cart-count" id="cartCount" data-cart-count>{{ cart_count|default:0 }}</span>
+    </a>
+</div>
+{% endif %}
+
+<script src="{% static 'cart_utils.js' %}"></script>

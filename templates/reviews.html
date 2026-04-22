@@ -1,0 +1,371 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'footer.css' %}">
+    <link rel="stylesheet" href="{% static 'review.css' %}">
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
+    <script>
+        tailwind.config = {
+            theme: { extend: { fontFamily: { inter: ['Inter'], playfair: ['Playfair Display'] } } }
+        }
+    </script>
+    <title>Reviews - G11 Fashion & Toys</title>
+</head>
+<body class="font-inter bg-[#fafafa] text-slate-800" style="display:block">
+
+    {% include 'navbar.html' %}
+    {% include 'cart.html' %}
+
+    <!-- ═══ HERO ═══ -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 py-16 md:py-20">
+        <div class="absolute inset-0 opacity-10" style="background-image:url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221.5%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E');"></div>
+        <!-- 3D Floating Shapes -->
+        <div class="absolute top-[10%] left-[5%] w-28 h-28 rounded-full bg-gradient-to-br from-indigo-400/20 to-purple-400/20 animate-float-slow pointer-events-none"></div>
+        <div class="absolute bottom-[15%] right-[8%] w-20 h-20 rounded-2xl bg-gradient-to-br from-pink-400/15 to-rose-400/15 rotate-45 animate-float-mid pointer-events-none"></div>
+        <div class="absolute top-[25%] right-[15%] w-24 h-24 rounded-full border-4 border-white/10 animate-float-fast pointer-events-none"></div>
+        <div class="absolute bottom-[30%] left-[12%] w-10 h-10 rounded-full bg-amber-400/15 animate-float-mid pointer-events-none"></div>
+        <div class="rv-sway absolute top-[50%] right-[4%] w-14 h-14 rounded-full border-3 border-white/12 pointer-events-none"></div>
+        <div class="rv-sway absolute top-[8%] left-[18%] w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-400/12 to-cyan-400/10 pointer-events-none" style="animation-delay:2s"></div>
+        <div class="rv-expand absolute bottom-[20%] left-[6%] w-16 h-16 rounded-full border-2 border-white/8 pointer-events-none"></div>
+        <div class="rv-expand absolute top-[35%] left-[22%] w-10 h-10 rounded-full bg-white/5 pointer-events-none" style="animation-delay:1.5s"></div>
+        <div class="container mx-auto px-6 relative z-10 text-center">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/15 border border-white/20 text-white font-semibold rounded-full text-sm mb-6 backdrop-blur-sm">
+                <i class="bi bi-chat-square-heart-fill text-pink-300"></i> Customer Feedback
+            </span>
+            <h1 class="text-4xl md:text-6xl font-black text-white font-playfair mb-4">What People Say</h1>
+            <p class="text-lg text-white/80 max-w-2xl mx-auto mb-8">Real reviews from real customers. Share your experience and help the community.</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#writeReview" class="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-indigo-700 font-bold rounded-full hover:shadow-xl hover:scale-105 transition-all duration-300">
+                    <i class="bi bi-pencil-square"></i> Write a Review
+                </a>
+                <a href="#reviewsList" class="inline-flex items-center gap-2 px-8 py-3.5 border-2 border-white/40 text-white font-bold rounded-full hover:bg-white/15 transition-all duration-300">
+                    <i class="bi bi-chat-dots"></i> Read Reviews
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ STATS BAR ═══ -->
+    <section class="bg-white border-b border-slate-100 py-8" data-reveal="up">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div>
+                    <div class="text-3xl font-black text-indigo-600">{{ latest_reviews|length }}</div>
+                    <div class="text-sm text-slate-500 mt-1">Total Reviews</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-black text-amber-500">4.8 <i class="bi bi-star-fill text-xl"></i></div>
+                    <div class="text-sm text-slate-500 mt-1">Average Rating</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-black text-emerald-500">98%</div>
+                    <div class="text-sm text-slate-500 mt-1">Satisfied</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-black text-pink-500">100%</div>
+                    <div class="text-sm text-slate-500 mt-1">Verified</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ WRITE REVIEW FORM ═══ -->
+    <section id="writeReview" class="py-14 bg-gradient-to-b from-white to-slate-50 relative overflow-hidden" data-reveal="up">
+        <!-- 3D Floating Shapes (Section 2) -->
+        <div class="absolute top-[8%] right-[5%] w-20 h-20 rounded-full bg-gradient-to-br from-indigo-200/30 to-purple-200/30 animate-float-slow pointer-events-none"></div>
+        <div class="absolute bottom-[10%] left-[4%] w-16 h-16 rounded-xl bg-gradient-to-br from-pink-200/25 to-rose-200/25 rotate-12 animate-float-fast pointer-events-none"></div>
+        <div class="rv-morph absolute top-[40%] left-[8%] w-12 h-12 bg-gradient-to-br from-amber-200/20 to-orange-200/15 pointer-events-none"></div>
+        <div class="rv-sway absolute bottom-[25%] right-[10%] w-14 h-14 rounded-full border-2 border-indigo-200/20 pointer-events-none" style="animation-delay:1s"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-2xl mx-auto">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl md:text-4xl font-bold font-playfair text-slate-900 mb-3">Share Your Experience</h2>
+                    <p class="text-slate-500">Your feedback helps us improve and helps others shop with confidence.</p>
+                </div>
+
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="mb-6 px-5 py-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 font-semibold flex items-center gap-3">
+                        <i class="bi bi-check-circle-fill text-xl"></i> {{ message }}
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post" enctype="multipart/form-data" class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-100 p-8 md:p-10 space-y-6" id="reviewForm">
+                    {% csrf_token %}
+
+                    <div class="grid md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-600 mb-2"><i class="bi bi-person mr-1 text-indigo-500"></i> Your Name</label>
+                            {{ form.name }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-600 mb-2"><i class="bi bi-envelope mr-1 text-indigo-500"></i> Email</label>
+                            {{ form.email }}
+                        </div>
+                    </div>
+
+                    <!-- Interactive Star Rating -->
+                    <div>
+                        <label class="block text-sm font-bold text-slate-600 mb-3"><i class="bi bi-star mr-1 text-amber-500"></i> Your Rating</label>
+                        <div class="hidden">{{ form.rating }}</div>
+                        <div class="flex gap-2" id="starPicker">
+                            {% for val, label in form.rating.field.choices %}
+                            {% if val %}
+                            <button type="button" class="star-btn w-12 h-12 rounded-xl border-2 border-slate-200 bg-slate-50 flex items-center justify-center text-xl text-slate-300 hover:border-amber-400 hover:bg-amber-50 hover:text-amber-500 transition-all duration-200" data-value="{{ val }}" title="{{ label }}">
+                                <i class="bi bi-star-fill"></i>
+                            </button>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        <p class="text-xs text-slate-400 mt-2" id="ratingLabel">Click to rate</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-600 mb-2"><i class="bi bi-chat-left-text mr-1 text-indigo-500"></i> Your Review</label>
+                        {{ form.comment }}
+                        <div class="flex justify-between mt-1">
+                            <span class="text-xs text-slate-400">Share details of your experience</span>
+                            <span class="text-xs text-slate-400"><span id="charCount">0</span>/500</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-600 mb-2"><i class="bi bi-image mr-1 text-indigo-500"></i> Photo (optional)</label>
+                        <div class="relative">
+                            {{ form.uploadImages }}
+                            <div class="mt-2" id="imagePreview"></div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold text-lg rounded-2xl hover:shadow-xl hover:shadow-indigo-500/30 hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
+                        <i class="bi bi-send-fill"></i> Submit Review
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ REVIEWS LIST ═══ -->
+    <section id="reviewsList" class="py-14 bg-slate-50" data-reveal="up" data-reveal-stagger>
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold font-playfair text-slate-900 mb-3">Latest Reviews</h2>
+                <p class="text-slate-500">What our customers are saying about us</p>
+            </div>
+
+            <!-- Filter bar -->
+            <div class="flex flex-wrap justify-center gap-2 mb-10" id="filterBar">
+                <button class="filter-chip active px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300" data-filter="all">All</button>
+                <button class="filter-chip px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300" data-filter="5">5 Stars</button>
+                <button class="filter-chip px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300" data-filter="4">4 Stars</button>
+                <button class="filter-chip px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300" data-filter="3">3 Stars</button>
+                <button class="filter-chip px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300" data-filter="2">2 & Below</button>
+            </div>
+
+            {% if latest_reviews %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="reviewsGrid">
+                {% for review in latest_reviews %}
+                <div class="review-card-new group bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-400 overflow-hidden" data-rating="{{ review.rating }}">
+                    <!-- Header -->
+                    <div class="p-6 pb-0">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-11 h-11 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-indigo-500/20">
+                                    {{ review.name|first|upper }}
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-slate-800">{{ review.name }}</h3>
+                                    <p class="text-xs text-slate-400">{{ review.created_at|date:"M d, Y" }}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-0.5">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= review.rating %}
+                                    <i class="bi bi-star-fill text-amber-400 text-sm"></i>
+                                    {% else %}
+                                    <i class="bi bi-star text-slate-200 text-sm"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Rating badge -->
+                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold
+                            {% if review.rating >= 4 %}bg-emerald-50 text-emerald-600
+                            {% elif review.rating == 3 %}bg-amber-50 text-amber-600
+                            {% else %}bg-red-50 text-red-600{% endif %}">
+                            {% if review.rating >= 4 %}<i class="bi bi-hand-thumbs-up-fill"></i> {{ review.get_rating_display }}
+                            {% elif review.rating == 3 %}<i class="bi bi-emoji-neutral"></i> {{ review.get_rating_display }}
+                            {% else %}<i class="bi bi-hand-thumbs-down"></i> {{ review.get_rating_display }}{% endif %}
+                        </span>
+                    </div>
+
+                    <!-- Comment -->
+                    <div class="px-6 py-4">
+                        <p class="text-slate-600 leading-relaxed text-[15px] line-clamp-3">{{ review.comment }}</p>
+                    </div>
+
+                    <!-- Image -->
+                    {% if review.uploadImages %}
+                    <div class="px-6 pb-4">
+                        <img src="{{ review.uploadImages.url }}" alt="Review photo" class="w-full h-44 object-cover rounded-xl cursor-pointer hover:scale-[1.02] transition-transform duration-300" loading="lazy" onclick="openLightbox(this.src)">
+                    </div>
+                    {% endif %}
+
+                    <!-- Footer -->
+                    <div class="px-6 pb-5 flex items-center justify-between border-t border-slate-50 pt-4">
+                        <span class="inline-flex items-center gap-1 text-xs text-emerald-500 font-semibold">
+                            <i class="bi bi-patch-check-fill"></i> Verified Purchase
+                        </span>
+                        <button class="like-btn text-slate-300 hover:text-pink-500 transition-colors" title="Helpful">
+                            <i class="bi bi-heart-fill"></i>
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-20">
+                <div class="w-20 h-20 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-5">
+                    <i class="bi bi-chat-square-text text-3xl text-slate-300"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-800 mb-2">No reviews yet</h3>
+                <p class="text-slate-400 mb-6">Be the first to share your experience!</p>
+                <a href="#writeReview" class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white font-bold rounded-full hover:bg-indigo-700 transition-colors">
+                    <i class="bi bi-pencil-square"></i> Write First Review
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm hidden items-center justify-center p-6 cursor-pointer" onclick="closeLightbox()">
+        <img id="lightboxImg" src="" alt="" class="max-w-full max-h-[85vh] rounded-2xl shadow-2xl">
+        <button class="absolute top-6 right-6 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full text-white text-xl flex items-center justify-center hover:bg-white/40 transition-colors">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+
+    {% include 'footer.html' %}
+
+    <script>
+    (function(){
+        'use strict';
+
+        // Star picker
+        const stars = document.querySelectorAll('#starPicker .star-btn');
+        const ratingSelect = document.getElementById('id_rating');
+        const ratingLabel = document.getElementById('ratingLabel');
+        const labels = ['','Poor','Fair','Good','Very Good','Excellent'];
+
+        stars.forEach(btn => {
+            btn.addEventListener('click', function(){
+                const val = parseInt(this.dataset.value);
+                if(ratingSelect) ratingSelect.value = val;
+                stars.forEach((s, i) => {
+                    if(i < val){
+                        s.classList.add('border-amber-400','bg-amber-50','text-amber-500');
+                        s.classList.remove('border-slate-200','bg-slate-50','text-slate-300');
+                    } else {
+                        s.classList.remove('border-amber-400','bg-amber-50','text-amber-500');
+                        s.classList.add('border-slate-200','bg-slate-50','text-slate-300');
+                    }
+                });
+                ratingLabel.textContent = labels[val] || '';
+            });
+        });
+
+        // Char counter
+        const comment = document.getElementById('id_comment');
+        const charCount = document.getElementById('charCount');
+        if(comment && charCount){
+            const update = () => { charCount.textContent = comment.value.length; };
+            update();
+            comment.addEventListener('input', update);
+        }
+
+        // Image preview
+        const fileInput = document.getElementById('id_uploadImages');
+        const preview = document.getElementById('imagePreview');
+        if(fileInput && preview){
+            fileInput.addEventListener('change', function(){
+                preview.innerHTML = '';
+                if(this.files && this.files[0]){
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(this.files[0]);
+                    img.className = 'w-24 h-24 object-cover rounded-xl border-2 border-indigo-200';
+                    preview.appendChild(img);
+                }
+            });
+        }
+
+        // Filter chips
+        const chips = document.querySelectorAll('#filterBar .filter-chip');
+        const cards = document.querySelectorAll('.review-card-new');
+        chips.forEach(chip => {
+            chip.addEventListener('click', function(){
+                chips.forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                const f = this.dataset.filter;
+                cards.forEach(card => {
+                    const r = parseInt(card.dataset.rating);
+                    if(f === 'all' || (f === '2' && r <= 2) || (r === parseInt(f))){
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Like buttons
+        document.querySelectorAll('.like-btn').forEach(btn => {
+            btn.addEventListener('click', function(){
+                this.classList.toggle('text-pink-500');
+                this.classList.toggle('text-slate-300');
+                const icon = this.querySelector('i');
+                icon.style.transform = 'scale(1.3)';
+                setTimeout(() => icon.style.transform = 'scale(1)', 200);
+            });
+        });
+
+        // Form inputs styling
+        document.querySelectorAll('#reviewForm .form-input, #reviewForm .form-select, #reviewForm .form-textarea').forEach(el => {
+            el.classList.add('w-full','px-4','py-3','rounded-xl','border','border-slate-200','bg-white','outline-none','transition-all','duration-200');
+            el.style.cssText += 'font-size:15px;';
+        });
+
+        // Apply focus styles
+        document.querySelectorAll('#reviewForm input, #reviewForm select, #reviewForm textarea').forEach(el => {
+            el.addEventListener('focus', () => { el.style.borderColor = '#6366f1'; el.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'; });
+            el.addEventListener('blur', () => { el.style.borderColor = '#e2e8f0'; el.style.boxShadow = 'none'; });
+        });
+    })();
+
+    function openLightbox(src){
+        const lb = document.getElementById('lightbox');
+        document.getElementById('lightboxImg').src = src;
+        lb.classList.remove('hidden');
+        lb.classList.add('flex');
+    }
+    function closeLightbox(){
+        const lb = document.getElementById('lightbox');
+        lb.classList.add('hidden');
+        lb.classList.remove('flex');
+    }
+    </script>
+    <script src="{% static 'global.js' %}"></script>
+    <script src="{% static 'scroll-reveal.js' %}"></script>
+</body>
+</html>

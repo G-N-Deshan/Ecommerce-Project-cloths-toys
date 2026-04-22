@@ -1,0 +1,17 @@
+/* ═══ Contact Page Styles ═══ */
+html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overflow-x: hidden;
+}
+html::-webkit-scrollbar { display: none; }
+
+/* Error list styling */
+.errorlist {
+    margin-top: 6px;
+    color: #dc2626;
+    font-size: 13px;
+    font-weight: 600;
+    list-style: none;
+    padding: 0;
+}

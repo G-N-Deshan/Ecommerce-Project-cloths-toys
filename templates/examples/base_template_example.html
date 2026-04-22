@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Your Shop{% endblock %}</title>
+    {% load static %}
+    
+    <!-- Your existing CSS -->
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation with cart count -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{% url 'index' %}" class="logo">Your Shop</a>
+            
+            <div class="nav-links">
+                <a href="{% url 'index' %}">Home</a>
+                <a href="{% url 'buy' %}">Shop</a>
+                <a href="{% url 'toys_page' %}">Toys</a>
+                <a href="{% url 'about' %}">About</a>
+                <a href="{% url 'contact' %}">Contact</a>
+                
+                <!-- Cart icon with count badge -->
+                <a href="{% url 'cart' %}" class="cart-link">
+                    🛒 Cart
+                    <span class="cart-count" data-cart-count>{{ cart_count|default:0 }}</span>
+                </a>
+                
+                {% if user.is_authenticated %}
+                    <a href="{% url 'wishlist' %}">❤️ Wishlist</a>
+                    <a href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Your Shop. All rights reserved.</p>
+    </footer>
+
+    <!-- IMPORTANT: Load cart_utils.js BEFORE page-specific scripts -->
+    <script src="{% static 'cart_utils.js' %}"></script>
+    
+    <!-- Your other scripts -->
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

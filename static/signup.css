@@ -1,0 +1,220 @@
+/* ═══════════════════════════════════════════
+   SIGNUP PAGE — 3D ANIMATED BACKGROUND
+   ═══════════════════════════════════════════ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html::-webkit-scrollbar { width: 5px; }
+html::-webkit-scrollbar-track { background: #0f172a; }
+html::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 99px; }
+
+/* ── Full-page background ── */
+.signup-bg-wrapper {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: #0f172a;
+}
+
+/* ── Grid overlay ── */
+.su-grid-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background-image:
+        linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: suGridMove 20s linear infinite;
+}
+@keyframes suGridMove {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(60px); }
+}
+
+/* ── Floating shapes ── */
+.su-shape {
+    position: absolute;
+    border-radius: 16px;
+    opacity: 0.12;
+    animation: suShapeFloat 8s ease-in-out infinite;
+}
+.su-shape-1 { width: 80px; height: 80px; border: 2px solid #a5b4fc; top: 8%; left: 6%; animation-delay: 0s; transform: rotate(15deg); }
+.su-shape-2 { width: 55px; height: 55px; background: #818cf8; top: 70%; right: 8%; animation-delay: 1.2s; border-radius: 50%; }
+.su-shape-3 { width: 45px; height: 45px; border: 2px solid #c4b5fd; top: 25%; right: 18%; animation-delay: 2.5s; transform: rotate(45deg); }
+.su-shape-4 { width: 35px; height: 35px; background: #a5b4fc; bottom: 15%; left: 12%; animation-delay: 1.8s; border-radius: 50%; }
+.su-shape-5 { width: 65px; height: 65px; border: 2px solid #e879f9; bottom: 30%; right: 30%; animation-delay: 3.5s; transform: rotate(-20deg); }
+.su-shape-6 { width: 50px; height: 50px; border: 2px solid #f59e0b; top: 50%; left: 3%; animation-delay: 4s; border-radius: 50%; opacity: 0.08; }
+.su-shape-7 { width: 40px; height: 40px; background: #e879f9; top: 15%; right: 5%; animation-delay: 2s; border-radius: 12px; opacity: 0.08; }
+.su-shape-8 { width: 70px; height: 70px; border: 2px solid #6366f1; bottom: 8%; right: 12%; animation-delay: 5s; transform: rotate(30deg); }
+
+@keyframes suShapeFloat {
+    0%, 100% { transform: translateY(0) rotate(var(--r, 15deg)); }
+    50% { transform: translateY(-28px) rotate(calc(var(--r, 15deg) + 12deg)); }
+}
+
+/* ── Card ── */
+.su-card {
+    width: 100%;
+    max-width: 480px;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 1.5rem;
+    padding: 2.5rem 2rem;
+    box-shadow:
+        0 0 80px rgba(99, 102, 241, 0.08),
+        0 25px 50px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Google Button ── */
+.su-google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.75rem;
+    color: #e2e8f0;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.su-google-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+    transform: translateY(-1px);
+}
+
+/* ── Inputs ── */
+.su-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.su-input-icon {
+    position: absolute;
+    left: 1rem;
+    color: rgba(165, 180, 252, 0.5);
+    font-size: 1rem;
+    pointer-events: none;
+    transition: color 0.3s;
+}
+.su-input {
+    width: 100%;
+    padding: 0.8rem 1rem 0.8rem 2.75rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    color: #fff;
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: all 0.3s ease;
+}
+.su-input::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+.su-input:focus {
+    border-color: rgba(99, 102, 241, 0.6);
+    background: rgba(99, 102, 241, 0.06);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.1);
+}
+.su-focused .su-input-icon {
+    color: #a5b4fc;
+}
+
+/* ── Password toggle ── */
+.su-toggle-pw {
+    position: absolute;
+    right: 0.8rem;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.25rem;
+    transition: color 0.3s;
+}
+.su-toggle-pw:hover { color: rgba(255, 255, 255, 0.7); }
+
+/* ── Password strength bar ── */
+.su-strength-bar {
+    height: 3px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-top: -0.25rem;
+}
+.su-strength-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 99px;
+    transition: width 0.4s ease, background 0.4s ease;
+}
+
+/* ── Submit button ── */
+.su-submit-btn {
+    width: 100%;
+    padding: 0.9rem 1.5rem;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border: none;
+    border-radius: 0.75rem;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+.su-submit-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+.su-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+}
+.su-submit-btn:hover::before {
+    opacity: 1;
+}
+.su-submit-btn:active {
+    transform: translateY(0);
+}
+
+/* ── Reveal animation ── */
+.reveal-su {
+    opacity: 0;
+    transform: translateY(24px);
+    animation: suReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: calc(var(--d, 0) * 0.08s + 0.2s);
+}
+@keyframes suReveal {
+    to { opacity: 1; transform: translateY(0); }
+}
+.reveal-su.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+    .su-card {
+        max-width: 95%;
+        padding: 2rem 1.25rem;
+        border-radius: 1.2rem;
+    }
+    .su-shape { opacity: 0.06; }
+}

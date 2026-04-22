@@ -1,0 +1,648 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overflow-x: hidden;
+}
+
+html::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hero Section */
+.toys-hero {
+    position: relative;
+    background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("../media/toys-hero.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    padding: 140px 20px;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toys-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.4), rgba(99, 102, 241, 0.4));
+}
+
+.toys-hero__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: #ffffff;
+    max-width: 800px;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.toys-hero__title {
+    font-family: "Playfair Display", serif;
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    letter-spacing: 2px;
+}
+
+.toys-hero__subtitle {
+    font-family: "Inter", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: #f1f5f9;
+    line-height: 1.6;
+    margin-bottom: 40px;
+}
+
+.toys-hero__buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 16px 40px;
+    border-radius: 10px;
+    font-family: "Poppins", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #6366f1, #ec4899);
+    color: #ffffff;
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+}
+
+.btn-secondary:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Filter Section */
+.filter-section {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    padding: 60px 20px;
+}
+
+.filter-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.filter-title {
+    font-family: "Playfair Display", serif;
+    font-size: 2rem;
+    color: #0f172a;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 50px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    color: #475569;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.filter-btn.active {
+    background: linear-gradient(135deg, #6366f1, #ec4899);
+    color: #ffffff;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+
+.filter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.1);
+}
+
+.filter-icon {
+    font-size: 1.3rem;
+}
+
+.filter-subtitle {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.3rem;
+    color: #0f172a;
+    text-align: center;
+    margin: 40px 0 20px;
+}
+
+.age-filter {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.age-btn {
+    padding: 10px 20px;
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    color: #475569;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.age-btn.active {
+    background: #6366f1;
+    color: #ffffff;
+    border-color: #6366f1;
+}
+
+.age-btn:hover {
+    border-color: #6366f1;
+    color: #6366f1;
+}
+
+/* Section Styles */
+.featured-section,
+.new-arrivals-section,
+.all-toys-section {
+    padding: 80px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.section-title {
+    font-family: "Playfair Display", serif;
+    font-size: 2.5rem;
+    text-align: center;
+    color: #0f172a;
+    margin-bottom: 10px;
+}
+
+.section-subtitle {
+    font-family: "Inter", sans-serif;
+    font-size: 1.1rem;
+    text-align: center;
+    color: #64748b;
+    margin-bottom: 50px;
+}
+
+/* Toys Grid */
+.toys-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+.toy-card {
+    position: relative;
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.toy-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.15);
+}
+
+.toy-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    z-index: 2;
+}
+
+.toy-badge.bestseller {
+    background: linear-gradient(135deg, #f97316, #dc2626);
+    color: #ffffff;
+}
+
+.toy-badge.new {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #ffffff;
+}
+
+.toy-image {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #f1f5f9;
+}
+
+.toy-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.toy-card:hover .toy-image img {
+    transform: scale(1.1);
+}
+
+.toy-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.toy-card:hover .toy-overlay {
+    opacity: 1;
+}
+
+.quick-view-btn {
+    padding: 12px 24px;
+    background: #ffffff;
+    color: #0f172a;
+    border-radius: 8px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+
+.quick-view-btn:hover {
+    transform: scale(1.05);
+}
+
+.toy-content {
+    padding: 20px;
+}
+
+.toy-category {
+    display: inline-block;
+    font-family: "Inter", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6366f1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.toy-content h3 {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 10px;
+    line-height: 1.3;
+}
+
+.toy-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.stars {
+    font-size: 0.9rem;
+    color: #fbbf24;
+}
+
+.rating-text {
+    font-family: "Inter", sans-serif;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.toy-age {
+    font-family: "Inter", sans-serif;
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 12px;
+}
+
+.price-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.price-current {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.price-old {
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+    color: #94a3b8;
+    text-decoration: line-through;
+}
+
+.discount-badge {
+    padding: 4px 10px;
+    background: #fef3c7;
+    color: #92400e;
+    border-radius: 6px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.add-to-cart-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #6366f1, #ec4899);
+    color: #ffffff;
+    text-align: center;
+    border-radius: 8px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-to-cart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+}
+
+/* No Toys Message */
+.no-toys {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.no-toys h3 {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.8rem;
+    color: #475569;
+    margin-bottom: 10px;
+}
+
+.no-toys p {
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+    color: #64748b;
+}
+
+/* Benefits Section */
+.benefits-section {
+    background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+    padding: 80px 20px;
+}
+
+.benefits-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+.benefit-card {
+    text-align: center;
+    color: #ffffff;
+}
+
+.benefit-icon {
+    font-size: 3.5rem;
+    margin-bottom: 15px;
+}
+
+.benefit-card h3 {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.benefit-card p {
+    font-family: "Inter", sans-serif;
+    font-size: 0.95rem;
+    color: #e0e7ff;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 3D Floating Shapes */
+.hero-shapes {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.shape {
+    position: absolute;
+    opacity: 0.15;
+    animation: shapeFloat 8s ease-in-out infinite;
+}
+
+.shape--circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #818cf8, #c084fc);
+    top: 15%;
+    left: 8%;
+    animation-delay: 0s;
+    animation-duration: 7s;
+}
+
+.shape--square {
+    width: 80px;
+    height: 80px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #ec4899, #f472b6);
+    top: 60%;
+    right: 10%;
+    animation-delay: 1.5s;
+    animation-duration: 9s;
+    transform: rotate(45deg);
+}
+
+.shape--triangle {
+    width: 0;
+    height: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-bottom: 90px solid rgba(251, 191, 36, 0.25);
+    top: 20%;
+    right: 18%;
+    animation-delay: 3s;
+    animation-duration: 10s;
+}
+
+.shape--dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f59e0b;
+    bottom: 25%;
+    left: 15%;
+    animation-delay: 2s;
+    animation-duration: 6s;
+}
+
+.shape--ring {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 6px solid rgba(129, 140, 248, 0.3);
+    bottom: 15%;
+    right: 25%;
+    animation-delay: 4s;
+    animation-duration: 11s;
+}
+
+@keyframes shapeFloat {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-20px) rotate(5deg);
+    }
+    50% {
+        transform: translateY(-35px) rotate(-3deg);
+    }
+    75% {
+        transform: translateY(-15px) rotate(4deg);
+    }
+}
+
+/* Card Entrance Animation */
+.toy-card { animation: toyCardUp .5s ease-out both; }
+.toy-card:nth-child(1) { animation-delay: .05s; }
+.toy-card:nth-child(2) { animation-delay: .12s; }
+.toy-card:nth-child(3) { animation-delay: .19s; }
+.toy-card:nth-child(4) { animation-delay: .26s; }
+.toy-card:nth-child(5) { animation-delay: .33s; }
+.toy-card:nth-child(6) { animation-delay: .40s; }
+.benefit-card { animation: toyCardUp .5s ease-out both; }
+.benefit-card:nth-child(1) { animation-delay: .1s; }
+.benefit-card:nth-child(2) { animation-delay: .2s; }
+.benefit-card:nth-child(3) { animation-delay: .3s; }
+@keyframes toyCardUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .toys-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    .toys-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .benefits-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .toys-hero__title {
+        font-size: 2.5rem;
+    }
+    
+    .filter-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filter-btn {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .toys-hero {
+        padding: 100px 20px;
+        background-attachment: scroll;
+        min-height: 400px;
+    }
+    
+    .toys-hero__title {
+        font-size: 2rem;
+    }
+    
+    .toys-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .benefits-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .toys-hero__buttons {
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+}

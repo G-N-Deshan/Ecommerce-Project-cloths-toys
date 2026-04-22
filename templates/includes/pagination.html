@@ -1,0 +1,28 @@
+{% if is_paginated %}
+<nav class="pagination-nav" style="display:flex;justify-content:center;align-items:center;gap:8px;padding:32px 0;flex-wrap:wrap;">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}{% for k,v in request.GET.items %}{% if k != 'page' %}&{{ k }}={{ v }}{% endif %}{% endfor %}"
+       style="padding:8px 16px;border-radius:8px;background:#6366f1;color:#fff;text-decoration:none;font-weight:600;transition:background .2s;">
+        &laquo; Prev
+    </a>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <span style="padding:8px 14px;border-radius:8px;background:#6366f1;color:#fff;font-weight:700;">{{ num }}</span>
+        {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+        <a href="?page={{ num }}{% for k,v in request.GET.items %}{% if k != 'page' %}&{{ k }}={{ v }}{% endif %}{% endfor %}"
+           style="padding:8px 14px;border-radius:8px;background:#f1f5f9;color:#334155;text-decoration:none;font-weight:600;transition:background .2s;">
+            {{ num }}
+        </a>
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}{% for k,v in request.GET.items %}{% if k != 'page' %}&{{ k }}={{ v }}{% endif %}{% endfor %}"
+       style="padding:8px 16px;border-radius:8px;background:#6366f1;color:#fff;text-decoration:none;font-weight:600;transition:background .2s;">
+        Next &raquo;
+    </a>
+    {% endif %}
+</nav>
+{% endif %}

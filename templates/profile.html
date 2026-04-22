@@ -1,0 +1,556 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'footer.css' %}">
+    <link rel="stylesheet" href="{% static 'profile.css' %}">
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
+    <title>User Profile</title>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    
+    {% if user.is_authenticated %}
+    <div class="profile-container" data-reveal="up">
+        <div class="profile-wrapper">
+            
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-cover">
+                    <!-- 3D Floating Shapes -->
+                    <div class="cover-shape cover-shape--circle" aria-hidden="true"></div>
+                    <div class="cover-shape cover-shape--square" aria-hidden="true"></div>
+                    <div class="cover-shape cover-shape--ring" aria-hidden="true"></div>
+                    <div class="cover-shape cover-shape--dot" aria-hidden="true"></div>
+                    <div class="cover-shape cover-shape--ribbon1" aria-hidden="true"></div>
+                    <div class="cover-shape cover-shape--ribbon2" aria-hidden="true"></div>
+                    <div class="cover-shape cover-shape--pulseRing1" aria-hidden="true"></div>
+                    <div class="cover-shape cover-shape--pulseRing2" aria-hidden="true"></div>
+                </div>
+                
+                <div class="profile-info">
+                    <div class="profile-avatar">
+                        <span class="avatar-initial">{{ user.username|first|upper }}</span>
+                    </div>
+                    
+                    <div class="profile-details">
+                        <h1 class="profile-name">{{ user.first_name|default:user.username }} {{ user.last_name }}</h1>
+                        <p class="profile-username">@{{ user.username }}</p>
+                        <p class="profile-member-since">Member since {{ user.date_joined|date:"M Y" }}</p>
+                    </div>
+
+                    <button class="edit-profile-btn" id="editProfileBtn">✎ Edit Profile</button>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="profile-content">
+                
+                <!-- Left Column: Personal Info -->
+                <div class="profile-column left-column">
+                    
+                    <!-- Personal Information Card -->
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h2>📋 Personal Information</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="info-group">
+                                <label class="info-label">Full Name</label>
+                                <p class="info-value">{{ user.first_name|default:"" }} {{ user.last_name|default:"" }}</p>
+                            </div>
+                            
+                            <div class="info-group">
+                                <label class="info-label">Username</label>
+                                <p class="info-value">{{ user.username }}</p>
+                            </div>
+                            
+                            <div class="info-group">
+                                <label class="info-label">Email Address</label>
+                                <p class="info-value">{{ user.email|default:"Not provided" }}</p>
+                            </div>
+                            
+                            <div class="info-group">
+                                <label class="info-label">Account Status</label>
+                                <span class="status-badge active">✓ Active</span>
+                            </div>
+
+                            <div class="info-group">
+                                <label class="info-label">Member Since</label>
+                                <p class="info-value">{{ user.date_joined|date:"F d, Y" }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Settings Card -->
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h2>⚙️ Account Settings</h2>
+                        </div>
+                        <div class="card-body">
+                            <button class="settings-btn" id="changePasswordBtn">🔐 Change Password</button>
+                            <button class="settings-btn" id="updateEmailBtn">📧 Update Email</button>
+                            <button class="settings-btn" id="notificationPrefBtn">🔔 Notification Preferences</button>
+                            <form method="post" action="{% url 'logout' %}" style="margin: 0;">
+                                {% csrf_token %}
+                                <button type="submit" class="settings-btn danger">🚪 Logout</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column: Activity & Stats -->
+                <div class="profile-column right-column">
+                    
+                    <!-- Statistics Card -->
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h2>📊 Your Activity</h2>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-number">{{ order_count|default:0 }}</div>
+                                <div class="stat-name">Total Orders</div>
+                                <a href="{% url 'my_orders' %}" style="font-size:0.8rem;color:#6366f1;text-decoration:none;margin-top:0.3rem;display:block">View Orders →</a>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">{{ review_count|default:0 }}</div>
+                                <div class="stat-name">Reviews Given</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">{{ wishlist_count|default:0 }}</div>
+                                <div class="stat-name">Wishlist Items</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">{{ satisfaction }}</div>
+                                <div class="stat-name">Satisfaction</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions Card -->
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h2>⚡ Quick Actions</h2>
+                        </div>
+                        <div class="quick-actions">
+                            <a href="{% url 'buy' %}" class="action-btn"><span class="action-icon">🛍️</span><span>Continue Shopping</span></a>
+                            <a href="{% url 'reviews' %}" class="action-btn"><span class="action-icon">⭐</span><span>View Reviews</span></a>
+                            <a href="{% url 'wishlist' %}" class="action-btn"><span class="action-icon">❤️</span><span>My Wishlist</span></a>
+                            <a href="{% url 'cart_details' %}" class="action-btn"><span class="action-icon">📦</span><span>My Cart</span></a>
+                        </div>
+                    </div>
+
+                    <!-- Recent Reviews Card -->
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h2>⭐ Your Recent Reviews</h2>
+                        </div>
+                        <div class="card-body">
+                            {% if user_reviews %}
+                                {% for review in user_reviews %}
+                                <div class="review-item">
+                                    <div class="review-rating">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= review.rating %}⭐{% else %}☆{% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <p class="review-text">{{ review.comment|truncatechars:80 }}</p>
+                                    <p class="review-date">{{ review.created_at|timesince }} ago</p>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="review-item">
+                                    <p class="review-text">You haven't written any reviews yet.</p>
+                                    <a href="{% url 'reviews' %}" class="review-date">Write your first review →</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✎ Edit Profile</h2>
+                <button class="modal-close" id="closeEditModal">&times;</button>
+            </div>
+            <form class="edit-form" id="editProfileForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" class="form-input" name="first_name" value="{{ user.first_name|default:'' }}">
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" class="form-input" name="last_name" value="{{ user.last_name|default:'' }}">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" class="form-input" name="email" value="{{ user.email|default:'' }}">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="cancelEditBtn">Cancel</button>
+                    <button type="submit" class="btn-save">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal" id="changePasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔐 Change Password</h2>
+                <button class="modal-close" id="closePasswordModal">&times;</button>
+            </div>
+            <form class="edit-form" id="changePasswordForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Current Password</label>
+                    <input type="password" class="form-input" name="current_password" required>
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" class="form-input" name="new_password" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirm New Password</label>
+                    <input type="password" class="form-input" name="confirm_password" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="cancelPasswordBtn">Cancel</button>
+                    <button type="submit" class="btn-save">Change Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Update Email Modal -->
+    <div class="modal" id="updateEmailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📧 Update Email</h2>
+                <button class="modal-close" id="closeEmailModal">&times;</button>
+            </div>
+            <form class="edit-form" id="updateEmailForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>New Email Address</label>
+                    <input type="email" class="form-input" name="email" value="{{ user.email|default:'' }}" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="cancelEmailBtn">Cancel</button>
+                    <button type="submit" class="btn-save">Update Email</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Preferences Modal -->
+    <div class="modal" id="notificationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔔 Notification Preferences</h2>
+                <button class="modal-close" id="closeNotificationModal">&times;</button>
+            </div>
+            <form class="edit-form" id="notificationForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="notify_orders" checked>
+                        <span>Order Updates</span>
+                    </label>
+                    <p class="input-help">Get notified about order status changes</p>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="notify_promotions" checked>
+                        <span>Promotions & Deals</span>
+                    </label>
+                    <p class="input-help">Receive promotional offers and discounts</p>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="notify_new_arrivals" checked>
+                        <span>New Arrivals</span>
+                    </label>
+                    <p class="input-help">Be the first to know about new products</p>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="notify_reviews" checked>
+                        <span>Review Responses</span>
+                    </label>
+                    <p class="input-help">Get notified when someone responds to your reviews</p>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="cancelNotificationBtn">Cancel</button>
+                    <button type="submit" class="btn-save">Save Preferences</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span class="toast-message" id="toastMessage"></span>
+    </div>
+
+    {% else %}
+    <div class="not-authenticated">
+        <h2>Please login to view your profile</h2>
+        <a href="{% url 'login' %}" class="login-link">Go to Login</a>
+    </div>
+    {% endif %}
+
+    {% include 'footer.html' %}
+    
+    <script src="{% static 'profile.js' %}"></script>
+    <script>
+        // Initialize modals
+        document.addEventListener('DOMContentLoaded', function() {
+            // Edit Profile Modal
+            const editBtn = document.getElementById('editProfileBtn');
+            const editModal = document.getElementById('editProfileModal');
+            const closeEditModal = document.getElementById('closeEditModal');
+            const cancelEditBtn = document.getElementById('cancelEditBtn');
+            
+            if (editBtn && editModal) {
+                editBtn.addEventListener('click', () => editModal.classList.add('active'));
+            }
+            if (closeEditModal && editModal) {
+                closeEditModal.addEventListener('click', () => editModal.classList.remove('active'));
+            }
+            if (cancelEditBtn && editModal) {
+                cancelEditBtn.addEventListener('click', () => editModal.classList.remove('active'));
+            }
+
+            // Change Password Modal
+            const changePwdBtn = document.getElementById('changePasswordBtn');
+            const pwdModal = document.getElementById('changePasswordModal');
+            const closePwdModal = document.getElementById('closePasswordModal');
+            const cancelPwdBtn = document.getElementById('cancelPasswordBtn');
+            
+            if (changePwdBtn && pwdModal) {
+                changePwdBtn.addEventListener('click', () => pwdModal.classList.add('active'));
+            }
+            if (closePwdModal && pwdModal) {
+                closePwdModal.addEventListener('click', () => pwdModal.classList.remove('active'));
+            }
+            if (cancelPwdBtn && pwdModal) {
+                cancelPwdBtn.addEventListener('click', () => pwdModal.classList.remove('active'));
+            }
+
+            // Update Email Modal
+            const updateEmailBtn = document.getElementById('updateEmailBtn');
+            const emailModal = document.getElementById('updateEmailModal');
+            const closeEmailModal = document.getElementById('closeEmailModal');
+            const cancelEmailBtn = document.getElementById('cancelEmailBtn');
+            
+            if (updateEmailBtn && emailModal) {
+                updateEmailBtn.addEventListener('click', () => emailModal.classList.add('active'));
+            }
+            if (closeEmailModal && emailModal) {
+                closeEmailModal.addEventListener('click', () => emailModal.classList.remove('active'));
+            }
+            if (cancelEmailBtn && emailModal) {
+                cancelEmailBtn.addEventListener('click', () => emailModal.classList.remove('active'));
+            }
+
+            // Notification Preferences Modal
+            const notifBtn = document.getElementById('notificationPrefBtn');
+            const notifModal = document.getElementById('notificationModal');
+            const closeNotifModal = document.getElementById('closeNotificationModal');
+            const cancelNotifBtn = document.getElementById('cancelNotificationBtn');
+            
+            if (notifBtn && notifModal) {
+                notifBtn.addEventListener('click', () => {
+                    // Load current preferences first
+                    fetch('{% url "notification_preferences" %}')
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success && data.preferences) {
+                                const form = document.getElementById('notificationForm');
+                                form.notify_orders.checked = data.preferences.notify_orders;
+                                form.notify_promotions.checked = data.preferences.notify_promotions;
+                                form.notify_new_arrivals.checked = data.preferences.notify_new_arrivals;
+                                form.notify_reviews.checked = data.preferences.notify_reviews;
+                            }
+                        });
+                    notifModal.classList.add('active');
+                });
+            }
+            if (closeNotifModal && notifModal) {
+                closeNotifModal.addEventListener('click', () => notifModal.classList.remove('active'));
+            }
+            if (cancelNotifBtn && notifModal) {
+                cancelNotifBtn.addEventListener('click', () => notifModal.classList.remove('active'));
+            }
+
+            // Close modals on outside click
+            window.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal')) {
+                    e.target.classList.remove('active');
+                }
+            });
+
+            // Form submissions with AJAX
+            const showToast = (message, isSuccess = true) => {
+                const toast = document.getElementById('toast');
+                const toastMessage = document.getElementById('toastMessage');
+                toastMessage.textContent = message;
+                toast.className = 'toast ' + (isSuccess ? 'success' : 'error');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            };
+
+            // Edit Profile Form
+            const editForm = document.getElementById('editProfileForm');
+            if (editForm) {
+                editForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(editForm);
+                    const data = Object.fromEntries(formData);
+                    
+                    try {
+                        const response = await fetch('{% url "update_profile" %}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                            body: JSON.stringify(data)
+                        });
+                        const result = await response.json();
+                        if (result.success) {
+                            showToast(result.message);
+                            editModal.classList.remove('active');
+                            setTimeout(() => location.reload(), 1000);
+                        } else {
+                            showToast(result.error, false);
+                        }
+                    } catch (error) {
+                        showToast('An error occurred. Please try again.', false);
+                    }
+                });
+            }
+
+            // Change Password Form
+            const pwdForm = document.getElementById('changePasswordForm');
+            if (pwdForm) {
+                pwdForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(pwdForm);
+                    const data = Object.fromEntries(formData);
+                    
+                    try {
+                        const response = await fetch('{% url "change_password" %}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                            body: JSON.stringify(data)
+                        });
+                        const result = await response.json();
+                        if (result.success) {
+                            showToast(result.message);
+                            pwdModal.classList.remove('active');
+                            pwdForm.reset();
+                        } else {
+                            showToast(result.error, false);
+                        }
+                    } catch (error) {
+                        showToast('An error occurred. Please try again.', false);
+                    }
+                });
+            }
+
+            // Update Email Form
+            const emailForm = document.getElementById('updateEmailForm');
+            if (emailForm) {
+                emailForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(emailForm);
+                    const data = Object.fromEntries(formData);
+                    
+                    try {
+                        const response = await fetch('{% url "update_email" %}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                            body: JSON.stringify(data)
+                        });
+                        const result = await response.json();
+                        if (result.success) {
+                            showToast(result.message);
+                            emailModal.classList.remove('active');
+                            setTimeout(() => location.reload(), 1000);
+                        } else {
+                            showToast(result.error, false);
+                        }
+                    } catch (error) {
+                        showToast('An error occurred. Please try again.', false);
+                    }
+                });
+            }
+
+            // Notification Preferences Form
+            const notifForm = document.getElementById('notificationForm');
+            if (notifForm) {
+                notifForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(notifForm);
+                    const data = {
+                        notify_orders: formData.has('notify_orders'),
+                        notify_promotions: formData.has('notify_promotions'),
+                        notify_new_arrivals: formData.has('notify_new_arrivals'),
+                        notify_reviews: formData.has('notify_reviews')
+                    };
+                    
+                    try {
+                        const response = await fetch('{% url "notification_preferences" %}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                            body: JSON.stringify(data)
+                        });
+                        const result = await response.json();
+                        if (result.success) {
+                            showToast(result.message);
+                            notifModal.classList.remove('active');
+                        } else {
+                            showToast(result.error, false);
+                        }
+                    } catch (error) {
+                        showToast('An error occurred. Please try again.', false);
+                    }
+                });
+            }
+        });
+    </script>
+    <script src="{% static 'global.js' %}"></script>
+    <script src="{% static 'scroll-reveal.js' %}"></script>
+
+</body>
+</html>
+

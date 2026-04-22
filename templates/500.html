@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Server Error — KidZone{% endblock %}
+
+{% block content %}
+<style>
+    .e5-shapes { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .e5-s { position: absolute; opacity: .1; }
+    .e5-s--c1 { width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(135deg,#ef4444,#f97316); top: 12%; right: 8%; animation: e5Pulse 4s ease-in-out infinite; }
+    .e5-s--c2 { width: 55px; height: 55px; border-radius: 50%; border: 3px solid rgba(239,68,68,.12); bottom: 25%; left: 10%; animation: e5Pulse 6s ease-in-out infinite 2s; }
+    .e5-s--sq1 { width: 65px; height: 65px; border-radius: 14px; background: linear-gradient(135deg,#f59e0b,#fbbf24); top: 45%; left: 6%; animation: e5Flicker 5s ease-in-out infinite; transform: rotate(30deg); }
+    .e5-s--sq2 { width: 40px; height: 40px; border-radius: 10px; border: 3px solid rgba(245,158,11,.1); bottom: 15%; right: 20%; animation: e5Flicker 7s ease-in-out infinite reverse; }
+    .e5-s--ring1 { width: 80px; height: 80px; border-radius: 50%; border: 3px solid rgba(239,68,68,.08); top: 25%; left: 35%; animation: e5Pulse 5s ease-in-out infinite 1s; }
+    .e5-s--ring2 { width: 50px; height: 50px; border-radius: 50%; border: 2px solid rgba(249,115,22,.08); top: 65%; right: 30%; animation: e5Pulse 7s ease-in-out infinite 3s; }
+    .e5-s--dot1 { width: 18px; height: 18px; border-radius: 50%; background: rgba(239,68,68,.15); bottom: 40%; left: 50%; animation: e5Flicker 3s ease-in-out infinite; }
+    .e5-s--dot2 { width: 12px; height: 12px; border-radius: 50%; background: rgba(245,158,11,.12); top: 8%; left: 20%; animation: e5Flicker 4s ease-in-out infinite 1.5s; }
+    @keyframes e5Pulse {
+        0%, 100% { transform: scale(1); opacity: .1; }
+        50% { transform: scale(1.4); opacity: .03; }
+    }
+    @keyframes e5Flicker {
+        0%, 100% { opacity: .1; }
+        25% { opacity: .02; }
+        50% { opacity: .14; }
+        75% { opacity: .04; }
+    }
+</style>
+<div class="e5-shapes" aria-hidden="true">
+    <div class="e5-s e5-s--c1"></div>
+    <div class="e5-s e5-s--c2"></div>
+    <div class="e5-s e5-s--sq1"></div>
+    <div class="e5-s e5-s--sq2"></div>
+    <div class="e5-s e5-s--ring1"></div>
+    <div class="e5-s e5-s--ring2"></div>
+    <div class="e5-s e5-s--dot1"></div>
+    <div class="e5-s e5-s--dot2"></div>
+</div>
+<section class="min-h-[80vh] flex items-center justify-center px-4">
+    <div class="text-center max-w-lg">
+        <div class="text-9xl font-black bg-gradient-to-r from-red-500 via-orange-500 to-amber-500 bg-clip-text text-transparent mb-4">500</div>
+        <h1 class="text-2xl font-bold text-slate-800 mb-3">Something Went Wrong</h1>
+        <p class="text-slate-500 mb-8">We're experiencing a server issue. Our team has been notified. Please try again in a few moments.</p>
+        <div class="flex flex-wrap justify-center gap-3">
+            <a href="{% url 'index' %}" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold transition">
+                <i class="bi bi-house-fill mr-2"></i>Go Home
+            </a>
+            <button onclick="location.reload()" class="px-6 py-3 bg-white border-2 border-slate-200 hover:border-slate-400 text-slate-600 rounded-xl font-semibold transition">
+                <i class="bi bi-arrow-clockwise mr-2"></i>Try Again
+            </button>
+        </div>
+    </div>
+</section>
+{% endblock %}

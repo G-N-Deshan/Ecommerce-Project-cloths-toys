@@ -1,0 +1,59 @@
+{% load static %}
+
+<section class="section-0">
+    <nav class="navbar">
+        <div>
+            <!-- Logo on left -->
+            <a href="{% url 'index' %}"><img src="{%static 'bird_2.jpg'%}" alt="logo" class="nav-logo"></a>
+            
+            <!-- Hamburger Toggle Button (mobile only) -->
+            <button class="nav-hamburger" aria-label="Toggle navigation" aria-expanded="false" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('nav-open');this.setAttribute('aria-expanded',this.classList.contains('open'))">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+
+            <!-- Navigation Links Centered -->
+            <div class="nav-links-container">
+                <button><a href="{% url 'index' %}" class="nav-link nav-link--home">Home</a></button>
+                <button><a href="{% url 'buy' %}" class="nav-link nav-link--vehicles">BUY</a></button>
+                <button><a href="{% url 'reviews' %}" class="nav-link nav-link--reviews"> Reviews</a></button>
+                <button><a href="{% url 'contact_us' %}" class="nav-link nav-link--contact">Contact</a></button>
+                <button><a href="{% url 'about' %}" class="nav-link nav-link--about">About</a></button>
+                
+                <!-- Search -->
+                <form action="{% url 'search' %}" method="GET" class="nav-search-form" style="display:inline-flex;align-items:center;margin:0 0.5rem;position:relative">
+                    <input type="text" name="q" placeholder="Search..." class="nav-search-input" style="padding:0.35rem 2.2rem 0.35rem 0.75rem;border:2px solid rgba(255,255,255,0.3);border-radius:20px;background:rgba(255,255,255,0.1);color:#fff;font-size:0.85rem;width:150px;outline:none;transition:all 0.3s">
+                    <button type="submit" style="position:absolute;right:4px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:0.75rem;padding:0;line-height:1" title="Search">🔍</button>
+                </form>
+
+                <!-- Cart Icon - Only for authenticated users -->
+                {% if user.is_authenticated %}
+                <a href="{% url 'cart_details' %}" class="cart-icon-link" title="Shopping Cart">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count-badge" data-cart-count>{{ cart_count|default:0 }}</span>
+                </a>
+                {% endif %}
+
+                <!-- Mobile-only auth links -->
+                {% if user.is_authenticated %}
+                <button class="nav-mobile-auth"><a href="{% url 'profile' %}" class="nav-link">{{ user.username }}</a></button>
+                <form method="post" action="{% url 'logout' %}" class="nav-mobile-auth" style="display:inline">{% csrf_token %}<button type="submit" class="nav-link nav-link--logout" style="background:none;border:none;cursor:pointer;font:inherit;padding:0.75rem 1.5rem;display:block;width:100%;text-align:left">Logout</button></form>
+                {% else %}
+                <button class="nav-mobile-auth"><a href="{% url 'login' %}" class="nav-link nav-link--login">Login</a></button>
+                {% endif %}
+            </div>
+
+            <!-- Login/Logout on right (desktop) -->
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'logout' %}" class="nav-desktop-auth" style="display:inline">{% csrf_token %}<button type="submit" class="nav-link nav-link--logout" style="background:none;border:none;cursor:pointer;font:inherit;letter-spacing:0.2rem;padding:0.5rem;margin-right:2rem">Logout</button></form>
+            <button class="user-profile-btn nav-desktop-auth" title="{{ user.username }}">
+                <a href="{% url 'profile' %}" class="nav-link">{{ user.username }}</a>
+            </button>
+            {% else %}
+            <button class="login-btn nav-desktop-auth"><a href="{% url 'login' %}" class="nav-link nav-link--login">Login</a></button>
+            {% endif %}
+        </div>
+    </nav>
+</section>
+{% include 'includes/breadcrumbs.html' %}

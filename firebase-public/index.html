@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>G11 Fashion & Toys</title>
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+  <!-- Tailwind (for your existing design tokens) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { inter: ['Inter'], playfair: ['Playfair Display'] },
+          colors: { brand: '#6366f1', accent: '#f59e0b' }
+        }
+      }
+    };
+  </script>
+
+  <!-- Existing CSS moved/copied into firebase-public/css -->
+  <link rel="stylesheet" href="/css/navbar.css" />
+  <link rel="stylesheet" href="/css/footer.css" />
+  <link rel="stylesheet" href="/css/index.css" />
+  <link rel="stylesheet" href="/css/scroll-reveal.css" />
+</head>
+<body class="font-inter bg-[#fafafa] text-slate-800 overflow-x-hidden">
+  <!-- Toast Container -->
+  <div id="toastContainer" class="fixed top-5 right-5 z-[9999] max-w-sm space-y-2 pointer-events-none"></div>
+
+  <!-- Navbar placeholder (rendered by JS) -->
+  <header id="navbarRoot"></header>
+
+  <!-- Cart icon / mini-cart placeholder -->
+  <div id="cartIconRoot"></div>
+
+  <!-- Main page content root -->
+  <main id="appRoot"></main>
+
+  <!-- Footer placeholder -->
+  <footer id="footerRoot"></footer>
+
+  <!-- Firebase SDKs -->
+  <script type="module" src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js"></script>
+
+  <!-- App bootstrap -->
+  <script type="module" src="/js/firebase-config.js"></script>
+  <script type="module" src="/js/app-bootstrap.js"></script>
+</body>
+</html>
+

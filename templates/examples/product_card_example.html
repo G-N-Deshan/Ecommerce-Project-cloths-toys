@@ -1,0 +1,119 @@
+{% load static %}
+
+<!-- Example 1: Offer Card with Add to Cart Button -->
+<div class="offer-card">
+    <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }}">
+    <div class="offer-badge">{{ offer.offers_badge }}</div>
+    <h3>{{ offer.title }}</h3>
+    <p>{{ offer.description }}</p>
+    <div class="price">
+        {% if offer.price2 %}
+            <span class="old-price">${{ offer.price1 }}</span>
+            <span class="new-price">${{ offer.price2 }}</span>
+        {% else %}
+            <span class="price">${{ offer.price1 }}</span>
+        {% endif %}
+    </div>
+    
+    <!-- Add to Cart Button with required data attributes -->
+    <button 
+        class="add-to-cart-btn" 
+        data-add-to-cart
+        data-item-type="offer" 
+        data-item-id="{{ offer.id }}">
+        🛒 Add to Cart
+    </button>
+    
+    <a href="{% url 'product_detail' 'offer' offer.id %}" class="view-details-btn">
+        View Details
+    </a>
+</div>
+
+<!-- Example 2: Toy Card -->
+<div class="toy-card">
+    <img src="{{ toy.imageUrl.url }}" alt="{{ toy.name }}">
+    {% if toy.is_bestseller %}
+        <span class="badge bestseller">Bestseller</span>
+    {% endif %}
+    <h3>{{ toy.name }}</h3>
+    <p>{{ toy.description|truncatewords:20 }}</p>
+    <div class="price">
+        {% if toy.original_price %}
+            <span class="old-price">${{ toy.original_price }}</span>
+            <span class="new-price">${{ toy.price }}</span>
+            <span class="discount">{{ toy.discount_percentage }}% OFF</span>
+        {% else %}
+            <span class="price">${{ toy.price }}</span>
+        {% endif %}
+    </div>
+    
+    <!-- Toy Add to Cart Button -->
+    <button 
+        class="add-to-cart-btn" 
+        data-add-to-cart
+        data-item-type="toy" 
+        data-item-id="{{ toy.id }}">
+        Add to Cart
+    </button>
+</div>
+
+<!-- Example 3: Cloth Card -->
+<div class="cloth-card">
+    <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}">
+    <h3>{{ cloth.name }}</h3>
+    <p>{{ cloth.desccription|truncatewords:15 }}</p>
+    <div class="price">
+        {% if cloth.price2 %}
+            <span class="old-price">${{ cloth.price1 }}</span>
+            <span class="new-price">${{ cloth.price2 }}</span>
+        {% elif cloth.price %}
+            <span class="price">${{ cloth.price }}</span>
+        {% endif %}
+    </div>
+    
+    <!-- Cloth Add to Cart Button -->
+    <button 
+        class="add-to-cart-btn" 
+        data-add-to-cart
+        data-item-type="cloth" 
+        data-item-id="{{ cloth.id }}">
+        🛒 Add to Cart
+    </button>
+</div>
+
+<!-- Example 4: New Arrival Card -->
+<div class="arrival-card">
+    <img src="{{ arrival.imageUrl.url }}" alt="{{ arrival.title }}">
+    <span class="new-badge">{{ arrival.offers_badge }}</span>
+    <h3>{{ arrival.title }}</h3>
+    <p>{{ arrival.description }}</p>
+    <div class="price">${{ arrival.price }}</div>
+    
+    <!-- New Arrival Add to Cart Button -->
+    <button 
+        class="add-to-cart-btn" 
+        data-add-to-cart
+        data-item-type="arrival" 
+        data-item-id="{{ arrival.id }}">
+        Add to Cart
+    </button>
+</div>
+
+<!-- Example 5: Shop Now Button (alternative style) -->
+<button 
+    class="shop-now-btn primary-btn" 
+    data-add-to-cart
+    data-item-type="offer" 
+    data-item-id="{{ offer.id }}">
+    Shop Now! 🚀
+</button>
+
+<!-- Example 6: Quick Add Button -->
+<button 
+    class="quick-add-btn" 
+    data-add-to-cart
+    data-item-type="toy" 
+    data-item-id="{{ toy.id }}"
+    title="Add to cart">
+    ➕
+</button>

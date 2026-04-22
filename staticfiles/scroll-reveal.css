@@ -1,0 +1,79 @@
+/* ============================================
+   Scroll Reveal Animations
+   Add data-reveal to any element to animate it
+   on scroll. Supports multiple animation types.
+   ============================================ */
+
+/* Base state - hidden before reveal */
+[data-reveal] {
+    opacity: 0;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    will-change: opacity, transform;
+}
+
+/* Slide up (default) */
+[data-reveal="up"],
+[data-reveal] {
+    transform: translateY(40px);
+}
+
+/* Slide down */
+[data-reveal="down"] {
+    transform: translateY(-40px);
+}
+
+/* Slide left */
+[data-reveal="left"] {
+    transform: translateX(-50px);
+}
+
+/* Slide right */
+[data-reveal="right"] {
+    transform: translateX(50px);
+}
+
+/* Scale up */
+[data-reveal="scale"] {
+    transform: scale(0.85);
+}
+
+/* Fade only */
+[data-reveal="fade"] {
+    transform: none;
+}
+
+/* Flip */
+[data-reveal="flip"] {
+    transform: perspective(600px) rotateX(15deg);
+}
+
+/* Revealed state */
+[data-reveal].revealed {
+    opacity: 1;
+    transform: translateY(0) translateX(0) scale(1) rotateX(0deg);
+}
+
+/* Stagger delays for child elements */
+[data-reveal-stagger] > *:nth-child(1) { transition-delay: 0.05s; }
+[data-reveal-stagger] > *:nth-child(2) { transition-delay: 0.12s; }
+[data-reveal-stagger] > *:nth-child(3) { transition-delay: 0.19s; }
+[data-reveal-stagger] > *:nth-child(4) { transition-delay: 0.26s; }
+[data-reveal-stagger] > *:nth-child(5) { transition-delay: 0.33s; }
+[data-reveal-stagger] > *:nth-child(6) { transition-delay: 0.40s; }
+[data-reveal-stagger] > *:nth-child(7) { transition-delay: 0.47s; }
+[data-reveal-stagger] > *:nth-child(8) { transition-delay: 0.54s; }
+
+/* Custom delay support via data-delay attribute */
+[data-reveal][data-delay="100"] { transition-delay: 0.1s; }
+[data-reveal][data-delay="200"] { transition-delay: 0.2s; }
+[data-reveal][data-delay="300"] { transition-delay: 0.3s; }
+[data-reveal][data-delay="400"] { transition-delay: 0.4s; }
+[data-reveal][data-delay="500"] { transition-delay: 0.5s; }
+
+/* Longer transitions for special elements */
+[data-reveal][data-duration="slow"] {
+    transition-duration: 0.9s;
+}
+[data-reveal][data-duration="fast"] {
+    transition-duration: 0.35s;
+}

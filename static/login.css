@@ -1,0 +1,205 @@
+/* ═══════════════════════════════════════════
+   LOGIN PAGE — 3D ANIMATED BACKGROUND
+   ═══════════════════════════════════════════ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html::-webkit-scrollbar { width: 5px; }
+html::-webkit-scrollbar-track { background: #0f172a; }
+html::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 99px; }
+
+/* ── Full-page background ── */
+.lg-bg-wrapper {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: #0f172a;
+}
+
+/* ── Grid overlay ── */
+.lg-grid-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background-image:
+        linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: lgGridMove 20s linear infinite;
+}
+@keyframes lgGridMove {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(60px); }
+}
+
+/* ── Floating shapes ── */
+.lg-shape {
+    position: absolute;
+    border-radius: 16px;
+    opacity: 0.12;
+    animation: lgShapeFloat 8s ease-in-out infinite;
+}
+.lg-shape-1 { width: 80px; height: 80px; border: 2px solid #a5b4fc; top: 10%; left: 8%; animation-delay: 0s; transform: rotate(15deg); }
+.lg-shape-2 { width: 55px; height: 55px; background: #818cf8; top: 65%; right: 10%; animation-delay: 1.5s; border-radius: 50%; }
+.lg-shape-3 { width: 45px; height: 45px; border: 2px solid #c4b5fd; top: 28%; right: 20%; animation-delay: 2.8s; transform: rotate(45deg); }
+.lg-shape-4 { width: 35px; height: 35px; background: #a5b4fc; bottom: 18%; left: 10%; animation-delay: 2s; border-radius: 50%; }
+.lg-shape-5 { width: 65px; height: 65px; border: 2px solid #e879f9; bottom: 35%; right: 28%; animation-delay: 3.5s; transform: rotate(-20deg); }
+.lg-shape-6 { width: 50px; height: 50px; border: 2px solid #f59e0b; top: 55%; left: 4%; animation-delay: 4.2s; border-radius: 50%; opacity: 0.08; }
+.lg-shape-7 { width: 40px; height: 40px; background: #e879f9; top: 12%; right: 6%; animation-delay: 1.8s; border-radius: 12px; opacity: 0.08; }
+.lg-shape-8 { width: 70px; height: 70px; border: 2px solid #6366f1; bottom: 10%; right: 15%; animation-delay: 5s; transform: rotate(30deg); }
+
+@keyframes lgShapeFloat {
+    0%, 100% { transform: translateY(0) rotate(var(--r, 15deg)); }
+    50% { transform: translateY(-28px) rotate(calc(var(--r, 15deg) + 12deg)); }
+}
+
+/* ── Card ── */
+.lg-card {
+    width: 100%;
+    max-width: 440px;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 1.5rem;
+    padding: 2.5rem 2rem;
+    box-shadow:
+        0 0 80px rgba(99, 102, 241, 0.08),
+        0 25px 50px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Google Button ── */
+.lg-google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.75rem;
+    color: #e2e8f0;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.lg-google-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+    transform: translateY(-1px);
+}
+
+/* ── Inputs ── */
+.lg-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.lg-input-icon {
+    position: absolute;
+    left: 1rem;
+    color: rgba(165, 180, 252, 0.5);
+    font-size: 1rem;
+    pointer-events: none;
+    transition: color 0.3s;
+}
+.lg-input {
+    width: 100%;
+    padding: 0.9rem 1rem 0.9rem 2.75rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    color: #fff;
+    font-size: 0.95rem;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: all 0.3s ease;
+}
+.lg-input::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+.lg-input:focus {
+    border-color: rgba(99, 102, 241, 0.6);
+    background: rgba(99, 102, 241, 0.06);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.1);
+}
+.lg-focused .lg-input-icon {
+    color: #a5b4fc;
+}
+
+/* ── Password toggle ── */
+.lg-toggle-pw {
+    position: absolute;
+    right: 0.8rem;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.25rem;
+    transition: color 0.3s;
+}
+.lg-toggle-pw:hover { color: rgba(255, 255, 255, 0.7); }
+
+/* ── Submit button ── */
+.lg-submit-btn {
+    width: 100%;
+    padding: 0.95rem 1.5rem;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border: none;
+    border-radius: 0.75rem;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+.lg-submit-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+.lg-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+}
+.lg-submit-btn:hover::before {
+    opacity: 1;
+}
+.lg-submit-btn:active {
+    transform: translateY(0);
+}
+
+/* ── Reveal animation ── */
+.reveal-lg {
+    opacity: 0;
+    transform: translateY(24px);
+    animation: lgReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: calc(var(--d, 0) * 0.1s + 0.2s);
+}
+@keyframes lgReveal {
+    to { opacity: 1; transform: translateY(0); }
+}
+.reveal-lg.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+    .lg-card {
+        max-width: 95%;
+        padding: 2rem 1.25rem;
+        border-radius: 1.2rem;
+    }
+    .lg-shape { opacity: 0.06; }
+}

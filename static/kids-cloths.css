@@ -1,0 +1,371 @@
+html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overflow-x: hidden;
+}
+
+html::-webkit-scrollbar {
+    display: none;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.section-7 {
+    position: relative;
+    background-image: url("../media/kids-card-page-background.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    padding: 100px 20px;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.section-7__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.35));
+    z-index: 1;
+}
+
+.section-7__content {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+    width: 100%;
+    text-align: center;
+    animation: fadeInUp 0.9s ease-out;
+}
+
+.section-7__text {
+    color: #fff;
+}
+
+.section-7__title {
+    font-family: "Playfair Display", serif;
+    font-size: 3.8rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    color: #ffffff;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    letter-spacing: 1px;
+}
+
+.section-7__subtitle {
+    font-family: "Inter", "Segoe UI", sans-serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: #e9eef6;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.section-7__buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 16px 36px;
+    border: none;
+    border-radius: 10px;
+    font-family: "Poppins", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+    color: #ffffff;
+    box-shadow: 0 8px 24px rgba(236, 72, 153, 0.35);
+}
+
+.btn-primary:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 36px rgba(236, 72, 153, 0.5);
+    background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%);
+}
+
+.btn-primary:active {
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: #ffffff;
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35);
+}
+
+.btn-secondary:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 36px rgba(59, 130, 246, 0.5);
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+}
+
+.btn-secondary:active {
+    transform: translateY(-1px);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .section-7 {
+        padding: 70px 20px;
+        min-height: 80vh;
+    }
+
+    .section-7__title {
+        font-size: 2.8rem;
+    }
+
+    .section-7__subtitle {
+        font-size: 1rem;
+    }
+
+    .btn {
+        padding: 14px 28px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .section-7 {
+        padding: 60px 16px;
+        min-height: 70vh;
+    }
+
+    .section-7__title {
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+    }
+
+    .section-7__subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 30px;
+    }
+
+    .section-7__buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 0.95rem;
+    }
+}
+
+
+
+
+/* ...existing code... */
+
+/* Kids page: Girls/Boys sections */
+.girls-section,
+.boys-section {
+    position: relative;
+    padding: 70px 20px;
+    background: #f8fafc;
+}
+
+.girls-section::before,
+.boys-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top left, rgba(99, 102, 241, 0.08), transparent 55%),
+                radial-gradient(circle at bottom right, rgba(236, 72, 153, 0.08), transparent 55%);
+    pointer-events: none;
+}
+
+.girls-section h1,
+.boys-section h1 {
+    font-family: "Playfair Display", serif;
+    font-size: 2.4rem;
+    text-align: center;
+    color: #0f172a;
+    margin-bottom: 10px;
+}
+
+.girls-section .sec-p,
+.boys-section .sec-p {
+    font-family: "Inter", "Segoe UI", sans-serif;
+    font-size: 1rem;
+    color: #475569;
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 35px;
+}
+
+.cloths-section {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.cloths-section__title {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0 0 22px;
+    text-align: center;
+    letter-spacing: 0.2px;
+}
+
+.cloths-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.cloth-item {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.cloth-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.14);
+}
+
+.cloth-item__image {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: #f1f5f9;
+}
+
+.cloth-item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.cloth-item:hover .cloth-item__image img {
+    transform: scale(1.05);
+}
+
+.cloth-item__content {
+    padding: 16px 16px 18px;
+    display: grid;
+    gap: 8px;
+}
+
+.cloth-item__content h3 {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0;
+}
+
+.price-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.price-current {
+    font-family: "Inter", "Segoe UI", sans-serif;
+    font-weight: 700;
+    color: #111827;
+}
+
+.price-old {
+    font-family: "Inter", "Segoe UI", sans-serif;
+    color: #94a3b8;
+    text-decoration: line-through;
+    font-size: 0.95rem;
+}
+
+.discount-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background: #ecfeff;
+    color: #0e7490;
+    border: 1px solid #cffafe;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 999px;
+    width: fit-content;
+}
+
+.cloths-section__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 6px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #6366f1, #ec4899);
+    color: #ffffff;
+    text-decoration: none;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cloths-section__btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 18px rgba(99, 102, 241, 0.25);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .cloths-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 992px) {
+    .cloths-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 576px) {
+    .cloths-grid {
+        grid-template-columns: 1fr;
+    }
+    .girls-section h1,
+    .boys-section h1 {
+        font-size: 2rem;
+    }
+}
+/* ...existing code... */

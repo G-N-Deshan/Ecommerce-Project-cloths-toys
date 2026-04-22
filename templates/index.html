@@ -1,0 +1,612 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" href="{% static 'navbar.css'%}">
+    <link rel="stylesheet" href="{%static 'footer.css'%}">
+    <link rel="stylesheet" href="{%static 'index.css'%}">
+    <link rel="stylesheet" href="{%static 'scroll-reveal.css'%}">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { inter: ['Inter'], playfair: ['Playfair Display'] },
+                    colors: { brand: '#6366f1', accent: '#f59e0b' }
+                }
+            }
+        }
+    </script>
+    <title>Home - G11 Fashion & Toys</title>
+</head>
+<body class="font-inter bg-[#fafafa] text-slate-800 overflow-x-hidden">
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed top-5 right-5 z-[9999] max-w-sm space-y-2 pointer-events-none"></div>
+
+    {% if messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% for message in messages %}
+            showToast('{{ message|escapejs }}', '{{ message.tags }}');
+            {% endfor %}
+        });
+    </script>
+    {% endif %}
+
+    {% include 'navbar.html' %}
+    {% include 'cart.html' %}
+
+    <!-- ╔══════════════════════════════════════╗
+         ║           HERO  SECTION              ║
+         ╚══════════════════════════════════════╝ -->
+    <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <!-- BG layers -->
+        <div class="absolute inset-0 z-0">
+            <img src="../media/cloths-page-background.jpg" alt="" class="w-full h-full object-cover scale-110" id="heroBg">
+            <div class="absolute inset-0 bg-gradient-to-br from-slate-900/90 via-indigo-900/80 to-slate-900/90"></div>
+        </div>
+
+        <!-- Floating particles (left half only) -->
+        <canvas id="heroParticles" class="absolute top-0 left-0 w-1/2 h-full z-[1] pointer-events-none"></canvas>
+
+        <!-- Floating geometric shapes -->
+        <div class="absolute inset-0 z-[1] overflow-hidden pointer-events-none" aria-hidden="true">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+        </div>
+
+        <div class="relative z-10 container mx-auto px-6 text-center">
+            <div class="hero-content">
+                <!-- Tagline chip -->
+                <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm text-white/90 text-sm font-medium mb-8 reveal-hero" style="--d:0">
+                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                    New Season Collection 2026
+                </div>
+
+                <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[0.95] tracking-tight mb-8 reveal-hero" style="--d:1">
+                    <span class="block text-white">Dress Up.</span>
+                    <span class="block bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Play On.</span>
+                </h1>
+
+                <p class="text-lg md:text-xl text-white/80 max-w-xl mx-auto mb-4 reveal-hero" style="--d:2">
+                    Premium fashion &amp; toys curated for kids who love to explore.
+                </p>
+                <p class="text-base text-white/60 mb-10 reveal-hero" style="--d:3">
+                    Up to <span class="text-amber-400 font-bold">50% OFF</span> &bull; Free delivery over $49
+                </p>
+
+                <!-- CTA -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center reveal-hero" style="--d:4">
+                    <a href="{% url 'buy' %}" class="mag-btn group relative inline-flex items-center gap-3 px-9 py-4 bg-white text-slate-900 font-bold rounded-full overflow-hidden transition-all duration-400 hover:shadow-[0_0_40px_rgba(99,102,241,0.45)]">
+                        <span class="relative z-10 flex items-center gap-2"><i class="bi bi-bag-check text-lg"></i> Shop Now</span>
+                        <span class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></span>
+                        <span class="relative z-10 group-hover:text-white transition-colors duration-300"></span>
+                    </a>
+                    <a href="{% url 'shop_offers' %}" class="mag-btn inline-flex items-center gap-2 px-9 py-4 border-2 border-white/40 text-white font-bold rounded-full hover:bg-white/15 backdrop-blur-sm transition-all duration-300">
+                        <i class="bi bi-fire text-amber-400"></i> View Offers
+                    </a>
+                </div>
+
+                <!-- Stats counters -->
+                <div class="flex flex-wrap justify-center gap-12 mt-20 reveal-hero" style="--d:5">
+                    <div class="text-center">
+                        <div class="text-4xl md:text-5xl font-black text-white counter" data-target="10000" data-suffix="+">0</div>
+                        <div class="text-white/60 text-sm mt-1">Happy Customers</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl md:text-5xl font-black text-white counter" data-target="500" data-suffix="+">0</div>
+                        <div class="text-white/60 text-sm mt-1">Products</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl md:text-5xl font-black text-white" style="display:flex;align-items:baseline;justify-content:center">
+                            <span class="counter" data-target="4.9" data-decimals="1">0</span><span class="text-amber-400 ml-1">★</span>
+                        </div>
+                        <div class="text-white/60 text-sm mt-1">Average Rating</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll cue -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
+            <div class="w-7 h-11 rounded-full border-2 border-white/30 flex justify-center pt-2">
+                <div class="w-1.5 h-3 bg-white/60 rounded-full animate-bounce"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ╔══════════════════════════════════════╗
+         ║        WELCOME / GREETING            ║
+         ╚══════════════════════════════════════╝ -->
+    <section class="py-14 bg-white relative" data-reveal>
+        <div class="container mx-auto px-6">
+            <div class="max-w-3xl mx-auto text-center reveal">
+                {% if user.is_authenticated %}
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 font-playfair">
+                    Welcome back, <span class="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{{ user.username }}</span>! 👋
+                </h2>
+                {% else %}
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 font-playfair">
+                    Welcome to <span class="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">G11</span>
+                </h2>
+                {% endif %}
+                <p class="text-lg text-slate-500 leading-relaxed">Discover trendy clothes and fun toys for your little ones — shop quality products at great prices.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ╔══════════════════════════════════════╗
+         ║          HOT  DEALS                  ║
+         ╚══════════════════════════════════════╝ -->
+    <section class="py-14 bg-gradient-to-b from-slate-50 to-white" id="hotDeals" data-reveal>
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-10 reveal">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-red-50 text-red-600 font-semibold rounded-full text-sm mb-5">
+                    <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span> Limited Time
+                </span>
+                <h2 class="text-4xl md:text-5xl font-bold font-playfair mb-3">Hot Deals</h2>
+                <p class="text-slate-500 text-lg">Grab them before they're gone!</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                {% for offer in offers %}
+                <div class="tilt-card reveal-stagger" style="--i:{{ forloop.counter0 }}">
+                    <div class="card-inner bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-shadow duration-500 group">
+                        <div class="relative overflow-hidden">
+                            <span class="absolute top-4 left-4 z-10 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full shadow-lg">
+                                {{ offer.offers_badge }}
+                            </span>
+                            <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }}" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+                            <!-- Overlay -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex items-end justify-center pb-6 gap-3">
+                                <a href="{% url 'product_detail' 'offer' offer.id %}" class="px-5 py-2 bg-white text-slate-800 font-semibold rounded-full text-sm transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 hover:bg-indigo-500 hover:text-white">
+                                    <i class="bi bi-eye mr-1"></i>Quick View
+                                </a>
+                                <button
+                                    class="px-5 py-2 bg-indigo-600 text-white font-semibold rounded-full text-sm transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 delay-75 hover:bg-indigo-700"
+                                    data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}">
+                                    <i class="bi bi-cart-plus mr-1"></i>Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-semibold text-slate-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-1">
+                                <a href="{% url 'product_detail' 'offer' offer.id %}" class="hover:text-indigo-600" style="color:inherit;text-decoration:none">{{ offer.title }}</a>
+                            </h3>
+                            <div class="flex items-center gap-3 mb-2">
+                                {% if offer.price2 %}
+                                <span class="text-xl font-bold text-indigo-600">${{ offer.price2 }}</span>
+                                {% endif %}
+                                {% if offer.price1 %}
+                                <span class="text-sm text-slate-400 line-through">${{ offer.price1 }}</span>
+                                {% endif %}
+                            </div>
+                            {% if offer.stock_text %}
+                            <span class="inline-block px-2 py-0.5 bg-amber-50 text-amber-700 text-xs rounded-full font-medium">{{ offer.stock_text }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-14 reveal">
+                <a href="{% url 'shop_offers' %}" class="mag-btn inline-flex items-center gap-2 px-9 py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-full hover:shadow-xl hover:shadow-indigo-500/30 transition-all duration-300 hover:scale-105">
+                    View All Offers <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ╔══════════════════════════════════════╗
+         ║        NEW  ARRIVALS                 ║
+         ╚══════════════════════════════════════╝ -->
+    <section class="py-14 bg-white" id="newArrivals" data-reveal>
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-10 reveal">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-600 font-semibold rounded-full text-sm mb-5">
+                    <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span> Just Landed
+                </span>
+                <h2 class="text-4xl md:text-5xl font-bold font-playfair mb-3">New Arrivals</h2>
+                <p class="text-slate-500 text-lg">Fresh products just dropped!</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {% for arrival in arrivals %}
+                <div class="tilt-card reveal-stagger" style="--i:{{ forloop.counter0 }}">
+                    <div class="card-inner bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-shadow duration-500 border border-slate-100 group">
+                        <div class="relative overflow-hidden">
+                            <span class="absolute top-4 right-4 z-10 px-3 py-1 bg-emerald-500 text-white text-[11px] font-bold rounded-full">NEW</span>
+                            <img src="{{ arrival.imageUrl.url }}" alt="{{ arrival.title }}" class="w-full h-56 object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+                            <a href="{% url 'product_detail' 'arrival' arrival.id %}" class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end justify-center pb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
+                                <span class="px-5 py-2 bg-white text-slate-800 font-semibold rounded-full text-sm transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 hover:bg-indigo-500 hover:text-white">
+                                    <i class="bi bi-eye mr-1"></i>Quick View
+                                </span>
+                            </a>
+                        </div>
+                        <div class="p-5">
+                            <span class="text-[11px] text-indigo-600 font-bold uppercase tracking-wider">{{ arrival.category }}</span>
+                            <h3 class="font-semibold text-slate-800 mt-1 mb-2 line-clamp-1">
+                                <a href="{% url 'product_detail' 'arrival' arrival.id %}" class="hover:text-indigo-600 transition-colors" style="color:inherit;text-decoration:none">{{ arrival.title }}</a>
+                            </h3>
+                            <p class="text-sm text-slate-400 mb-4 line-clamp-2">{{ arrival.description }}</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-slate-800">${{ arrival.price }}</span>
+                                <button
+                                    class="w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center hover:scale-110 hover:bg-indigo-700 transition-all duration-300 shadow-lg shadow-indigo-500/25"
+                                    data-add-to-cart data-item-type="arrival" data-item-id="{{ arrival.id }}">
+                                    <i class="bi bi-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-span-full text-center py-16">
+                    <i class="bi bi-inbox text-6xl text-slate-200 mb-4 block"></i>
+                    <p class="text-slate-400 text-lg">No new arrivals yet. Check back soon!</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- ╔══════════════════════════════════════╗
+         ║          WISHLIST SECTION            ║
+         ╚══════════════════════════════════════╝ -->
+    <section class="py-14 bg-gradient-to-b from-slate-50 to-white" id="wishlistSection" data-reveal>
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-10 reveal">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-pink-50 text-pink-600 font-semibold rounded-full text-sm mb-5">
+                    <i class="bi bi-heart-fill text-xs"></i> Your Favorites
+                </span>
+                <h2 class="text-4xl md:text-5xl font-bold font-playfair mb-3">Wishlist</h2>
+                {% if user.is_authenticated %}
+                <p class="text-slate-500 text-lg">{{ wishlist_count }} item{{ wishlist_count|pluralize }} saved</p>
+                {% else %}
+                <p class="text-slate-500 text-lg">Items you love, saved for later</p>
+                {% endif %}
+            </div>
+
+            {% if not user.is_authenticated %}
+            <!-- Not logged in -->
+            <div class="max-w-md mx-auto reveal">
+                <div class="relative bg-white rounded-3xl shadow-xl p-12 text-center overflow-hidden group">
+                    <div class="absolute -top-20 -right-20 w-52 h-52 bg-gradient-to-br from-pink-200/40 to-purple-200/40 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+                    <div class="relative z-10">
+                        <div class="w-20 h-20 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-purple-500/30 rotate-6 group-hover:rotate-0 transition-transform duration-500">
+                            <i class="bi bi-heart text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Login to view wishlist</h3>
+                        <p class="text-slate-400 mb-8">Save your favorite items for later</p>
+                        <a href="{% url 'login' %}" class="mag-btn inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300">
+                            <i class="bi bi-box-arrow-in-right"></i> Login Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            {% elif wishlist_count == 0 %}
+            <!-- Empty wishlist -->
+            <div class="max-w-md mx-auto reveal">
+                <div class="relative bg-white rounded-3xl shadow-xl p-12 text-center overflow-hidden group">
+                    <div class="absolute -bottom-20 -left-20 w-52 h-52 bg-gradient-to-br from-slate-100 to-slate-200/50 rounded-full blur-2xl"></div>
+                    <div class="relative z-10">
+                        <div class="w-20 h-20 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <i class="bi bi-heart text-3xl text-slate-300"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Your wishlist is empty</h3>
+                        <p class="text-slate-400 mb-8">Start adding products you love!</p>
+                        <a href="{% url 'buy' %}" class="mag-btn inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300">
+                            <i class="bi bi-bag"></i> Browse Products
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            {% else %}
+            <!-- Wishlist items -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5">
+                {% for item in wishlist_items %}
+                <div class="flip-card reveal-stagger" style="--i:{{ forloop.counter0 }}">
+                    <div class="flip-inner">
+                        <!-- Front -->
+                        <div class="flip-front bg-white rounded-2xl overflow-hidden shadow-md">
+                            <div class="relative">
+                                <img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-40 object-cover" loading="lazy">
+                                <span class="absolute top-2 left-2 px-2 py-0.5 bg-slate-800/70 text-white text-[10px] font-semibold rounded-md backdrop-blur-sm">{{ item.category }}</span>
+                            </div>
+                            <div class="p-3">
+                                <h4 class="font-semibold text-sm truncate text-slate-800">{{ item.name }}</h4>
+                                <span class="font-bold text-indigo-600 text-sm">${{ item.price }}</span>
+                            </div>
+                        </div>
+                        <!-- Back -->
+                        <div class="flip-back bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl flex flex-col items-center justify-center p-4 text-white text-center">
+                            <i class="bi bi-heart-fill text-2xl mb-2"></i>
+                            <p class="text-xs font-medium mb-3 opacity-90">{{ item.name }}</p>
+                            <a href="{% url 'product_detail' item.item_type item.id %}" class="px-4 py-1.5 bg-white text-indigo-600 rounded-full text-xs font-bold hover:scale-105 transition-transform">View</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Go to Wishlist button -->
+            <div class="text-center mt-12 reveal">
+                <a href="{% url 'wishlist' %}" class="mag-btn inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-full hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-300 hover:scale-105 text-lg">
+                    <i class="bi bi-heart-fill"></i>
+                    Go to Wishlist
+                    {% if wishlist_count > 6 %}
+                    <span class="ml-1 px-2.5 py-0.5 bg-white/20 rounded-full text-sm">{{ wishlist_count }} items</span>
+                    {% endif %}
+                    <i class="bi bi-arrow-right ml-1"></i>
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- ╔══════════════════════════════════════╗
+         ║        WHY CHOOSE US                 ║
+         ╚══════════════════════════════════════╝ -->
+    <section class="py-14 bg-white relative overflow-hidden" id="features" data-reveal>
+        <!-- Subtle background pattern -->
+        <div class="absolute inset-0 opacity-[0.03]" style="background-image:url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M0%200h60v60H0z%22%20fill%3D%22none%22%2F%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221.5%22%20fill%3D%22%236366f1%22%2F%3E%3C%2Fsvg%3E');"></div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-12 reveal">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-indigo-50 text-indigo-600 font-semibold rounded-full text-sm mb-5 border border-indigo-100">
+                    <i class="bi bi-shield-check"></i> Trusted by 10,000+ Customers
+                </span>
+                <h2 class="text-4xl md:text-6xl font-black text-slate-900 font-playfair mb-4">Why Choose Us</h2>
+                <p class="text-slate-500 text-lg max-w-2xl mx-auto">We're committed to providing the best shopping experience with premium quality, unbeatable prices, and customer-first service.</p>
+            </div>
+
+            <!-- 3 Interactive Feature Cards -->
+            {% with colors="indigo,emerald,amber" icons="bi-bag-heart-fill,bi-chat-square-heart-fill,bi-cart-check-fill" links="cloths,reviews,buy" %}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-14">
+                {% for card in cards %}
+                <div class="tilt-card reveal-stagger" style="--i:{{ forloop.counter0 }}">
+                    <div class="card-inner feature-card-interactive group relative rounded-3xl overflow-hidden transition-all duration-500 cursor-pointer bg-white shadow-lg shadow-slate-200/60 hover:shadow-2xl hover:shadow-indigo-200/40 hover:-translate-y-2 border border-slate-100 hover:border-indigo-200">
+                        <!-- Card image with color overlay -->
+                        {% if card.imageUrl %}
+                        <div class="relative h-52 overflow-hidden">
+                            <img src="{{ card.imageUrl.url }}" alt="{{ card.name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+                            <!-- Gradient overlay matching card theme -->
+                            {% if forloop.counter == 1 %}
+                            <div class="absolute inset-0 bg-gradient-to-t from-indigo-900/80 via-indigo-900/20 to-transparent"></div>
+                            {% elif forloop.counter == 2 %}
+                            <div class="absolute inset-0 bg-gradient-to-t from-emerald-900/80 via-emerald-900/20 to-transparent"></div>
+                            {% else %}
+                            <div class="absolute inset-0 bg-gradient-to-t from-amber-900/80 via-amber-900/20 to-transparent"></div>
+                            {% endif %}
+                            <!-- Floating badge on image -->
+                            <div class="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-bold
+                                {% if forloop.counter == 1 %}text-indigo-600{% elif forloop.counter == 2 %}text-emerald-600{% else %}text-amber-600{% endif %}
+                                shadow-lg">
+                                {% if forloop.counter == 1 %}500+ Products{% elif forloop.counter == 2 %}4.9★ Rating{% else %}Fast Checkout{% endif %}
+                            </div>
+                            <!-- Title overlay on image -->
+                            <div class="absolute bottom-4 left-5 right-5">
+                                <h3 class="text-2xl font-bold text-white drop-shadow-lg">{{ card.name }}</h3>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div class="p-6">
+                            <!-- Icon row -->
+                            <div class="flex items-center gap-3 mb-4">
+                                {% if forloop.counter == 1 %}
+                                <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center group-hover:bg-indigo-500 transition-colors duration-400">
+                                    <i class="bi bi-bag-heart-fill text-xl text-indigo-600 group-hover:text-white transition-colors duration-400"></i>
+                                </div>
+                                <span class="text-xs font-semibold text-indigo-500 bg-indigo-50 px-2.5 py-1 rounded-full">SELECTION</span>
+                                {% elif forloop.counter == 2 %}
+                                <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center group-hover:bg-emerald-500 transition-colors duration-400">
+                                    <i class="bi bi-chat-square-heart-fill text-xl text-emerald-600 group-hover:text-white transition-colors duration-400"></i>
+                                </div>
+                                <span class="text-xs font-semibold text-emerald-500 bg-emerald-50 px-2.5 py-1 rounded-full">REVIEWS</span>
+                                {% else %}
+                                <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center group-hover:bg-amber-500 transition-colors duration-400">
+                                    <i class="bi bi-cart-check-fill text-xl text-amber-600 group-hover:text-white transition-colors duration-400"></i>
+                                </div>
+                                <span class="text-xs font-semibold text-amber-500 bg-amber-50 px-2.5 py-1 rounded-full">SHOPPING</span>
+                                {% endif %}
+                            </div>
+
+                            <p class="text-slate-500 leading-relaxed text-[15px] mb-5">{{ card.details }}</p>
+
+                            <!-- CTA link -->
+                            {% if forloop.counter == 1 %}
+                            <a href="{% url 'cloths' %}" class="inline-flex items-center gap-2 text-indigo-600 font-semibold text-sm group-hover:gap-3 transition-all duration-300">
+                                Explore Collection <i class="bi bi-arrow-right transition-transform group-hover:translate-x-1"></i>
+                            </a>
+                            {% elif forloop.counter == 2 %}
+                            <a href="{% url 'reviews' %}" class="inline-flex items-center gap-2 text-emerald-600 font-semibold text-sm group-hover:gap-3 transition-all duration-300">
+                                Read Reviews <i class="bi bi-arrow-right transition-transform group-hover:translate-x-1"></i>
+                            </a>
+                            {% else %}
+                            <a href="{% url 'buy' %}" class="inline-flex items-center gap-2 text-amber-600 font-semibold text-sm group-hover:gap-3 transition-all duration-300">
+                                Start Shopping <i class="bi bi-arrow-right transition-transform group-hover:translate-x-1"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+
+                        <!-- Animated bottom border on hover -->
+                        <div class="absolute bottom-0 left-0 right-0 h-1 transition-all duration-500 scale-x-0 group-hover:scale-x-100 origin-left
+                            {% if forloop.counter == 1 %}bg-gradient-to-r from-indigo-500 to-purple-500
+                            {% elif forloop.counter == 2 %}bg-gradient-to-r from-emerald-500 to-teal-500
+                            {% else %}bg-gradient-to-r from-amber-500 to-orange-500{% endif %}"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endwith %}
+
+            <!-- Feature highlights strip -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-14">
+                <div class="reveal-stagger bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100 rounded-2xl p-5 text-center group hover:shadow-lg hover:shadow-indigo-100 hover:-translate-y-1 transition-all duration-400" style="--i:0">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 group-hover:bg-indigo-500 transition-all duration-400">
+                        <i class="bi bi-truck text-indigo-600 text-xl group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h4 class="text-slate-800 font-bold text-sm mb-1">Free Shipping</h4>
+                    <p class="text-slate-400 text-xs">On orders over $49</p>
+                </div>
+                <div class="reveal-stagger bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 rounded-2xl p-5 text-center group hover:shadow-lg hover:shadow-emerald-100 hover:-translate-y-1 transition-all duration-400" style="--i:1">
+                    <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 group-hover:bg-emerald-500 transition-all duration-400">
+                        <i class="bi bi-arrow-repeat text-emerald-600 text-xl group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h4 class="text-slate-800 font-bold text-sm mb-1">Easy Returns</h4>
+                    <p class="text-slate-400 text-xs">30-day return policy</p>
+                </div>
+                <div class="reveal-stagger bg-gradient-to-br from-sky-50 to-blue-50 border border-sky-100 rounded-2xl p-5 text-center group hover:shadow-lg hover:shadow-sky-100 hover:-translate-y-1 transition-all duration-400" style="--i:2">
+                    <div class="w-12 h-12 bg-sky-100 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 group-hover:bg-sky-500 transition-all duration-400">
+                        <i class="bi bi-shield-lock text-sky-600 text-xl group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h4 class="text-slate-800 font-bold text-sm mb-1">Secure Payment</h4>
+                    <p class="text-slate-400 text-xs">100% encrypted checkout</p>
+                </div>
+                <div class="reveal-stagger bg-gradient-to-br from-pink-50 to-rose-50 border border-pink-100 rounded-2xl p-5 text-center group hover:shadow-lg hover:shadow-pink-100 hover:-translate-y-1 transition-all duration-400" style="--i:3">
+                    <div class="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 group-hover:bg-pink-500 transition-all duration-400">
+                        <i class="bi bi-headset text-pink-600 text-xl group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h4 class="text-slate-800 font-bold text-sm mb-1">24/7 Support</h4>
+                    <p class="text-slate-400 text-xs">Always here for you</p>
+                </div>
+            </div>
+
+            <!-- Navigation buttons -->
+            <div class="flex flex-wrap justify-center gap-4 reveal">
+                <a href="{% url 'cloths' %}" class="mag-btn inline-flex items-center gap-2 px-7 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-full hover:shadow-xl hover:shadow-indigo-500/30 transition-all duration-300 hover:scale-105">
+                    <i class="bi bi-bag-heart"></i> Shop Cloths
+                </a>
+                <a href="{% url 'toys_page' %}" class="mag-btn inline-flex items-center gap-2 px-7 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-full hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-300 hover:scale-105">
+                    <i class="bi bi-puzzle"></i> Shop Toys
+                </a>
+                <a href="{% url 'shop_offers' %}" class="mag-btn inline-flex items-center gap-2 px-7 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-full hover:shadow-xl hover:shadow-amber-500/30 transition-all duration-300 hover:scale-105">
+                    <i class="bi bi-fire"></i> View Offers
+                </a>
+                <a href="{% url 'contact_us' %}" class="mag-btn inline-flex items-center gap-2 px-7 py-3 bg-slate-800 text-white font-semibold rounded-full hover:bg-slate-700 transition-all duration-300 hover:scale-105">
+                    <i class="bi bi-envelope"></i> Contact Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ╔══════════════════════════════════════╗
+         ║            CTA SECTION               ║
+         ╚══════════════════════════════════════╝ -->
+    <section class="py-14 relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500" id="cta" data-reveal="scale">
+        <!-- Moving grid -->
+        <div class="absolute inset-0 opacity-10" style="background-image:url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M0%200h60v60H0z%22%20fill%3D%22none%22%2F%3E%3Cpath%20d%3D%22M0%2060V0h60%22%20stroke%3D%22%23fff%22%20stroke-width%3D%220.5%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E');"></div>
+        <!-- Glow orbs -->
+        <div class="absolute top-10 left-10 w-72 h-72 bg-white/10 rounded-full blur-[80px] pointer-events-none"></div>
+        <div class="absolute bottom-10 right-10 w-72 h-72 bg-white/10 rounded-full blur-[80px] pointer-events-none"></div>
+
+        <!-- Floating particles -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+            <div class="shape" style="width:80px;height:80px;border:2px solid rgba(255,255,255,0.15);top:15%;left:10%;animation-delay:0s;border-radius:16px;transform:rotate(20deg)"></div>
+            <div class="shape" style="width:50px;height:50px;background:rgba(255,255,255,0.08);bottom:20%;right:12%;animation-delay:1.5s;border-radius:50%"></div>
+            <div class="shape" style="width:40px;height:40px;border:2px solid rgba(255,255,255,0.1);top:60%;left:80%;animation-delay:3s;border-radius:12px;transform:rotate(-15deg)"></div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Left: Content -->
+                <div class="reveal">
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/15 border border-white/20 text-white font-semibold rounded-full text-sm mb-6 backdrop-blur-sm">
+                        <i class="bi bi-lightning-charge-fill text-amber-300"></i> Don't Miss Out
+                    </span>
+                    <h2 class="text-4xl md:text-6xl font-black text-white mb-6 leading-tight font-playfair">Ready to <span class="bg-gradient-to-r from-amber-300 to-yellow-200 bg-clip-text text-transparent">Shop?</span></h2>
+                    <p class="text-lg text-white/80 mb-4 leading-relaxed">Join thousands of happy customers who trust G11 for premium quality fashion and toys. Discover exclusive deals, new arrivals, and curated collections.</p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-3 text-white/80">
+                            <div class="w-6 h-6 rounded-full bg-emerald-400/20 flex items-center justify-center flex-shrink-0"><i class="bi bi-check-lg text-emerald-400 text-xs"></i></div>
+                            <span>Premium quality products at unbeatable prices</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-white/80">
+                            <div class="w-6 h-6 rounded-full bg-emerald-400/20 flex items-center justify-center flex-shrink-0"><i class="bi bi-check-lg text-emerald-400 text-xs"></i></div>
+                            <span>Free shipping on orders over $49</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-white/80">
+                            <div class="w-6 h-6 rounded-full bg-emerald-400/20 flex items-center justify-center flex-shrink-0"><i class="bi bi-check-lg text-emerald-400 text-xs"></i></div>
+                            <span>30-day hassle-free returns &amp; exchanges</span>
+                        </li>
+                    </ul>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="{% url 'buy' %}" class="mag-btn inline-flex items-center gap-3 px-10 py-4 bg-white text-slate-900 font-bold text-lg rounded-full hover:shadow-[0_0_50px_rgba(255,255,255,0.3)] hover:scale-105 transition-all duration-300 group">
+                            <i class="bi bi-bag-check text-xl"></i> Start Shopping
+                            <i class="bi bi-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <a href="{% url 'contact_us' %}" class="mag-btn inline-flex items-center gap-2 px-8 py-4 border-2 border-white/30 text-white font-bold rounded-full hover:bg-white/15 backdrop-blur-sm transition-all duration-300">
+                            <i class="bi bi-chat-dots"></i> Get in Touch
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right: 3D Quick-link cards -->
+                <div class="grid grid-cols-2 gap-4">
+                    <a href="{% url 'cloths' %}" class="tilt-card reveal-stagger" style="--i:0">
+                        <div class="card-inner bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 text-center hover:bg-white/20 transition-all duration-400 group" style="min-height:180px">
+                            <div class="w-16 h-16 bg-gradient-to-br from-pink-400 to-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-pink-500/25 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                                <i class="bi bi-handbag text-2xl text-white"></i>
+                            </div>
+                            <h4 class="text-white font-bold text-lg mb-1">Fashion</h4>
+                            <p class="text-white/60 text-sm">Trendy apparel</p>
+                        </div>
+                    </a>
+                    <a href="{% url 'toys_page' %}" class="tilt-card reveal-stagger" style="--i:1">
+                        <div class="card-inner bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 text-center hover:bg-white/20 transition-all duration-400 group" style="min-height:180px">
+                            <div class="w-16 h-16 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/25 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500">
+                                <i class="bi bi-puzzle text-2xl text-white"></i>
+                            </div>
+                            <h4 class="text-white font-bold text-lg mb-1">Toys</h4>
+                            <p class="text-white/60 text-sm">Fun for kids</p>
+                        </div>
+                    </a>
+                    <a href="{% url 'shop_offers' %}" class="tilt-card reveal-stagger" style="--i:2">
+                        <div class="card-inner bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 text-center hover:bg-white/20 transition-all duration-400 group" style="min-height:180px">
+                            <div class="w-16 h-16 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-amber-500/25 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                                <i class="bi bi-fire text-2xl text-white"></i>
+                            </div>
+                            <h4 class="text-white font-bold text-lg mb-1">Offers</h4>
+                            <p class="text-white/60 text-sm">Hot deals daily</p>
+                        </div>
+                    </a>
+                    <a href="{% url 'new_arrivals' %}" class="tilt-card reveal-stagger" style="--i:3">
+                        <div class="card-inner bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 text-center hover:bg-white/20 transition-all duration-400 group" style="min-height:180px">
+                            <div class="w-16 h-16 bg-gradient-to-br from-sky-400 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-sky-500/25 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500">
+                                <i class="bi bi-stars text-2xl text-white"></i>
+                            </div>
+                            <h4 class="text-white font-bold text-lg mb-1">New Arrivals</h4>
+                            <p class="text-white/60 text-sm">Fresh drops</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+
+    <script src="{% static 'cart_utils.js' %}"></script>
+    <script src="{% static 'home.js' %}"></script>
+    <script src="{%static 'scroll-reveal.js'%}"></script>
+    <script src="{% static 'global.js' %}"></script>
+</body>
+</html>

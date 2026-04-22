@@ -1,0 +1,66 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="{% static 'cart_details_page.css' %}">
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
+</head>
+<body>
+    <!-- 3D Floating Shapes -->
+    <div class="page-shapes" aria-hidden="true">
+        <div class="pshape pshape--circle"></div>
+        <div class="pshape pshape--square"></div>
+        <div class="pshape pshape--ring"></div>
+        <div class="pshape pshape--dot"></div>
+        <div class="pshape pshape--pend1"></div>
+        <div class="pshape pshape--pend2"></div>
+        <div class="pshape pshape--slide1"></div>
+        <div class="pshape pshape--slide2"></div>
+    </div>
+    <div class="cart-page-container" data-reveal="up">
+        <h1>Shopping Cart</h1>
+        
+        <div class="cart-content">
+            <div class="cart-items-section">
+                <div id="cartItems" class="cart-items">
+                    <!-- Cart items will be dynamically loaded here -->
+                </div>
+                <div id="emptyCartMessage" class="empty-cart">
+                    <p>Your cart is empty</p>
+                    <a href="{% url 'buy' %}" class="continue-shopping-btn">Continue Shopping</a>
+                </div>
+            </div>
+
+            <div class="cart-summary">
+                <h2>Order Summary</h2>
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="subtotal">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Tax (10%):</span>
+                    <span id="tax">$0.00</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span id="total">$0.00</span>
+                </div>
+                <form action="{% url 'checkout' %}" method="POST" style="width: 100%;">
+                    {% csrf_token %}
+                    <button type="submit" class="checkout-btn" id="checkoutBtn">Proceed to Checkout</button>
+                </form>
+                <a href="{% url 'buy' %}" class="continue-shopping">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'cart_utils.js' %}"></script>
+    <script src="{% static 'cart_page.js' %}"></script>
+    <script src="{% static 'global.js' %}"></script>
+    <script src="{% static 'scroll-reveal.js' %}"></script>
+</body>
+</html>

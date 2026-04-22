@@ -1,0 +1,194 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - KidZone</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'footer.css' %}">
+    <style>
+        :root { --primary: #6366f1; --secondary: #ec4899; --accent: #f59e0b; --surface: #f8fafc; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--surface); }
+        .search-hero {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            padding: 4rem 2rem 3rem;
+            text-align: center;
+        }
+        .search-hero h1 { color: #fff; font-size: 2rem; margin-bottom: 1.5rem; }
+        .search-bar {
+            max-width: 600px; margin: 0 auto; display: flex; gap: 0;
+            border-radius: 50px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+        .search-bar input {
+            flex: 1; padding: 1rem 1.5rem; border: none; font-size: 1rem; outline: none;
+        }
+        .search-bar button {
+            padding: 1rem 2rem; background: var(--accent); border: none; color: #fff;
+            font-weight: 600; cursor: pointer; transition: background 0.3s;
+        }
+        .search-bar button:hover { background: #d97706; }
+        .results-container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .results-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem;
+        }
+        .results-header h2 { font-size: 1.3rem; color: #1e293b; }
+        .results-header span { color: #64748b; }
+        .results-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .result-card {
+            background: #fff; border-radius: 1rem; overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none; color: inherit;
+        }
+        .result-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(99,102,241,0.15); }
+        .result-card img {
+            width: 100%; height: 220px; object-fit: cover;
+            background: linear-gradient(135deg, #ede9fe, #e0e7ff);
+        }
+        .result-card-body { padding: 1rem; }
+        .result-type {
+            display: inline-block; padding: 0.2rem 0.6rem;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff; border-radius: 20px; font-size: 0.7rem; font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .result-card h3 { font-size: 1rem; color: #1e293b; margin-bottom: 0.3rem; }
+        .result-price { font-size: 1.1rem; font-weight: 700; color: #6366f1; }
+        .result-rating { color: var(--accent); font-size: 0.85rem; margin-top: 0.3rem; }
+        .no-results {
+            text-align: center; padding: 4rem 1rem; color: #64748b;
+        }
+        .no-results span { font-size: 4rem; display: block; margin-bottom: 1rem; }
+        .pagination { display: flex; justify-content: center; gap: 0.5rem; margin: 2rem 0; flex-wrap: wrap; }
+        .pagination a, .pagination span {
+            padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none;
+            border: 1px solid #e2e8f0; color: #6366f1; font-weight: 500;
+        }
+        .pagination .current { background: #6366f1; color: #fff; border-color: #6366f1; }
+        .pagination a:hover { background: #ede9fe; }
+
+        /* Floating 3D shapes */
+        .sr-shapes { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+        .sr-s { position: absolute; opacity: .07; animation: srFloat 8s ease-in-out infinite; }
+        .sr-s--c  { width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg,#818cf8,#c084fc); top: 8%; right: 5%; animation-duration: 7s; }
+        .sr-s--sq { width: 70px; height: 70px; border-radius: 14px; background: linear-gradient(135deg,#ec4899,#f472b6); bottom: 15%; left: 6%; animation-delay: 2s; animation-duration: 9s; transform: rotate(45deg); }
+        .sr-s--r  { width: 80px; height: 80px; border-radius: 50%; border: 4px solid rgba(99,102,241,.12); top: 45%; left: 12%; animation-delay: 3.5s; animation-duration: 10s; }
+        .sr-s--tr { width: 0; height: 0; border-left: 35px solid transparent; border-right: 35px solid transparent; border-bottom: 60px solid rgba(245,158,11,.07); bottom: 35%; right: 10%; animation-delay: 1.5s; animation-duration: 11s; }
+        .sr-s--radar1 { width: 80px; height: 80px; border-radius: 50%; border: 3px solid rgba(99,102,241,.12); top: 20%; left: 35%; animation: srRadar 5s linear infinite; }
+        .sr-s--radar2 { width: 55px; height: 55px; border-radius: 50%; border: 2px solid rgba(236,72,153,.1); bottom: 25%; right: 30%; animation: srRadar 7s linear infinite reverse; }
+        .sr-s--scan1 { width: 100px; height: 3px; background: linear-gradient(90deg, transparent, rgba(99,102,241,.2), transparent); top: 30%; left: 0; animation: srScan 8s ease-in-out infinite; }
+        .sr-s--scan2 { width: 80px; height: 3px; background: linear-gradient(90deg, transparent, rgba(251,191,36,.15), transparent); bottom: 45%; right: 0; animation: srScan 10s ease-in-out infinite 3s; }
+        @keyframes srFloat {
+            0%,100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-22px) rotate(5deg); }
+            50% { transform: translateY(-34px) rotate(-4deg); }
+            75% { transform: translateY(-14px) rotate(3deg); }
+        }
+        @keyframes srRadar {
+            0% { transform: scale(0.6) rotate(0deg); opacity: .15; }
+            50% { transform: scale(1.2) rotate(180deg); opacity: .04; }
+            100% { transform: scale(0.6) rotate(360deg); opacity: .15; }
+        }
+        @keyframes srScan {
+            0%   { transform: translateX(-100%); opacity: 0; }
+            10%  { opacity: .2; }
+            90%  { opacity: .2; }
+            100% { transform: translateX(calc(100vw + 100%)); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+{% include 'navbar.html' %}
+
+<!-- 3D Floating Shapes -->
+<div class="sr-shapes" aria-hidden="true">
+    <div class="sr-s sr-s--c"></div>
+    <div class="sr-s sr-s--sq"></div>
+    <div class="sr-s sr-s--r"></div>
+    <div class="sr-s sr-s--tr"></div>
+    <div class="sr-s sr-s--radar1"></div>
+    <div class="sr-s sr-s--radar2"></div>
+    <div class="sr-s sr-s--scan1"></div>
+    <div class="sr-s sr-s--scan2"></div>
+</div>
+
+<section class="search-hero" style="position:relative;z-index:1;">
+    <h1>Search Products</h1>
+    <form class="search-bar" action="{% url 'search' %}" method="GET">
+        <input type="text" name="q" placeholder="Search for toys, clothing, offers..." value="{{ query }}" autofocus>
+        <button type="submit">Search</button>
+    </form>
+</section>
+
+<div class="results-container">
+    {% if query %}
+    <div class="results-header">
+        <h2>{% if total %}Showing {{ total }} result{{ total|pluralize }} for "{{ query }}"{% else %}No results for "{{ query }}"{% endif %}</h2>
+    </div>
+    {% endif %}
+
+    {% if results %}
+    <div class="results-grid">
+        {% for item in results %}
+        <a href="{{ item.url }}" class="result-card">
+            {% if item.image %}
+            <img src="{{ item.image }}" alt="{{ item.name }}" loading="lazy">
+            {% else %}
+            <img src="" alt="{{ item.name }}" style="background:linear-gradient(135deg,#ede9fe,#e0e7ff)">
+            {% endif %}
+            <div class="result-card-body">
+                <span class="result-type">{{ item.type }}</span>
+                <h3>{{ item.name }}</h3>
+                <div class="result-price">Rs. {{ item.price }}</div>
+                {% if item.rating %}
+                <div class="result-rating">★ {{ item.rating }}/5</div>
+                {% endif %}
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if results.has_other_pages %}
+    <div class="pagination">
+        {% if results.has_previous %}
+        <a href="?q={{ query }}&page={{ results.previous_page_number }}">← Prev</a>
+        {% endif %}
+        {% for num in results.paginator.page_range %}
+            {% if results.number == num %}
+            <span class="current">{{ num }}</span>
+            {% elif num > results.number|add:"-3" and num < results.number|add:"3" %}
+            <a href="?q={{ query }}&page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if results.has_next %}
+        <a href="?q={{ query }}&page={{ results.next_page_number }}">Next →</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% elif query %}
+    <div class="no-results">
+        <span>🔍</span>
+        <h3>No products found</h3>
+        <p>Try different keywords or browse our categories</p>
+    </div>
+    {% else %}
+    <div class="no-results">
+        <span>🛍️</span>
+        <h3>Start searching</h3>
+        <p>Enter a keyword above to find products</p>
+    </div>
+    {% endif %}
+</div>
+
+{% include 'footer.html' %}
+</body>
+</html>

@@ -1,0 +1,278 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - KidZone</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <style>
+        :root { --primary: #6366f1; --secondary: #ec4899; --accent: #f59e0b; --surface: #f8fafc; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--surface); }
+        .dash-header {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            padding: 2rem; color: #fff;
+        }
+        .dash-header h1 { font-size: 1.8rem; }
+        .dash-header p { opacity: 0.8; margin-top: 0.3rem; }
+        .dash-nav { display: flex; gap: 1rem; margin-top: 1rem; }
+        .dash-nav a {
+            color: rgba(255,255,255,0.8); text-decoration: none; padding: 0.4rem 1rem;
+            border-radius: 8px; font-size: 0.85rem; transition: all 0.3s;
+        }
+        .dash-nav a:hover, .dash-nav a.active { background: rgba(255,255,255,0.15); color: #fff; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+
+        /* Stat Cards */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card {
+            background: #fff; border-radius: 1rem; padding: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06); position: relative; overflow: hidden;
+        }
+        .stat-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+        }
+        .stat-card:nth-child(1)::before { background: linear-gradient(90deg, #6366f1, #8b5cf6); }
+        .stat-card:nth-child(2)::before { background: linear-gradient(90deg, #10b981, #34d399); }
+        .stat-card:nth-child(3)::before { background: linear-gradient(90deg, #ec4899, #f472b6); }
+        .stat-card:nth-child(4)::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .stat-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .stat-value { font-size: 2rem; font-weight: 700; color: #1e293b; }
+        .stat-label { font-size: 0.85rem; color: #64748b; margin-top: 0.2rem; }
+
+        /* Charts */
+        .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+        .chart-card {
+            background: #fff; border-radius: 1rem; padding: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .chart-card h3 { font-size: 1rem; color: #1e293b; margin-bottom: 1rem; }
+
+        /* Tables */
+        .table-card {
+            background: #fff; border-radius: 1rem; padding: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 1.5rem;
+        }
+        .table-card h3 { font-size: 1rem; color: #1e293b; margin-bottom: 1rem; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 0.75rem; color: #64748b; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid #e2e8f0; }
+        td { padding: 0.75rem; border-bottom: 1px solid #f1f5f9; color: #1e293b; font-size: 0.9rem; }
+        tr:hover td { background: #f8fafc; }
+        .stock-low { color: #f59e0b; font-weight: 600; }
+        .stock-out { color: #ef4444; font-weight: 600; }
+        .stock-ok { color: #10b981; font-weight: 600; }
+
+        @media (max-width: 768px) {
+            .charts-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="dash-header">
+    <h1>📊 KidZone Dashboard</h1>
+    <p>Welcome back, {{ user.username }}!</p>
+    <div class="dash-nav">
+        <a href="{% url 'admin_dashboard' %}" class="active">Overview</a>
+        <a href="/admin/">Django Admin</a>
+        <a href="{% url 'index' %}">Back to Store</a>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">📦</div>
+            <div class="stat-value">{{ total_orders }}</div>
+            <div class="stat-label">Total Orders</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-value">Rs. {{ total_revenue|floatformat:0 }}</div>
+            <div class="stat-label">Total Revenue</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-value">{{ total_users }}</div>
+            <div class="stat-label">Registered Users</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-value">{{ pending_orders }}</div>
+            <div class="stat-label">Pending Orders</div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>Monthly Revenue</h3>
+            <canvas id="revenueChart"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>Orders by Status</h3>
+            <canvas id="statusChart"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>Daily Orders (Last 30 Days)</h3>
+            <canvas id="dailyChart"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>Top Selling Products</h3>
+            <canvas id="topProductsChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Low Stock Alerts -->
+    {% if low_stock %}
+    <div class="table-card">
+        <h3>⚠️ Low Stock Alerts</h3>
+        <table>
+            <thead>
+                <tr><th>Product</th><th>SKU</th><th>Stock</th><th>Threshold</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+                {% for inv in low_stock %}
+                <tr>
+                    <td>{{ inv }}</td>
+                    <td>{{ inv.sku|default:"-" }}</td>
+                    <td>{{ inv.stock }}</td>
+                    <td>{{ inv.low_stock_threshold }}</td>
+                    <td>
+                        {% if inv.stock == 0 %}<span class="stock-out">Out of Stock</span>
+                        {% else %}<span class="stock-low">Low Stock</span>{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- Top Products Table -->
+    {% if top_products %}
+    <div class="table-card">
+        <h3>🏆 Top Selling Products</h3>
+        <table>
+            <thead>
+                <tr><th>Product</th><th>Quantity Sold</th><th>Revenue</th></tr>
+            </thead>
+            <tbody>
+                {% for p in top_products %}
+                <tr>
+                    <td>{{ p.item_name }}</td>
+                    <td>{{ p.total_qty }}</td>
+                    <td>Rs. {{ p.total_revenue|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+const primaryColor = '#6366f1';
+const secondaryColor = '#ec4899';
+const accentColor = '#f59e0b';
+
+// Plugin to show "No data" when chart is empty
+const noDataPlugin = {
+    id: 'noData',
+    afterDraw(chart) {
+        const datasets = chart.data.datasets;
+        let hasData = false;
+        for (const ds of datasets) {
+            if (ds.data && ds.data.length > 0) { hasData = true; break; }
+        }
+        if (!hasData) {
+            const { ctx, width, height } = chart;
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.font = '500 16px Inter, sans-serif';
+            ctx.fillStyle = '#94a3b8';
+            ctx.fillText('No data available yet', width / 2, height / 2);
+            ctx.restore();
+        }
+    }
+};
+
+// Monthly Revenue Chart
+new Chart(document.getElementById('revenueChart'), {
+    type: 'bar',
+    data: {
+        labels: {{ monthly_labels|safe }},
+        datasets: [{
+            label: 'Revenue (Rs.)',
+            data: {{ monthly_revenue|safe }},
+            backgroundColor: 'rgba(99, 102, 241, 0.2)',
+            borderColor: primaryColor,
+            borderWidth: 2,
+            borderRadius: 8,
+        }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } } },
+    plugins: [noDataPlugin]
+});
+
+// Orders by Status (Doughnut)
+const statusData = {{ status_counts|safe }};
+new Chart(document.getElementById('statusChart'), {
+    type: 'doughnut',
+    data: {
+        labels: Object.keys(statusData).map(s => s.charAt(0).toUpperCase() + s.slice(1)),
+        datasets: [{
+            data: Object.values(statusData),
+            backgroundColor: ['#f59e0b', '#6366f1', '#3b82f6', '#10b981', '#ef4444'],
+            borderWidth: 0,
+        }]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'bottom' } }, cutout: '60%' },
+    plugins: [noDataPlugin]
+});
+
+// Daily Orders Line Chart
+new Chart(document.getElementById('dailyChart'), {
+    type: 'line',
+    data: {
+        labels: {{ daily_labels|safe }},
+        datasets: [{
+            label: 'Orders',
+            data: {{ daily_counts|safe }},
+            borderColor: secondaryColor,
+            backgroundColor: 'rgba(236, 72, 153, 0.1)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 3,
+        }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } } },
+    plugins: [noDataPlugin]
+});
+
+// Top Products Horizontal Bar
+const topProducts = {{ top_products_json|safe }};
+new Chart(document.getElementById('topProductsChart'), {
+    type: 'bar',
+    data: {
+        labels: topProducts.map(p => p.item_name.length > 20 ? p.item_name.substring(0,20) + '…' : p.item_name),
+        datasets: [{
+            label: 'Units Sold',
+            data: topProducts.map(p => p.total_qty),
+            backgroundColor: 'rgba(245, 158, 11, 0.3)',
+            borderColor: accentColor,
+            borderWidth: 2,
+            borderRadius: 8,
+        }]
+    },
+    options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } } },
+    plugins: [noDataPlugin]
+});
+</script>
+</body>
+</html>

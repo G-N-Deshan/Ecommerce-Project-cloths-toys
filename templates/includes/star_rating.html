@@ -1,0 +1,6 @@
+{% if item_rating %}
+<div style="display:inline-flex;align-items:center;gap:4px;margin:4px 0;">
+    <span style="position:relative;display:inline-block;font-size:.85rem;letter-spacing:2px;color:#cbd5e1;">☆☆☆☆☆<span style="position:absolute;left:0;top:0;overflow:hidden;white-space:nowrap;color:#f59e0b;width:{% widthratio item_rating 5 100 %}%;">★★★★★</span></span>
+    <span style="font-size:.72rem;color:#64748b;">({{ item_review_count|default:"0" }})</span>
+</div>
+{% endif %}

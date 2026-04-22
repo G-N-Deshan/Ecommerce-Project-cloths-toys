@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloths</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'navbar.css'%}">
+    <link rel="stylesheet" href="{%static 'footer.css'%}">
+    <link rel="stylesheet" href="{% static 'cloths-page.css'%}">
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css'%}">
+</head>
+<body>
+
+    {%include 'navbar.html'%}
+
+
+    
+
+<div class="section-9">
+        <div class="section-9__overlay"></div>
+        <!-- 3D Floating Shapes -->
+        <div class="hero-shapes" aria-hidden="true">
+            <div class="shape shape--circle"></div>
+            <div class="shape shape--square"></div>
+            <div class="shape shape--ring"></div>
+            <div class="shape shape--wave1"></div>
+            <div class="shape shape--wave2"></div>
+            <div class="shape shape--morph1"></div>
+            <div class="shape shape--morph2"></div>
+            <div class="shape shape--streak"></div>
+        </div>
+        <div class="section-9__content">
+            <h1 class="section-9__title">Cloths</h1>
+            <p class="section-9__subtitle">Explore curated styles for every age and occasion.</p>
+
+            <div class="selection-section" data-reveal="up" data-reveal-stagger>
+                <div class="card mens-card">
+                    <div class="card__content">
+                        <h2>Mens</h2>
+                        <p>Sharp, comfortable, and timeless essentials.</p>
+                        <a href="{% url 'mens_cloths' %}" class="card__btn">Shop Mens</a>
+                    </div>
+                </div>
+
+                <div class="card womens-card">
+                    <div class="card__content">
+                        <h2>Womens</h2>
+                        <p>Elegant styles designed for every moment.</p>
+                        <a href="{% url 'women_cloths' %}" class="card__btn">Shop Womens</a>
+                    </div>
+                </div>
+
+                <div class="card kids-card">
+                    <div class="card__content">
+                        <h2>Kids</h2>
+                        <p>Playful, durable, and colorful favorites.</p>
+                        <a href="{% url 'kids_cloths' %}" class="card__btn">Shop Kids</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section  class="section-8" data-reveal="up">
+        <div class="section-8__content">
+            <h2 class="section-8__title">Our Brands</h2>
+            <p class="section-8__subtitle">Trusted labels we proudly carry.</p>
+
+            <div class="brand-grid">
+                <div class="brand-circle">Nike</div>
+                <div class="brand-circle">Adidas</div>
+                <div class="brand-circle">Puma</div>
+                <div class="brand-circle">Zara</div>
+                <div class="brand-circle">H&M</div>
+                <div class="brand-circle">Levi’s</div>
+                <div class="brand-circle">Gap</div>
+                <div class="brand-circle">Uniqlo</div>
+            </div>
+        </div>
+    </section>
+
+ {%include 'footer.html'%}
+    <script src="{% static 'global.js' %}"></script>
+    <script src="{% static 'scroll-reveal.js'%}"></script>
+</body>
+</html>

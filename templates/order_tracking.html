@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Tracking - {{ order.order_number }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'footer.css' %}">
+    <style>
+        :root { --primary: #6366f1; --secondary: #ec4899; --accent: #f59e0b; --surface: #f8fafc; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--surface); }
+        .tracking-hero {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            padding: 3rem 2rem; text-align: center; color: #fff;
+        }
+        .tracking-hero h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        .tracking-hero p { opacity: 0.9; }
+        .tracking-container { max-width: 900px; margin: -2rem auto 2rem; padding: 0 1rem; }
+        .tracking-card {
+            background: #fff; border-radius: 1rem; padding: 2rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+        .order-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .info-item label { font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; }
+        .info-item p { font-size: 1rem; color: #1e293b; font-weight: 500; margin-top: 0.2rem; }
+        .status-badge {
+            display: inline-block; padding: 0.3rem 1rem; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 600; color: #fff;
+        }
+        .status-pending { background: #f59e0b; }
+        .status-processing { background: #6366f1; }
+        .status-shipped { background: #3b82f6; }
+        .status-delivered { background: #10b981; }
+        .status-cancelled { background: #ef4444; }
+
+        /* Progress tracker */
+        .progress-tracker { display: flex; justify-content: space-between; margin: 2rem 0; position: relative; }
+        .progress-tracker::before {
+            content: ''; position: absolute; top: 20px; left: 10%; right: 10%;
+            height: 3px; background: #e2e8f0; z-index: 0;
+        }
+        .progress-tracker::after {
+            content: ''; position: absolute; top: 20px; left: 10%;
+            height: 3px; background: linear-gradient(90deg, #6366f1, #ec4899);
+            z-index: 1; transition: width 0.5s;
+        }
+        .step {
+            display: flex; flex-direction: column; align-items: center;
+            position: relative; z-index: 2; flex: 1;
+        }
+        .step-circle {
+            width: 40px; height: 40px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-weight: 700;
+            background: #e2e8f0; color: #94a3b8; transition: all 0.3s;
+        }
+        .step.completed .step-circle { background: #6366f1; color: #fff; }
+        .step.active .step-circle { background: var(--accent); color: #fff; box-shadow: 0 0 0 4px rgba(245,158,11,0.3); }
+        .step-label { font-size: 0.75rem; margin-top: 0.5rem; color: #64748b; font-weight: 500; text-transform: capitalize; }
+        .step.completed .step-label, .step.active .step-label { color: #1e293b; font-weight: 600; }
+
+        /* Timeline */
+        .timeline { border-top: 1px solid #e2e8f0; padding-top: 1.5rem; margin-top: 1.5rem; }
+        .timeline h3 { font-size: 1.1rem; color: #1e293b; margin-bottom: 1rem; }
+        .timeline-item {
+            display: flex; gap: 1rem; padding: 0.8rem 0; position: relative;
+        }
+        .timeline-dot {
+            width: 12px; height: 12px; border-radius: 50%; background: #6366f1;
+            margin-top: 4px; flex-shrink: 0;
+        }
+        .timeline-content { flex: 1; }
+        .timeline-content .status { font-weight: 600; color: #1e293b; text-transform: capitalize; }
+        .timeline-content .note { color: #64748b; font-size: 0.9rem; margin-top: 0.1rem; }
+        .timeline-content .date { color: #94a3b8; font-size: 0.8rem; margin-top: 0.2rem; }
+        .back-link {
+            display: inline-block; margin: 1.5rem 0; color: #6366f1;
+            text-decoration: none; font-weight: 500;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        /* Floating 3D shapes */
+        .ot-shapes { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+        .ot-s { position: absolute; opacity: .07; animation: otFloat 8s ease-in-out infinite; }
+        .ot-s--c  { width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg,#818cf8,#c084fc); top: 8%; right: 5%; animation-duration: 7s; }
+        .ot-s--sq { width: 70px; height: 70px; border-radius: 14px; background: linear-gradient(135deg,#ec4899,#f472b6); bottom: 15%; left: 6%; animation-delay: 2s; animation-duration: 9s; transform: rotate(45deg); }
+        .ot-s--r  { width: 80px; height: 80px; border-radius: 50%; border: 4px solid rgba(99,102,241,.12); top: 45%; left: 12%; animation-delay: 3.5s; animation-duration: 10s; }
+        .ot-s--dot { width: 30px; height: 30px; border-radius: 50%; background: rgba(251,191,36,.12); bottom: 30%; left: 25%; animation-delay: 1s; animation-duration: 6s; animation-name: otFloat; }
+        .ot-s--path1 { width: 80px; height: 4px; border-radius: 20px; background: linear-gradient(90deg, rgba(99,102,241,.18), rgba(168,85,247,.1), transparent); top: 25%; right: 8%; animation: otPath 10s ease-in-out infinite; }
+        .ot-s--path2 { width: 60px; height: 4px; border-radius: 20px; background: linear-gradient(90deg, rgba(236,72,153,.14), rgba(244,114,182,.08), transparent); bottom: 20%; left: 40%; animation: otPath 12s ease-in-out infinite reverse; }
+        .ot-s--ping1 { width: 60px; height: 60px; border-radius: 50%; border: 3px solid rgba(16,185,129,.12); top: 60%; right: 20%; animation: otPing 4s ease-out infinite; }
+        .ot-s--ping2 { width: 40px; height: 40px; border-radius: 50%; border: 2px solid rgba(99,102,241,.1); top: 10%; left: 50%; animation: otPing 5s ease-out infinite 1.5s; }
+        @keyframes otFloat {
+            0%,100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-22px) rotate(5deg); }
+            50% { transform: translateY(-34px) rotate(-4deg); }
+            75% { transform: translateY(-14px) rotate(3deg); }
+        }
+        @keyframes otPath {
+            0%   { transform: translateX(0) scaleX(1); opacity: .18; }
+            50%  { transform: translateX(60px) scaleX(1.5); opacity: .05; }
+            100% { transform: translateX(0) scaleX(1); opacity: .18; }
+        }
+        @keyframes otPing {
+            0%   { transform: scale(0.8); opacity: .15; }
+            70%  { transform: scale(1.5); opacity: 0; }
+            100% { transform: scale(0.8); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+{% include 'navbar.html' %}
+
+<!-- 3D Floating Shapes -->
+<div class="ot-shapes" aria-hidden="true">
+    <div class="ot-s ot-s--c"></div>
+    <div class="ot-s ot-s--sq"></div>
+    <div class="ot-s ot-s--r"></div>
+    <div class="ot-s ot-s--dot"></div>
+    <div class="ot-s ot-s--path1"></div>
+    <div class="ot-s ot-s--path2"></div>
+    <div class="ot-s ot-s--ping1"></div>
+    <div class="ot-s ot-s--ping2"></div>
+</div>
+
+<section class="tracking-hero" style="position:relative;z-index:1;">
+    <h1>Order Tracking</h1>
+    <p>{{ order.order_number }}</p>
+</section>
+
+<div class="tracking-container">
+    <div class="tracking-card">
+        <div class="order-info">
+            <div class="info-item">
+                <label>Order Number</label>
+                <p>{{ order.order_number }}</p>
+            </div>
+            <div class="info-item">
+                <label>Order Date</label>
+                <p>{{ order.created_at|date:"M d, Y" }}</p>
+            </div>
+            <div class="info-item">
+                <label>Total</label>
+                <p>Rs. {{ order.total }}</p>
+            </div>
+            <div class="info-item">
+                <label>Status</label>
+                <p><span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span></p>
+            </div>
+            {% if order.tracking_number %}
+            <div class="info-item">
+                <label>Tracking Number</label>
+                <p>{{ order.tracking_number }}</p>
+            </div>
+            {% endif %}
+            {% if order.estimated_delivery %}
+            <div class="info-item">
+                <label>Estimated Delivery</label>
+                <p>{{ order.estimated_delivery|date:"M d, Y" }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Progress Steps -->
+        {% if order.status != 'cancelled' %}
+        <div class="progress-tracker" style="--progress: {% if current_index == 0 %}10%{% elif current_index == 1 %}36%{% elif current_index == 2 %}63%{% elif current_index == 3 %}90%{% else %}0%{% endif %}">
+            {% for step in status_steps %}
+            <div class="step {% if forloop.counter0 < current_index %}completed{% endif %} {% if forloop.counter0 == current_index %}active{% endif %}">
+                <div class="step-circle">
+                    {% if forloop.counter0 < current_index %}✓{% else %}{{ forloop.counter }}{% endif %}
+                </div>
+                <span class="step-label">{{ step }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        <style>.progress-tracker::after { width: var(--progress); }</style>
+        {% endif %}
+
+        <!-- Tracking Timeline -->
+        {% if tracking_updates %}
+        <div class="timeline">
+            <h3>Tracking History</h3>
+            {% for update in tracking_updates %}
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="status">{{ update.get_status_display }}</div>
+                    {% if update.note %}<div class="note">{{ update.note }}</div>{% endif %}
+                    <div class="date">{{ update.created_at|date:"M d, Y h:i A" }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <a href="{% url 'my_orders' %}" class="back-link">← Back to My Orders</a>
+    </div>
+</div>
+
+{% include 'footer.html' %}
+</body>
+</html>

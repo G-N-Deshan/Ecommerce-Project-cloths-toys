@@ -1,0 +1,657 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Clothing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'footer.css' %}">
+    <style>
+        :root {
+            --sky: #e0f2fe;
+            --cloud: #f8fbff;
+            --ink: #1f2937;
+            --brand-blue: #0ea5e9;
+            --brand-orange: #fb923c;
+            --brand-yellow: #facc15;
+            --line: #dbe7f3;
+            --ok: #16a34a;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: "Nunito", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 10% 10%, #ffffff 0%, transparent 30%),
+                radial-gradient(circle at 90% 0%, #fde68a 0%, transparent 30%),
+                linear-gradient(180deg, #f0f9ff 0%, #f8fafc 60%, #fefce8 100%);
+            min-height: 100vh;
+        }
+
+        .kids-wrap {
+            width: min(1200px, 92%);
+            margin: 0 auto;
+        }
+
+        .hero {
+            margin-top: 14px;
+            border-radius: 28px;
+            padding: 56px 30px;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(120deg, rgba(14, 165, 233, 0.92), rgba(251, 146, 60, 0.9)),
+                url('{% static "kids-card-page-background.jpg" %}') center/cover no-repeat;
+            box-shadow: 0 20px 40px rgba(14, 165, 233, 0.2);
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.14)' stroke-width='2'%3E%3Ccircle cx='40' cy='40' r='22'/%3E%3Ccircle cx='160' cy='100' r='18'/%3E%3Cpath d='M18 150h44M132 40h34M80 178h58'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 220px 220px;
+            mix-blend-mode: soft-light;
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-family: "Fredoka", sans-serif;
+            font-size: clamp(2rem, 6vw, 3.4rem);
+            margin: 0 0 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero p {
+            max-width: 760px;
+            margin: 0 auto;
+            font-size: clamp(1rem, 2.8vw, 1.2rem);
+            line-height: 1.6;
+        }
+
+        .sticky-tabs {
+            position: sticky;
+            top: 10px;
+            z-index: 30;
+            margin: 18px 0 8px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(219, 231, 243, 0.8);
+            border-radius: 999px;
+            padding: 8px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 10px 18px;
+            font-weight: 800;
+            font-family: "Nunito", sans-serif;
+            background: transparent;
+            color: #334155;
+            cursor: pointer;
+            transition: 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover,
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--brand-blue), var(--brand-orange));
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .controls {
+            background: var(--cloud);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 18px;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 12px;
+            align-items: end;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .field label {
+            font-size: 0.88rem;
+            color: #475569;
+            font-weight: 700;
+        }
+
+        .field input,
+        .field select {
+            height: 40px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 0 12px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            background: #fff;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 10px;
+            padding: 11px 16px;
+            font-weight: 800;
+            font-family: inherit;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn-apply {
+            background: linear-gradient(135deg, var(--brand-blue), #6366f1);
+            color: white;
+        }
+
+        .btn-clear {
+            background: #fff;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .result-bar {
+            margin: 12px 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .result-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 999px;
+            padding: 8px 14px;
+            background: #fff;
+            border: 1px solid var(--line);
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .section-card {
+            background: rgba(255, 255, 255, 0.78);
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            padding: 20px;
+            margin: 16px 0 20px;
+            scroll-margin-top: 90px;
+            background-image:
+                linear-gradient(130deg, rgba(14, 165, 233, 0.06), rgba(251, 146, 60, 0.08)),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='rgba(30,64,175,0.08)' stroke-width='1.6'%3E%3Cpath d='M20 20h28v28H20zM124 124h28v28h-28z'/%3E%3Ccircle cx='88' cy='90' r='10'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: auto, 200px 200px;
+        }
+
+        .section-anchor-top {
+            height: 1px;
+            scroll-margin-top: 90px;
+        }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .section-head h2 {
+            margin: 0;
+            font-family: "Fredoka", sans-serif;
+            font-size: clamp(1.3rem, 4vw, 2rem);
+        }
+
+        .section-head p {
+            margin: 0;
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .product {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: 0.22s ease;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+        }
+
+        .img-wrap {
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            background: #eef2ff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .product:hover .img-wrap img { transform: scale(1.08); }
+
+        .img-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .product:hover .img-overlay { opacity: 1; }
+        .quick-view-link {
+            padding: 10px 22px;
+            background: #fff;
+            color: #0f172a;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        .quick-view-link:hover { transform: scale(1.05); }
+
+        .body {
+            padding: 12px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .name {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.35;
+            min-height: 2.7em;
+        }
+
+        .meta {
+            font-size: 0.82rem;
+            color: #64748b;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+
+        .price-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .price-now {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .price-old {
+            font-size: 0.86rem;
+            color: #94a3b8;
+            text-decoration: line-through;
+        }
+
+        .badge {
+            display: inline-block;
+            width: fit-content;
+            border-radius: 999px;
+            padding: 3px 10px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+            background: #ecfccb;
+            color: #3f6212;
+            text-transform: uppercase;
+        }
+
+        .card-actions {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+        }
+
+        .buy-link {
+            text-align: center;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            padding: 10px 12px;
+            text-decoration: none;
+            color: #0f172a;
+            font-weight: 800;
+            background: #f8fafc;
+        }
+
+        .cart-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 12px;
+            background: linear-gradient(135deg, var(--brand-orange), #f97316);
+            color: #fff;
+            font-weight: 800;
+            cursor: pointer;
+            min-width: 94px;
+        }
+
+        .empty {
+            background: #fff;
+            border: 1px dashed #cbd5e1;
+            color: #475569;
+            border-radius: 14px;
+            padding: 24px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        @media (max-width: 1024px) {
+            .controls-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 768px) {
+            .hero { padding: 40px 18px; border-radius: 22px; }
+            .controls-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .actions { grid-column: 1 / -1; }
+            .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 520px) {
+            .kids-wrap { width: 94%; }
+            .controls-grid { grid-template-columns: 1fr; }
+            .grid { grid-template-columns: 1fr; }
+            .section-head { flex-direction: column; align-items: flex-start; }
+        }
+
+        /* 3D Floating Shapes */
+        @keyframes pgFloat {
+            0%,100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-22px) rotate(5deg); }
+            50% { transform: translateY(-36px) rotate(-4deg); }
+            75% { transform: translateY(-14px) rotate(3deg); }
+        }
+        @keyframes kcBounce {
+            0%,100% { transform: translateY(0) scale(1); }
+            30% { transform: translateY(-30px) scale(1.1); }
+            50% { transform: translateY(0) scale(0.95); }
+            70% { transform: translateY(-15px) scale(1.05); }
+        }
+        @keyframes kcWobble {
+            0%,100% { transform: rotate(0deg) translateY(0); }
+            25% { transform: rotate(8deg) translateY(-12px); }
+            50% { transform: rotate(-6deg) translateY(-20px); }
+            75% { transform: rotate(4deg) translateY(-8px); }
+        }
+        @keyframes cardUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .grid article { animation: cardUp .5s ease-out both; }
+        .grid article:nth-child(2) { animation-delay: .06s; }
+        .grid article:nth-child(3) { animation-delay: .12s; }
+        .grid article:nth-child(4) { animation-delay: .18s; }
+    </style>
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="kids-wrap">
+        <div id="top-section" data-observe="top-section" class="section-anchor-top"></div>
+        <section class="hero">
+            <!-- 3D Floating Shapes -->
+            <div class="absolute top-[10%] left-[6%] w-24 h-24 rounded-full bg-white/10 pointer-events-none" style="position:absolute;animation:pgFloat 7s ease-in-out infinite"></div>
+            <div class="absolute bottom-[12%] right-[7%] w-16 h-16 rounded-2xl bg-white/8 rotate-45 pointer-events-none" style="position:absolute;animation:pgFloat 9s 2s ease-in-out infinite"></div>
+            <div class="absolute top-[25%] right-[15%] w-20 h-20 rounded-full border-4 border-white/10 pointer-events-none" style="position:absolute;animation:pgFloat 10s 3.5s ease-in-out infinite"></div>
+            <div class="absolute top-[50%] left-[3%] w-14 h-14 rounded-xl bg-amber-300/10 pointer-events-none" style="position:absolute;animation:kcBounce 4s cubic-bezier(.36,.07,.19,.97) infinite"></div>
+            <div class="absolute top-[15%] right-[6%] w-10 h-10 rounded-full bg-pink-300/10 pointer-events-none" style="position:absolute;animation:kcBounce 5s 1s cubic-bezier(.36,.07,.19,.97) infinite"></div>
+            <div class="absolute bottom-[25%] left-[15%] w-12 h-12 rounded-2xl border-2 border-amber-300/12 pointer-events-none" style="position:absolute;animation:kcWobble 6s ease-in-out infinite"></div>
+            <div class="absolute bottom-[5%] right-[20%] w-16 h-16 rounded-full bg-white/6 pointer-events-none" style="position:absolute;animation:kcWobble 7s 2s ease-in-out infinite"></div>
+            <div class="absolute top-[60%] right-[8%] w-8 h-8 rounded-full bg-cyan-300/10 pointer-events-none" style="position:absolute;animation:kcBounce 3s 0.5s cubic-bezier(.36,.07,.19,.97) infinite"></div>
+            <h1>Playful Kids Wardrobe</h1>
+            <p>Fresh fits for school, park time, birthday plans, and everything in-between. Use filters and sorting to quickly find what families actually want.</p>
+        </section>
+
+        <nav class="sticky-tabs" aria-label="Kids section navigation">
+            <button class="tab-btn active" type="button" data-scroll-target="top-section">Top</button>
+            <button class="tab-btn" type="button" data-scroll-target="girls-section">Girls</button>
+            <button class="tab-btn" type="button" data-scroll-target="boys-section">Boys</button>
+        </nav>
+
+        <section class="controls" id="filter-section" data-reveal="up">
+            <form method="get" action="{% url 'kids_cloths' %}" class="controls-grid">
+                <div class="field">
+                    <label for="q">Search</label>
+                    <input id="q" type="text" name="q" value="{{ search_query }}" placeholder="Product name">
+                </div>
+
+                <div class="field">
+                    <label for="gender">Gender section</label>
+                    <select id="gender" name="gender">
+                        <option value="all" {% if selected_gender == 'all' %}selected{% endif %}>All</option>
+                        <option value="kids-girl" {% if selected_gender == 'kids-girl' %}selected{% endif %}>Girls</option>
+                        <option value="kids-men" {% if selected_gender == 'kids-men' %}selected{% endif %}>Boys</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="subcategory">Subcategory</label>
+                    <select id="subcategory" name="subcategory">
+                        <option value="all" {% if selected_subcategory == 'all' %}selected{% endif %}>All types</option>
+                        {% for value, label in subcategory_options %}
+                        <option value="{{ value }}" {% if selected_subcategory == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="min_price">Min price</label>
+                    <input id="min_price" type="number" min="0" step="1" name="min_price" value="{{ selected_min_price }}" placeholder="e.g. 500">
+                </div>
+
+                <div class="field">
+                    <label for="max_price">Max price</label>
+                    <input id="max_price" type="number" min="0" step="1" name="max_price" value="{{ selected_max_price }}" placeholder="e.g. 2500">
+                </div>
+
+                <div class="field">
+                    <label for="sort">Sort by</label>
+                    <select id="sort" name="sort" onchange="this.form.submit()">
+                        <option value="featured" {% if selected_sort == 'featured' %}selected{% endif %}>Featured</option>
+                        <option value="newest" {% if selected_sort == 'newest' %}selected{% endif %}>Newest</option>
+                        <option value="oldest" {% if selected_sort == 'oldest' %}selected{% endif %}>Oldest</option>
+                        <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price low to high</option>
+                        <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price high to low</option>
+                        <option value="name_asc" {% if selected_sort == 'name_asc' %}selected{% endif %}>Name A to Z</option>
+                        <option value="name_desc" {% if selected_sort == 'name_desc' %}selected{% endif %}>Name Z to A</option>
+                    </select>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn btn-apply">Apply filters</button>
+                    <a class="btn btn-clear" href="{% url 'kids_cloths' %}">Clear</a>
+                </div>
+            </form>
+        </section>
+
+        <div class="result-bar">
+            <span class="result-chip">{{ all_kids_cloths|length }} products found</span>
+            <span class="result-chip">Girls: {{ kids_girls_cloths|length }} | Boys: {{ kids_cloths|length }}</span>
+        </div>
+
+        <section class="section-card" id="girls-section" data-observe="girls-section" data-reveal="left">
+            <div class="section-head">
+                <h2>Girls Collection</h2>
+                <p>{{ kids_girls_cloths|length }} items</p>
+            </div>
+            {% if kids_girls_cloths %}
+            <div class="grid">
+                {% for cloth in kids_girls_cloths %}
+                <article class="product">
+                    <div class="img-wrap">
+                        <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" loading="lazy">
+                        <div class="img-overlay">
+                            <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="quick-view-link">Quick View</a>
+                        </div>
+                    </div>
+                    <div class="body">
+                        <h3 class="name"><a href="{% url 'product_detail' 'cloth' cloth.id %}" style="color:inherit;text-decoration:none">{{ cloth.name }}</a></h3>
+                        <span class="meta">{{ cloth.get_subcategory_display|default:'Everyday wear' }}</span>
+                        {% with item_rating=cloth.avg_rating item_review_count=cloth.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
+                        <div class="price-row">
+                            <span class="price-now">Rs {{ cloth.price2|default:cloth.price1|default:cloth.price }}</span>
+                            {% if cloth.price1 and cloth.price2 %}<span class="price-old">Rs {{ cloth.price1 }}</span>{% endif %}
+                        </div>
+                        {% if cloth.discount_text %}<span class="badge">{{ cloth.discount_text }}</span>{% endif %}
+                        <div class="card-actions">
+                            <a class="buy-link" href="{% url 'product_detail' 'cloth' cloth.id %}">View details</a>
+                            <button class="cart-btn" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}">Add cart</button>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty">No girls products matched the current filters.</div>
+            {% endif %}
+        </section>
+
+        <section class="section-card" id="boys-section" data-observe="boys-section" data-reveal="right">
+            <div class="section-head">
+                <h2>Boys Collection</h2>
+                <p>{{ kids_cloths|length }} items</p>
+            </div>
+            {% if kids_cloths %}
+            <div class="grid">
+                {% for cloth in kids_cloths %}
+                <article class="product">
+                    <div class="img-wrap">
+                        <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" loading="lazy">
+                        <div class="img-overlay">
+                            <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="quick-view-link">Quick View</a>
+                        </div>
+                    </div>
+                    <div class="body">
+                        <h3 class="name"><a href="{% url 'product_detail' 'cloth' cloth.id %}" style="color:inherit;text-decoration:none">{{ cloth.name }}</a></h3>
+                        <span class="meta">{{ cloth.get_subcategory_display|default:'Everyday wear' }}</span>
+                        {% with item_rating=cloth.avg_rating item_review_count=cloth.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
+                        <div class="price-row">
+                            <span class="price-now">Rs {{ cloth.price2|default:cloth.price1|default:cloth.price }}</span>
+                            {% if cloth.price1 and cloth.price2 %}<span class="price-old">Rs {{ cloth.price1 }}</span>{% endif %}
+                        </div>
+                        {% if cloth.discount_text %}<span class="badge">{{ cloth.discount_text }}</span>{% endif %}
+                        <div class="card-actions">
+                            <a class="buy-link" href="{% url 'product_detail' 'cloth' cloth.id %}">View details</a>
+                            <button class="cart-btn" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}">Add cart</button>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty">No boys products matched the current filters.</div>
+            {% endif %}
+        </section>
+    </div>
+
+    {% with page_obj=all_kids_cloths %}
+    {% include 'includes/pagination.html' %}
+    {% endwith %}
+
+    {% include 'footer.html' %}
+
+    <script>
+        (function () {
+            const cached = localStorage.getItem('kids_cart_count');
+            if (cached) {
+                document.querySelectorAll('[data-cart-count]').forEach((el) => {
+                    el.textContent = cached;
+                });
+            }
+        })();
+    </script>
+    <script src="{% static 'cart_utils.js' %}"></script>
+    <script>
+        (function () {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const sections = document.querySelectorAll('[data-observe]');
+
+            tabs.forEach((tab) => {
+                tab.addEventListener('click', function () {
+                    const targetId = this.getAttribute('data-scroll-target');
+                    const target = document.getElementById(targetId);
+                    if (!target) return;
+
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    tabs.forEach((btn) => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (!entry.isIntersecting) return;
+                        const id = entry.target.getAttribute('data-observe');
+                        tabs.forEach((btn) => {
+                            btn.classList.toggle('active', btn.getAttribute('data-scroll-target') === id);
+                        });
+                    });
+                },
+                { threshold: 0.3 }
+            );
+
+            sections.forEach((section) => observer.observe(section));
+        })();
+    </script>
+    <script src="{% static 'global.js' %}"></script>
+    <script src="{% static 'scroll-reveal.js' %}"></script>
+</body>
+</html>

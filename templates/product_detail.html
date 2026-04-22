@@ -1,0 +1,817 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product_name }} - Product Details</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'footer.css' %}">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --accent: #f59e0b;
+            --surface: #f8fafc;
+            --glass: rgba(255,255,255,0.7);
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--surface); }
+
+        /* ── Breadcrumb ── */
+        .breadcrumb a { transition: color .2s; }
+        .breadcrumb a:hover { color: var(--primary); }
+
+        /* ── Image gallery ── */
+        .img-shell {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #ede9fe 0%, #e0e7ff 100%);
+        }
+        .img-shell img {
+            transition: transform .6s cubic-bezier(.25,.46,.45,.94);
+            cursor: zoom-in;
+        }
+        .img-shell:hover img { transform: scale(1.08); }
+
+        /* ── Zoom overlay ── */
+        .zoom-overlay {
+            position: fixed; inset:0; z-index:1000;
+            background: rgba(0,0,0,.85);
+            display: none; align-items: center; justify-content: center;
+            cursor: zoom-out;
+            animation: fadeIn .3s ease;
+        }
+        .zoom-overlay.active { display: flex; }
+        .zoom-overlay img {
+            max-width: 90vw; max-height: 90vh;
+            border-radius: .75rem;
+            box-shadow: 0 25px 60px rgba(0,0,0,.5);
+            animation: scaleIn .35s cubic-bezier(.16,1,.3,1);
+        }
+
+        /* ── Star rating ── */
+        .star { color: #d1d5db; font-size: 1.5rem; cursor: pointer; transition: color .15s, transform .15s; }
+        .star.filled { color: var(--accent); }
+        .star:hover { transform: scale(1.25); }
+
+        /* ── Review card ── */
+        .review-card {
+            background: white;
+            border-radius: .75rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,.06);
+            border: 1px solid #f1f5f9;
+            transition: transform .25s, box-shadow .25s;
+        }
+        .review-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,.08); }
+
+        /* ── Related card ── */
+        .related-card {
+            background: white;
+            border-radius: .75rem;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06);
+            border: 1px solid #f1f5f9;
+            transition: transform .3s, box-shadow .3s;
+        }
+        .related-card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,.12); }
+        .related-card img { transition: transform .5s; width: 100%; height: 200px; object-fit: cover; }
+        .related-card:hover img { transform: scale(1.05); }
+
+        /* ── Rating bar ── */
+        .rating-bar-fill { transition: width .8s cubic-bezier(.4,0,.2,1); }
+
+        /* ── Scroll reveal ── */
+        .reveal { opacity:0; transform: translateY(30px); transition: opacity .7s, transform .7s; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── Animations ── */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.15); } }
+        .anim-slide-up { animation: slideUp .6s ease both; }
+        .anim-slide-up-d1 { animation: slideUp .6s .1s ease both; }
+        .anim-slide-up-d2 { animation: slideUp .6s .2s ease both; }
+        .anim-slide-up-d3 { animation: slideUp .6s .3s ease both; }
+
+        /* ── Tabs ── */
+        .tab-btn { position: relative; padding-bottom: .5rem; }
+        .tab-btn::after {
+            content: ''; position: absolute; bottom: 0; left: 50%; width: 0; height: 3px;
+            background: var(--primary); border-radius: 2px; transition: width .3s, left .3s;
+        }
+        .tab-btn.active::after { width: 100%; left: 0; }
+        .tab-btn.active { color: var(--primary); font-weight: 600; }
+
+        /* ── Add-to-cart ripple ── */
+        .btn-cart { position: relative; overflow: hidden; }
+        .btn-cart .ripple {
+            position: absolute; border-radius: 50%; background: rgba(255,255,255,.4);
+            transform: scale(0); animation: rippleAnim .6s linear;
+        }
+        @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed; bottom: 2rem; right: 2rem; z-index: 2000;
+            background: #10b981; color: white; padding: 1rem 1.5rem;
+            border-radius: .75rem; font-weight: 600;
+            box-shadow: 0 10px 25px rgba(16,185,129,.35);
+            transform: translateY(120%); transition: transform .4s cubic-bezier(.16,1,.3,1);
+        }
+        .toast.show { transform: translateY(0); }
+
+        /* ── Quantity stepper ── */
+        .qty-btn {
+            width: 2.5rem; height: 2.5rem; border-radius: .5rem;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.25rem; font-weight: 700; cursor: pointer;
+            border: 2px solid #e2e8f0; background: white; color: #334155;
+            transition: all .15s;
+        }
+        .qty-btn:hover { border-color: var(--primary); color: var(--primary); background: #eef2ff; }
+
+        /* 3D Floating Shapes */
+        .pd-shapes { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+        .pd-shape { position: absolute; opacity: .06; animation: pdFloat 8s ease-in-out infinite; }
+        .pd-shape--circle { width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg,#818cf8,#c084fc); top: 8%; left: 4%; animation-duration: 7s; }
+        .pd-shape--square { width: 80px; height: 80px; border-radius: 16px; background: linear-gradient(135deg,#ec4899,#f472b6); bottom: 12%; right: 6%; animation-delay: 2s; animation-duration: 9s; transform: rotate(45deg); }
+        .pd-shape--ring { width: 90px; height: 90px; border-radius: 50%; border: 5px solid rgba(99,102,241,.1); top: 40%; right: 10%; animation-delay: 3.5s; animation-duration: 10s; }
+        .pd-shape--dot { width: 35px; height: 35px; border-radius: 50%; background: rgba(251,191,36,.1); bottom: 25%; left: 12%; animation-delay: 1.5s; animation-duration: 6s; }
+        .pd-shape--flip1 { width: 70px; height: 70px; border-radius: 14px; background: linear-gradient(135deg, rgba(99,102,241,.12), rgba(168,85,247,.08)); top: 22%; right: 18%; animation: pdFlip 8s ease-in-out infinite; }
+        .pd-shape--flip2 { width: 50px; height: 50px; border-radius: 50%; border: 3px solid rgba(236,72,153,.12); bottom: 40%; left: 35%; animation: pdFlip 10s ease-in-out infinite 2s; }
+        .pd-shape--zoom1 { width: 90px; height: 90px; border-radius: 50%; background: radial-gradient(circle, rgba(99,102,241,.1), transparent 70%); top: 60%; right: 5%; animation: pdZoom 6s ease-in-out infinite; }
+        .pd-shape--zoom2 { width: 40px; height: 40px; border-radius: 50%; background: radial-gradient(circle, rgba(251,191,36,.15), transparent 70%); top: 5%; left: 45%; animation: pdZoom 8s ease-in-out infinite 1.5s; }
+        @keyframes pdFloat {
+            0%,100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-22px) rotate(5deg); }
+            50% { transform: translateY(-35px) rotate(-4deg); }
+            75% { transform: translateY(-14px) rotate(3deg); }
+        }
+        @keyframes pdFlip {
+            0%, 100% { transform: perspective(200px) rotateY(0deg) scale(1); }
+            50% { transform: perspective(200px) rotateY(180deg) scale(1.15); }
+        }
+        @keyframes pdZoom {
+            0%, 100% { transform: scale(1); opacity: .1; }
+            50% { transform: scale(1.5); opacity: .04; }
+        }
+    </style>
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
+</head>
+<body class="bg-slate-50 min-h-screen">
+
+{% include 'navbar.html' %}
+
+<!-- 3D Floating Shapes -->
+<div class="pd-shapes" aria-hidden="true">
+    <div class="pd-shape pd-shape--circle"></div>
+    <div class="pd-shape pd-shape--square"></div>
+    <div class="pd-shape pd-shape--ring"></div>
+    <div class="pd-shape pd-shape--dot"></div>
+    <div class="pd-shape pd-shape--flip1"></div>
+    <div class="pd-shape pd-shape--flip2"></div>
+    <div class="pd-shape pd-shape--zoom1"></div>
+    <div class="pd-shape pd-shape--zoom2"></div>
+</div>
+
+<!-- Zoom overlay -->
+<div id="zoomOverlay" class="zoom-overlay" onclick="this.classList.remove('active')">
+    <img id="zoomImg" src="" alt="Zoom">
+</div>
+
+<!-- Toast notification -->
+<div id="toast" class="toast">&#10003; Added to cart!</div>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb flex items-center gap-2 text-sm text-slate-500 mb-8 anim-slide-up">
+        <a href="{% url 'index' %}" class="hover:text-indigo-600">Home</a>
+        <span class="text-slate-300">/</span>
+        <a href="{{ back_url }}" class="hover:text-indigo-600">{{ back_label }}</a>
+        <span class="text-slate-300">/</span>
+        <span class="text-slate-800 font-medium">{{ product_name }}</span>
+    </nav>
+
+    <!-- ════════ PRODUCT HERO ════════ -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16" data-reveal="up">
+
+        <!-- Image -->
+        <div class="img-shell anim-slide-up" onclick="openZoom(this.querySelector('img').src)">
+            {% if product_type == 'cloth' and product.discount_text %}
+            <span class="absolute top-4 left-4 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.discount_text }}</span>
+            {% endif %}
+            {% if product_type == 'toy' and product.discount_percentage %}
+            <span class="absolute top-4 left-4 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.discount_percentage }}% OFF</span>
+            {% endif %}
+            {% if product_type == 'offer' and product.offers_badge %}
+            <span class="absolute top-4 left-4 z-10 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.offers_badge }}</span>
+            {% endif %}
+            {% if product_type == 'arrival' and product.offers_badge %}
+            <span class="absolute top-4 left-4 z-10 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.offers_badge }}</span>
+            {% endif %}
+            <img src="{{ product.imageUrl.url }}" alt="{{ product_name }}"
+                 class="w-full h-[480px] object-contain p-8" id="mainProductImage">
+            <div class="absolute bottom-4 right-4 bg-white/80 backdrop-blur rounded-lg px-3 py-1.5 text-xs text-slate-500 flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/></svg>
+                Click to zoom
+            </div>
+        </div>
+        {% if gallery_images %}
+        <div class="flex gap-2 mt-3 overflow-x-auto pb-2" style="grid-column:1">
+            <div class="w-16 h-16 rounded-lg overflow-hidden cursor-pointer border-2 border-indigo-500 flex-shrink-0" onclick="switchImage('{{ product.imageUrl.url }}', this)">
+                <img src="{{ product.imageUrl.url }}" alt="Main" class="w-full h-full object-cover">
+            </div>
+            {% for gimg in gallery_images %}
+            <div class="w-16 h-16 rounded-lg overflow-hidden cursor-pointer border-2 border-transparent hover:border-indigo-300 flex-shrink-0" onclick="switchImage('{{ gimg.image.url }}', this)">
+                <img src="{{ gimg.image.url }}" alt="{{ gimg.alt_text|default:product_name }}" class="w-full h-full object-cover" loading="lazy">
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Info -->
+        <div class="flex flex-col justify-between anim-slide-up-d1">
+            <div>
+                <!-- Category badge -->
+                <span class="inline-block bg-indigo-100 text-indigo-700 text-xs font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wide">
+                    {{ category_label }}
+                </span>
+
+                <!-- Title -->
+                <h1 class="font-['Playfair_Display'] text-3xl lg:text-4xl font-bold text-slate-900 mb-4 leading-tight">
+                    {{ product_name }}
+                </h1>
+
+                <!-- Rating summary -->
+                {% if review_count %}
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="flex items-center gap-1">
+                        {% for i in "12345" %}
+                        {% if forloop.counter <= avg_rating %}
+                        <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        {% else %}
+                        <svg class="w-5 h-5 text-slate-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <span class="text-sm font-semibold text-slate-700">{{ avg_rating }}</span>
+                    <a href="#reviews-section" class="text-sm text-indigo-600 hover:underline">({{ review_count }} review{{ review_count|pluralize }})</a>
+                </div>
+                {% else %}
+                <a href="#reviews-section" class="text-sm text-indigo-500 hover:underline mb-5 inline-block">Be the first to review</a>
+                {% endif %}
+
+                <!-- Description -->
+                <p class="text-slate-600 leading-relaxed mb-6 text-base">
+                    {{ product_description }}
+                </p>
+
+                <!-- Divider -->
+                <div class="h-px bg-slate-200 mb-6"></div>
+
+                <!-- Pricing -->
+                <div class="mb-6">
+                    {% if product_type == 'toy' %}
+                    <div class="flex items-end gap-3">
+                        <span class="text-3xl font-bold text-slate-900">Rs {{ product.price }}</span>
+                        {% if product.original_price %}
+                        <span class="text-lg text-slate-400 line-through">Rs {{ product.original_price }}</span>
+                        <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-0.5 rounded-full">Save {{ product.discount_percentage }}%</span>
+                        {% endif %}
+                    </div>
+                    {% elif product_type == 'cloth' %}
+                    <div class="flex items-end gap-3">
+                        {% if product.price1 %}
+                        <span class="text-3xl font-bold text-slate-900">{{ product.price1 }}</span>
+                        {% elif product.price %}
+                        <span class="text-3xl font-bold text-slate-900">{{ product.price }}</span>
+                        {% endif %}
+                        {% if product.price2 %}
+                        <span class="text-lg text-slate-400 line-through">{{ product.price2 }}</span>
+                        {% endif %}
+                        {% if product.discount_text %}
+                        <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-0.5 rounded-full">{{ product.discount_text }}</span>
+                        {% endif %}
+                    </div>
+                    {% elif product_type == 'offer' %}
+                    <div class="flex items-end gap-3">
+                        {% if product.price1 %}
+                        <span class="text-3xl font-bold text-slate-900">{{ product.price1 }}</span>
+                        {% endif %}
+                        {% if product.price2 %}
+                        <span class="text-lg text-slate-400 line-through">{{ product.price2 }}</span>
+                        {% endif %}
+                        {% if product.stock_text %}
+                        <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-0.5 rounded-full">{{ product.stock_text }}</span>
+                        {% endif %}
+                    </div>
+                    {% elif product_type == 'arrival' %}
+                    <div class="flex items-end gap-3">
+                        {% if product.price %}
+                        <span class="text-3xl font-bold text-slate-900">{{ product.price }}</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Extra Details -->
+                <div class="grid grid-cols-2 gap-3 mb-6">
+                    {% if product_type == 'toy' %}
+                    <div class="bg-slate-50 rounded-lg p-3">
+                        <p class="text-xs text-slate-400 uppercase tracking-wide">Category</p>
+                        <p class="text-sm font-semibold text-slate-700">{{ product.get_category_display }}</p>
+                    </div>
+                    <div class="bg-slate-50 rounded-lg p-3">
+                        <p class="text-xs text-slate-400 uppercase tracking-wide">Age Range</p>
+                        <p class="text-sm font-semibold text-slate-700">{{ product.get_age_range_display }}</p>
+                    </div>
+                    {% elif product_type == 'cloth' %}
+                    <div class="bg-slate-50 rounded-lg p-3">
+                        <p class="text-xs text-slate-400 uppercase tracking-wide">Category</p>
+                        <p class="text-sm font-semibold text-slate-700">{{ product.get_category_display }}</p>
+                    </div>
+                    {% if product.subcategory %}
+                    <div class="bg-slate-50 rounded-lg p-3">
+                        <p class="text-xs text-slate-400 uppercase tracking-wide">Type</p>
+                        <p class="text-sm font-semibold text-slate-700">{{ product.get_subcategory_display }}</p>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="space-y-4 anim-slide-up-d2">
+                <!-- Inventory Status (live-updated) -->
+                {% if inventory %}
+                <div class="mb-2">
+                    {% if not inventory.is_in_stock %}
+                    <span data-stock-product="{{ product_type }}-{{ product.id }}" class="stock-badge stock-badge--out inline-block bg-red-100 text-red-700 text-sm font-semibold px-3 py-1 rounded-full">Out of Stock</span>
+                    {% elif inventory.is_low_stock %}
+                    <span data-stock-product="{{ product_type }}-{{ product.id }}" class="stock-badge stock-badge--low inline-block bg-amber-100 text-amber-700 text-sm font-semibold px-3 py-1 rounded-full">Low Stock — Only {{ inventory.stock }} left</span>
+                    {% else %}
+                    <span data-stock-product="{{ product_type }}-{{ product.id }}" class="stock-badge stock-badge--in inline-block bg-emerald-100 text-emerald-700 text-sm font-semibold px-3 py-1 rounded-full">In Stock</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <!-- Size / Color Variants -->
+                {% if variants %}
+                <div class="mb-4">
+                    {% with sizes=variants|dictsort:"size" %}
+                    {% if sizes.0.size %}
+                    <p class="text-sm font-medium text-slate-600 mb-2">Size</p>
+                    <div class="flex flex-wrap gap-2 mb-3" id="sizeOptions">
+                        {% for v in variants %}
+                        {% if v.size %}
+                        <button type="button" class="variant-size-btn px-3 py-1.5 border-2 border-slate-200 rounded-lg text-sm font-medium hover:border-indigo-500 hover:text-indigo-600 transition-all {% if v.stock == 0 %}opacity-40 cursor-not-allowed line-through{% endif %}"
+                                data-size="{{ v.size }}" data-extra="{{ v.extra_price }}" data-stock="{{ v.stock }}"
+                                onclick="selectVariant(this, 'size')">{{ v.size }}</button>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+
+                    {% with colors=variants|dictsort:"color" %}
+                    {% if colors.0.color %}
+                    <p class="text-sm font-medium text-slate-600 mb-2">Color</p>
+                    <div class="flex flex-wrap gap-2" id="colorOptions">
+                        {% for v in variants %}
+                        {% if v.color %}
+                        <button type="button" class="variant-color-btn w-8 h-8 rounded-full border-2 border-transparent hover:border-indigo-500 transition-all {% if v.stock == 0 %}opacity-40{% endif %}"
+                                style="background:{{ v.color_code|default:'#ccc' }}" title="{{ v.color }}"
+                                data-color="{{ v.color }}" data-extra="{{ v.extra_price }}" data-stock="{{ v.stock }}"
+                                onclick="selectVariant(this, 'color')"></button>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+                {% endif %}
+
+                <!-- Quantity -->
+                <div class="flex items-center gap-4">
+                    <span class="text-sm font-medium text-slate-600">Quantity</span>
+                    <div class="flex items-center gap-2">
+                        <button class="qty-btn" onclick="changeQty(-1)">-</button>
+                        <input id="qtyInput" type="number" value="1" min="1" max="20"
+                               class="w-14 text-center border-2 border-slate-200 rounded-lg h-10 font-semibold text-slate-800 focus:border-indigo-400 focus:outline-none">
+                        <button class="qty-btn" onclick="changeQty(1)">+</button>
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <!-- Add to cart -->
+                    <a id="addToCartBtn"
+                       href="{% url 'add_to_cart' product_type product.id %}"
+                       class="btn-cart flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 px-6 rounded-xl text-center transition-all duration-300 hover:shadow-lg hover:shadow-indigo-200 flex items-center justify-center gap-2"
+                       data-add-to-cart data-item-type="{{ product_type }}" data-item-id="{{ product.id }}"
+                       onclick="showCartToast(event)">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
+                        Add to Cart
+                    </a>
+                    <!-- Wishlist -->
+                    {% if product_type == 'cloth' or product_type == 'toy' %}
+                    <a href="{% url 'add_to_wishlist' product_type product.id %}"
+                       class="border-2 {% if in_wishlist %}border-red-400 bg-red-50 text-red-500{% else %}border-slate-200 text-slate-500 hover:border-red-300 hover:text-red-500 hover:bg-red-50{% endif %} font-semibold py-4 px-5 rounded-xl transition-all duration-300 flex items-center justify-center"
+                       title="{% if in_wishlist %}In Wishlist{% else %}Add to Wishlist{% endif %}">
+                        <svg class="w-6 h-6" fill="{% if in_wishlist %}currentColor{% else %}none{% endif %}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                    </a>
+                    {% endif %}
+                </div>
+
+                <!-- Trust badges -->
+                <div class="flex items-center gap-6 pt-4 border-t border-slate-100">
+                    <div class="flex items-center gap-2 text-xs text-slate-500">
+                        <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                        Free Returns
+                    </div>
+                    <div class="flex items-center gap-2 text-xs text-slate-500">
+                        <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/><path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"/></svg>
+                        Fast Delivery
+                    </div>
+                    <div class="flex items-center gap-2 text-xs text-slate-500">
+                        <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                        Secure Checkout
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ TABS ════════ -->
+    <div class="border-b border-slate-200 mb-10 flex gap-8 anim-slide-up-d3" id="tabBar">
+        <button class="tab-btn active text-sm text-slate-600 pb-3" onclick="switchTab('details')">Product Details</button>
+        <button class="tab-btn text-sm text-slate-600 pb-3" onclick="switchTab('reviews')">Reviews ({{ review_count }})</button>
+    </div>
+
+    <!-- ════════ TAB: DETAILS ════════ -->
+    <section id="tab-details" class="mb-16 reveal">
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
+            <h2 class="font-['Playfair_Display'] text-2xl font-bold text-slate-900 mb-6">About this product</h2>
+            <p class="text-slate-600 leading-relaxed text-base mb-6">{{ long_description|default:product_description }}</p>
+
+            {% if features_list %}
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    Key Features
+                </h3>
+                <ul class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {% for feature in features_list %}
+                    <li class="flex items-start gap-3 bg-slate-50 rounded-lg p-3">
+                        <svg class="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        <span class="text-slate-700 text-sm">{{ feature }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <!-- Specifications grid -->
+            {% if material or sizes_available or dimensions or care_instructions or safety_info %}
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    Specifications
+                </h3>
+                <div class="border border-slate-200 rounded-xl overflow-hidden">
+                    <table class="w-full text-sm">
+                        <tbody>
+                            {% if material %}
+                            <tr class="border-b border-slate-100">
+                                <td class="px-5 py-3 bg-slate-50 font-medium text-slate-700 w-1/3">Material</td>
+                                <td class="px-5 py-3 text-slate-600">{{ material }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if sizes_available %}
+                            <tr class="border-b border-slate-100">
+                                <td class="px-5 py-3 bg-slate-50 font-medium text-slate-700 w-1/3">Sizes Available</td>
+                                <td class="px-5 py-3 text-slate-600">{{ sizes_available }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if dimensions %}
+                            <tr class="border-b border-slate-100">
+                                <td class="px-5 py-3 bg-slate-50 font-medium text-slate-700 w-1/3">Dimensions</td>
+                                <td class="px-5 py-3 text-slate-600">{{ dimensions }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if care_instructions %}
+                            <tr class="border-b border-slate-100">
+                                <td class="px-5 py-3 bg-slate-50 font-medium text-slate-700 w-1/3">Care Instructions</td>
+                                <td class="px-5 py-3 text-slate-600">{{ care_instructions }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if safety_info %}
+                            <tr>
+                                <td class="px-5 py-3 bg-slate-50 font-medium text-slate-700 w-1/3">Safety Info</td>
+                                <td class="px-5 py-3 text-slate-600">{{ safety_info }}</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gradient-to-br from-indigo-50 to-violet-50 rounded-xl p-5">
+                    <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 mb-1">Quality Guaranteed</h3>
+                    <p class="text-sm text-slate-500">Premium materials and craftsmanship.</p>
+                </div>
+                <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-5">
+                    <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 mb-1">Best Price</h3>
+                    <p class="text-sm text-slate-500">Competitive pricing with great deals.</p>
+                </div>
+                <div class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl p-5">
+                    <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    </div>
+                    <h3 class="font-semibold text-slate-800 mb-1">Easy Returns</h3>
+                    <p class="text-sm text-slate-500">30-day hassle-free return policy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ TAB: REVIEWS ════════ -->
+    <section id="tab-reviews" class="mb-16 hidden" style="display:none;">
+        <div id="reviews-section" class="scroll-mt-24">
+
+            <!-- Rating overview -->
+            <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <!-- Left: big number -->
+                    <div class="flex flex-col items-center justify-center text-center">
+                        <span class="text-6xl font-bold text-slate-900">{% if avg_rating %}{{ avg_rating }}{% else %}0{% endif %}</span>
+                        <div class="flex gap-1 my-3">
+                            {% for i in "12345" %}
+                            {% if forloop.counter <= avg_rating %}
+                            <svg class="w-6 h-6 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            {% else %}
+                            <svg class="w-6 h-6 text-slate-200" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        <p class="text-sm text-slate-500">Based on {{ review_count }} review{{ review_count|pluralize }}</p>
+                    </div>
+                    <!-- Right: bars -->
+                    <div class="space-y-3">
+                        {% for star, count in rating_dist.items %}
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-medium text-slate-600 w-6 text-right">{{ star }}</span>
+                            <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <div class="flex-1 bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                <div class="rating-bar-fill bg-amber-400 h-full rounded-full" style="width: 0%"
+                                     data-width="{% if review_count %}{% widthratio count review_count 100 %}{% else %}0{% endif %}"></div>
+                            </div>
+                            <span class="text-xs text-slate-400 w-8">{{ count }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review list -->
+            <div class="space-y-4 mb-10">
+                {% for rev in reviews %}
+                <div class="review-card">
+                    <div class="flex items-start justify-between mb-2">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm">{{ rev.name.0|upper }}</div>
+                                <span class="font-semibold text-slate-800">{{ rev.name }}</span>
+                            </div>
+                            {% if rev.title %}
+                            <h4 class="font-semibold text-slate-700 mt-1">{{ rev.title }}</h4>
+                            {% endif %}
+                        </div>
+                        <div class="flex gap-0.5">
+                            {% for i in "12345" %}
+                            {% if forloop.counter <= rev.rating %}
+                            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            {% else %}
+                            <svg class="w-4 h-4 text-slate-200" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed">{{ rev.comment }}</p>
+                    <p class="text-xs text-slate-400 mt-3">{{ rev.created_at|date:"M d, Y" }}</p>
+                </div>
+                {% empty %}
+                <div class="text-center py-12 bg-white rounded-2xl border border-slate-100">
+                    <svg class="w-16 h-16 mx-auto text-slate-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                    <h3 class="text-lg font-semibold text-slate-700 mb-1">No reviews yet</h3>
+                    <p class="text-slate-500 text-sm">Share your thoughts about this product!</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Write a review -->
+            <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
+                <h3 class="font-['Playfair_Display'] text-2xl font-bold text-slate-900 mb-6">Write a Review</h3>
+
+                {% if review_error %}
+                <div class="bg-red-50 text-red-600 text-sm rounded-lg p-4 mb-6 border border-red-200">{{ review_error }}</div>
+                {% endif %}
+
+                <form method="POST" class="space-y-6">
+                    {% csrf_token %}
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Your Name *</label>
+                            <input type="text" name="reviewer_name" required
+                                   {% if request.user.is_authenticated %}value="{{ request.user.get_full_name|default:request.user.username }}"{% endif %}
+                                   class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Review Title</label>
+                            <input type="text" name="review_title" placeholder="Sum it up in a few words"
+                                   class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 outline-none transition-all">
+                        </div>
+                    </div>
+
+                    <!-- Star picker -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Rating *</label>
+                        <div id="starPicker" class="flex gap-1">
+                            <span class="star" data-value="1">&#9733;</span>
+                            <span class="star" data-value="2">&#9733;</span>
+                            <span class="star" data-value="3">&#9733;</span>
+                            <span class="star" data-value="4">&#9733;</span>
+                            <span class="star" data-value="5">&#9733;</span>
+                        </div>
+                        <input type="hidden" name="review_rating" id="ratingInput" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Your Review *</label>
+                        <textarea name="review_comment" rows="4" required placeholder="What did you like or dislike?"
+                                  class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 outline-none transition-all resize-none"></textarea>
+                    </div>
+
+                    <button type="submit"
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-indigo-200">
+                        Submit Review
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ RELATED PRODUCTS ════════ -->
+    {% if related_products %}
+    <section class="mb-16 reveal" data-reveal="up">
+        <h2 class="font-['Playfair_Display'] text-2xl font-bold text-slate-900 mb-8">You Might Also Like</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {% for rp in related_products %}
+            <a href="{% url 'product_detail' product_type rp.id %}" class="related-card group">
+                <div class="overflow-hidden">
+                    <img src="{{ rp.imageUrl.url }}" alt="{{ rp.title|default:rp.name }}" loading="lazy">
+                </div>
+                <div class="p-4">
+                    <h3 class="font-semibold text-slate-800 text-sm mb-1 group-hover:text-indigo-600 transition-colors line-clamp-2">{{ rp.title|default:rp.name }}</h3>
+                    {% if product_type == 'toy' %}
+                    <span class="text-indigo-600 font-bold text-sm">Rs {{ rp.price }}</span>
+                    {% elif product_type == 'cloth' %}
+                    <span class="text-indigo-600 font-bold text-sm">{{ rp.price1|default:rp.price }}</span>
+                    {% elif product_type == 'offer' %}
+                    <span class="text-indigo-600 font-bold text-sm">{{ rp.price1|default:"" }}</span>
+                    {% elif product_type == 'arrival' %}
+                    <span class="text-indigo-600 font-bold text-sm">{{ rp.price|default:"" }}</span>
+                    {% endif %}
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+</main>
+
+{% include 'footer.html' %}
+
+<script src="{% static 'cart_utils.js' %}"></script>
+<script>
+/* ── Zoom ── */
+function openZoom(src) {
+    const ov = document.getElementById('zoomOverlay');
+    document.getElementById('zoomImg').src = src;
+    ov.classList.add('active');
+}
+
+/* ── Gallery image switch ── */
+function switchImage(src, el) {
+    document.getElementById('mainProductImage').src = src;
+    el.parentElement.querySelectorAll('div').forEach(d => d.classList.remove('border-indigo-500'));
+    el.classList.add('border-indigo-500');
+}
+
+/* ── Variant selector ── */
+function selectVariant(btn, type) {
+    const group = type === 'size' ? '#sizeOptions' : '#colorOptions';
+    document.querySelectorAll(group + ' button').forEach(b => b.classList.remove('border-indigo-500', 'bg-indigo-50'));
+    btn.classList.add('border-indigo-500', 'bg-indigo-50');
+}
+
+/* ── Quantity ── */
+function changeQty(delta) {
+    const inp = document.getElementById('qtyInput');
+    let v = parseInt(inp.value) || 1;
+    v = Math.max(1, Math.min(20, v + delta));
+    inp.value = v;
+}
+
+/* ── Toast ── */
+function showCartToast(e) {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+/* ── Tabs ── */
+function switchTab(name) {
+    document.querySelectorAll('[id^="tab-"]').forEach(el => { el.style.display = 'none'; el.classList.add('hidden'); });
+    const target = document.getElementById('tab-' + name);
+    if (target) { target.style.display = 'block'; target.classList.remove('hidden'); }
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    if (name === 'reviews') {
+        // animate rating bars
+        document.querySelectorAll('.rating-bar-fill').forEach(bar => {
+            const w = bar.dataset.width;
+            if (w) bar.style.width = w + '%';
+        });
+    }
+}
+
+/* ── Star picker ── */
+(function() {
+    const stars = document.querySelectorAll('#starPicker .star');
+    const input = document.getElementById('ratingInput');
+    let selected = 0;
+
+    stars.forEach(s => {
+        s.addEventListener('mouseenter', () => {
+            const val = parseInt(s.dataset.value);
+            stars.forEach(x => x.classList.toggle('filled', parseInt(x.dataset.value) <= val));
+        });
+        s.addEventListener('click', () => {
+            selected = parseInt(s.dataset.value);
+            input.value = selected;
+            stars.forEach(x => x.classList.toggle('filled', parseInt(x.dataset.value) <= selected));
+        });
+    });
+
+    document.getElementById('starPicker').addEventListener('mouseleave', () => {
+        stars.forEach(x => x.classList.toggle('filled', parseInt(x.dataset.value) <= selected));
+    });
+})();
+
+/* ── Scroll reveal ── */
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* ── Hash navigation ── */
+if (window.location.hash === '#reviews-section') {
+    switchTab('reviews');
+    setTimeout(() => document.getElementById('reviews-section').scrollIntoView({ behavior: 'smooth' }), 200);
+}
+</script>
+<script src="{% static 'scroll-reveal.js' %}"></script>
+<script src="{% static 'global.js' %}"></script>
+<script>
+// Track recently viewed product
+document.addEventListener('DOMContentLoaded', function() {
+    trackRecentlyViewed({
+        id: {{ product.id }},
+        type: '{{ product_type }}',
+        name: '{{ product_name|escapejs }}',
+        price: '{{ product_display_price }}',
+        image: '{{ product.imageUrl.url }}',
+        url: '/product/{{ product_type }}/{{ product.id }}/'
+    });
+});
+</script>
+</body>
+</html>

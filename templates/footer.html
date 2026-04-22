@@ -1,0 +1,121 @@
+{%load static%}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<footer class="site-footer">
+    <div class="footer-main">
+        <div class="footer-container">
+            <!-- Brand Section - Left Side -->
+            <div class="footer-brand">
+                <div class="brand-row">
+                    <img src="{%static 'bird_2.jpg'%}" alt="G11 logo" class="footer-logo" loading="lazy">
+                    <div>
+                        <h2 class="brand-name">G11</h2>
+                        <p class="brand-tagline">Style & Joy. Delivered Daily.</p>
+                    </div>
+                </div>
+                <p class="brand-description">
+                    Discover quality clothes and fun toys for kids. Everything you need to bring smiles and style to your little ones.
+                </p>
+                
+                <!-- Contact Info -->
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <span class="contact-icon">📍</span>
+                        <span>123 Fashion Street, City</span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">📧</span>
+                        <span>contact@g11shop.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">📞</span>
+                        <span>+1 234 567 8900</span>
+                    </div>
+                </div>
+                
+                <!-- Social Media Links -->
+                <div class="social-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="Facebook">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Twitter">
+                            <i class="bi bi-twitter-x"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Instagram">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link" title="YouTube">
+                            <i class="bi bi-youtube"></i>
+                        </a>
+                        <a href="#" class="social-link" title="WhatsApp">
+                            <i class="bi bi-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Links Column -->
+            <div class="footer-column">
+                <h3 class="footer-title">Quick Links</h3>
+                <ul class="footer-list">
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'buy' %}">Shop</a></li>
+                    <li><a href="{% url 'shop_offers' %}">Offers</a></li>
+                    <li><a href="{% url 'new_arrivals' %}">New Arrivals</a></li>
+                    <li><a href="{% url 'toys_page' %}">Toys</a></li>
+                </ul>
+            </div>
+
+            <!-- Company Column -->
+            <div class="footer-column">
+                <h3 class="footer-title">Company</h3>
+                <ul class="footer-list">
+                    <li><a href="{% url 'about' %}">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="{% url 'contact_us' %}">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Support Column -->
+            <div class="footer-column">
+                <h3 class="footer-title">Support</h3>
+                <ul class="footer-list">
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Shipping Info</a></li>
+                    <li><a href="#">Returns & Exchanges</a></li>
+                    <li><a href="#">Order Status</a></li>
+                    <li><a href="#">FAQs</a></li>
+                </ul>
+            </div>
+
+            <!-- Newsletter Column -->
+            <div class="footer-column newsletter-column">
+                <h3 class="footer-title">Newsletter</h3>
+                <p class="newsletter-text">Subscribe to get special offers and exclusive deals!</p>
+                <form class="newsletter-form" action="#" method="POST">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+                <p class="newsletter-note">By subscribing, you agree to our Privacy Policy.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+        <div class="footer-bottom-content">
+            <p>© 2026 G11 Shop. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy Policy</a>
+                <span>|</span>
+                <a href="#">Terms of Service</a>
+                <span>|</span>
+                <a href="#">Cookie Policy</a>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="{% static 'live_reload.js' %}"></script>
