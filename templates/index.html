@@ -54,7 +54,7 @@
         <!-- BG layers -->
         <div class="absolute inset-0 z-0">
             <img src="../media/cloths-page-background.jpg" alt="" class="w-full h-full object-cover scale-110" id="heroBg">
-            <div class="absolute inset-0 bg-gradient-to-br from-slate-900/90 via-indigo-900/80 to-slate-900/90"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-sky-50/78 via-white/58 to-indigo-100/62"></div>
         </div>
 
         <!-- Floating particles (left half only) -->
@@ -70,52 +70,52 @@
         </div>
 
         <div class="relative z-10 container mx-auto px-6 text-center">
-            <div class="hero-content">
+            <div class="hero-content max-w-4xl mx-auto bg-white/34 backdrop-blur-md rounded-[2rem] px-6 py-10 md:px-12 md:py-14 shadow-[0_30px_90px_rgba(15,23,42,0.18)] border border-white/55">
                 <!-- Tagline chip -->
-                <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm text-white/90 text-sm font-medium mb-8 reveal-hero" style="--d:0">
+                <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-slate-300/70 bg-white/75 backdrop-blur-sm text-slate-700 text-sm font-semibold mb-8 reveal-hero" style="--d:0">
                     <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
                     New Season Collection 2026
                 </div>
 
                 <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[0.95] tracking-tight mb-8 reveal-hero" style="--d:1">
-                    <span class="block text-white">Dress Up.</span>
-                    <span class="block bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Play On.</span>
+                    <span class="block text-slate-900">Dress Up.</span>
+                    <span class="block bg-gradient-to-r from-cyan-600 via-sky-600 to-indigo-600 bg-clip-text text-transparent">Play On.</span>
                 </h1>
 
-                <p class="text-lg md:text-xl text-white/80 max-w-xl mx-auto mb-4 reveal-hero" style="--d:2">
+                <p class="text-lg md:text-xl text-slate-700 max-w-xl mx-auto mb-4 reveal-hero" style="--d:2">
                     Premium fashion &amp; toys curated for kids who love to explore.
                 </p>
-                <p class="text-base text-white/60 mb-10 reveal-hero" style="--d:3">
-                    Up to <span class="text-amber-400 font-bold">50% OFF</span> &bull; Free delivery over $49
+                <p class="text-base text-slate-600 mb-10 reveal-hero" style="--d:3">
+                    Up to <span class="text-orange-500 font-bold">50% OFF</span> &bull; Free delivery over $49
                 </p>
 
                 <!-- CTA -->
                 <div class="flex flex-col sm:flex-row gap-4 justify-center reveal-hero" style="--d:4">
-                    <a href="{% url 'buy' %}" class="mag-btn group relative inline-flex items-center gap-3 px-9 py-4 bg-white text-slate-900 font-bold rounded-full overflow-hidden transition-all duration-400 hover:shadow-[0_0_40px_rgba(99,102,241,0.45)]">
+                    <a href="{% url 'buy' %}" class="mag-btn group relative inline-flex items-center gap-3 px-9 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold rounded-full overflow-hidden transition-all duration-400 hover:shadow-[0_0_40px_rgba(14,116,144,0.35)]">
                         <span class="relative z-10 flex items-center gap-2"><i class="bi bi-bag-check text-lg"></i> Shop Now</span>
-                        <span class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></span>
+                        <span class="absolute inset-0 bg-gradient-to-r from-blue-700 to-indigo-700 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></span>
                         <span class="relative z-10 group-hover:text-white transition-colors duration-300"></span>
                     </a>
-                    <a href="{% url 'shop_offers' %}" class="mag-btn inline-flex items-center gap-2 px-9 py-4 border-2 border-white/40 text-white font-bold rounded-full hover:bg-white/15 backdrop-blur-sm transition-all duration-300">
-                        <i class="bi bi-fire text-amber-400"></i> View Offers
+                    <a href="{% url 'shop_offers' %}" class="mag-btn inline-flex items-center gap-2 px-9 py-4 border-2 border-slate-300 text-slate-800 font-bold rounded-full hover:bg-white/75 backdrop-blur-sm transition-all duration-300">
+                        <i class="bi bi-fire text-orange-500"></i> View Offers
                     </a>
                 </div>
 
                 <!-- Stats counters -->
                 <div class="flex flex-wrap justify-center gap-12 mt-20 reveal-hero" style="--d:5">
                     <div class="text-center">
-                        <div class="text-4xl md:text-5xl font-black text-white counter" data-target="10000" data-suffix="+">0</div>
-                        <div class="text-white/60 text-sm mt-1">Happy Customers</div>
+                        <div class="text-4xl md:text-5xl font-black text-slate-900 counter" data-target="10000" data-suffix="+">0</div>
+                        <div class="text-slate-600 text-sm mt-1">Happy Customers</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-4xl md:text-5xl font-black text-white counter" data-target="500" data-suffix="+">0</div>
-                        <div class="text-white/60 text-sm mt-1">Products</div>
+                        <div class="text-4xl md:text-5xl font-black text-slate-900 counter" data-target="500" data-suffix="+">0</div>
+                        <div class="text-slate-600 text-sm mt-1">Products</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-4xl md:text-5xl font-black text-white" style="display:flex;align-items:baseline;justify-content:center">
-                            <span class="counter" data-target="4.9" data-decimals="1">0</span><span class="text-amber-400 ml-1">★</span>
+                        <div class="text-4xl md:text-5xl font-black text-slate-900" style="display:flex;align-items:baseline;justify-content:center">
+                            <span class="counter" data-target="4.9" data-decimals="1">0</span><span class="text-orange-500 ml-1">★</span>
                         </div>
-                        <div class="text-white/60 text-sm mt-1">Average Rating</div>
+                        <div class="text-slate-600 text-sm mt-1">Average Rating</div>
                     </div>
                 </div>
             </div>
@@ -123,8 +123,8 @@
 
         <!-- Scroll cue -->
         <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
-            <div class="w-7 h-11 rounded-full border-2 border-white/30 flex justify-center pt-2">
-                <div class="w-1.5 h-3 bg-white/60 rounded-full animate-bounce"></div>
+            <div class="w-7 h-11 rounded-full border-2 border-slate-500/40 flex justify-center pt-2 bg-white/45 backdrop-blur-sm">
+                <div class="w-1.5 h-3 bg-slate-600/70 rounded-full animate-bounce"></div>
             </div>
         </div>
     </section>
