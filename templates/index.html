@@ -86,7 +86,7 @@
                     Premium fashion &amp; toys curated for kids who love to explore.
                 </p>
                 <p class="text-base text-slate-600 mb-10 reveal-hero" style="--d:3">
-                    Up to <span class="text-orange-500 font-bold">50% OFF</span> &bull; Free delivery over $49
+                    Up to <span class="text-orange-500 font-bold">50% OFF</span> &bull; Free delivery over Rs 49
                 </p>
 
                 <!-- CTA -->
@@ -189,10 +189,10 @@
                             </h3>
                             <div class="flex items-center gap-3 mb-2">
                                 {% if offer.price2 %}
-                                <span class="text-xl font-bold text-indigo-600">${{ offer.price2 }}</span>
+                                <span class="text-xl font-bold text-indigo-600">Rs {{ offer.price2 }}</span>
                                 {% endif %}
                                 {% if offer.price1 %}
-                                <span class="text-sm text-slate-400 line-through">${{ offer.price1 }}</span>
+                                <span class="text-sm text-slate-400 line-through">Rs {{ offer.price1 }}</span>
                                 {% endif %}
                             </div>
                             {% if offer.stock_text %}
@@ -245,7 +245,7 @@
                             </h3>
                             <p class="text-sm text-slate-400 mb-4 line-clamp-2">{{ arrival.description }}</p>
                             <div class="flex items-center justify-between">
-                                <span class="text-xl font-bold text-slate-800">${{ arrival.price }}</span>
+                                <span class="text-xl font-bold text-slate-800">Rs {{ arrival.price }}</span>
                                 <button
                                     class="w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center hover:scale-110 hover:bg-indigo-700 transition-all duration-300 shadow-lg shadow-indigo-500/25"
                                     data-add-to-cart data-item-type="arrival" data-item-id="{{ arrival.id }}">
@@ -332,7 +332,7 @@
                             </div>
                             <div class="p-3">
                                 <h4 class="font-semibold text-sm truncate text-slate-800">{{ item.name }}</h4>
-                                <span class="font-bold text-indigo-600 text-sm">${{ item.price }}</span>
+                                <span class="font-bold text-indigo-600 text-sm">Rs {{ item.price }}</span>
                             </div>
                         </div>
                         <!-- Back -->
