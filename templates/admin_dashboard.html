@@ -153,6 +153,39 @@
     </div>
     {% endif %}
 
+    <!-- Admin Order Management -->
+    <div class="table-card" id="order-management">
+        <h3 style="display: flex; justify-content: space-between; align-items: center;">
+            <span>🛒 Recent Orders Summary & Management</span>
+        </h3>
+        <table>
+            <thead>
+                <tr><th>Order #</th><th>Customer</th><th>Date</th><th>Total</th><th>Status Action</th></tr>
+            </thead>
+            <tbody>
+                {% for order in recent_orders %}
+                <tr>
+                    <td><strong>{{ order.order_number }}</strong></td>
+                    <td>{{ order.user.username }}<br><small style="color:#64748b;">{{ order.email }}</small></td>
+                    <td>{{ order.created_at|date:"M d, Y" }}</td>
+                    <td>Rs. {{ order.total }}</td>
+                    <td>
+                        <select class="status-select status-{{ order.status }}" data-order-id="{{ order.id }}" style="padding: 0.3rem; border-radius: 6px; font-weight: 600; cursor: pointer; border: 1px solid #e2e8f0; outline: none; background-color: #f8fafc;">
+                            <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
+                            <option value="processing" {% if order.status == 'processing' %}selected{% endif %}>Processing</option>
+                            <option value="shipped" {% if order.status == 'shipped' %}selected{% endif %}>Shipped</option>
+                            <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Delivered</option>
+                            <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                        </select>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5" style="text-align: center; color: #64748b;">No recent orders.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
     <!-- Top Products Table -->
     {% if top_products %}
     <div class="table-card">
@@ -272,6 +305,75 @@ new Chart(document.getElementById('topProductsChart'), {
     },
     options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } } },
     plugins: [noDataPlugin]
+});
+
+// CSRF Helper for Django
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Handle Order Status Updating
+document.querySelectorAll('.status-select').forEach(select => {
+    // Save initial value
+    select.setAttribute('data-original', select.value);
+    
+    select.addEventListener('change', function() {
+        const orderId = this.dataset.orderId;
+        const newStatus = this.value;
+        const originalStatus = this.getAttribute('data-original');
+        
+        let note = prompt(`Updating order status to: ${newStatus.toUpperCase()}.\n\nOptional: Add a note (e.g. 'Handed to DHL courier')`);
+        
+        if (note === null) {
+            // user clicked cancel
+            this.value = originalStatus;
+            return;
+        }
+
+        const btn = this;
+        btn.disabled = true;
+
+        fetch(`/dashboard/order/${orderId}/update-status/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({ status: newStatus, note: note })
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            if (data.success) {
+                btn.setAttribute('data-original', newStatus);
+                // Dynamically update the color class
+                btn.className = `status-select status-${newStatus}`;
+                // Optional slight visual cue that it worked
+                let origBg = btn.style.backgroundColor;
+                btn.style.backgroundColor = '#d1fae5';
+                setTimeout(() => btn.style.backgroundColor = origBg, 1000);
+            } else {
+                alert('Error: ' + data.error);
+                btn.value = originalStatus;
+            }
+        })
+        .catch(err => {
+            btn.disabled = false;
+            alert('A network error occurred.');
+            btn.value = originalStatus;
+        });
+    });
 });
 </script>
 </body>

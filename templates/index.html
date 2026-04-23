@@ -89,16 +89,23 @@
                     Up to <span class="text-orange-500 font-bold">50% OFF</span> &bull; Free delivery over Rs 49
                 </p>
 
-                <!-- CTA -->
-                <div class="flex flex-col sm:flex-row gap-4 justify-center reveal-hero" style="--d:4">
-                    <a href="{% url 'buy' %}" class="mag-btn group relative inline-flex items-center gap-3 px-9 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold rounded-full overflow-hidden transition-all duration-400 hover:shadow-[0_0_40px_rgba(14,116,144,0.35)]">
-                        <span class="relative z-10 flex items-center gap-2"><i class="bi bi-bag-check text-lg"></i> Shop Now</span>
-                        <span class="absolute inset-0 bg-gradient-to-r from-blue-700 to-indigo-700 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></span>
-                        <span class="relative z-10 group-hover:text-white transition-colors duration-300"></span>
-                    </a>
-                    <a href="{% url 'shop_offers' %}" class="mag-btn inline-flex items-center gap-2 px-9 py-4 border-2 border-slate-300 text-slate-800 font-bold rounded-full hover:bg-white/75 backdrop-blur-sm transition-all duration-300">
-                        <i class="bi bi-fire text-orange-500"></i> View Offers
-                    </a>
+                <!-- Search & Quick Links -->
+                <div class="max-w-2xl mx-auto mb-8 reveal-hero" style="--d:4">
+                    <form action="{% url 'search' %}" method="GET" class="relative flex items-center w-full group shadow-2xl shadow-indigo-500/10 rounded-full text-left">
+                        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                            <i class="bi bi-search text-slate-400 group-focus-within:text-indigo-600 transition-colors text-lg"></i>
+                        </div>
+                        <input type="text" name="q" placeholder="Search for clothes, toys, and offers..." class="w-full pl-14 pr-36 py-4 md:py-5 bg-white/90 backdrop-blur-md border border-white/60 text-slate-800 text-lg rounded-full outline-none focus:bg-white focus:shadow-[0_0_40px_rgba(99,102,241,0.25)] focus:border-indigo-300 transition-all duration-300 placeholder-slate-500" required>
+                        <button type="submit" class="absolute right-2 inset-y-2 px-8 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-full hover:shadow-lg hover:shadow-indigo-500/30 transition-all hover:scale-105 active:scale-95 text-lg">
+                            Search
+                        </button>
+                    </form>
+                    
+                    <div class="flex flex-wrap justify-center items-center gap-3 mt-6">
+                        <span class="text-slate-600 text-sm font-medium py-1">Trending:</span>
+                        <a href="{% url 'buy' %}" class="px-4 py-1 rounded-full bg-white/50 border border-slate-200 text-slate-700 text-sm hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition-colors">All Products</a>
+                        <a href="{% url 'shop_offers' %}" class="px-4 py-1 rounded-full bg-white/50 border border-slate-200 text-slate-700 text-sm hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-colors flex items-center gap-1"><i class="bi bi-fire text-orange-500"></i> Hot Deals</a>
+                    </div>
                 </div>
 
                 <!-- Stats counters -->
@@ -125,6 +132,73 @@
         <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
             <div class="w-7 h-11 rounded-full border-2 border-slate-500/40 flex justify-center pt-2 bg-white/45 backdrop-blur-sm">
                 <div class="w-1.5 h-3 bg-slate-600/70 rounded-full animate-bounce"></div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- ╔══════════════════════════════════════╗
+         ║    CATEGORY QUICK-ACCESS GRID        ║
+         ╚══════════════════════════════════════╝ -->
+    <section class="py-12 bg-slate-50 relative -mt-6 z-20" data-reveal>
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto reveal pt-8">
+                <!-- Women's Card -->
+                <a href="{% url 'women_cloths' %}" class="group relative rounded-[2rem] shadow-[0_15px_30px_rgba(236,72,153,0.2)] hover:shadow-[0_30px_60px_rgba(236,72,153,0.4)] hover:-translate-y-3 hover:translate-x-1 hover:-rotate-1 hover:scale-105 transition-all duration-500 flex flex-col items-center justify-end p-8 text-center min-h-[240px] border border-white/20" style="transform-style: preserve-3d; perspective: 1000px;">
+                    <div class="absolute inset-0 rounded-[2rem] overflow-hidden z-0">
+                        <img src="../media/women-card.jpg" alt="Women's Fashion" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" style="transform: translateZ(-20px);">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 opacity-80 group-hover:opacity-60 transition-opacity duration-500"></div>
+                        <!-- Glass shine effect -->
+                        <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none transform translate-y-full group-hover:translate-y-0"></div>
+                    </div>
+                    
+                    <div class="relative z-10 transition-transform duration-500 group-hover:-translate-y-4">
+                        <h3 class="font-black text-white text-3xl mb-1 tracking-widest uppercase drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]">Women's</h3>
+                        <p class="text-sm font-bold text-pink-300 uppercase tracking-[0.2em] drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] decoration-pink-500 underline-offset-4 group-hover:underline">Trendy Fashion</p>
+                    </div>
+                </a>
+                
+                <!-- Men's Card -->
+                <a href="{% url 'mens_cloths' %}" class="group relative rounded-[2rem] shadow-[0_15px_30px_rgba(59,130,246,0.2)] hover:shadow-[0_30px_60px_rgba(59,130,246,0.4)] hover:-translate-y-3 hover:-translate-x-1 hover:rotate-1 hover:scale-105 transition-all duration-500 flex flex-col items-center justify-end p-8 text-center min-h-[240px] border border-white/20" style="transform-style: preserve-3d; perspective: 1000px;">
+                    <div class="absolute inset-0 rounded-[2rem] overflow-hidden z-0">
+                        <img src="../media/men-card.jpg" alt="Men's Fashion" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" style="transform: translateZ(-20px);">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 opacity-80 group-hover:opacity-60 transition-opacity duration-500"></div>
+                        <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none transform translate-y-full group-hover:translate-y-0"></div>
+                    </div>
+                    
+                    <div class="relative z-10 transition-transform duration-500 group-hover:-translate-y-4">
+                        <h3 class="font-black text-white text-3xl mb-1 tracking-widest uppercase drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]">Men's</h3>
+                        <p class="text-sm font-bold text-blue-300 uppercase tracking-[0.2em] drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] decoration-blue-500 underline-offset-4 group-hover:underline">Casual & Formal</p>
+                    </div>
+                </a>
+                
+                <!-- Kids' Card -->
+                <a href="{% url 'kids_cloths' %}" class="group relative rounded-[2rem] shadow-[0_15px_30px_rgba(245,158,11,0.2)] hover:shadow-[0_30px_60px_rgba(245,158,11,0.4)] hover:-translate-y-3 hover:translate-x-1 hover:-rotate-1 hover:scale-105 transition-all duration-500 flex flex-col items-center justify-end p-8 text-center min-h-[240px] border border-white/20" style="transform-style: preserve-3d; perspective: 1000px;">
+                    <div class="absolute inset-0 rounded-[2rem] overflow-hidden z-0">
+                        <img src="../media/kids-card.jpg" alt="Kids' Fashion" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" style="transform: translateZ(-20px);">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 opacity-80 group-hover:opacity-60 transition-opacity duration-500"></div>
+                        <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none transform translate-y-full group-hover:translate-y-0"></div>
+                    </div>
+                    
+                    <div class="relative z-10 transition-transform duration-500 group-hover:-translate-y-4">
+                        <h3 class="font-black text-white text-3xl mb-1 tracking-widest uppercase drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]">Kids'</h3>
+                        <p class="text-sm font-bold text-amber-300 uppercase tracking-[0.2em] drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] decoration-amber-500 underline-offset-4 group-hover:underline">Cute Apparel</p>
+                    </div>
+                </a>
+                
+                <!-- Toys Card -->
+                <a href="{% url 'toys_page' %}" class="group relative rounded-[2rem] shadow-[0_15px_30px_rgba(16,185,129,0.2)] hover:shadow-[0_30px_60px_rgba(16,185,129,0.4)] hover:-translate-y-3 hover:-translate-x-1 hover:rotate-1 hover:scale-105 transition-all duration-500 flex flex-col items-center justify-end p-8 text-center min-h-[240px] border border-white/20" style="transform-style: preserve-3d; perspective: 1000px;">
+                    <div class="absolute inset-0 rounded-[2rem] overflow-hidden z-0">
+                        <img src="../media/toys/3.jpeg" alt="Toys" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" style="transform: translateZ(-20px);">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 opacity-80 group-hover:opacity-60 transition-opacity duration-500"></div>
+                        <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none transform translate-y-full group-hover:translate-y-0"></div>
+                    </div>
+                    
+                    <div class="relative z-10 transition-transform duration-500 group-hover:-translate-y-4">
+                        <h3 class="font-black text-white text-3xl mb-1 tracking-widest uppercase drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]">Toys</h3>
+                        <p class="text-sm font-bold text-emerald-300 uppercase tracking-[0.2em] drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] decoration-emerald-500 underline-offset-4 group-hover:underline">Fun & Games</p>
+                    </div>
+                </a>
             </div>
         </div>
     </section>
@@ -598,6 +672,34 @@
                         </div>
                     </a>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ╔══════════════════════════════════════╗
+         ║         NEWSLETTER SECTION           ║
+         ╚══════════════════════════════════════╝ -->
+    <section class="py-16 bg-slate-900 relative overflow-hidden" data-reveal>
+        <div class="absolute inset-0 z-0 opacity-20">
+            <div class="absolute top-10 left-10 w-64 h-64 bg-indigo-500 rounded-full blur-[100px]"></div>
+            <div class="absolute bottom-10 right-10 w-64 h-64 bg-pink-500 rounded-full blur-[100px]"></div>
+        </div>
+        <div class="container mx-auto px-6 relative z-10 text-center">
+            <div class="max-w-2xl mx-auto reveal">
+                <div class="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm border border-white/20">
+                    <i class="bi bi-envelope-paper text-3xl text-white"></i>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold text-white mb-4 font-playfair">Join Our Newsletter</h2>
+                <p class="text-slate-300 text-lg mb-8">Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>
+                
+                <form action="#" method="POST" class="relative max-w-lg mx-auto flex text-left" onsubmit="event.preventDefault(); alert('Subscribed successfully!');">
+                    <i class="bi bi-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                    <input type="email" placeholder="Enter your email address" class="w-full pl-12 pr-36 py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full outline-none focus:bg-white/20 transition-all duration-300 placeholder-slate-400" required>
+                    <button type="submit" class="absolute right-1 top-1 bottom-1 px-8 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold rounded-full hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] transition-all duration-300 hover:scale-105">
+                        Subscribe
+                    </button>
+                </form>
+                <p class="text-slate-400 text-sm mt-4"><i class="bi bi-shield-check text-emerald-400 mr-1"></i> We respect your privacy. No spam ever.</p>
             </div>
         </div>
     </section>

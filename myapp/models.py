@@ -274,7 +274,7 @@ class WishlistItem(models.Model):
     
     def get_price(self):
         if self.item_type == 'cloth':
-            return self.cloth.price2 or self.cloth.price
+            return self.cloth.price2 or self.cloth.price1 or self.cloth.price
         else:
             return str(self.toy.price)
     
@@ -372,11 +372,11 @@ class CartItem(models.Model):
             return 0.0
 
         if self.item_type == 'cloth':
-            return self._to_float(item.price2 or item.price or 0)
+            return self._to_float(item.price2 or item.price1 or item.price or 0)
         elif self.item_type == 'toy':
             return self._to_float(item.price)
         elif self.item_type == 'offer':
-            return self._to_float(item.price2 or item.price1 or 0)
+            return self._to_float(item.price1 or item.price2 or 0)
         elif self.item_type == 'arrival':
             return self._to_float(item.price or 0)
         return 0.0

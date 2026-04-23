@@ -73,6 +73,7 @@ urlpatterns = [
 
     # Admin Dashboard
     path('dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('dashboard/order/<int:order_id>/update-status/', views.admin_update_order_status, name='admin_update_order_status'),
 
     # Payment (Stripe)
     path('payment/', views.payment_page, name='payment_page'),

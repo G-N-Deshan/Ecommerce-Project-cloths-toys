@@ -2052,6 +2052,9 @@ def admin_dashboard(request):
     total_users = User.objects.count()
     pending_orders = Order.objects.filter(status='pending').count()
 
+    # Pass recent orders for management
+    recent_orders = Order.objects.prefetch_related('user').order_by('-created_at')[:20]
+
     context = {
         'monthly_labels': json.dumps([m['month'].strftime('%b %Y') for m in monthly_revenue]),
         'monthly_revenue': json.dumps([float(m['total'] or 0) for m in monthly_revenue]),
@@ -2067,8 +2070,44 @@ def admin_dashboard(request):
         'total_revenue': float(total_revenue),
         'total_users': total_users,
         'pending_orders': pending_orders,
+        'recent_orders': recent_orders,
     }
     return render(request, 'admin_dashboard.html', context)
+
+
+# ══════════════════════════════════════════════════════
+# ADMIN ORDER UPDATE
+# ══════════════════════════════════════════════════════
+
+@login_required(login_url='login')
+@require_POST
+def admin_update_order_status(request, order_id):
+    if not request.user.is_superuser:
+        return JsonResponse({'success': False, 'error': 'Unauthorized'}, status=403)
+        
+    try:
+        data = json.loads(request.body)
+        new_status = data.get('status')
+        note = data.get('note', '')
+        
+        valid_statuses = [status[0] for status in Order.STATUS_CHOICES]
+        if new_status not in valid_statuses:
+            return JsonResponse({'success': False, 'error': 'Invalid status provided.'}, status=400)
+            
+        order = get_object_or_404(Order, id=order_id)
+        order.status = new_status
+        order.save()
+        
+        # Create tracking update
+        OrderTracking.objects.create(
+            order=order,
+            status=new_status,
+            note=note
+        )
+        
+        return JsonResponse({'success': True, 'message': f'Order {order.order_number} status updated to {order.get_status_display()}'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 
 # ══════════════════════════════════════════════════════

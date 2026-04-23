@@ -113,8 +113,8 @@
                 <span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span>
             </div>
             <div class="order-actions">
-                <a href="{% url 'order_tracking' order.order_number %}" class="btn-track">Track Order</a>
-                <a href="{% url 'reorder' order.order_number %}" class="btn-track" style="background:#f59e0b;">Reorder</a>
+                <a href="{% url 'order_tracking' order.order_number %}" class="btn-track">📍 Track Order</a>
+                <a href="{% url 'reorder' order.order_number %}" class="btn-track" style="background:#f59e0b;">🔄 Reorder</a>
             </div>
         </div>
         {% endfor %}
