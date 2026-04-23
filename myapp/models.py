@@ -245,6 +245,13 @@ class WishlistItem(models.Model):
     
     toy = models.ForeignKey('Toy', on_delete=models.CASCADE, blank=True, null=True, related_name='wishlisted_by')
     
+    alert_threshold_percent = models.PositiveIntegerField(default=0)
+    is_shared = models.BooleanField(default=False)
+    last_alert_sent = models.DateTimeField(blank=True, null=True)
+    original_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    price_alert_enabled = models.BooleanField(default=False)
+    shared_at = models.DateTimeField(blank=True, null=True)
+    
     added_at = models.DateTimeField(auto_now_add=True)
     
     

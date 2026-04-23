@@ -1417,18 +1417,19 @@ def cart_details(request):
 # Wishlist views
 @login_required(login_url='login')
 def wishlist(request):
-    wishlist_items = WishlistItem.objects.filter(user=request.user)
-    
-    cloth_items = wishlist_items.filter(item_type='cloth')
-    toy_items = wishlist_items.filter(item_type='toy')
+    wishlist_items = WishlistItem.objects.filter(user=request.user).select_related('cloth', 'toy')
+
+    cloth_items = wishlist_items.filter(item_type='cloth').select_related('cloth')
+    toy_items = wishlist_items.filter(item_type='toy').select_related('toy')
     
     total_count = wishlist_items.count()
     cloth_count = cloth_items.count()
     toy_count = toy_items.count()
     
     context = {
-        'wishlist_items': wishlist_items,  
-        'toy_items': toy_items,             
+        'wishlist_items': wishlist_items,
+        'cloth_items': cloth_items,
+        'toy_items': toy_items,
         'total_count': total_count,
         'cloth_count': cloth_count,
         'toy_count': toy_count,
