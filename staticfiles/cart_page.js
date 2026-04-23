@@ -74,7 +74,7 @@ function renderCart(data) {
                 <div class="item-details">
                     <h3><a href="${detailUrl}" class="cart-item-link">${item.name}</a></h3>
                     <p>${item.item_type.charAt(0).toUpperCase() + item.item_type.slice(1)}</p>
-                    <div class="item-price">$${item.price.toFixed(2)}</div>
+                    <div class="item-price">Rs ${item.price.toFixed(2)}</div>
                     <div class="quantity-control">
                         <button class="qty-btn" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
                         <input type="number" class="qty-input" value="${item.quantity}" min="1" 
@@ -166,9 +166,9 @@ function updateSummary(data) {
     const taxEl = document.getElementById('tax');
     const totalEl = document.getElementById('total');
     
-    if (subtotalEl) subtotalEl.textContent = `$${data.subtotal.toFixed(2)}`;
-    if (taxEl) taxEl.textContent = `$${data.tax.toFixed(2)}`;
-    if (totalEl) totalEl.textContent = `$${data.total.toFixed(2)}`;
+    if (subtotalEl) subtotalEl.textContent = `Rs ${data.subtotal.toFixed(2)}`;
+    if (taxEl) taxEl.textContent = `Rs ${data.tax.toFixed(2)}`;
+    if (totalEl) totalEl.textContent = `Rs ${data.total.toFixed(2)}`;
 }
 
 function updateCartCount(count) {

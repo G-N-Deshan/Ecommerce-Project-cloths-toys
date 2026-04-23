@@ -326,23 +326,36 @@ def user_login(request):
 
 
 def user_signup(request):
+    def render_signup_with_data(data=None):
+        return render(request, 'signup.html', {
+            'signup_data': data or {},
+        })
+
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
         password2 = request.POST.get('password2')
+
+        signup_data = {
+            'username': (request.POST.get('username') or '').strip(),
+            'full_name': (request.POST.get('full_name') or '').strip(),
+            'email': (request.POST.get('email') or '').strip(),
+            'address': (request.POST.get('address') or '').strip(),
+            'phone': (request.POST.get('phone') or '').strip(),
+        }
         
         if password != password2:
             messages.error(request, 'Passwords do not match')
-            return render(request, 'signup.html')
+            return render_signup_with_data(signup_data)
         
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Username already exists')
-            return render(request, 'signup.html')
+            return render_signup_with_data(signup_data)
         
         if User.objects.filter(email=email).exists():
             messages.error(request, 'Email already registered')
-            return render(request, 'signup.html')
+            return render_signup_with_data(signup_data)
         
         # Validate password strength
         try:
@@ -350,7 +363,7 @@ def user_signup(request):
         except ValidationError as e:
             for error in e.messages:
                 messages.error(request, error)
-            return render(request, 'signup.html')
+            return render_signup_with_data(signup_data)
         
         user = User.objects.create_user(username=username, email=email, password=password)
         user.save()
@@ -359,7 +372,7 @@ def user_signup(request):
         messages.success(request, 'Account created successfully!')
         return redirect('index')
     
-    return render(request, 'signup.html')
+    return render_signup_with_data()
 
 
 @require_POST

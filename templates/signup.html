@@ -103,12 +103,12 @@
                     <div class="lg-input-group">
                         <i class="bi bi-person lg-input-icon"></i>
                         <input type="text" id="username" name="username" placeholder="Username" required
-                               class="lg-input" autocomplete="username">
+                               class="lg-input" autocomplete="username" value="{{ signup_data.username|default:'' }}">
                     </div>
                     <div class="lg-input-group">
                         <i class="bi bi-person-badge lg-input-icon"></i>
                         <input type="text" id="full_name" name="full_name" placeholder="Full Name"
-                               class="lg-input">
+                               class="lg-input" value="{{ signup_data.full_name|default:'' }}">
                     </div>
                 </div>
 
@@ -116,7 +116,7 @@
                 <div class="lg-input-group reveal-lg" style="--d:5">
                     <i class="bi bi-envelope lg-input-icon"></i>
                     <input type="email" id="email" name="email" placeholder="Email address" required
-                           class="lg-input" autocomplete="email">
+                           class="lg-input" autocomplete="email" value="{{ signup_data.email|default:'' }}">
                 </div>
 
                 <!-- Row: Address + Phone -->
@@ -124,12 +124,12 @@
                     <div class="lg-input-group">
                         <i class="bi bi-geo-alt lg-input-icon"></i>
                         <input type="text" id="address" name="address" placeholder="Address" required
-                               class="lg-input">
+                               class="lg-input" value="{{ signup_data.address|default:'' }}">
                     </div>
                     <div class="lg-input-group">
                         <i class="bi bi-telephone lg-input-icon"></i>
                         <input type="tel" id="phone" name="phone" placeholder="Phone number" required
-                               class="lg-input">
+                               class="lg-input" value="{{ signup_data.phone|default:'' }}">
                     </div>
                 </div>
 

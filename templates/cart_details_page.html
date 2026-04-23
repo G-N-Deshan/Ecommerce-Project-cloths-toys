@@ -39,15 +39,15 @@
                 <h2>Order Summary</h2>
                 <div class="summary-row">
                     <span>Subtotal:</span>
-                    <span id="subtotal">$0.00</span>
+                    <span id="subtotal">Rs 0.00</span>
                 </div>
                 <div class="summary-row">
                     <span>Tax (10%):</span>
-                    <span id="tax">$0.00</span>
+                    <span id="tax">Rs 0.00</span>
                 </div>
                 <div class="summary-row total">
                     <span>Total:</span>
-                    <span id="total">$0.00</span>
+                    <span id="total">Rs 0.00</span>
                 </div>
                 <form action="{% url 'checkout' %}" method="POST" style="width: 100%;">
                     {% csrf_token %}
