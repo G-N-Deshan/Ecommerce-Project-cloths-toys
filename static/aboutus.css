@@ -278,6 +278,17 @@ html::-webkit-scrollbar {
     flex-wrap: wrap;
 }
 
+.service-trust-actions .btn-secondary {
+    background: #ffffff;
+    color: #0f172a;
+    border: 2px solid #0ea5e9;
+}
+
+.service-trust-actions .btn-secondary:hover {
+    background: #e0f2fe;
+    color: #0c4a6e;
+}
+
 /* Values Section */
 .values-section {
     padding: 100px 20px;
