@@ -33,6 +33,10 @@
 
                 <!-- Cart Icon - Only for authenticated users -->
                 {% if user.is_authenticated %}
+                <a href="{% url 'wishlist' %}" class="wishlist-icon-link" title="Wishlist">
+                    <span class="wishlist-icon" aria-hidden="true">♡</span>
+                    <span class="wishlist-count-badge" data-wishlist-count>{{ wishlist_count|default:0 }}</span>
+                </a>
                 <a href="{% url 'cart_details' %}" class="cart-icon-link" title="Shopping Cart">
                     <span class="cart-icon">🛒</span>
                     <span class="cart-count-badge" data-cart-count>{{ cart_count|default:0 }}</span>
