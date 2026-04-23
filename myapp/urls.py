@@ -74,6 +74,8 @@ urlpatterns = [
     # Admin Dashboard
     path('dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('dashboard/order/<int:order_id>/update-status/', views.admin_update_order_status, name='admin_update_order_status'),
+    path('subscribe-newsletter/', views.subscribe_newsletter, name='subscribe_newsletter'),
+
 
     # Payment (Stripe)
     path('payment/', views.payment_page, name='payment_page'),
@@ -90,6 +92,13 @@ urlpatterns = [
 
     # Real-time update polling
     path('check-updates/', views.check_updates, name='check_updates'),
+
+    # Loyalty Program
+    path('loyalty/', views.loyalty_dashboard, name='loyalty_dashboard'),
+    path('loyalty/redeem/', views.redeem_loyalty_points, name='redeem_loyalty_points'),
+
+    # AI Assistant
+    path('ai-chat/', views.ai_chat, name='ai_chat'),
 
     # Password Reset (Django built-in)
     path('password-reset/', auth_views.PasswordResetView.as_view(

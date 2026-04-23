@@ -1,0 +1,434 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
+<style>
+    :root {
+        --bronze: #8a5a2e; /* Deeper Bronze */
+        --silver: #a0a0a0; /* Deeper Silver */
+        --gold: #d4af37;   /* Metallic Gold */
+        --accent-glow: rgba(99, 102, 241, 0.3);
+    }
+
+    .loyalty-hero {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        padding: 120px 0 160px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    .loyalty-hero::before {
+        content: '';
+        position: absolute;
+        width: 600px; height: 600px;
+        background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+        top: -300px; left: -300px;
+        pointer-events: none;
+    }
+
+    .loyalty-hero::after {
+        content: '';
+        position: absolute;
+        width: 400px; height: 400px;
+        background: radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, transparent 70%);
+        bottom: -200px; right: -200px;
+        pointer-events: none;
+    }
+
+    .tier-badge {
+        padding: 10px 24px;
+        border-radius: 99px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        margin-bottom: 24px;
+        border: 2px solid rgba(255,255,255,0.1);
+    }
+
+    .tier-bronze { background: linear-gradient(135deg, #cd7f32, #8d5524); color: white; }
+    .tier-silver { background: linear-gradient(135deg, #e2e8f0, #94a3b8); color: #1e293b; }
+    .tier-gold { background: linear-gradient(135deg, #fbbf24, #d97706); color: #451a03; }
+
+    .pts-card-wrapper {
+        margin-top: -100px;
+        padding: 0 1.5rem;
+        position: relative;
+        z-index: 50;
+    }
+
+    .pts-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 32px;
+        padding: 48px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .points-display {
+        border-right: 2px solid #f1f5f9;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .points-number {
+        font-size: 5rem;
+        line-height: 1;
+        font-weight: 900;
+        letter-spacing: -2px;
+        background: linear-gradient(135deg, #1e293b 0%, #6366f1 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .progress-section {
+        padding-left: 48px;
+    }
+
+    .progress-track {
+        height: 14px;
+        background: #f1f5f9;
+        border-radius: 99px;
+        overflow: hidden;
+        margin: 24px 0 12px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+        transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    }
+
+    .reward-item {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 24px;
+        padding: 30px;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        text-align: center;
+    }
+
+    .reward-item:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(99, 102, 241, 0.1);
+        border-color: #6366f1;
+    }
+
+    .reward-icon-box {
+        width: 60px; height: 60px;
+        margin: 0 auto 20px;
+        background: #f5f3ff;
+        color: #6366f1;
+        border-radius: 18px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.75rem;
+        transition: all 0.3s;
+    }
+
+    .reward-item:hover .reward-icon-box {
+        background: #6366f1;
+        color: white;
+        transform: rotate(10deg);
+    }
+
+    .redeem-action-btn {
+        width: 100%;
+        padding: 14px;
+        background: #0f172a;
+        color: white;
+        border: none;
+        border-radius: 14px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 15px;
+    }
+
+    .redeem-action-btn:hover { background: #6366f1; transform: translateY(-2px); }
+    .redeem-action-btn:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; transform: none; }
+
+    .history-card {
+        background: white;
+        border-radius: 24px;
+        border: 1px solid #e2e8f0;
+        padding: 40px;
+        margin-top: 80px;
+    }
+
+    .history-row {
+        border-bottom: 1px solid #f1f5f9;
+        padding: 20px 10px;
+        transition: background 0.2s;
+    }
+
+    .history-row:last-child { border-bottom: none; }
+    .history-row:hover { background: #fafafa; }
+
+    .pts-pill {
+        padding: 4px 12px;
+        border-radius: 8px;
+        font-weight: 800;
+        font-size: 0.9rem;
+    }
+    .pts-pill-plus { background: #ecfdf5; color: #059669; }
+    .pts-pill-minus { background: #fef2f2; color: #dc2626; }
+
+    @media (max-width: 768px) {
+        .pts-card { padding: 30px; }
+        .points-display { border-right: none; border-bottom: 2px solid #f1f5f9; padding-bottom: 30px; margin-bottom: 30px; }
+        .progress-section { padding-left: 0; }
+        .points-number { font-size: 4rem; }
+    }
+</style>
+
+<div class="loyalty-hero">
+    <div class="container mx-auto px-6">
+        <div class="tier-badge tier-{{ profile.tier }}" data-reveal="scale">
+            <i class="bi bi-stars"></i>
+            {{ profile.tier|title }} Status
+        </div>
+        <h1 class="text-5xl md:text-7xl font-black mb-6 font-playfair tracking-tight" data-reveal="up">G11 Exclusive <span class="text-indigo-400">Rewards</span></h1>
+        <p class="text-indigo-200 text-lg md:text-xl max-w-2xl mx-auto opacity-80" data-reveal="up" data-delay="100">
+            You're an essential part of the G11 family. Earn points on every purchase and unlock a world of premium benefits.
+        </p>
+    </div>
+</div>
+
+<div class="pts-card-wrapper">
+    <div class="pts-card" data-reveal="up" data-delay="200">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-0 items-center">
+            <div class="col-span-1 md:col-span-4 points-display text-center md:text-left">
+                <p class="text-slate-400 font-black uppercase tracking-widest text-xs mb-1">Point Balance</p>
+                <div class="flex items-center justify-center md:justify-start gap-4">
+                    <span class="points-number">{{ profile.current_points }}</span>
+                    <span class="text-slate-300 font-bold text-lg">PTS</span>
+                </div>
+            </div>
+            <div class="col-span-1 md:col-span-8 progress-section">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <h4 class="text-slate-800 font-bold text-xl mb-1">
+                            {% if next_tier %}
+                            Road to {{ next_tier }} Status
+                            {% else %}
+                            You're a Legend!
+                            {% endif %}
+                        </h4>
+                        <p class="text-slate-500 text-sm">
+                            {% if next_tier %}
+                            Collect <strong>{{ next_tier_points|subtract:profile.total_points_earned }}</strong> more points to reach {{ next_tier }} level.
+                            {% else %}
+                            You've unlocked every perk we have. Thank you!
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-indigo-600 font-black text-lg">{{ progress|floatformat:0 }}%</span>
+                    </div>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-bar" style="width: {{ progress }}%"></div>
+                </div>
+                <div class="flex justify-between text-[10px] font-black tracking-widest text-slate-300 uppercase">
+                    <span>{{ profile.total_points_earned }} PTS</span>
+                    <span>{{ next_tier_points|default:profile.total_points_earned }} PTS</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mx-auto px-6 max-w-6xl mt-24">
+    <!-- Rewards Grid -->
+    <div class="mb-20">
+        <div class="flex items-end justify-between mb-10">
+            <div>
+                <h2 class="text-4xl font-black text-slate-900 font-playfair mb-2" data-reveal="left">The Reward Shop</h2>
+                <p class="text-slate-500">Pick a reward and instant-convert your points into savings.</p>
+            </div>
+            <div class="hidden md:block">
+                <i class="bi bi-ticket-perforated text-6xl text-slate-100"></i>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- RS 50 -->
+            <div class="reward-item" data-reveal="up" data-delay="100">
+                <div class="reward-icon-box"><i class="bi bi-tag-fill"></i></div>
+                <h3 class="font-black text-slate-800 text-xl mb-2">Rs. 50 OFF</h3>
+                <p class="text-slate-500 text-sm mb-6 leading-relaxed">Perfect for a quick treat on your next purchase.</p>
+                <div class="p-3 bg-slate-50 rounded-xl mb-4 text-xs font-bold text-slate-400">Cost: 500 Points</div>
+                <button class="redeem-action-btn" onclick="redeemPoints(500)" {% if profile.current_points < 500 %}disabled{% endif %}>
+                    Redeem Now
+                </button>
+            </div>
+
+            <!-- RS 150 -->
+            <div class="reward-item" data-reveal="up" data-delay="200">
+                <div class="reward-icon-box"><i class="bi bi-gift-fill"></i></div>
+                <h3 class="font-black text-slate-800 text-xl mb-2">Rs. 150 OFF</h3>
+                <p class="text-slate-500 text-sm mb-6 leading-relaxed">Save extra on that toy they've been eyeing.</p>
+                <div class="p-3 bg-slate-50 rounded-xl mb-4 text-xs font-bold text-slate-400">Cost: 1,500 Points</div>
+                <button class="redeem-action-btn" onclick="redeemPoints(1500)" {% if profile.current_points < 1500 %}disabled{% endif %}>
+                    Redeem Now
+                </button>
+            </div>
+
+            <!-- RS 300 -->
+            <div class="reward-item" data-reveal="up" data-delay="300">
+                <div class="reward-icon-box"><i class="bi bi-gem"></i></div>
+                <h3 class="font-black text-slate-800 text-xl mb-2">Rs. 300 OFF</h3>
+                <p class="text-slate-500 text-sm mb-6 leading-relaxed">A serious discount for our most loyal shoppers.</p>
+                <div class="p-3 bg-slate-50 rounded-xl mb-4 text-xs font-bold text-slate-400">Cost: 3,000 Points</div>
+                <button class="redeem-action-btn" onclick="redeemPoints(3000)" {% if profile.current_points < 3000 %}disabled{% endif %}>
+                    Redeem Now
+                </button>
+            </div>
+
+            <!-- RS 500 -->
+            <div class="reward-item" data-reveal="up" data-delay="400">
+                <div class="reward-icon-box"><i class="bi bi-crown-fill"></i></div>
+                <h3 class="font-black text-slate-800 text-xl mb-2">Rs. 500 OFF</h3>
+                <p class="text-slate-500 text-sm mb-6 leading-relaxed">The ultimate G11 reward. You've earned it!</p>
+                <div class="p-3 bg-slate-50 rounded-xl mb-4 text-xs font-bold text-slate-400">Cost: 5,000 Points</div>
+                <button class="redeem-action-btn" onclick="redeemPoints(5000)" {% if profile.current_points < 5000 %}disabled{% endif %}>
+                    Redeem Now
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Card -->
+    <div class="history-card shadow-sm mb-20" data-reveal="up">
+        <h2 class="text-3xl font-black text-slate-900 font-playfair mb-8">Activity Ledger</h2>
+        
+        {% if history %}
+        <div class="space-y-0">
+            {% for entry in history %}
+            <div class="history-row flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center {% if entry.points > 0 %}bg-emerald-50 text-emerald-500{% else %}bg-red-50 text-red-500{% endif %}">
+                        <i class="bi {% if entry.points > 0 %}bi-plus-lg{% else %}bi-dash-lg{% endif %}"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-slate-800">{{ entry.description }}</p>
+                        <p class="text-xs text-slate-400 uppercase font-black">{{ entry.created_at|date:"d M Y • H:i" }}</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <span class="pts-pill {% if entry.points > 0 %}pts-pill-plus{% else %}pts-pill-minus{% endif %}">
+                        {% if entry.points > 0 %}+{% endif %}{{ entry.points }} PTS
+                    </span>
+                    {% if entry.order %}
+                    <a href="{% url 'order_tracking' entry.order.order_number %}" class="block text-[10px] text-indigo-500 hover:underline mt-1 font-bold">VIEW ORDER</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-20">
+            <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="bi bi-database-dash text-3xl text-slate-200"></i>
+            </div>
+            <p class="text-slate-400 font-medium">Your ledger is currently empty. Shop to begin!</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal for Redemption Result -->
+<div id="redemptionModal" class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/80 backdrop-blur-md" style="display:none;">
+    <div class="bg-white rounded-[40px] p-10 max-w-md w-full shadow-2xl scale-95 transition-transform duration-500" id="modalContent">
+        <div class="text-center mb-8">
+            <div id="modalIcon" class="w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl"></div>
+            <h3 id="modalTitle" class="text-3xl font-black text-slate-900"></h3>
+            <p id="modalMessage" class="text-slate-500 mt-2 text-lg"></p>
+        </div>
+        <div id="couponBox" class="bg-slate-50 border-2 border-dashed border-slate-200 rounded-3xl p-8 text-center mb-8" style="display:none;">
+            <p class="text-slate-400 text-[10px] font-black uppercase mb-4 tracking-widest">Single Use Coupon Code</p>
+            <div class="flex items-center justify-center gap-4">
+                <span id="couponCodeDisplay" class="text-4xl font-black text-indigo-600 tracking-tighter"></span>
+                <button onclick="copyCoupon()" class="text-slate-400 hover:text-indigo-600 transition-colors text-2xl"><i class="bi bi-copy"></i></button>
+            </div>
+        </div>
+        <button onclick="closeModal()" class="w-full py-5 bg-indigo-600 text-white rounded-2xl font-black hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all uppercase tracking-widest text-sm">Got it!</button>
+    </div>
+</div>
+
+<script>
+    // JS Logic remains same but UI class updates
+    function redeemPoints(points) {
+        if (!confirm(`Confirm redemption of ${points} points?`)) return;
+
+        fetch('{% url "redeem_loyalty_points" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ points: points })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const modal = document.getElementById('redemptionModal');
+            const icon = document.getElementById('modalIcon');
+            const title = document.getElementById('modalTitle');
+            const msg = document.getElementById('modalMessage');
+            const couponBox = document.getElementById('couponBox');
+            const codeDisplay = document.getElementById('couponCodeDisplay');
+
+            modal.style.display = 'flex';
+            setTimeout(() => document.getElementById('modalContent').style.transform = 'scale(1)', 10);
+
+            if (data.success) {
+                icon.className = 'w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl bg-emerald-100 text-emerald-600';
+                icon.innerHTML = '<i class="bi bi-check-lg"></i>';
+                title.textContent = 'Success!';
+                msg.textContent = 'Enjoy your exclusive discount.';
+                couponBox.style.display = 'block';
+                codeDisplay.textContent = data.coupon_code;
+                window.shouldRefresh = true;
+            } else {
+                icon.className = 'w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl bg-red-100 text-red-600';
+                icon.innerHTML = '<i class="bi bi-x-lg"></i>';
+                title.textContent = 'Error';
+                msg.textContent = data.error;
+                couponBox.style.display = 'none';
+            }
+        });
+    }
+
+    function closeModal() {
+        document.getElementById('modalContent').style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            document.getElementById('redemptionModal').style.display = 'none';
+            if (window.shouldRefresh) window.location.reload();
+        }, 200);
+    }
+
+    function copyCoupon() {
+        const code = document.getElementById('couponCodeDisplay').textContent;
+        navigator.clipboard.writeText(code).then(() => {
+            alert('Copied to clipboard!');
+        });
+    }
+</script>
+
+<script src="{% static 'scroll-reveal.js' %}"></script>
+{% endblock %}

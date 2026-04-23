@@ -1,0 +1,326 @@
+<!-- AI Assistant Floating UI -->
+<style>
+    :root {
+        --ai-primary: #6366f1;
+        --ai-bg: #ffffff;
+        --ai-text: #1e293b;
+    }
+
+    #ai-concierge-container {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 9999;
+        font-family: 'Outfit', sans-serif;
+    }
+
+    /* Floating Bubble */
+    #ai-bubble {
+        width: 65px;
+        height: 65px;
+        background: var(--ai-primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        color: white;
+        font-size: 28px;
+        position: relative;
+    }
+
+    #ai-bubble:hover {
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 15px 30px rgba(99, 102, 241, 0.5);
+    }
+
+    #ai-bubble .notification-dot {
+        position: absolute;
+        top: 0; right: 0;
+        width: 15px; height: 15px;
+        background: #ef4444;
+        border: 3px solid white;
+        border-radius: 50%;
+    }
+
+    /* Chat Window */
+    #ai-window {
+        position: absolute;
+        bottom: 85px;
+        right: 0;
+        width: 380px;
+        height: 550px;
+        background: var(--ai-bg);
+        border-radius: 24px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid rgba(0,0,0,0.05);
+        transform-origin: bottom right;
+        transition: all 0.3s ease;
+    }
+
+    #ai-window.active {
+        display: flex;
+        animation: slideInChat 0.4s ease forwards;
+    }
+
+    @keyframes slideInChat {
+        from { opacity: 0; transform: scale(0.8) translateY(20px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* Header */
+    .ai-header {
+        padding: 20px;
+        background: var(--ai-primary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .ai-identity {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .ai-logo {
+        width: 40px; height: 40px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 12px;
+        display: flex;
+        align-items: center; justify-content: center;
+        font-size: 20px;
+    }
+
+    /* Messages Area */
+    .ai-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        background: #f8fafc;
+    }
+
+    .msg {
+        max-width: 85%;
+        padding: 12px 16px;
+        border-radius: 18px;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .msg-ai {
+        align-self: flex-start;
+        background: white;
+        color: var(--ai-text);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        border-bottom-left-radius: 4px;
+    }
+
+    .msg-user {
+        align-self: flex-end;
+        background: var(--ai-primary);
+        color: white;
+        border-bottom-right-radius: 4px;
+    }
+
+    /* Product Cards */
+    .ai-product-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .ai-product-card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 10px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.2s;
+    }
+
+    .ai-product-card:hover { border-color: var(--ai-primary); transform: translateX(5px); }
+
+    .ai-prod-img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
+    .ai-prod-info h4 { font-size: 13px; font-weight: 700; margin: 0; }
+    .ai-prod-info p { font-size: 12px; color: var(--ai-primary); font-weight: 600; margin: 0; }
+
+    /* Input Area */
+    .ai-input-area {
+        padding: 15px;
+        background: white;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        gap: 10px;
+    }
+
+    .ai-input-area input {
+        flex: 1;
+        border: none;
+        background: #f1f5f9;
+        padding: 12px 15px;
+        border-radius: 12px;
+        outline: none;
+        font-size: 14px;
+    }
+
+    .ai-send-btn {
+        width: 45px; height: 45px;
+        background: var(--ai-primary);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+    }
+
+    /* Typing Indicator */
+    .typing {
+        display: flex; gap: 4px; padding: 10px;
+    }
+    .typing div {
+        width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%;
+        animation: typingAnim 1s infinite ease-in-out;
+    }
+    .typing div:nth-child(2) { animation-delay: 0.2s; }
+    .typing div:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typingAnim {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-4px); }
+    }
+
+    @media (max-width: 480px) {
+        #ai-window {
+            width: calc(100vw - 40px);
+            height: 70vh;
+            bottom: 80px;
+        }
+    }
+</style>
+
+<div id="ai-concierge-container">
+    <div id="ai-bubble" onclick="toggleChat()">
+        <span class="bi bi-robot"></span>
+        <div class="notification-dot"></div>
+    </div>
+
+    <div id="ai-window">
+        <div class="ai-header">
+            <div class="ai-identity">
+                <div class="ai-logo"><i class="bi bi-robot"></i></div>
+                <div>
+                    <h3 class="font-bold text-sm m-0">G11 Smart Concierge</h3>
+                    <p class="text-[10px] opacity-70 m-0">AI Assistant • Online</p>
+                </div>
+            </div>
+            <button onclick="toggleChat()" class="bg-transparent border-none text-white opacity-60 hover:opacity-100 cursor-pointer text-xl">
+                <i class="bi bi-dash-lg"></i>
+            </button>
+        </div>
+
+        <div class="ai-messages" id="ai-messages-list">
+            <div class="msg msg-ai">
+                👋 Hello! I'm your G11 shopping assistant. How can I help you today?
+            </div>
+        </div>
+
+        <div class="ai-input-area">
+            <input type="text" id="ai-input" placeholder="Ask me anything..." onkeypress="handleKeyPress(event)">
+            <button class="ai-send-btn" onclick="sendMessage()">
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleChat() {
+        const win = document.getElementById('ai-window');
+        win.classList.toggle('active');
+        if (win.classList.contains('active')) {
+            document.getElementById('ai-input').focus();
+            document.querySelector('.notification-dot').style.display = 'none';
+        }
+    }
+
+    function handleKeyPress(e) {
+        if (e.key === 'Enter') sendMessage();
+    }
+
+    function appendMessage(text, isUser = false, products = []) {
+        const list = document.getElementById('ai-messages-list');
+        
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `msg ${isUser ? 'msg-user' : 'msg-ai'}`;
+        msgDiv.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // Support bold
+        list.appendChild(msgDiv);
+
+        if (products && products.length > 0) {
+            const prodList = document.createElement('div');
+            prodList.className = 'ai-product-list';
+            products.forEach(p => {
+                prodList.innerHTML += `
+                    <a href="${p.url}" class="ai-product-card">
+                        <img src="${p.image}" class="ai-prod-img" alt="${p.name}">
+                        <div class="ai-prod-info">
+                            <h4>${p.name}</h4>
+                            <p>${p.price}</p>
+                        </div>
+                    </a>
+                `;
+            });
+            list.appendChild(prodList);
+        }
+
+        list.scrollTop = list.scrollHeight;
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('ai-input');
+        const text = input.value.trim();
+        if (!text) return;
+
+        appendMessage(text, true);
+        input.value = '';
+
+        // Show typing indicator
+        const typing = document.createElement('div');
+        typing.className = 'typing';
+        typing.innerHTML = '<div></div><div></div><div></div>';
+        document.getElementById('ai-messages-list').appendChild(typing);
+        document.getElementById('ai-messages-list').scrollTop = document.getElementById('ai-messages-list').scrollHeight;
+
+        fetch('{% url "ai_chat" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ message: text })
+        })
+        .then(response => response.json())
+        .then(data => {
+            typing.remove();
+            appendMessage(data.message, false, data.products || []);
+        })
+        .catch(err => {
+            typing.remove();
+            appendMessage("I'm sorry, I'm having trouble connecting right now.");
+        });
+    }
+</script>

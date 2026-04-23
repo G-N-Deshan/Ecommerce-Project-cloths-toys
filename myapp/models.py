@@ -653,3 +653,51 @@ class SiteUpdate(models.Model):
         obj.save()
         return obj
 
+
+class NewsletterSubscription(models.Model):
+    email = models.EmailField(unique=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.email
+
+    class Meta:
+        ordering = ['-subscribed_at']
+        verbose_name = 'Newsletter Subscription'
+        verbose_name_plural = 'Newsletter Subscriptions'
+
+
+class LoyaltyProfile(models.Model):
+    TIER_CHOICES = [
+        ('bronze', 'Bronze'),
+        ('silver', 'Silver'),
+        ('gold', 'Gold'),
+    ]
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='loyalty_profile')
+    total_points_earned = models.PositiveIntegerField(default=0)
+    current_points = models.PositiveIntegerField(default=0)
+    tier = models.CharField(max_length=10, choices=TIER_CHOICES, default='bronze')
+    
+    def update_tier(self):
+        if self.total_points_earned >= 5000:
+            self.tier = 'gold'
+        elif self.total_points_earned >= 1000:
+            self.tier = 'silver'
+        else:
+            self.tier = 'bronze'
+        self.save()
+
+    def __str__(self):
+        return f"{self.user.username} - {self.tier.title()} ({self.current_points} pts)"
+
+
+class LoyaltyHistory(models.Model):
+    profile = models.ForeignKey(LoyaltyProfile, on_delete=models.CASCADE, related_name='history')
+    order = models.ForeignKey('Order', on_delete=models.SET_NULL, null=True, blank=True)
+    points = models.IntegerField()
+    description = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.profile.user.username}: {self.points} pts - {self.description}"

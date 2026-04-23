@@ -1,6 +1,24 @@
 {% load static %}
+<style>
+    .section-0 {
+        height: auto !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        z-index: 1100 !important;
+    }
+    .promo-banner {
+        width: 100% !important;
+        z-index: 1101 !important;
+    }
+</style>
 
 <section class="section-0">
+    <!-- PROMO BANNER INSIDE STICKY CONTAINER -->
+    <div class="promo-banner" role="alert">
+        <div class="promo-content">
+            <span class="promo-icon">🎉</span> flash sale! use code <strong>KIDS20</strong> for 20% off all orders over Rs. 500! <span class="promo-icon">✨</span>
+        </div>
+    </div>
     <nav class="navbar">
         <div>
             <!-- Logo on left -->
@@ -40,6 +58,9 @@
                 <a href="{% url 'cart_details' %}" class="cart-icon-link" title="Shopping Cart">
                     <span class="cart-icon">🛒</span>
                     <span class="cart-count-badge" data-cart-count>{{ cart_count|default:0 }}</span>
+                </a>
+                <a href="{% url 'loyalty_dashboard' %}" class="loyalty-icon-link" title="G11 Rewards" style="text-decoration:none; margin-left:1.5rem; font-size:1.2rem;">
+                    <span class="loyalty-icon">🎖️</span>
                 </a>
                 {% endif %}
 

@@ -7070,3 +7070,84 @@ INFO 2026-04-23 23:25:20,771 autoreload 19084 14032 C:\Users\nipun\Desktop\Ecomm
 INFO 2026-04-23 23:25:21,889 autoreload 30292 26448 Watching for file changes with StatReloader
 WARNING 2026-04-23 23:50:29,362 log 30292 30496 Not Found: /favicon.ico
 WARNING 2026-04-23 23:55:53,281 log 30292 18456 Forbidden (CSRF token missing.): /
+INFO 2026-04-24 00:31:07,413 autoreload 30292 26448 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-24 00:31:08,668 autoreload 11140 9500 Watching for file changes with StatReloader
+WARNING 2026-04-24 00:41:29,216 log 11140 23364 Not Found: /favicon.ico
+ERROR 2026-04-24 00:41:59,058 middleware 11140 18528 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-04-24 00:41:59,111 log 11140 18528 Not Found: /media/about-hero.jpg
+ERROR 2026-04-24 00:42:10,647 middleware 11140 25216 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-04-24 00:42:10,665 log 11140 25216 Not Found: /media/about-hero.jpg
+WARNING 2026-04-24 00:50:18,693 log 11140 21760 Bad Request: /profile/change-password/
+WARNING 2026-04-24 00:56:19,601 log 11140 29012 Not Found: /favicon.ico
+INFO 2026-04-24 01:01:00,915 autoreload 11140 9500 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-04-24 01:01:02,361 autoreload 22640 21460 Watching for file changes with StatReloader
+INFO 2026-04-24 01:01:47,724 autoreload 22640 21460 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-24 01:01:49,436 autoreload 9448 23964 Watching for file changes with StatReloader
+WARNING 2026-04-24 01:01:53,201 log 9448 9556 Forbidden (CSRF token missing.): /
+INFO 2026-04-24 01:02:00,262 autoreload 9448 23964 C:\Users\nipun\Desktop\Ecommerce project\myapp\urls.py changed, reloading.
+INFO 2026-04-24 01:02:01,858 autoreload 30388 29400 Watching for file changes with StatReloader
+WARNING 2026-04-24 01:02:05,675 log 30388 22168 Forbidden (CSRF token missing.): /
+WARNING 2026-04-24 01:03:53,225 log 30388 4084 Not Found: /favicon.ico
+INFO 2026-04-24 01:08:45,972 autoreload 30388 29400 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-04-24 01:08:47,280 autoreload 29700 20648 Watching for file changes with StatReloader
+INFO 2026-04-24 01:09:48,176 autoreload 29700 20648 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-24 01:09:49,462 autoreload 9244 29660 Watching for file changes with StatReloader
+INFO 2026-04-24 01:09:55,887 autoreload 9244 29660 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-24 01:09:57,155 autoreload 27440 7328 Watching for file changes with StatReloader
+INFO 2026-04-24 01:10:07,918 autoreload 27440 7328 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-24 01:10:09,362 autoreload 15720 29456 Watching for file changes with StatReloader
+INFO 2026-04-24 01:10:18,655 autoreload 15720 29456 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-24 01:10:20,062 autoreload 25348 24328 Watching for file changes with StatReloader
+INFO 2026-04-24 01:10:29,781 autoreload 25348 24328 C:\Users\nipun\Desktop\Ecommerce project\myapp\urls.py changed, reloading.
+INFO 2026-04-24 01:10:31,273 autoreload 28240 22688 Watching for file changes with StatReloader
+INFO 2026-04-24 01:12:28,038 autoreload 28240 22688 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-24 01:12:29,290 autoreload 20916 17276 Watching for file changes with StatReloader
+INFO 2026-04-24 01:12:34,339 autoreload 20916 17276 C:\Users\nipun\Desktop\Ecommerce project\myapp\urls.py changed, reloading.
+INFO 2026-04-24 01:12:35,518 autoreload 12308 29684 Watching for file changes with StatReloader
+WARNING 2026-04-24 01:15:58,164 log 12308 27848 Not Found: /favicon.ico
+ERROR 2026-04-24 01:19:53,978 log 12308 11912 Internal Server Error: /ai-chat/
+ERROR 2026-04-24 01:20:20,604 log 12308 11912 Internal Server Error: /ai-chat/
+WARNING 2026-04-24 01:27:39,171 log 12308 11912 Not Found: /favicon.ico
+ERROR 2026-04-24 01:29:51,690 middleware 12308 22932 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-04-24 01:29:51,720 log 12308 22932 Not Found: /media/about-hero.jpg
+ERROR 2026-04-24 01:30:22,880 log 12308 11912 Internal Server Error: /ai-chat/
+WARNING 2026-04-24 01:31:40,490 log 12308 19656 Not Found: /favicon.ico
+ERROR 2026-04-24 01:31:58,767 middleware 12308 24000 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-04-24 01:31:58,803 log 12308 24000 Not Found: /media/about-hero.jpg
+WARNING 2026-04-24 01:33:51,341 log 12308 20200 Not Found: /favicon.ico
+WARNING 2026-04-24 01:34:09,983 log 12308 24000 Not Found: /favicon.ico
+ERROR 2026-04-24 01:34:23,688 log 12308 24000 Internal Server Error: /ai-chat/
+INFO 2026-04-24 01:37:26,837 autoreload 12308 29684 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-24 01:37:28,092 autoreload 21952 4400 Watching for file changes with StatReloader
+INFO 2026-04-24 01:37:40,663 autoreload 21952 4400 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-24 01:37:42,194 autoreload 9392 15684 Watching for file changes with StatReloader
+WARNING 2026-04-24 01:38:43,166 log 9392 4320 Not Found: /favicon.ico
+INFO 2026-04-24 01:40:04,708 autoreload 9392 15684 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-24 01:40:06,219 autoreload 23140 29148 Watching for file changes with StatReloader
+INFO 2026-04-24 01:40:18,291 autoreload 23140 29148 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-24 01:40:19,688 autoreload 15396 28228 Watching for file changes with StatReloader
+WARNING 2026-04-24 01:44:41,227 log 15396 22492 Not Found: /favicon.ico

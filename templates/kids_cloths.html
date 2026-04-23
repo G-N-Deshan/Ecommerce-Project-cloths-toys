@@ -459,6 +459,8 @@
             <p>Fresh fits for school, park time, birthday plans, and everything in-between. Use filters and sorting to quickly find what families actually want.</p>
         </section>
 
+        {% include 'includes/promo_strip.html' with variant="orange" %}
+
         <nav class="sticky-tabs" aria-label="Kids section navigation">
             <button class="tab-btn active" type="button" data-scroll-target="top-section">Top</button>
             <button class="tab-btn" type="button" data-scroll-target="girls-section">Girls</button>
@@ -520,6 +522,8 @@
                 </div>
             </form>
         </section>
+
+        {% include 'includes/promo_strip.html' %}
 
         <div class="result-bar">
             <span class="result-chip">{{ all_kids_cloths|length }} products found</span>

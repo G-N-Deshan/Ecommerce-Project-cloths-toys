@@ -18,4 +18,6 @@
 
 .btn-primary:hover {
     background: #4f46e5;
-}
+}/* Star Picker */
+#starPicker .star { font-size: 2rem; cursor: pointer; color: #cbd5e1; transition: color 0.2s; user-select: none; }
+#starPicker .star:hover, #starPicker .star.filled { color: #facc15; }

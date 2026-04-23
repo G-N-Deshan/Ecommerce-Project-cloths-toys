@@ -4,7 +4,8 @@ from django.http import HttpResponse, JsonResponse
 from .models import (Card, Offers, NewArrivals, Cloths, Review, ContactMessage, Toy,
                      WishlistItem, Cart, CartItem, Order, OrderItem, ProductReview,
                      ProductImage, Inventory, Coupon, ProductVariant, OrderTracking,
-                     SiteUpdate, ServiceReview)
+                     SiteUpdate, ServiceReview, NewsletterSubscription,
+                     LoyaltyProfile, LoyaltyHistory)
 from .forms import ReviewForm, ContactForm, ServiceReviewForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -65,7 +66,238 @@ def parse_query_float(raw_value):
         return None
 
 
+# Loyalty Program Helpers
+def get_loyalty_profile(user):
+    profile, created = LoyaltyProfile.objects.get_or_create(user=user)
+    return profile
+
+
+@login_required(login_url='login')
+def loyalty_dashboard(request):
+    profile = get_loyalty_profile(request.user)
+    history = profile.history.all().order_by('-created_at')
+    
+    # Calculate progress to next tier
+    next_tier = None
+    next_tier_points = 0
+    progress = 0
+    
+    if profile.tier == 'bronze':
+        next_tier = 'Silver'
+        next_tier_points = 1000
+    elif profile.tier == 'silver':
+        next_tier = 'Gold'
+        next_tier_points = 5000
+        
+    if next_tier_points > 0:
+        progress = min(100, (profile.total_points_earned / next_tier_points) * 100)
+
+    context = {
+        'profile': profile,
+        'history': history,
+        'next_tier': next_tier,
+        'next_tier_points': next_tier_points,
+        'progress': progress,
+    }
+    return render(request, 'loyalty_dashboard.html', context)
+
+
+@require_POST
+@login_required(login_url='login')
+def redeem_loyalty_points(request):
+    """Convert points into a coupon"""
+    try:
+        data = json.loads(request.body)
+        points_to_redeem = int(data.get('points', 0))
+        
+        if points_to_redeem < 500:
+            return JsonResponse({'success': False, 'error': 'Minimum 500 points required for redemption.'}, status=400)
+            
+        profile = get_loyalty_profile(request.user)
+        
+        if profile.current_points < points_to_redeem:
+            return JsonResponse({'success': False, 'error': 'Insufficient points.'}, status=400)
+            
+        # Calculate discount: 10 points = Rs. 1.0 (500 pts = Rs 50)
+        discount_value = points_to_redeem // 10
+        
+        # Create a unique coupon code
+        import uuid
+        coupon_code = f"REWARD-{uuid.uuid4().hex[:6].upper()}"
+        
+        from django.utils import timezone
+        from datetime import timedelta
+        
+        coupon = Coupon.objects.create(
+            code=coupon_code,
+            discount_type='fixed',
+            discount_value=Decimal(str(discount_value)),
+            min_order_amount=Decimal(str(discount_value * 5)),
+            valid_from=timezone.now(),
+            valid_until=timezone.now() + timedelta(days=30),
+            is_active=True
+        )
+        
+        # Deduct points
+        profile.current_points -= points_to_redeem
+        profile.save()
+        
+        # Add history
+        LoyaltyHistory.objects.create(
+            profile=profile,
+            points=-points_to_redeem,
+            description=f"Redeemed points for coupon {coupon_code} (Rs. {discount_value} off)"
+        )
+        
+        return JsonResponse({
+            'success': True, 
+            'message': f'Successfully redeemed! Your code: {coupon_code}',
+            'coupon_code': coupon_code,
+            'new_points': profile.current_points
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+@csrf_exempt
+@require_POST
+def ai_chat(request):
+    """Smart Concierge AI Assistant Logic"""
+    try:
+        data = json.loads(request.body)
+        query = data.get('message', '').lower().strip()
+        
+        if not query:
+            return JsonResponse({'message': "I'm your G11 Assistant! How can I help you today?"})
+
+        # 1. Simple FAQ logic
+        if any(word in query for word in ['ship', 'delivery', 'track', 'arrive']):
+            return JsonResponse({
+                'message': "🎁 **Shipping Info:** We offer standard delivery (3-5 days) and Express (1-2 days). You'll get a tracking link via email as soon as we dispatch your order!",
+                'products': []
+            })
+            
+        if any(word in query for word in ['return', 'refund', 'exchange', 'policy']):
+            return JsonResponse({
+                'message': "🔄 **Returns:** We have a worry-free 30-day return policy. Just ensure the items are unused and have their original tags.",
+                'products': []
+            })
+            
+        if any(word in query for word in ['size', 'chart', 'fit', 'measurement']):
+            return JsonResponse({
+                'message': "📏 **Sizing:** Most of our clothes are true-to-size. You can find a specific size guide on every product detail page!",
+                'products': []
+            })
+
+        if any(word in query for word in ['style', 'match', 'advice', 'wear', 'combine', 'outfit']):
+            return JsonResponse({
+                'message': "👗 **Style Advice:** For a balanced look, try pairing our bold patterned tops with neutral-colored pants. Soft pastels work great for spring, while deep indigo and mustard are perfect for cooler seasons! Need a specific match? Tell me what color you're starting with.",
+                'products': []
+            })
+
+        # 2. Product Search Logic
+        import re
+        
+        # Extract numbers (potentially ages)
+        ages = re.findall(r'\b\d+\b', query)
+        
+        stop_words = {'i', 'want', 'need', 'to', 'buy', 'shop', 'for', 'a', 'the', 'is', 'find', 'me', 'some', 'looking', 'gift', 'present', 'year', 'years', 'old'}
+        raw_words = query.split()
+        keywords = [word for word in raw_words if word not in stop_words and not word.isdigit()]
+        
+        if not keywords and not ages:
+            return JsonResponse({
+                'message': "I'm ready to help! You can ask me for product recommendations (e.g., 'blue dresses') or gift ideas by age.",
+                'products': []
+            })
+
+        # Initialize Q objects
+        toy_q = Q()
+        cloth_q = Q()
+
+        # Handle gender/category mapping
+        if any(w in raw_words for w in ['boy', 'boys', 'son', 'male']):
+            toy_q |= Q(category__icontains='educational') | Q(category__icontains='building')
+            cloth_q |= Q(category__icontains='kids-men') | Q(category__icontains='men')
+        if any(w in raw_words for w in ['girl', 'girls', 'daughter', 'female']):
+            toy_q |= Q(category__icontains='creative') | Q(category__icontains='plush')
+            cloth_q |= Q(category__icontains='kids-girl') | Q(category__icontains='women')
+
+        # Handle age matching
+        for age in ages:
+            toy_q |= Q(age_range__icontains=age)
+            # For clothes, we search description/name for age mentioned
+            cloth_q |= Q(name__icontains=age) | Q(desccription__icontains=age)
+
+        # Keyword matching
+        for kw in keywords:
+            if len(kw) > 2:
+                toy_q |= Q(name__icontains=kw) | Q(description__icontains=kw) | Q(category__icontains=kw)
+                cloth_q |= Q(name__icontains=kw) | Q(desccription__icontains=kw) | Q(category__icontains=kw)
+
+        toys = Toy.objects.filter(toy_q).distinct()[:3]
+        cloths = Cloths.objects.filter(cloth_q).distinct()[:3]
+        
+        products = []
+        for t in toys:
+            products.append({
+                'name': t.name,
+                'price': f"Rs. {t.price}",
+                'url': f"/product/toy/{t.id}/",
+                'image': t.imageUrl.url if t.imageUrl else ''
+            })
+        for c in cloths:
+            products.append({
+                'name': c.name,
+                'price': c.price2 or c.price1 or c.price,
+                'url': f"/product/cloth/{c.id}/",
+                'image': c.imageUrl.url if c.imageUrl else ''
+            })
+
+        if products:
+            return JsonResponse({
+                'message': f"✨ I've curated a few items for you based on **'{query}'**. Hope you love them!",
+                'products': products
+            })
+        else:
+            if any(w in raw_words for w in ['why', 'how', 'explain', 'what']):
+                return JsonResponse({
+                    'message': "🤔 I'm still learning! Right now, I can find products by color, category, or age (like 'blue dress' or 'toys for 3 year old'). I can also help with shipping and return info. What can I help you find?",
+                    'products': []
+                })
+            
+            return JsonResponse({
+                'message': "🔍 I couldn't find an exact match for that specific request, but check out these **New Arrivals** — they're trending right now!",
+                'products': []
+            })
+
+    except Exception as e:
+        return JsonResponse({'message': "Oops! I hit a snag. Please try again or contact support."}, status=500)
+
+
 # Create your views here.
+
+
+@require_POST
+def subscribe_newsletter(request):
+    email = request.POST.get('email', '').strip()
+    if not email:
+        return JsonResponse({'status': 'error', 'message': 'Please provide a valid email.'}, status=400)
+    
+    # Simple email validation
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        return JsonResponse({'status': 'error', 'message': 'Please provide a valid email format.'}, status=400)
+
+    try:
+        if NewsletterSubscription.objects.filter(email=email).exists():
+            return JsonResponse({'status': 'info', 'message': 'You are already subscribed!'})
+            
+        NewsletterSubscription.objects.create(email=email)
+        return JsonResponse({'status': 'success', 'message': 'Thank you for subscribing! Check your inbox soon.'})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': 'Something went wrong. Please try again later.'}, status=500)
+
 
 def index(request):
     offers = Offers.objects.all()
@@ -1667,6 +1899,32 @@ def checkout(request):
             # Send order confirmation email
             _send_order_confirmation_email(order)
             
+            # Award Loyalty Points
+            try:
+                points_base = int((subtotal / 100) * 10)
+                profile = get_loyalty_profile(request.user)
+                
+                multiplier = 1.0
+                if profile.tier == 'silver':
+                    multiplier = 1.5
+                elif profile.tier == 'gold':
+                    multiplier = 2.0
+                
+                final_points = int(points_base * multiplier)
+                profile.total_points_earned += final_points
+                profile.current_points += final_points
+                profile.update_tier()
+                
+                LoyaltyHistory.objects.create(
+                    profile=profile,
+                    order=order,
+                    points=final_points,
+                    description=f"Earned from order {order_number}"
+                )
+            except Exception as e:
+                # Fail silently for loyalty to ensure order success is prioritized
+                pass
+            
             cart.items.all().delete()
             
             messages.success(request, f'Order {order_number} placed successfully!')
@@ -2104,7 +2362,38 @@ def admin_update_order_status(request, order_id):
             status=new_status,
             note=note
         )
-        
+
+        # Automated Email Notification
+        if new_status in ['shipped', 'delivered']:
+            from django.core.mail import send_mail
+            from django.template.loader import render_to_string
+            from django.utils.html import strip_tags
+            from django.conf import settings
+            
+            subject = f"KidZone Order Update: #{order.order_number} is now {new_status.title()}"
+            html_message = f"""
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #6366f1;">Your Order is {new_status.title()}! 🎉</h2>
+                <p>Hello {order.full_name},</p>
+                <p>Great news! Your order <strong>#{order.order_number}</strong> has been marked as <strong>{new_status.title()}</strong>.</p>
+                {f'<p><strong>Note:</strong> {note}</p>' if note else ''}
+                {f'<p><strong>Tracking Number:</strong> {order.tracking_number}</p>' if order.tracking_number else ''}
+                <p>Thank you for shopping with KidZone!</p>
+            </div>
+            """
+            plain_message = strip_tags(html_message)
+            try:
+                send_mail(
+                    subject,
+                    plain_message,
+                    getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@kidzone.com'),
+                    [order.email],
+                    html_message=html_message,
+                    fail_silently=True
+                )
+            except Exception as mail_err:
+                pass # Fail silently if email backend is not configured correctly
+
         return JsonResponse({'success': True, 'message': f'Order {order.order_number} status updated to {order.get_status_display()}'})
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=500)

@@ -95,14 +95,69 @@
             <div class="footer-column newsletter-column">
                 <h3 class="footer-title">Newsletter</h3>
                 <p class="newsletter-text">Subscribe to get special offers and exclusive deals!</p>
-                <form class="newsletter-form" action="#" method="POST">
-                    <input type="email" placeholder="Enter your email" required>
-                    <button type="submit">Subscribe</button>
+                <form class="newsletter-form" id="newsletterForm" action="{% url 'subscribe_newsletter' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="email" name="email" id="newsletterEmail" placeholder="Enter your email" required>
+                    <button type="submit" id="newsletterSubmit">Subscribe</button>
                 </form>
+                <div id="newsletterMessage" style="margin-top: 10px; font-size: 0.85rem; font-weight: 600; display: none;"></div>
                 <p class="newsletter-note">By subscribing, you agree to our Privacy Policy.</p>
             </div>
         </div>
     </div>
+
+    <!-- AJAX Newsletter Submission script -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const newsletterForm = document.getElementById('newsletterForm');
+        const newsletterMessage = document.getElementById('newsletterMessage');
+        const newsletterSubmit = document.getElementById('newsletterSubmit');
+
+        if (newsletterForm) {
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const email = formData.get('email');
+                
+                // Disable button and show loading state
+                newsletterSubmit.disabled = true;
+                newsletterSubmit.innerHTML = '<i class="bi bi-hourglass-split"></i>';
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    newsletterMessage.style.display = 'block';
+                    newsletterMessage.textContent = data.message;
+                    
+                    if (data.status === 'success') {
+                        newsletterMessage.style.color = '#10b981'; // Emerald-500
+                        newsletterForm.reset();
+                    } else if (data.status === 'info') {
+                        newsletterMessage.style.color = '#3b82f6'; // Blue-500
+                    } else {
+                        newsletterMessage.style.color = '#ef4444'; // Red-500
+                    }
+                })
+                .catch(error => {
+                    newsletterMessage.style.display = 'block';
+                    newsletterMessage.textContent = 'Something went wrong. Please try again.';
+                    newsletterMessage.style.color = '#ef4444';
+                })
+                .finally(() => {
+                    newsletterSubmit.disabled = false;
+                    newsletterSubmit.textContent = 'Subscribe';
+                });
+            });
+        }
+    });
+    </script>
 
     <!-- Footer Bottom -->
     <div class="footer-bottom">
@@ -117,5 +172,8 @@
             </div>
         </div>
     </div>
+    <!-- AI Assistant Floating UI -->
+    {% include 'includes/ai_assistant.html' %}
 </footer>
+
 <script src="{% static 'live_reload.js' %}"></script>

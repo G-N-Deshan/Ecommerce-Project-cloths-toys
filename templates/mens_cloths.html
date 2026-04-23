@@ -188,6 +188,8 @@
             </div>
         </section>
 
+        {% include 'includes/promo_strip.html' with variant="default" %}
+
         <section id="filterPanel" class="mt-6 md:mt-8 frost p-4 md:p-6" data-reveal="up">
             <form method="get" action="{% url 'mens_cloths' %}" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-3">
                 <div class="xl:col-span-2">
@@ -233,6 +235,8 @@
                 </div>
             </form>
         </section>
+
+        {% include 'includes/promo_strip.html' with variant="orange" %}
 
         <section id="menCatalog" class="mt-5" data-reveal="up">
             <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
