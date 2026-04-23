@@ -18,9 +18,15 @@ body {
 }
 
 .wishlist-page {
-    max-width: 1200px;
+    display: block;
+    width: min(1320px, calc(100% - 2rem));
+    max-width: none;
     margin: 0 auto;
-    padding: 2rem 1rem 4rem;
+    padding: 2rem 0 4rem;
+}
+
+.wishlist-page > * {
+    width: 100%;
 }
 
 /* Hero Section */
@@ -240,10 +246,12 @@ body {
 /* Content */
 .wishlist-content {
     min-height: 300px;
+    width: 100%;
 }
 
 .wishlist-tab-pane {
     display: none;
+    width: 100%;
 }
 
 .wishlist-tab-pane.is-active {
@@ -277,8 +285,9 @@ body {
 /* Grid */
 .wishlist-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1.5rem;
+    width: 100%;
 }
 
 /* Cards */
@@ -400,7 +409,8 @@ body {
 /* Responsive */
 @media (max-width: 768px) {
     .wishlist-page {
-        padding: 1.2rem .8rem 2.5rem;
+        width: calc(100% - 1rem);
+        padding: 1.2rem 0 2.5rem;
     }
 
     .wishlist-card-media {
