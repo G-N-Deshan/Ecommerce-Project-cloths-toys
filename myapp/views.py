@@ -4,8 +4,8 @@ from django.http import HttpResponse, JsonResponse
 from .models import (Card, Offers, NewArrivals, Cloths, Review, ContactMessage, Toy,
                      WishlistItem, Cart, CartItem, Order, OrderItem, ProductReview,
                      ProductImage, Inventory, Coupon, ProductVariant, OrderTracking,
-                     SiteUpdate)
-from .forms import ReviewForm, ContactForm
+                     SiteUpdate, ServiceReview)
+from .forms import ReviewForm, ContactForm, ServiceReviewForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -117,7 +117,43 @@ def index(request):
     return render(request, 'index.html', context)
 
 def about(request):
-    return render(request, 'about.html')
+    cart_count = 0
+    try:
+        cart_count = get_or_create_cart(request).get_item_count()
+    except Exception:
+        cart_count = 0
+
+    approved_reviews = ServiceReview.objects.filter(is_approved=True)
+    total_reviews = approved_reviews.count()
+
+    summary = {
+        'total_reviews': total_reviews,
+        'average_rating': 0,
+        'recommend_percent': 0,
+        'delivery_avg': 0,
+        'support_avg': 0,
+    }
+
+    if total_reviews:
+        aggregate = approved_reviews.aggregate(
+            average_rating=Avg('overall_rating'),
+            delivery_avg=Avg('delivery_rating'),
+            support_avg=Avg('support_rating'),
+        )
+        recommend_count = approved_reviews.filter(overall_rating__gte=4).count()
+        summary = {
+            'total_reviews': total_reviews,
+            'average_rating': round(float(aggregate.get('average_rating') or 0), 1),
+            'recommend_percent': round((recommend_count * 100) / total_reviews),
+            'delivery_avg': round(float(aggregate.get('delivery_avg') or 0), 1),
+            'support_avg': round(float(aggregate.get('support_avg') or 0), 1),
+        }
+
+    return render(request, 'about.html', {
+        'cart_count': cart_count,
+        'service_summary': summary,
+        'latest_service_reviews': approved_reviews[:3],
+    })
 
 def contact(request):
     return render(request, 'contact.html')
@@ -925,6 +961,9 @@ def reviews(request):
         cart_count = 0
 
     if request.method == 'POST':
+        if not request.user.is_authenticated:
+            messages.error(request, 'Please log in to submit a review.')
+            return redirect(f'/login/?next={request.path}')
         form = ReviewForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
@@ -940,6 +979,109 @@ def reviews(request):
 
 def review_success(request):
     return render(request, 'review_success.html')
+
+
+def service_reviews(request):
+    cart_count = 0
+    try:
+        cart_count = get_or_create_cart(request).get_item_count()
+    except Exception:
+        cart_count = 0
+
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            messages.error(request, 'Please log in to submit a service review.')
+            return redirect(f'/login/?next={request.path}')
+        form = ServiceReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            email = (form.cleaned_data.get('email') or '').strip().lower()
+            verified = False
+
+            if request.user.is_authenticated and Order.objects.filter(user=request.user).exists():
+                verified = True
+            elif email and Order.objects.filter(email__iexact=email).exists():
+                verified = True
+
+            review.is_verified_customer = verified
+            review.is_approved = verified
+            review.save()
+
+            if verified:
+                messages.success(request, 'Thanks! Your verified service review is now live.')
+            else:
+                messages.info(request, 'Thanks! Your review was submitted and is waiting for admin approval.')
+
+            return redirect('service_reviews')
+    else:
+        form = ServiceReviewForm()
+
+    topic = request.GET.get('topic', 'all')
+    sort = request.GET.get('sort', 'newest')
+    only_verified = request.GET.get('verified', '0') == '1'
+    min_rating_raw = request.GET.get('min_rating', '0')
+
+    try:
+        min_rating = float(min_rating_raw)
+    except (TypeError, ValueError):
+        min_rating = 0
+
+    reviews_qs = ServiceReview.objects.filter(is_approved=True)
+
+    if topic in {'overall', 'delivery', 'packaging', 'support', 'returns'}:
+        reviews_qs = reviews_qs.filter(topic=topic)
+
+    if only_verified:
+        reviews_qs = reviews_qs.filter(is_verified_customer=True)
+
+    if min_rating > 0:
+        reviews_qs = reviews_qs.filter(overall_rating__gte=min_rating)
+
+    if sort == 'helpful':
+        reviews_qs = reviews_qs.order_by('-helpful_count', '-created_at')
+    elif sort == 'highest':
+        reviews_qs = reviews_qs.order_by('-overall_rating', '-created_at')
+    else:
+        reviews_qs = reviews_qs.order_by('-created_at')
+
+    paginator = Paginator(reviews_qs, 12)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
+    aggregate = ServiceReview.objects.filter(is_approved=True).aggregate(
+        average_rating=Avg('overall_rating'),
+        total=Count('id'),
+    )
+
+    avg_rating = round(float(aggregate.get('average_rating') or 0), 1)
+    total_reviews = int(aggregate.get('total') or 0)
+
+    return render(request, 'service_reviews.html', {
+        'form': form,
+        'service_reviews': page_obj,
+        'is_paginated': paginator.num_pages > 1,
+        'selected_topic': topic,
+        'selected_sort': sort,
+        'selected_verified': only_verified,
+        'selected_min_rating': min_rating,
+        'avg_rating': avg_rating,
+        'total_reviews': total_reviews,
+        'cart_count': cart_count,
+    })
+
+
+@require_POST
+def service_review_helpful(request, review_id):
+    review = get_object_or_404(ServiceReview, id=review_id, is_approved=True)
+    session_key = f'service_review_helpful_{review_id}'
+
+    if request.session.get(session_key):
+        return JsonResponse({'success': False, 'message': 'Already voted', 'helpful_count': review.helpful_count})
+
+    review.helpful_count = (review.helpful_count or 0) + 1
+    review.save(update_fields=['helpful_count'])
+    request.session[session_key] = True
+
+    return JsonResponse({'success': True, 'helpful_count': review.helpful_count})
 
 
 def contact_us(request):

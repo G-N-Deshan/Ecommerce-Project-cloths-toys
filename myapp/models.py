@@ -122,6 +122,48 @@ class Review(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+
+class ServiceReview(models.Model):
+    TOPIC_CHOICES = [
+        ('overall', 'Overall Experience'),
+        ('delivery', 'Delivery Speed'),
+        ('packaging', 'Packaging Quality'),
+        ('support', 'Customer Support'),
+        ('returns', 'Returns & Refunds'),
+    ]
+
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    topic = models.CharField(max_length=20, choices=TOPIC_CHOICES, default='overall')
+    delivery_rating = models.IntegerField(default=5)
+    packaging_rating = models.IntegerField(default=5)
+    support_rating = models.IntegerField(default=5)
+    returns_rating = models.IntegerField(default=5)
+    overall_rating = models.DecimalField(max_digits=3, decimal_places=2, default=5.0)
+    comment = models.TextField()
+    is_verified_customer = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False)
+    helpful_count = models.PositiveIntegerField(default=0)
+    report_count = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        ratings = [
+            self.delivery_rating,
+            self.packaging_rating,
+            self.support_rating,
+            self.returns_rating,
+        ]
+        self.overall_rating = round(sum(ratings) / 4.0, 2)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.name} - {self.overall_rating}/5"
+
+    class Meta:
+        ordering = ['-created_at']
     
 
 class ContactMessage(models.Model):

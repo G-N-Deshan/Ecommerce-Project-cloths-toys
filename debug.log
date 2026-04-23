@@ -6391,3 +6391,481 @@ INFO 2026-04-23 01:01:04,575 autoreload 24624 30064 C:\Users\nipun\Desktop\Ecomm
 INFO 2026-04-23 01:01:05,855 autoreload 23892 22660 Watching for file changes with StatReloader
 INFO 2026-04-23 01:04:14,044 autoreload 23892 22660 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
 INFO 2026-04-23 01:04:15,203 autoreload 26644 1716 Watching for file changes with StatReloader
+ERROR 2026-04-23 07:33:28,217 middleware 26644 8264 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-04-23 07:33:28,256 log 26644 8264 Not Found: /media/about-hero.jpg
+ERROR 2026-04-23 07:34:51,841 middleware 26644 28252 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\toys-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\toys-hero.jpg” does not exist
+WARNING 2026-04-23 07:34:51,868 log 26644 28252 Not Found: /media/toys-hero.jpg
+ERROR 2026-04-23 07:39:10,118 middleware 26644 2724 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-04-23 07:39:10,159 log 26644 2724 Not Found: /media/about-hero.jpg
+INFO 2026-04-23 07:46:40,900 autoreload 26644 1716 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-04-23 07:46:42,120 autoreload 19104 25240 Watching for file changes with StatReloader
+INFO 2026-04-23 07:46:52,557 autoreload 19104 25240 C:\Users\nipun\Desktop\Ecommerce project\myapp\forms.py changed, reloading.
+INFO 2026-04-23 07:46:53,547 autoreload 17588 28972 Watching for file changes with StatReloader
+INFO 2026-04-23 07:47:01,749 autoreload 17588 28972 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-04-23 07:47:02,965 autoreload 15076 8584 Watching for file changes with StatReloader
+INFO 2026-04-23 07:47:24,815 autoreload 15076 8584 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-23 07:47:26,025 autoreload 28464 17260 Watching for file changes with StatReloader
+INFO 2026-04-23 07:47:39,637 autoreload 28464 17260 C:\Users\nipun\Desktop\Ecommerce project\myapp\urls.py changed, reloading.
+INFO 2026-04-23 07:47:40,823 autoreload 25464 18308 Watching for file changes with StatReloader
+ERROR 2026-04-23 07:52:59,215 middleware 25464 23684 Exception: (1146, "Table 'myproject.myapp_servicereview' doesn't exist")
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.ProgrammingError: (1146, "Table 'myproject.myapp_servicereview' doesn't exist")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 1042, in service_reviews
+    page_obj = paginator.get_page(request.GET.get('page'))
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\paginator.py", line 168, in get_page
+    number = self.validate_number(number)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\paginator.py", line 160, in validate_number
+    return self._validate_number(number, self.num_pages)
+                                         ^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\utils\functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\paginator.py", line 195, in num_pages
+    if self.count == 0 and not self.allow_empty_first_page:
+       ^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\utils\functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\paginator.py", line 189, in count
+    return c()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\models\query.py", line 610, in count
+    return self.query.get_count(using=self.db)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\models\sql\query.py", line 656, in get_count
+    return obj.get_aggregation(using, {"__count": Count("*")})["__count"]
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\models\sql\query.py", line 638, in get_aggregation
+    result = compiler.execute_sql(SINGLE)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\models\sql\compiler.py", line 1624, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+django.db.utils.ProgrammingError: (1146, "Table 'myproject.myapp_servicereview' doesn't exist")
+ERROR 2026-04-23 07:52:59,412 log 25464 23684 Internal Server Error: /service-reviews/
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.ProgrammingError: (1146, "Table 'myproject.myapp_servicereview' doesn't exist")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 1042, in service_reviews
+    page_obj = paginator.get_page(request.GET.get('page'))
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\paginator.py", line 168, in get_page
+    number = self.validate_number(number)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\paginator.py", line 160, in validate_number
+    return self._validate_number(number, self.num_pages)
+                                         ^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\utils\functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\paginator.py", line 195, in num_pages
+    if self.count == 0 and not self.allow_empty_first_page:
+       ^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\utils\functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\paginator.py", line 189, in count
+    return c()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\models\query.py", line 610, in count
+    return self.query.get_count(using=self.db)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\models\sql\query.py", line 656, in get_count
+    return obj.get_aggregation(using, {"__count": Count("*")})["__count"]
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\models\sql\query.py", line 638, in get_aggregation
+    result = compiler.execute_sql(SINGLE)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\models\sql\compiler.py", line 1624, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+django.db.utils.ProgrammingError: (1146, "Table 'myproject.myapp_servicereview' doesn't exist")
+ERROR 2026-04-23 07:53:00,000 middleware 25464 23684 Exception: (1146, "Table 'myproject.myapp_servicereview' doesn't exist")
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.ProgrammingError: (1146, "Table 'myproject.myapp_servicereview' doesn't exist")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 127, in about
+    total_reviews = approved_reviews.count()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\models\query.py", line 610, in count
+    return self.query.get_count(using=self.db)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\models\sql\query.py", line 656, in get_count
+    return obj.get_aggregation(using, {"__count": Count("*")})["__count"]
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\models\sql\query.py", line 638, in get_aggregation
+    result = compiler.execute_sql(SINGLE)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\models\sql\compiler.py", line 1624, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+django.db.utils.ProgrammingError: (1146, "Table 'myproject.myapp_servicereview' doesn't exist")
+ERROR 2026-04-23 07:53:00,045 log 25464 23684 Internal Server Error: /about/
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.ProgrammingError: (1146, "Table 'myproject.myapp_servicereview' doesn't exist")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 127, in about
+    total_reviews = approved_reviews.count()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\models\query.py", line 610, in count
+    return self.query.get_count(using=self.db)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\models\sql\query.py", line 656, in get_count
+    return obj.get_aggregation(using, {"__count": Count("*")})["__count"]
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\models\sql\query.py", line 638, in get_aggregation
+    result = compiler.execute_sql(SINGLE)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\models\sql\compiler.py", line 1624, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+django.db.utils.ProgrammingError: (1146, "Table 'myproject.myapp_servicereview' doesn't exist")
+WARNING 2026-04-23 07:53:30,804 log 25464 23516 Not Found: /favicon.ico
+ERROR 2026-04-23 07:53:30,908 middleware 25464 23684 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-04-23 07:53:30,921 log 25464 23684 Not Found: /media/about-hero.jpg
+WARNING 2026-04-23 07:55:05,266 log 25464 15800 Not Found: /favicon.ico
+INFO 2026-04-23 07:57:52,395 autoreload 25464 18308 C:\Users\nipun\Desktop\Ecommerce project\myapp\forms.py changed, reloading.
+INFO 2026-04-23 07:57:53,594 autoreload 7284 25504 Watching for file changes with StatReloader
+ERROR 2026-04-23 07:59:46,319 middleware 7284 28560 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-04-23 07:59:46,338 log 7284 28560 Not Found: /media/about-hero.jpg
+INFO 2026-04-23 07:59:47,819 autoreload 7284 25504 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-23 07:59:49,030 autoreload 29660 13048 Watching for file changes with StatReloader
+ERROR 2026-04-23 08:01:10,334 middleware 29660 17056 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-04-23 08:01:10,369 log 29660 17056 Not Found: /media/about-hero.jpg
+INFO 2026-04-23 08:01:13,180 autoreload 29660 13048 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-04-23 08:01:14,424 autoreload 22308 27796 Watching for file changes with StatReloader

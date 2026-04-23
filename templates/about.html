@@ -69,6 +69,55 @@
         </div>
     </section>
 
+    <section class="service-trust-section" data-reveal="up">
+        <div class="service-trust-container">
+            <div class="service-trust-head">
+                <span class="section-badge">Service Feedback</span>
+                <h2>How Customers Rate Our Service</h2>
+                <p>Transparent reviews about delivery, support, and after-sales experience.</p>
+            </div>
+
+            <div class="service-trust-stats">
+                <article>
+                    <strong>{{ service_summary.average_rating }}</strong>
+                    <span>Average Service Score</span>
+                </article>
+                <article>
+                    <strong>{{ service_summary.total_reviews }}</strong>
+                    <span>Approved Reviews</span>
+                </article>
+                <article>
+                    <strong>{{ service_summary.recommend_percent }}%</strong>
+                    <span>Would Recommend Us</span>
+                </article>
+                <article>
+                    <strong>{{ service_summary.delivery_avg }}</strong>
+                    <span>Delivery Rating</span>
+                </article>
+            </div>
+
+            <div class="service-review-list">
+                {% for review in latest_service_reviews %}
+                <article class="service-review-item">
+                    <div class="service-review-top">
+                        <h3>{{ review.name }}</h3>
+                        <span>{{ review.overall_rating }}/5</span>
+                    </div>
+                    <p class="service-review-meta">{{ review.get_topic_display }} • {{ review.created_at|date:"M d, Y" }}</p>
+                    <p>{{ review.comment|truncatechars:140 }}</p>
+                </article>
+                {% empty %}
+                <p class="service-review-empty">No approved service reviews yet. Be the first to share your experience.</p>
+                {% endfor %}
+            </div>
+
+            <div class="service-trust-actions">
+                <a href="{% url 'service_reviews' %}" class="btn-primary">Read Service Reviews</a>
+                <a href="{% url 'service_reviews' %}#write-review" class="btn-secondary">Write Service Review</a>
+            </div>
+        </div>
+    </section>
+
     <!-- Values Section -->
     <section class="values-section" data-reveal="up" data-reveal-stagger>
         <h2 class="section-title">Our Core Values</h2>

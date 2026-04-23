@@ -13,6 +13,7 @@ BREADCRUMB_MAP = {
     '/mens_cloths/': "Men's Cloths",
     '/toys/': 'Toys',
     '/reviews/': 'Reviews',
+    '/service-reviews/': 'Service Reviews',
     '/cart/': 'Cart',
     '/cart_details_page/': 'Cart Details',
     '/wishlist/': 'Wishlist',

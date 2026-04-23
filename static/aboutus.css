@@ -162,6 +162,122 @@ html::-webkit-scrollbar {
     transform: scale(1.05);
 }
 
+/* Service trust section */
+.service-trust-section {
+    padding: 90px 20px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
+}
+
+.service-trust-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.service-trust-head h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 2.4rem;
+    color: #0f172a;
+    margin-bottom: 10px;
+}
+
+.service-trust-head p {
+    font-family: "Inter", sans-serif;
+    color: #64748b;
+    margin-bottom: 28px;
+}
+
+.service-trust-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.service-trust-stats article {
+    background: #ffffff;
+    border: 1px solid #dbeafe;
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+}
+
+.service-trust-stats strong {
+    display: block;
+    font-family: "Poppins", sans-serif;
+    font-size: 1.8rem;
+    color: #0284c7;
+    margin-bottom: 6px;
+}
+
+.service-trust-stats span {
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.service-review-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.service-review-item {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.service-review-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.service-review-top h3 {
+    font-family: "Poppins", sans-serif;
+    font-size: 1rem;
+    color: #0f172a;
+}
+
+.service-review-top span {
+    background: #0ea5e9;
+    color: #ffffff;
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.service-review-meta {
+    color: #64748b;
+    font-size: 0.82rem;
+    margin-bottom: 10px;
+}
+
+.service-review-item p {
+    color: #334155;
+    font-size: 0.93rem;
+    line-height: 1.6;
+}
+
+.service-review-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    border: 1px dashed #7dd3fc;
+    border-radius: 12px;
+    padding: 20px;
+    color: #0369a1;
+}
+
+.service-trust-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 22px;
+    flex-wrap: wrap;
+}
+
 /* Values Section */
 .values-section {
     padding: 100px 20px;
@@ -620,6 +736,14 @@ html::-webkit-scrollbar {
     .team-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .service-trust-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .service-review-list {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 768px) {
@@ -656,6 +780,10 @@ html::-webkit-scrollbar {
     .team-grid {
         grid-template-columns: 1fr;
     }
+
+    .service-trust-head h2 {
+        font-size: 2rem;
+    }
 }
 
 @media (max-width: 576px) {
@@ -680,5 +808,9 @@ html::-webkit-scrollbar {
     .btn-secondary {
         width: 100%;
         max-width: 300px;
+    }
+
+    .service-trust-stats {
+        grid-template-columns: 1fr;
     }
 }

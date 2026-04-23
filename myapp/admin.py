@@ -4,6 +4,7 @@ from django.utils.html import format_html
 from .models import (Card, Cloths, Offers, NewArrivals, Review, ContactMessage, Toy,
                      WishlistItem, Cart, CartItem, Order, OrderItem, ProductReview,
                      ProductImage, Inventory, Coupon, ProductVariant, OrderTracking)
+from .models import ServiceReview
 
 # Admin site branding
 admin.site.site_header = 'KidZone Admin Dashboard'
@@ -107,6 +108,32 @@ class ContactMessageAdmin(admin.ModelAdmin):
     @admin.action(description='Mark selected messages as unread')
     def mark_as_unread(self, request, queryset):
         queryset.update(is_read=False)
+
+
+@admin.register(ServiceReview)
+class ServiceReviewAdmin(admin.ModelAdmin):
+    list_display = [
+        'name',
+        'email',
+        'topic',
+        'overall_rating',
+        'is_verified_customer',
+        'is_approved',
+        'helpful_count',
+        'created_at',
+    ]
+    list_filter = ['topic', 'is_verified_customer', 'is_approved', 'created_at']
+    search_fields = ['name', 'email', 'comment']
+    readonly_fields = ['overall_rating', 'created_at', 'updated_at', 'helpful_count', 'report_count']
+    actions = ['approve_reviews', 'mark_unapproved']
+
+    @admin.action(description='Approve selected service reviews')
+    def approve_reviews(self, request, queryset):
+        queryset.update(is_approved=True)
+
+    @admin.action(description='Mark selected service reviews as unapproved')
+    def mark_unapproved(self, request, queryset):
+        queryset.update(is_approved=False)
     
     
 @admin.register(Toy)

@@ -1,0 +1,164 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Reviews - G11</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'footer.css' %}">
+    <link rel="stylesheet" href="{% static 'service_reviews.css' %}">
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <section class="srv-hero" data-reveal="up">
+        <div class="srv-hero__content">
+            <p class="srv-eyebrow">Service Trust Center</p>
+            <h1>Real Feedback About Delivery, Support, and Service</h1>
+            <p>Read honest experiences from customers and share your own to help others decide with confidence.</p>
+            <div class="srv-stats">
+                <article><strong>{{ avg_rating }}</strong><span>Average service score</span></article>
+                <article><strong>{{ total_reviews }}</strong><span>Approved reviews</span></article>
+                <article><strong>{% if total_reviews %}{{ total_reviews }}{% else %}0{% endif %}</strong><span>Community voices</span></article>
+            </div>
+        </div>
+    </section>
+
+    <section class="srv-shell" data-reveal="up">
+        <div class="srv-grid">
+            <div class="srv-form-card" id="write-review">
+                <h2>Share Service Review</h2>
+                <p>Your feedback helps improve delivery and support quality.</p>
+
+                {% if messages %}
+                <div class="srv-alerts">
+                    {% for message in messages %}
+                    <div class="srv-alert">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                <form method="post" class="srv-form">
+                    {% csrf_token %}
+                    <label>Name {{ form.name }}</label>
+                    <label>Email {{ form.email }}</label>
+                    <label>Primary Topic {{ form.topic }}</label>
+                    <div class="srv-rating-grid">
+                        <label>Delivery {{ form.delivery_rating }}</label>
+                        <label>Packaging {{ form.packaging_rating }}</label>
+                        <label>Support {{ form.support_rating }}</label>
+                        <label>Returns {{ form.returns_rating }}</label>
+                    </div>
+                    <label>Experience {{ form.comment }}</label>
+                    <button type="submit" class="srv-btn srv-btn--primary">Submit Service Review</button>
+                </form>
+                {% else %}
+                <div class="srv-login-card">
+                    <h3>Login Required</h3>
+                    <p>You can read service reviews without an account. Please log in to submit your own.</p>
+                    <a href="{% url 'login' %}?next={{ request.path }}" class="srv-btn srv-btn--primary">Login to Add Service Review</a>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="srv-list-card">
+                <form method="get" class="srv-filter-row">
+                    <select name="topic">
+                        <option value="all" {% if selected_topic == 'all' %}selected{% endif %}>All topics</option>
+                        <option value="overall" {% if selected_topic == 'overall' %}selected{% endif %}>Overall Experience</option>
+                        <option value="delivery" {% if selected_topic == 'delivery' %}selected{% endif %}>Delivery</option>
+                        <option value="packaging" {% if selected_topic == 'packaging' %}selected{% endif %}>Packaging</option>
+                        <option value="support" {% if selected_topic == 'support' %}selected{% endif %}>Support</option>
+                        <option value="returns" {% if selected_topic == 'returns' %}selected{% endif %}>Returns</option>
+                    </select>
+                    <select name="sort">
+                        <option value="newest" {% if selected_sort == 'newest' %}selected{% endif %}>Newest</option>
+                        <option value="helpful" {% if selected_sort == 'helpful' %}selected{% endif %}>Most Helpful</option>
+                        <option value="highest" {% if selected_sort == 'highest' %}selected{% endif %}>Highest Rated</option>
+                    </select>
+                    <select name="min_rating">
+                        <option value="0" {% if selected_min_rating == 0 %}selected{% endif %}>Any rating</option>
+                        <option value="3" {% if selected_min_rating == 3 %}selected{% endif %}>3+ stars</option>
+                        <option value="4" {% if selected_min_rating == 4 %}selected{% endif %}>4+ stars</option>
+                        <option value="5" {% if selected_min_rating == 5 %}selected{% endif %}>5 stars</option>
+                    </select>
+                    <label class="srv-check"><input type="checkbox" name="verified" value="1" {% if selected_verified %}checked{% endif %}> Verified only</label>
+                    <button type="submit" class="srv-btn">Apply</button>
+                </form>
+
+                <div class="srv-reviews">
+                    {% for review in service_reviews %}
+                    <article class="srv-review-item">
+                        <div class="srv-review-head">
+                            <div>
+                                <h3>{{ review.name }}</h3>
+                                <p>{{ review.created_at|date:"M d, Y" }} • {{ review.get_topic_display }}</p>
+                            </div>
+                            <span class="srv-rating">{{ review.overall_rating }}/5</span>
+                        </div>
+                        <div class="srv-badges">
+                            {% if review.is_verified_customer %}<span class="srv-badge srv-badge--verified">Verified Customer</span>{% endif %}
+                            <span class="srv-badge">Delivery {{ review.delivery_rating }}</span>
+                            <span class="srv-badge">Support {{ review.support_rating }}</span>
+                        </div>
+                        <p class="srv-comment">{{ review.comment }}</p>
+                        <button type="button" class="srv-helpful" data-review-id="{{ review.id }}">Helpful ({{ review.helpful_count }})</button>
+                    </article>
+                    {% empty %}
+                    <p class="srv-empty">No approved service reviews yet. Be the first to submit one.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% with page_obj=service_reviews %}
+    {% include 'includes/pagination.html' %}
+    {% endwith %}
+
+    {% include 'footer.html' %}
+
+    <script>
+    (function () {
+        function getCookie(name) {
+            var value = '; ' + document.cookie;
+            var parts = value.split('; ' + name + '=');
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return '';
+        }
+
+        var csrftoken = getCookie('csrftoken');
+        document.querySelectorAll('.srv-helpful').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var id = btn.getAttribute('data-review-id');
+                fetch('/service-reviews/helpful/' + id + '/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(function (res) { return res.json(); })
+                .then(function (data) {
+                    if (data.helpful_count !== undefined) {
+                        btn.textContent = 'Helpful (' + data.helpful_count + ')';
+                    }
+                    if (!data.success) {
+                        btn.disabled = true;
+                    }
+                })
+                .catch(function () {});
+            });
+        });
+    })();
+    </script>
+    <script src="{% static 'global.js' %}"></script>
+    <script src="{% static 'scroll-reveal.js' %}"></script>
+</body>
+</html>

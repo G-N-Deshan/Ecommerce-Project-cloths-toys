@@ -1,5 +1,5 @@
 from django import forms
-from .models import Review, ContactMessage
+from .models import Review, ContactMessage, ServiceReview
 
 class ReviewForm(forms.ModelForm):
     class Meta:
@@ -41,4 +41,29 @@ class ContactForm(forms.ModelForm):
                 'rows': 6,
                 'placeholder': 'Tell us your message...',
             }),
+        }
+
+
+class ServiceReviewForm(forms.ModelForm):
+    class Meta:
+        model = ServiceReview
+        fields = [
+            'name',
+            'email',
+            'topic',
+            'delivery_rating',
+            'packaging_rating',
+            'support_rating',
+            'returns_rating',
+            'comment',
+        ]
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'Your name'}),
+            'email': forms.EmailInput(attrs={'class': 'form-input', 'placeholder': 'Your email'}),
+            'topic': forms.Select(attrs={'class': 'form-select'}),
+            'delivery_rating': forms.Select(choices=[(i, str(i)) for i in range(1, 6)], attrs={'class': 'form-select'}),
+            'packaging_rating': forms.Select(choices=[(i, str(i)) for i in range(1, 6)], attrs={'class': 'form-select'}),
+            'support_rating': forms.Select(choices=[(i, str(i)) for i in range(1, 6)], attrs={'class': 'form-select'}),
+            'returns_rating': forms.Select(choices=[(i, str(i)) for i in range(1, 6)], attrs={'class': 'form-select'}),
+            'comment': forms.Textarea(attrs={'class': 'form-textarea', 'rows': 5, 'placeholder': 'Tell us about your service experience'}),
         }

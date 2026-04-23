@@ -32,6 +32,8 @@ urlpatterns = [
 
     path('reviews/', views.reviews, name='reviews'),
     path('review-success/', views.review_success, name='review_success'),
+    path('service-reviews/', views.service_reviews, name='service_reviews'),
+    path('service-reviews/helpful/<int:review_id>/', views.service_review_helpful, name='service_review_helpful'),
 
     path('cart/', views.cart_page, name='cart'),
     path('cart/add/<str:item_type>/<int:item_id>/', views.add_to_cart, name='add_to_cart'),
