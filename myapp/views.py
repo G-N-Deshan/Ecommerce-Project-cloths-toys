@@ -961,14 +961,38 @@ def reviews(request):
         cart_count = 0
 
     if request.method == 'POST':
+        is_ajax = _wants_json(request)
         if not request.user.is_authenticated:
+            if is_ajax:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Please log in to submit a review.',
+                    'login_url': f'/login/?next={request.path}',
+                }, status=401)
             messages.error(request, 'Please log in to submit a review.')
             return redirect(f'/login/?next={request.path}')
         form = ReviewForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            review = form.save()
+            if is_ajax:
+                return JsonResponse({
+                    'success': True,
+                    'review': {
+                        'name': review.name,
+                        'rating': review.rating,
+                        'rating_label': review.get_rating_display(),
+                        'comment': review.comment,
+                        'created_at': review.created_at.strftime('%b %d, %Y'),
+                        'image_url': review.uploadImages.url if review.uploadImages else '',
+                    }
+                })
             messages.success(request, 'Review submitted successfully!')
-            return redirect('review_success')  
+            return redirect('/reviews/#reviewsList')
+        if is_ajax:
+            first_error = 'Please check your inputs and try again.'
+            if form.errors:
+                first_error = next(iter(form.errors.values()))[0]
+            return JsonResponse({'success': False, 'message': str(first_error)})
     else:
         form = ReviewForm()
     

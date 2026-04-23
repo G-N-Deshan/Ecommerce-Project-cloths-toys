@@ -68,7 +68,7 @@
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                 <div>
-                    <div class="text-3xl font-black text-indigo-600">{{ latest_reviews|length }}</div>
+                    <div class="text-3xl font-black text-indigo-600" id="totalReviewsCount">{{ latest_reviews|length }}</div>
                     <div class="text-sm text-slate-500 mt-1">Total Reviews</div>
                 </div>
                 <div>
@@ -191,7 +191,6 @@
                 <button class="filter-chip px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300" data-filter="2">2 & Below</button>
             </div>
 
-            {% if latest_reviews %}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="reviewsGrid">
                 {% for review in latest_reviews %}
                 <div class="review-card-new group bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-400 overflow-hidden" data-rating="{{ review.rating }}">
@@ -253,8 +252,8 @@
                 </div>
                 {% endfor %}
             </div>
-            {% else %}
-            <div class="text-center py-20">
+
+            <div class="text-center py-20 {% if latest_reviews %}hidden{% endif %}" id="noReviewsState">
                 <div class="w-20 h-20 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-5">
                     <i class="bi bi-chat-square-text text-3xl text-slate-300"></i>
                 </div>
@@ -264,7 +263,6 @@
                     <i class="bi bi-pencil-square"></i> Write First Review
                 </a>
             </div>
-            {% endif %}
         </div>
     </section>
 
@@ -281,6 +279,93 @@
     <script>
     (function(){
         'use strict';
+
+        function escapeHtml(text){
+            return String(text || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/\"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function starsHtml(rating){
+            let out = '';
+            for(let i=1;i<=5;i++){
+                out += i <= rating
+                    ? '<i class="bi bi-star-fill text-amber-400 text-sm"></i>'
+                    : '<i class="bi bi-star text-slate-200 text-sm"></i>';
+            }
+            return out;
+        }
+
+        function ratingBadge(review){
+            if(review.rating >= 4){
+                return '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-600"><i class="bi bi-hand-thumbs-up-fill"></i> ' + escapeHtml(review.rating_label) + '</span>';
+            }
+            if(review.rating === 3){
+                return '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-600"><i class="bi bi-emoji-neutral"></i> ' + escapeHtml(review.rating_label) + '</span>';
+            }
+            return '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-red-50 text-red-600"><i class="bi bi-hand-thumbs-down"></i> ' + escapeHtml(review.rating_label) + '</span>';
+        }
+
+        function bindLikeButton(btn){
+            if(!btn) return;
+            btn.addEventListener('click', function(){
+                this.classList.toggle('text-pink-500');
+                this.classList.toggle('text-slate-300');
+                const icon = this.querySelector('i');
+                icon.style.transform = 'scale(1.3)';
+                setTimeout(() => icon.style.transform = 'scale(1)', 200);
+            });
+        }
+
+        function prependReviewCard(review){
+            const grid = document.getElementById('reviewsGrid');
+            if(!grid) return;
+
+            const card = document.createElement('div');
+            card.className = 'review-card-new group bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-400 overflow-hidden';
+            card.setAttribute('data-rating', String(review.rating));
+
+            let imageHtml = '';
+            if(review.image_url){
+                imageHtml = '<div class="px-6 pb-4"><img src="' + escapeHtml(review.image_url) + '" alt="Review photo" class="w-full h-44 object-cover rounded-xl cursor-pointer hover:scale-[1.02] transition-transform duration-300" loading="lazy" onclick="openLightbox(this.src)"></div>';
+            }
+
+            card.innerHTML = '' +
+                '<div class="p-6 pb-0">' +
+                    '<div class="flex items-start justify-between mb-4">' +
+                        '<div class="flex items-center gap-3">' +
+                            '<div class="w-11 h-11 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-indigo-500/20">' + escapeHtml((review.name || 'U').charAt(0).toUpperCase()) + '</div>' +
+                            '<div>' +
+                                '<h3 class="font-bold text-slate-800">' + escapeHtml(review.name) + '</h3>' +
+                                '<p class="text-xs text-slate-400">' + escapeHtml(review.created_at) + '</p>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="flex items-center gap-0.5">' + starsHtml(review.rating) + '</div>' +
+                    '</div>' +
+                    ratingBadge(review) +
+                '</div>' +
+                '<div class="px-6 py-4"><p class="text-slate-600 leading-relaxed text-[15px] line-clamp-3">' + escapeHtml(review.comment) + '</p></div>' +
+                imageHtml +
+                '<div class="px-6 pb-5 flex items-center justify-between border-t border-slate-50 pt-4">' +
+                    '<span class="inline-flex items-center gap-1 text-xs text-emerald-500 font-semibold"><i class="bi bi-patch-check-fill"></i> Verified Purchase</span>' +
+                    '<button class="like-btn text-slate-300 hover:text-pink-500 transition-colors" title="Helpful"><i class="bi bi-heart-fill"></i></button>' +
+                '</div>';
+
+            grid.prepend(card);
+            bindLikeButton(card.querySelector('.like-btn'));
+
+            const emptyState = document.getElementById('noReviewsState');
+            if(emptyState) emptyState.classList.add('hidden');
+
+            const totalCountEl = document.getElementById('totalReviewsCount');
+            if(totalCountEl){
+                const current = parseInt(totalCountEl.textContent || '0', 10) || 0;
+                totalCountEl.textContent = String(current + 1);
+            }
+        }
 
         // Star picker
         const stars = document.querySelectorAll('#starPicker .star-btn');
@@ -331,12 +416,12 @@
 
         // Filter chips
         const chips = document.querySelectorAll('#filterBar .filter-chip');
-        const cards = document.querySelectorAll('.review-card-new');
         chips.forEach(chip => {
             chip.addEventListener('click', function(){
                 chips.forEach(c => c.classList.remove('active'));
                 this.classList.add('active');
                 const f = this.dataset.filter;
+                const cards = document.querySelectorAll('.review-card-new');
                 cards.forEach(card => {
                     const r = parseInt(card.dataset.rating);
                     if(f === 'all' || (f === '2' && r <= 2) || (r === parseInt(f))){
@@ -349,15 +434,7 @@
         });
 
         // Like buttons
-        document.querySelectorAll('.like-btn').forEach(btn => {
-            btn.addEventListener('click', function(){
-                this.classList.toggle('text-pink-500');
-                this.classList.toggle('text-slate-300');
-                const icon = this.querySelector('i');
-                icon.style.transform = 'scale(1.3)';
-                setTimeout(() => icon.style.transform = 'scale(1)', 200);
-            });
-        });
+        document.querySelectorAll('.like-btn').forEach(bindLikeButton);
 
         // Form inputs styling
         document.querySelectorAll('#reviewForm .form-input, #reviewForm .form-select, #reviewForm .form-textarea').forEach(el => {
@@ -370,6 +447,121 @@
             el.addEventListener('focus', () => { el.style.borderColor = '#6366f1'; el.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'; });
             el.addEventListener('blur', () => { el.style.borderColor = '#e2e8f0'; el.style.boxShadow = 'none'; });
         });
+
+        // Real-time submit
+        const reviewForm = document.getElementById('reviewForm');
+        let isSubmitting = false;
+        let lastSubmitAt = 0;
+        if(reviewForm && reviewForm.dataset.ajaxBound !== '1'){
+            reviewForm.dataset.ajaxBound = '1';
+            reviewForm.addEventListener('submit', function(e){
+                e.preventDefault();
+
+                if(isSubmitting){
+                    return;
+                }
+
+                const now = Date.now();
+                if(now - lastSubmitAt < 1200){
+                    return;
+                }
+
+                const nameInput = document.getElementById('id_name');
+                const emailInput = document.getElementById('id_email');
+                const commentInput = document.getElementById('id_comment');
+
+                if(!nameInput || !emailInput || !commentInput || !ratingSelect){
+                    if(window.showToast){
+                        window.showToast('Form is not ready. Please refresh and try again.', 'error');
+                    }
+                    return;
+                }
+
+                if(!nameInput.value.trim() || !emailInput.value.trim() || !commentInput.value.trim() || !ratingSelect.value){
+                    if(window.showToast){
+                        window.showToast('Please fill name, email, rating, and review message.', 'error');
+                    } else {
+                        alert('Please fill name, email, rating, and review message.');
+                    }
+                    return;
+                }
+
+                if(typeof emailInput.checkValidity === 'function' && !emailInput.checkValidity()){
+                    if(window.showToast){
+                        window.showToast('Please enter a valid email address.', 'error');
+                    } else {
+                        alert('Please enter a valid email address.');
+                    }
+                    return;
+                }
+
+                const submitBtn = reviewForm.querySelector('button[type="submit"]');
+                isSubmitting = true;
+                lastSubmitAt = now;
+                if(submitBtn) submitBtn.disabled = true;
+
+                const formData = new FormData(reviewForm);
+
+                fetch(window.location.pathname, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(async res => {
+                    const contentType = res.headers.get('content-type') || '';
+                    if(contentType.includes('application/json')){
+                        return res.json();
+                    }
+                    throw new Error('Unexpected response format');
+                })
+                .then(data => {
+                    if(!data.success){
+                        if(data.login_url){
+                            window.location.href = data.login_url;
+                            return;
+                        }
+                        if(window.showToast){
+                            window.showToast(data.message || 'Failed to submit review.', 'error');
+                        } else {
+                            alert(data.message || 'Failed to submit review.');
+                        }
+                        return;
+                    }
+
+                    prependReviewCard(data.review);
+                    reviewForm.reset();
+
+                    if(ratingSelect) ratingSelect.value = '';
+                    stars.forEach(s => {
+                        s.classList.remove('border-amber-400','bg-amber-50','text-amber-500');
+                        s.classList.add('border-slate-200','bg-slate-50','text-slate-300');
+                    });
+                    if(ratingLabel) ratingLabel.textContent = 'Click to rate';
+                    if(charCount) charCount.textContent = '0';
+                    if(preview) preview.innerHTML = '';
+
+                    if(window.showToast){
+                        window.showToast('Review submitted successfully!', 'success');
+                    }
+
+                    const reviewsSection = document.getElementById('reviewsList');
+                    if(reviewsSection){
+                        reviewsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                })
+                .catch(() => {
+                    if(window.showToast){
+                        window.showToast('Something went wrong while submitting.', 'error');
+                    }
+                })
+                .finally(() => {
+                    isSubmitting = false;
+                    if(submitBtn) submitBtn.disabled = false;
+                });
+            });
+        }
     })();
 
     function openLightbox(src){
