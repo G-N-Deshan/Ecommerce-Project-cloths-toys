@@ -13691,3 +13691,8 @@ INFO 2026-04-24 20:04:52,389 autoreload 12368 1404 Watching for file changes wit
 WARNING 2026-04-24 20:06:04,389 log 12368 25212 Not Found: /favicon.ico
 INFO 2026-04-24 20:06:43,964 autoreload 12368 1404 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
 INFO 2026-04-24 20:06:45,549 autoreload 18776 25756 Watching for file changes with StatReloader
+INFO 2026-04-24 20:37:57,359 autoreload 18776 25756 C:\Users\nipun\Desktop\Ecommerce project\myproject\wsgi.py changed, reloading.
+INFO 2026-04-24 20:37:59,014 autoreload 18056 8408 Watching for file changes with StatReloader
+WARNING 2026-04-24 20:39:37,671 log 18056 9220 Not Found: /favicon.ico
+INFO 2026-04-24 20:50:20,836 autoreload 18056 8408 C:\Users\nipun\Desktop\Ecommerce project\myproject\wsgi.py changed, reloading.
+INFO 2026-04-24 20:50:22,602 autoreload 29636 28708 Watching for file changes with StatReloader

@@ -1,14 +1,24 @@
-Django==6.0.2
+# Core framework
+Django==6.0.3
+
+# App configuration and static file serving
 python-decouple==3.8
 whitenoise==6.12.0
-djangorestframework==3.16.1
-stripe==14.4.1
-django-allauth==65.15.0
-Pillow==12.1.1
-pyjwt[crypto]==2.11.0
+
+# Production server
 gunicorn==23.0.0
+
+# Database URL parsing + DB drivers
 dj-database-url==2.3.0
 psycopg2-binary==2.9.10
 PyMySQL==1.1.1
+
+# App features
+djangorestframework==3.16.1
+django-allauth==65.15.0
+stripe==14.4.1
+Pillow==12.1.1
+
+# Media storage
 cloudinary==1.41.0
 django-cloudinary-storage==0.3.0

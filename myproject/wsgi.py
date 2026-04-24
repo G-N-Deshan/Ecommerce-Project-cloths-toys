@@ -9,5 +9,5 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
 
 application = get_wsgi_application()
 
-# Vercel serverless entry point
+# Optional alias used by some WSGI hosts and tooling
 app = application

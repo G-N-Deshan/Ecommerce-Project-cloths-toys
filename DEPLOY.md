@@ -1,148 +1,163 @@
-# KidZone — Vercel Deployment Guide
+# KidZone — DigitalOcean Deployment Guide
 
 ## Prerequisites
-- GitHub account
-- Vercel account (free) — https://vercel.com
-- Neon account (free PostgreSQL) — https://neon.tech
-- Cloudinary account (free media hosting) — https://cloudinary.com
+- DigitalOcean droplet (Ubuntu 22.04+)
+- Domain name (optional but recommended)
+- GitHub repository access
 
 ---
 
-## Step 1 — Push code to GitHub
+## 1. Prepare Server
 
 ```bash
-git init
-git add .
-git commit -m "Initial commit"
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
-git branch -M main
-git push -u origin main
+sudo apt update
+sudo apt install -y python3 python3-venv python3-pip nginx
+```
+
+Clone the project:
+
+```bash
+git clone <your-repo-url> kidzone
+cd kidzone
 ```
 
 ---
 
-## Step 2 — Create a free PostgreSQL database (Neon)
-
-1. Go to https://neon.tech and sign up (free tier).
-2. Click **New Project** → give it a name (e.g. `kidzone`).
-3. Copy the **Connection String** — it looks like:
-   ```
-   postgresql://username:password@ep-xxxx.us-east-2.aws.neon.tech/neondb?sslmode=require
-   ```
-4. Save this — you'll use it as `DATABASE_URL` in Vercel.
-
----
-
-## Step 3 — Create a free Cloudinary account
-
-1. Go to https://cloudinary.com and sign up (free tier).
-2. From your **Dashboard**, copy the **CLOUDINARY_URL** — it looks like:
-   ```
-   cloudinary://API_KEY:API_SECRET@CLOUD_NAME
-   ```
-3. Save this — you'll use it as `CLOUDINARY_URL` in Vercel.
-
----
-
-## Step 4 — Deploy to Vercel
-
-1. Go to https://vercel.com and sign in with GitHub.
-2. Click **Add New → Project**.
-3. Import your GitHub repository.
-4. **Framework Preset**: select **Other**.
-5. Click **Environment Variables** and add these:
-
-| Variable | Value |
-|---|---|
-| `SECRET_KEY` | A long random string (generate one at https://djecrety.ir) |
-| `DEBUG` | `False` |
-| `ALLOWED_HOSTS` | `.vercel.app,your-custom-domain.com` |
-| `CSRF_TRUSTED_ORIGINS` | `https://your-project-name.vercel.app` |
-| `DATABASE_URL` | The Neon connection string from Step 2 |
-| `CLOUDINARY_URL` | The Cloudinary URL from Step 3 |
-| `STRIPE_PUBLISHABLE_KEY` | Your Stripe publishable key |
-| `STRIPE_SECRET_KEY` | Your Stripe secret key |
-
-6. Click **Deploy**.
-
-> **Note:** Replace `your-project-name` with the actual Vercel project name after deployment.  
-> Update `ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS` with your actual `.vercel.app` domain.
-
----
-
-## Step 5 — Run migrations on the production database
-
-After the first deployment, you need to run migrations against the Neon database.
-
-**Option A — From your local machine:**
+## 2. Create Virtual Environment
 
 ```bash
-# Set the DATABASE_URL temporarily
-set DATABASE_URL=postgresql://username:password@ep-xxxx.us-east-2.aws.neon.tech/neondb?sslmode=require
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+```
 
-# Run migrations
+---
+
+## 3. Configure Environment Variables
+
+Create `.env` in project root (or export variables in systemd):
+
+```env
+SECRET_KEY=your-secret
+DEBUG=False
+ALLOWED_HOSTS=your-domain.com,www.your-domain.com,server-ip
+CSRF_TRUSTED_ORIGINS=https://your-domain.com,https://www.your-domain.com
+
+# Choose one DB style:
+# DATABASE_URL=postgresql://user:pass@host:5432/dbname
+# or MySQL fallback values:
+DB_NAME=myproject
+DB_USER=root
+DB_PASSWORD=your-password
+DB_HOST=127.0.0.1
+DB_PORT=3306
+
+# Optional services
+CLOUDINARY_URL=cloudinary://...
+STRIPE_PUBLISHABLE_KEY=...
+STRIPE_SECRET_KEY=...
+```
+
+---
+
+## 4. Run Django Setup
+
+```bash
 python manage.py migrate
-
-# Create a superuser for the admin panel
+python manage.py collectstatic --noinput
 python manage.py createsuperuser
 ```
 
-**Option B — Using Neon's SQL Editor:**
-
-You can also use Neon's web console to run SQL directly if needed.
-
 ---
 
-## Step 6 — Upload existing media to Cloudinary
+## 5. Configure Gunicorn Service
 
-Since Vercel has no persistent filesystem, your media files (product images, etc.)
-need to be in Cloudinary.
+Create `/etc/systemd/system/kidzone.service`:
 
-1. Log into the **Django Admin** at `https://your-project.vercel.app/admin/`
-2. Re-upload images through the admin panel — they'll automatically go to Cloudinary.
+```ini
+[Unit]
+Description=KidZone Django App
+After=network.target
 
-Or bulk-upload via Cloudinary's dashboard/API.
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/kidzone
+Environment="PATH=/var/www/kidzone/.venv/bin"
+ExecStart=/var/www/kidzone/.venv/bin/gunicorn myproject.wsgi:application --bind 127.0.0.1:8000 --workers 3
+Restart=always
 
----
+[Install]
+WantedBy=multi-user.target
+```
 
-## How real-time updates work
-
-A polling system automatically refreshes the frontend when you make changes in the admin panel:
-
-1. **SiteUpdate model** tracks a timestamp (`updated_at`).
-2. **Django signals** fire on every save/delete of content models (products, offers, reviews, etc.) and update the timestamp.
-3. **live_reload.js** (included on every page via footer) polls `/check-updates/` every 8 seconds.
-4. When the timestamp changes, the page automatically reloads — showing your admin changes in near real-time.
-
-**No WebSockets or external services needed.** Works within Vercel's free tier.
-
----
-
-## Redeployment
-
-Every `git push` to `main` triggers an automatic redeployment on Vercel.
+Then enable and start:
 
 ```bash
-git add .
-git commit -m "Update something"
-git push
+sudo systemctl daemon-reload
+sudo systemctl enable kidzone
+sudo systemctl start kidzone
+sudo systemctl status kidzone
 ```
 
 ---
 
-## Troubleshooting
+## 6. Configure Nginx Reverse Proxy
 
-| Problem | Solution |
-|---|---|
-| Static files not loading | Make sure `whitenoise` is in middleware and `STATIC_ROOT` is set |
-| 500 error on Vercel | Check Vercel **Function Logs** in the dashboard |
-| Images not showing | Verify `CLOUDINARY_URL` is set correctly in env vars |
-| Admin login not working | Run `python manage.py createsuperuser` against the production DB |
-| CSRF errors | Add your Vercel domain to `CSRF_TRUSTED_ORIGINS` |
-| Database errors | Check `DATABASE_URL` is correct and Neon project is active |
+Create `/etc/nginx/sites-available/kidzone`:
+
+```nginx
+server {
+   listen 80;
+   server_name your-domain.com www.your-domain.com;
+
+   location /static/ {
+      alias /var/www/kidzone/staticfiles/;
+   }
+
+   location /media/ {
+      alias /var/www/kidzone/media/;
+   }
+
+   location / {
+      proxy_pass http://127.0.0.1:8000;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+   }
+}
+```
+
+Enable config and reload:
+
+```bash
+sudo ln -s /etc/nginx/sites-available/kidzone /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
 
 ---
 
-## Environment Variables Reference
+## 7. Enable HTTPS (Recommended)
 
-See `.env.example` for the full list of supported environment variables.
+```bash
+sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d your-domain.com -d www.your-domain.com
+```
+
+---
+
+## 8. Deploy Updates
+
+```bash
+cd /var/www/kidzone
+git pull
+source .venv/bin/activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py collectstatic --noinput
+sudo systemctl restart kidzone
+sudo systemctl reload nginx
+```
