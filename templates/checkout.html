@@ -1,13 +1,16 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - KidZone</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{% static 'navbar.css' %}">
@@ -19,7 +22,7 @@
                 extend: {
                     fontFamily: { inter: ['Inter'], playfair: ['Playfair Display'] },
                     colors: {
-                        brand: { 50:'#eef2ff', 100:'#e0e7ff', 200:'#c7d2fe', 300:'#a5b4fc', 400:'#818cf8', 500:'#6366f1', 600:'#4f46e5', 700:'#4338ca', 800:'#3730a3', 900:'#312e81' },
+                        brand: { 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81' },
                     }
                 }
             }
@@ -27,88 +30,300 @@
     </script>
     <style>
         /* Floating shapes */
-        .ck-shapes { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-        .ck-s { position: absolute; opacity: .06; animation: ckFloat 8s ease-in-out infinite; }
-        .ck-s--c { width: 130px; height: 130px; border-radius: 50%; background: linear-gradient(135deg,#818cf8,#c084fc); top: 6%; left: 3%; animation-duration: 7s; }
-        .ck-s--sq { width: 80px; height: 80px; border-radius: 16px; background: linear-gradient(135deg,#ec4899,#f472b6); bottom: 12%; right: 5%; animation-delay: 2s; animation-duration: 9s; transform: rotate(45deg); }
-        .ck-s--r { width: 90px; height: 90px; border-radius: 50%; border: 5px solid rgba(99,102,241,.12); top: 38%; right: 10%; animation-delay: 3.5s; animation-duration: 10s; }
-        .ck-s--tr { width: 0; height: 0; border-left: 40px solid transparent; border-right: 40px solid transparent; border-bottom: 70px solid rgba(245,158,11,.06); top: 60%; left: 8%; animation-delay: 1.5s; animation-duration: 11s; }
-        .ck-s--glide1 { width: 90px; height: 14px; border-radius: 40px; background: linear-gradient(90deg, rgba(99,102,241,.18), transparent); top: 25%; right: 8%; animation: ckGlide 9s ease-in-out infinite; }
-        .ck-s--glide2 { width: 60px; height: 10px; border-radius: 30px; background: linear-gradient(90deg, rgba(236,72,153,.14), transparent); bottom: 35%; left: 15%; animation: ckGlide 11s ease-in-out infinite reverse; }
-        .ck-s--orb1 { width: 70px; height: 70px; border-radius: 50%; border: 3px solid rgba(99,102,241,.12); top: 45%; right: 25%; animation: ckOrb 7s ease-in-out infinite; }
-        .ck-s--orb2 { width: 45px; height: 45px; border-radius: 50%; background: radial-gradient(circle, rgba(251,191,36,.15), transparent 70%); top: 15%; left: 40%; animation: ckOrb 9s ease-in-out infinite 2s; }
+        .ck-shapes {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .ck-s {
+            position: absolute;
+            opacity: .06;
+            animation: ckFloat 8s ease-in-out infinite;
+        }
+
+        .ck-s--c {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #818cf8, #c084fc);
+            top: 6%;
+            left: 3%;
+            animation-duration: 7s;
+        }
+
+        .ck-s--sq {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #ec4899, #f472b6);
+            bottom: 12%;
+            right: 5%;
+            animation-delay: 2s;
+            animation-duration: 9s;
+            transform: rotate(45deg);
+        }
+
+        .ck-s--r {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 5px solid rgba(99, 102, 241, .12);
+            top: 38%;
+            right: 10%;
+            animation-delay: 3.5s;
+            animation-duration: 10s;
+        }
+
+        .ck-s--tr {
+            width: 0;
+            height: 0;
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+            border-bottom: 70px solid rgba(245, 158, 11, .06);
+            top: 60%;
+            left: 8%;
+            animation-delay: 1.5s;
+            animation-duration: 11s;
+        }
+
+        .ck-s--glide1 {
+            width: 90px;
+            height: 14px;
+            border-radius: 40px;
+            background: linear-gradient(90deg, rgba(99, 102, 241, .18), transparent);
+            top: 25%;
+            right: 8%;
+            animation: ckGlide 9s ease-in-out infinite;
+        }
+
+        .ck-s--glide2 {
+            width: 60px;
+            height: 10px;
+            border-radius: 30px;
+            background: linear-gradient(90deg, rgba(236, 72, 153, .14), transparent);
+            bottom: 35%;
+            left: 15%;
+            animation: ckGlide 11s ease-in-out infinite reverse;
+        }
+
+        .ck-s--orb1 {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid rgba(99, 102, 241, .12);
+            top: 45%;
+            right: 25%;
+            animation: ckOrb 7s ease-in-out infinite;
+        }
+
+        .ck-s--orb2 {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(251, 191, 36, .15), transparent 70%);
+            top: 15%;
+            left: 40%;
+            animation: ckOrb 9s ease-in-out infinite 2s;
+        }
+
         @keyframes ckFloat {
-            0%,100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-24px) rotate(5deg); }
-            50% { transform: translateY(-36px) rotate(-4deg); }
-            75% { transform: translateY(-16px) rotate(3deg); }
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            25% {
+                transform: translateY(-24px) rotate(5deg);
+            }
+
+            50% {
+                transform: translateY(-36px) rotate(-4deg);
+            }
+
+            75% {
+                transform: translateY(-16px) rotate(3deg);
+            }
         }
+
         @keyframes ckGlide {
-            0%   { transform: translateX(0) scaleX(1); opacity: .14; }
-            50%  { transform: translateX(50px) scaleX(1.3); opacity: .06; }
-            100% { transform: translateX(0) scaleX(1); opacity: .14; }
+            0% {
+                transform: translateX(0) scaleX(1);
+                opacity: .14;
+            }
+
+            50% {
+                transform: translateX(50px) scaleX(1.3);
+                opacity: .06;
+            }
+
+            100% {
+                transform: translateX(0) scaleX(1);
+                opacity: .14;
+            }
         }
+
         @keyframes ckOrb {
-            0%, 100% { transform: scale(1) rotate(0deg); opacity: .12; }
-            50%  { transform: scale(1.25) rotate(180deg); opacity: .06; }
+
+            0%,
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: .12;
+            }
+
+            50% {
+                transform: scale(1.25) rotate(180deg);
+                opacity: .06;
+            }
         }
 
         /* Step indicator pulse */
-        .step-active { animation: stepPulse 2s ease-in-out infinite; }
+        .step-active {
+            animation: stepPulse 2s ease-in-out infinite;
+        }
+
         @keyframes stepPulse {
-            0%,100% { box-shadow: 0 0 0 0 rgba(99,102,241,.4); }
-            50% { box-shadow: 0 0 0 8px rgba(99,102,241,0); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, .4);
+            }
+
+            50% {
+                box-shadow: 0 0 0 8px rgba(99, 102, 241, 0);
+            }
         }
 
         /* Slide up entrance */
-        .slide-up { animation: slideUp .5s ease-out both; }
-        .slide-up-d1 { animation-delay: .1s; }
-        .slide-up-d2 { animation-delay: .2s; }
-        .slide-up-d3 { animation-delay: .3s; }
+        .slide-up {
+            animation: slideUp .5s ease-out both;
+        }
+
+        .slide-up-d1 {
+            animation-delay: .1s;
+        }
+
+        .slide-up-d2 {
+            animation-delay: .2s;
+        }
+
+        .slide-up-d3 {
+            animation-delay: .3s;
+        }
+
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(28px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Input focus glow */
-        .ck-input:focus { border-color: #6366f1 !important; box-shadow: 0 0 0 3px rgba(99,102,241,.15) !important; }
-        .ck-input { transition: all .25s ease; }
+        .ck-input:focus {
+            border-color: #6366f1 !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, .15) !important;
+        }
+
+        .ck-input {
+            transition: all .25s ease;
+        }
 
         /* Radio card styling */
-        .pay-card { transition: all .25s ease; cursor: pointer; }
-        .pay-card:hover { border-color: #a5b4fc; background: #f5f3ff; }
-        .pay-card.selected { border-color: #6366f1; background: #eef2ff; box-shadow: 0 0 0 3px rgba(99,102,241,.12); }
+        .pay-card {
+            transition: all .25s ease;
+            cursor: pointer;
+        }
+
+        .pay-card:hover {
+            border-color: #a5b4fc;
+            background: #f5f3ff;
+        }
+
+        .pay-card.selected {
+            border-color: #6366f1;
+            background: #eef2ff;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, .12);
+        }
 
         /* Summary item hover */
-        .summary-item { transition: background .2s ease; }
-        .summary-item:hover { background: #f8fafc; }
+        .summary-item {
+            transition: background .2s ease;
+        }
+
+        .summary-item:hover {
+            background: #f8fafc;
+        }
 
         /* Checkout button shimmer */
-        .btn-shimmer { position: relative; overflow: hidden; }
+        .btn-shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+
         .btn-shimmer::after {
             content: '';
-            position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,.2), transparent);
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .2), transparent);
             animation: shimmer 3s ease-in-out infinite;
         }
+
         @keyframes shimmer {
-            0% { left: -100%; }
-            50%,100% { left: 100%; }
+            0% {
+                left: -100%;
+            }
+
+            50%,
+            100% {
+                left: 100%;
+            }
         }
 
         /* Security seal pulse */
-        .seal-glow { animation: sealGlow 3s ease-in-out infinite; }
+        .seal-glow {
+            animation: sealGlow 3s ease-in-out infinite;
+        }
+
         @keyframes sealGlow {
-            0%,100% { opacity:.8; }
-            50% { opacity:1; }
+
+            0%,
+            100% {
+                opacity: .8;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
 
         /* Scrollbar for summary */
-        .summary-scroll::-webkit-scrollbar { width: 4px; }
-        .summary-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
-        .summary-scroll::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 4px; }
+        .summary-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .summary-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        .summary-scroll::-webkit-scrollbar-thumb {
+            background: #c7d2fe;
+            border-radius: 4px;
+        }
     </style>
 </head>
+
 <body class="font-inter bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 text-slate-800 min-h-screen">
     {% include 'navbar.html' %}
 
@@ -126,7 +341,7 @@
 
     {% if messages %}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             {% for message in messages %}
             showToast('{{ message|escapejs }}', '{{ message.tags }}');
             {% endfor %}
@@ -139,7 +354,8 @@
 
         <!-- Breadcrumb -->
         <nav class="flex items-center gap-2 text-sm text-slate-400 mb-6 slide-up" aria-label="Breadcrumb">
-            <a href="{% url 'index' %}" class="hover:text-indigo-500 transition-colors"><i class="bi bi-house-fill"></i></a>
+            <a href="{% url 'index' %}" class="hover:text-indigo-500 transition-colors"><i
+                    class="bi bi-house-fill"></i></a>
             <i class="bi bi-chevron-right text-[10px]"></i>
             <a href="{% url 'cart_details' %}" class="hover:text-indigo-500 transition-colors">Cart</a>
             <i class="bi bi-chevron-right text-[10px]"></i>
@@ -148,7 +364,8 @@
 
         <!-- Checkout Header -->
         <div class="text-center mb-10 slide-up">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-indigo-50 border border-indigo-100 text-indigo-600 font-semibold rounded-full text-sm mb-4">
+            <div
+                class="inline-flex items-center gap-2 px-4 py-1.5 bg-indigo-50 border border-indigo-100 text-indigo-600 font-semibold rounded-full text-sm mb-4">
                 <i class="bi bi-shield-lock-fill"></i> Secure Checkout
             </div>
             <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 font-playfair">Complete Your Order</h1>
@@ -158,19 +375,24 @@
         <!-- Progress Steps -->
         <div class="flex items-center justify-center gap-0 mb-12 slide-up slide-up-d1">
             <div class="flex items-center">
-                <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm font-bold shadow-lg shadow-indigo-500/25">
+                <div
+                    class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm font-bold shadow-lg shadow-indigo-500/25">
                     <i class="bi bi-check-lg"></i>
                 </div>
                 <span class="ml-2 text-sm font-semibold text-indigo-600 hidden sm:inline">Cart</span>
             </div>
             <div class="w-12 sm:w-20 h-0.5 bg-indigo-600 mx-2"></div>
             <div class="flex items-center">
-                <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm font-bold shadow-lg shadow-indigo-500/25 step-active">2</div>
+                <div
+                    class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm font-bold shadow-lg shadow-indigo-500/25 step-active">
+                    2</div>
                 <span class="ml-2 text-sm font-semibold text-indigo-600 hidden sm:inline">Checkout</span>
             </div>
             <div class="w-12 sm:w-20 h-0.5 bg-slate-200 mx-2"></div>
             <div class="flex items-center">
-                <div class="w-10 h-10 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center text-sm font-bold">3</div>
+                <div
+                    class="w-10 h-10 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center text-sm font-bold">
+                    3</div>
                 <span class="ml-2 text-sm font-semibold text-slate-400 hidden sm:inline">Confirm</span>
             </div>
         </div>
@@ -183,7 +405,8 @@
                 {% csrf_token %}
 
                 <!-- Shipping Information Card -->
-                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm shadow-slate-200/50 p-6 md:p-8 slide-up slide-up-d1" data-reveal="up">
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm shadow-slate-200/50 p-6 md:p-8 slide-up slide-up-d1"
+                    data-reveal="up">
                     <div class="flex items-center gap-3 mb-6">
                         <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
                             <i class="bi bi-geo-alt-fill text-indigo-600 text-lg"></i>
@@ -196,7 +419,8 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label for="full_name" class="block text-sm font-semibold text-slate-700 mb-1.5">Full Name <span class="text-red-400">*</span></label>
+                            <label for="full_name" class="block text-sm font-semibold text-slate-700 mb-1.5">Full Name
+                                <span class="text-red-400">*</span></label>
                             <div class="relative">
                                 <i class="bi bi-person absolute left-3 top-1/2 -translate-y-1/2 text-slate-300"></i>
                                 <input type="text" id="full_name" name="full_name" required placeholder="John Doe"
@@ -205,7 +429,8 @@
                             </div>
                         </div>
                         <div>
-                            <label for="email" class="block text-sm font-semibold text-slate-700 mb-1.5">Email Address <span class="text-red-400">*</span></label>
+                            <label for="email" class="block text-sm font-semibold text-slate-700 mb-1.5">Email Address
+                                <span class="text-red-400">*</span></label>
                             <div class="relative">
                                 <i class="bi bi-envelope absolute left-3 top-1/2 -translate-y-1/2 text-slate-300"></i>
                                 <input type="email" id="email" name="email" required placeholder="john@example.com"
@@ -214,7 +439,8 @@
                             </div>
                         </div>
                         <div>
-                            <label for="phone" class="block text-sm font-semibold text-slate-700 mb-1.5">Phone Number <span class="text-red-400">*</span></label>
+                            <label for="phone" class="block text-sm font-semibold text-slate-700 mb-1.5">Phone Number
+                                <span class="text-red-400">*</span></label>
                             <div class="relative">
                                 <i class="bi bi-telephone absolute left-3 top-1/2 -translate-y-1/2 text-slate-300"></i>
                                 <input type="tel" id="phone" name="phone" required placeholder="+94 7X XXX XXXX"
@@ -222,15 +448,18 @@
                             </div>
                         </div>
                         <div class="sm:col-span-2">
-                            <label for="address" class="block text-sm font-semibold text-slate-700 mb-1.5">Street Address <span class="text-red-400">*</span></label>
+                            <label for="address" class="block text-sm font-semibold text-slate-700 mb-1.5">Street
+                                Address <span class="text-red-400">*</span></label>
                             <div class="relative">
                                 <i class="bi bi-building absolute left-3 top-1/2 -translate-y-1/2 text-slate-300"></i>
-                                <input type="text" id="address" name="address" required placeholder="123 Main Street, Apt 4B"
+                                <input type="text" id="address" name="address" required
+                                    placeholder="123 Main Street, Apt 4B"
                                     class="ck-input w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm focus:outline-none">
                             </div>
                         </div>
                         <div>
-                            <label for="city" class="block text-sm font-semibold text-slate-700 mb-1.5">City <span class="text-red-400">*</span></label>
+                            <label for="city" class="block text-sm font-semibold text-slate-700 mb-1.5">City <span
+                                    class="text-red-400">*</span></label>
                             <div class="relative">
                                 <i class="bi bi-pin-map absolute left-3 top-1/2 -translate-y-1/2 text-slate-300"></i>
                                 <input type="text" id="city" name="city" required placeholder="Colombo"
@@ -238,7 +467,8 @@
                             </div>
                         </div>
                         <div>
-                            <label for="postal_code" class="block text-sm font-semibold text-slate-700 mb-1.5">Postal Code <span class="text-red-400">*</span></label>
+                            <label for="postal_code" class="block text-sm font-semibold text-slate-700 mb-1.5">Postal
+                                Code <span class="text-red-400">*</span></label>
                             <div class="relative">
                                 <i class="bi bi-mailbox absolute left-3 top-1/2 -translate-y-1/2 text-slate-300"></i>
                                 <input type="text" id="postal_code" name="postal_code" required placeholder="10100"
@@ -246,7 +476,8 @@
                             </div>
                         </div>
                         <div class="sm:col-span-2">
-                            <label for="country" class="block text-sm font-semibold text-slate-700 mb-1.5">Country <span class="text-red-400">*</span></label>
+                            <label for="country" class="block text-sm font-semibold text-slate-700 mb-1.5">Country <span
+                                    class="text-red-400">*</span></label>
                             <div class="relative">
                                 <i class="bi bi-globe2 absolute left-3 top-1/2 -translate-y-1/2 text-slate-300"></i>
                                 <input type="text" id="country" name="country" required placeholder="Sri Lanka"
@@ -257,7 +488,8 @@
                 </div>
 
                 <!-- Payment Method Card -->
-                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm shadow-slate-200/50 p-6 md:p-8 slide-up slide-up-d2" data-reveal="up">
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm shadow-slate-200/50 p-6 md:p-8 slide-up slide-up-d2"
+                    data-reveal="up">
                     <div class="flex items-center gap-3 mb-6">
                         <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
                             <i class="bi bi-credit-card-fill text-emerald-600 text-lg"></i>
@@ -270,37 +502,50 @@
 
                     <div class="space-y-3">
                         <!-- COD Option -->
-                        <label class="pay-card selected flex items-center gap-4 p-4 border-2 border-indigo-500 rounded-xl" data-pay="cod">
+                        <label
+                            class="pay-card selected flex items-center gap-4 p-4 border-2 border-indigo-500 rounded-xl"
+                            data-pay="cod">
                             <input type="radio" name="payment_method" value="cash_on_delivery" checked class="hidden">
-                            <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
                                 <i class="bi bi-cash-stack text-amber-600 text-xl"></i>
                             </div>
                             <div class="flex-1">
                                 <div class="flex items-center gap-2">
                                     <span class="font-bold text-slate-900">Cash on Delivery</span>
-                                    <span class="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-bold rounded-full uppercase">Popular</span>
+                                    <span
+                                        class="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-bold rounded-full uppercase">Popular</span>
                                 </div>
-                                <p class="text-xs text-slate-400 mt-0.5">Pay when your order arrives at your doorstep</p>
+                                <p class="text-xs text-slate-400 mt-0.5">Pay when your order arrives at your doorstep
+                                </p>
                             </div>
-                            <div class="w-5 h-5 rounded-full border-2 border-indigo-500 flex items-center justify-center flex-shrink-0 pay-radio">
+                            <div
+                                class="w-5 h-5 rounded-full border-2 border-indigo-500 flex items-center justify-center flex-shrink-0 pay-radio">
                                 <div class="w-2.5 h-2.5 rounded-full bg-indigo-500 pay-dot"></div>
                             </div>
                         </label>
 
                         <!-- Stripe Option -->
-                        <label class="pay-card flex items-center gap-4 p-4 border-2 border-slate-200 rounded-xl" data-pay="card">
+                        <label class="pay-card flex items-center gap-4 p-4 border-2 border-slate-200 rounded-xl"
+                            data-pay="card">
                             <input type="radio" name="payment_method" value="card" class="hidden">
-                            <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0">
                                 <i class="bi bi-credit-card-2-front-fill text-indigo-600 text-xl"></i>
                             </div>
                             <div class="flex-1">
                                 <div class="flex items-center gap-2">
                                     <span class="font-bold text-slate-900">Credit / Debit Card</span>
-                                    <span class="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full uppercase">Secure</span>
+                                    <span
+                                        class="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full uppercase">Secure</span>
                                 </div>
-                                <p class="text-xs text-slate-400 mt-0.5">Pay securely via Stripe — <a href="{% url 'payment_page' %}" class="text-indigo-600 font-semibold hover:underline">Pay with Stripe <i class="bi bi-arrow-right text-[10px]"></i></a></p>
+                                <p class="text-xs text-slate-400 mt-0.5">Pay securely via Stripe — <a
+                                        href="{% url 'payment_page' %}"
+                                        class="text-indigo-600 font-semibold hover:underline">Pay with Stripe <i
+                                            class="bi bi-arrow-right text-[10px]"></i></a></p>
                             </div>
-                            <div class="w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center flex-shrink-0 pay-radio">
+                            <div
+                                class="w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center flex-shrink-0 pay-radio">
                                 <div class="w-2.5 h-2.5 rounded-full bg-indigo-500 pay-dot hidden"></div>
                             </div>
                         </label>
@@ -309,7 +554,8 @@
 
                 <!-- Coupon Code Card -->
                 {% if coupons_available %}
-                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm shadow-slate-200/50 p-6 md:p-8 slide-up slide-up-d3" data-reveal="up">
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm shadow-slate-200/50 p-6 md:p-8 slide-up slide-up-d3"
+                    data-reveal="up">
                     <div class="flex items-center gap-3 mb-5">
                         <div class="w-10 h-10 rounded-xl bg-pink-50 flex items-center justify-center">
                             <i class="bi bi-tag-fill text-pink-600 text-lg"></i>
@@ -321,7 +567,8 @@
                     </div>
                     <div class="flex gap-3">
                         <div class="relative flex-1">
-                            <i class="bi bi-ticket-perforated absolute left-3 top-1/2 -translate-y-1/2 text-slate-300"></i>
+                            <i
+                                class="bi bi-ticket-perforated absolute left-3 top-1/2 -translate-y-1/2 text-slate-300"></i>
                             <input type="text" id="coupon_code" name="coupon_code" placeholder="Enter coupon code"
                                 class="ck-input w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm focus:outline-none uppercase tracking-wider">
                         </div>
@@ -339,7 +586,8 @@
             <div class="lg:col-span-2 space-y-6">
 
                 <!-- Order Summary Card -->
-                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm shadow-slate-200/50 overflow-hidden sticky top-6 slide-up slide-up-d2" data-reveal="up">
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm shadow-slate-200/50 overflow-hidden sticky top-6 slide-up slide-up-d2"
+                    data-reveal="up">
                     <!-- Header -->
                     <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-5 text-white">
                         <div class="flex items-center justify-between">
@@ -360,24 +608,32 @@
                             <div class="summary-item flex items-center gap-3 p-3 rounded-xl">
                                 {% with real_item=item.get_item %}
                                 {% if real_item.imageUrl %}
-                                <div class="w-14 h-14 rounded-lg bg-slate-50 border border-slate-100 overflow-hidden flex-shrink-0">
-                                    <img src="{{ real_item.imageUrl.url }}" alt="" class="w-full h-full object-contain p-1" loading="lazy">
+                                <div
+                                    class="w-14 h-14 rounded-lg bg-slate-50 border border-slate-100 overflow-hidden flex-shrink-0">
+                                    <img src="{{ real_item.imageUrl.url }}" alt=""
+                                        class="w-full h-full object-contain p-1" loading="lazy">
                                 </div>
                                 {% else %}
-                                <div class="w-14 h-14 rounded-lg bg-indigo-50 flex items-center justify-center flex-shrink-0">
+                                <div
+                                    class="w-14 h-14 rounded-lg bg-indigo-50 flex items-center justify-center flex-shrink-0">
                                     <i class="bi bi-box-seam text-indigo-400 text-lg"></i>
                                 </div>
                                 {% endif %}
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-semibold text-slate-800 truncate">
-                                        {% if real_item.name %}{{ real_item.name }}{% elif real_item.title %}{{ real_item.title }}{% else %}Item{% endif %}
+                                        {% if real_item.name %}{{ real_item.name }}{% elif real_item.title %}{{
+                                        real_item.title }}{% else %}Item{% endif %}
                                     </p>
                                     <div class="flex items-center gap-2 mt-0.5">
                                         <span class="text-xs text-slate-400">Qty: {{ item.quantity }}</span>
-                                        <span class="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded font-medium">{{ item.get_item_type_display }}</span>
+                                        <span class="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded font-medium">
+                                            {{ item.get_item_type_display }}
+                                        </span>
                                     </div>
                                 </div>
-                                <span class="text-sm font-bold text-indigo-600 flex-shrink-0">Rs {{ item.get_subtotal|floatformat:2 }}</span>
+                                <span class="text-sm font-bold text-indigo-600 flex-shrink-0">
+                                    Rs {{ item.get_subtotal|floatformat:2 }}
+                                </span>
                                 {% endwith %}
                             </div>
                             {% endfor %}
@@ -412,7 +668,9 @@
                             <div class="flex justify-between items-center">
                                 <span class="text-base font-bold text-slate-900">Total</span>
                                 <div class="text-right">
-                                    <span class="text-2xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent" id="grandTotal">
+                                    <span
+                                        class="text-2xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"
+                                        id="grandTotal">
                                         Rs {{ total|floatformat:2 }}
                                     </span>
                                 </div>
@@ -429,17 +687,20 @@
                         </button>
 
                         <!-- Edit Cart Link -->
-                        <a href="{% url 'cart_details' %}" class="block text-center mt-3 text-sm text-slate-400 hover:text-indigo-600 transition-colors">
+                        <a href="{% url 'cart_details' %}"
+                            class="block text-center mt-3 text-sm text-slate-400 hover:text-indigo-600 transition-colors">
                             <i class="bi bi-pencil-square"></i> Edit Cart
                         </a>
                     </div>
                 </div>
 
                 <!-- Trust Badges -->
-                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm shadow-slate-200/50 p-5 slide-up slide-up-d3" data-reveal="up">
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm shadow-slate-200/50 p-5 slide-up slide-up-d3"
+                    data-reveal="up">
                     <div class="grid grid-cols-2 gap-4">
                         <div class="flex items-center gap-2.5">
-                            <div class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0 seal-glow">
+                            <div
+                                class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0 seal-glow">
                                 <i class="bi bi-shield-check text-emerald-600"></i>
                             </div>
                             <div>
@@ -485,70 +746,70 @@
     <script src="{% static 'global.js' %}"></script>
     <script src="{% static 'scroll-reveal.js' %}"></script>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
 
-        // ── Payment method radio cards ──
-        const payCards = document.querySelectorAll('.pay-card');
-        payCards.forEach(card => {
-            card.addEventListener('click', function() {
-                payCards.forEach(c => {
-                    c.classList.remove('selected');
-                    c.style.borderColor = '';
-                    const dot = c.querySelector('.pay-dot');
-                    const radio = c.querySelector('.pay-radio');
-                    if (dot) dot.classList.add('hidden');
-                    if (radio) radio.style.borderColor = '#cbd5e1';
-                    c.querySelector('input[type=radio]').checked = false;
-                });
-                this.classList.add('selected');
-                this.style.borderColor = '#6366f1';
-                const dot = this.querySelector('.pay-dot');
-                const radio = this.querySelector('.pay-radio');
-                if (dot) dot.classList.remove('hidden');
-                if (radio) radio.style.borderColor = '#6366f1';
-                this.querySelector('input[type=radio]').checked = true;
-            });
-        });
-
-        // ── Coupon Code AJAX ──
-        const couponBtn = document.getElementById('applyCouponBtn');
-        if (couponBtn) {
-            couponBtn.addEventListener('click', async function() {
-                const code = document.getElementById('coupon_code').value.trim();
-                const msg = document.getElementById('couponMsg');
-                if (!code) {
-                    msg.innerHTML = '<span class="text-red-500 flex items-center gap-1"><i class="bi bi-exclamation-circle"></i> Please enter a coupon code.</span>';
-                    return;
-                }
-                couponBtn.disabled = true;
-                couponBtn.innerHTML = '<i class="bi bi-hourglass-split animate-spin"></i> Checking...';
-                try {
-                    const res = await fetch('{% url "validate_coupon" %}', {
-                        method: 'POST',
-                        headers: {'Content-Type':'application/json', 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value},
-                        body: JSON.stringify({code: code, subtotal: {{ subtotal|floatformat:2 }} })
+            // ── Payment method radio cards ──
+            const payCards = document.querySelectorAll('.pay-card');
+            payCards.forEach(card => {
+                card.addEventListener('click', function () {
+                    payCards.forEach(c => {
+                        c.classList.remove('selected');
+                        c.style.borderColor = '';
+                        const dot = c.querySelector('.pay-dot');
+                        const radio = c.querySelector('.pay-radio');
+                        if (dot) dot.classList.add('hidden');
+                        if (radio) radio.style.borderColor = '#cbd5e1';
+                        c.querySelector('input[type=radio]').checked = false;
                     });
-                    const data = await res.json();
-                    if (data.valid) {
-                        msg.innerHTML = '<span class="text-emerald-600 flex items-center gap-1"><i class="bi bi-check-circle-fill"></i> Coupon applied! You save Rs ' + data.discount.toFixed(2) + '</span>';
-                        document.getElementById('discountRow').classList.remove('hidden');
-                        document.getElementById('discountVal').textContent = '-Rs ' + data.discount.toFixed(2);
-                        const newTotal = {{ total|floatformat:2 }} - data.discount;
-                        document.getElementById('grandTotal').textContent = 'Rs ' + newTotal.toFixed(2);
-                        showToast('Coupon applied successfully!', 'success');
-                    } else {
-                        msg.innerHTML = '<span class="text-red-500 flex items-center gap-1"><i class="bi bi-x-circle-fill"></i> ' + data.error + '</span>';
+                    this.classList.add('selected');
+                    this.style.borderColor = '#6366f1';
+                    const dot = this.querySelector('.pay-dot');
+                    const radio = this.querySelector('.pay-radio');
+                    if (dot) dot.classList.remove('hidden');
+                    if (radio) radio.style.borderColor = '#6366f1';
+                    this.querySelector('input[type=radio]').checked = true;
+                });
+            });
+
+            // ── Coupon Code AJAX ──
+            const couponBtn = document.getElementById('applyCouponBtn');
+            if (couponBtn) {
+                couponBtn.addEventListener('click', async function () {
+                    const code = document.getElementById('coupon_code').value.trim();
+                    const msg = document.getElementById('couponMsg');
+                    if (!code) {
+                        msg.innerHTML = '<span class="text-red-500 flex items-center gap-1"><i class="bi bi-exclamation-circle"></i> Please enter a coupon code.</span>';
+                        return;
                     }
-                } catch(e) {
-                    msg.innerHTML = '<span class="text-red-500 flex items-center gap-1"><i class="bi bi-x-circle-fill"></i> Failed to validate coupon.</span>';
-                }
-                couponBtn.disabled = false;
-                couponBtn.innerHTML = '<i class="bi bi-check2-circle"></i> Apply';
+                    couponBtn.disabled = true;
+                    couponBtn.innerHTML = '<i class="bi bi-hourglass-split animate-spin"></i> Checking...';
+                    try {
+                        const res = await fetch('{% url "validate_coupon" %}', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value },
+                            body: JSON.stringify({ code: code, subtotal: {{ subtotal|floatformat:2 }} })
+                        });
+                        const data = await res.json();
+                        if (data.valid) {
+                            msg.innerHTML = '<span class="text-emerald-600 flex items-center gap-1"><i class="bi bi-check-circle-fill"></i> Coupon applied! You save Rs ' + data.discount.toFixed(2) + '</span>';
+                            document.getElementById('discountRow').classList.remove('hidden');
+                            document.getElementById('discountVal').textContent = '-Rs ' + data.discount.toFixed(2);
+                            const newTotal = {{ total|floatformat:2 }} - data.discount;
+                            document.getElementById('grandTotal').textContent = 'Rs ' + newTotal.toFixed(2);
+        showToast('Coupon applied successfully!', 'success');
+                    } else {
+            msg.innerHTML = '<span class="text-red-500 flex items-center gap-1"><i class="bi bi-x-circle-fill"></i> ' + data.error + '</span>';
+        }
+                } catch (e) {
+            msg.innerHTML = '<span class="text-red-500 flex items-center gap-1"><i class="bi bi-x-circle-fill"></i> Failed to validate coupon.</span>';
+        }
+        couponBtn.disabled = false;
+        couponBtn.innerHTML = '<i class="bi bi-check2-circle"></i> Apply';
             });
         }
 
         // ── Form submit loading state ──
-        document.getElementById('checkoutForm').addEventListener('submit', function() {
+        document.getElementById('checkoutForm').addEventListener('submit', function () {
             const btn = document.getElementById('placeOrderBtn');
             btn.disabled = true;
             btn.innerHTML = '<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Processing...';
@@ -556,11 +817,11 @@
 
         // ── Floating labels effect ──
         document.querySelectorAll('.ck-input').forEach(input => {
-            input.addEventListener('focus', function() {
+            input.addEventListener('focus', function () {
                 this.parentElement.querySelector('i')?.classList.add('text-indigo-500');
                 this.parentElement.querySelector('i')?.classList.remove('text-slate-300');
             });
-            input.addEventListener('blur', function() {
+            input.addEventListener('blur', function () {
                 if (!this.value) {
                     this.parentElement.querySelector('i')?.classList.remove('text-indigo-500');
                     this.parentElement.querySelector('i')?.classList.add('text-slate-300');
@@ -570,4 +831,5 @@
     });
     </script>
 </body>
+
 </html>

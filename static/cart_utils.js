@@ -31,7 +31,7 @@ if (window.__cartUtilsBootstrapped) {
 } else {
     window.__cartUtilsBootstrapped = true;
 
-    async function addToCart(itemType, itemId, buttonElement = null) {
+    async function addToCart(itemType, itemId, buttonElement = null, unitPrice = null) {
         const fallbackUrl = `/cart/add/${itemType}/${itemId}/`;
 
         try {
@@ -57,7 +57,8 @@ if (window.__cartUtilsBootstrapped) {
                     'X-CSRFToken': csrftoken,
                     'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({ unit_price: unitPrice })
             });
 
             if (!response.ok) {
@@ -123,7 +124,14 @@ if (window.__cartUtilsBootstrapped) {
             e.preventDefault();
             e.stopPropagation();
             console.log(`Adding ${itemType} #${itemId} to cart...`);
-            addToCart(itemType, itemId, btn);
+
+            const card = btn.closest('[data-price], [data-product-price], .product-card, article, .card');
+            const unitPrice =
+                btn.dataset.productPrice ||
+                (card && (card.dataset.productPrice || card.dataset.price)) ||
+                null;
+
+            addToCart(itemType, itemId, btn, unitPrice);
         });
 
         console.log('✅ Cart Utils: Ready!');

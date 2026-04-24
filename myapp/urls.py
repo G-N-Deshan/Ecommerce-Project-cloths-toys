@@ -74,6 +74,11 @@ urlpatterns = [
     # Admin Dashboard
     path('dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('dashboard/order/<int:order_id>/update-status/', views.admin_update_order_status, name='admin_update_order_status'),
+    path('dashboard/order/<int:order_id>/details/', views.get_order_details, name='get_order_details'),
+    path('dashboard/export/orders/', views.export_orders_csv, name='export_orders_csv'),
+    path('dashboard/loyalty/manage/', views.manage_loyalty_points, name='manage_loyalty_points'),
+    path('dashboard/inventory/<int:inventory_id>/restock/', views.admin_inventory_restock, name='admin_inventory_restock'),
+    path('dashboard/inventory/<int:inventory_id>/threshold/', views.admin_inventory_update_threshold, name='admin_inventory_update_threshold'),
     path('subscribe-newsletter/', views.subscribe_newsletter, name='subscribe_newsletter'),
 
 

@@ -5,7 +5,7 @@ from .models import (Card, Offers, NewArrivals, Cloths, Review, ContactMessage, 
                      WishlistItem, Cart, CartItem, Order, OrderItem, ProductReview,
                      ProductImage, Inventory, Coupon, ProductVariant, OrderTracking,
                      SiteUpdate, ServiceReview, NewsletterSubscription,
-                     LoyaltyProfile, LoyaltyHistory)
+                     LoyaltyProfile, LoyaltyHistory, SiteBanner, SiteSettings)
 from .forms import ReviewForm, ContactForm, ServiceReviewForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -273,7 +273,13 @@ def ai_chat(request):
             })
 
     except Exception as e:
-        return JsonResponse({'message': "Oops! I hit a snag. Please try again or contact support."}, status=500)
+        import traceback
+        error_msg = traceback.format_exc()
+        print(f"AI Chat Error: {error_msg}")
+        return JsonResponse({
+            'message': f"I'm sorry, I encountered an internal error. (Debug: {str(e)})",
+            'products': []
+        }, status=200) # Use 200 so the UI can show the error message instead of failing silently
 
 
 # Create your views here.
@@ -336,7 +342,14 @@ def index(request):
                 'category': item.get_category(),
                 'item_type': item.item_type,
             })
-    
+
+    try:
+        active_banners = SiteBanner.objects.filter(is_active=True).order_by('order')
+        site_settings_obj = SiteSettings.get_settings()
+    except Exception:
+        active_banners = []
+        site_settings_obj = None
+
     context = {
         'cards': cards,
         'offers': offers,
@@ -344,6 +357,8 @@ def index(request):
         'wishlist_items': wishlist_items,
         'wishlist_count': wishlist_count,
         'cart_count': cart_count,
+        'active_banners': active_banners,
+        'site_settings': site_settings_obj,
     }
     
     return render(request, 'index.html', context)
@@ -1455,6 +1470,17 @@ def _wants_json(request):
 def add_to_cart(request, item_type, item_id):
     try:
         cart = get_or_create_cart(request)
+        requested_unit_price = None
+
+        # Optional unit price sent by frontend (price shown to user when clicking Add to Cart).
+        if request.method == 'POST' and request.body:
+            try:
+                payload = json.loads(request.body)
+                parsed_price = parse_catalog_price(payload.get('unit_price'))
+                if parsed_price > 0:
+                    requested_unit_price = Decimal(str(round(parsed_price, 2)))
+            except (TypeError, ValueError, json.JSONDecodeError):
+                requested_unit_price = None
         
         # Get the product based on item_type
         item = None
@@ -1498,7 +1524,15 @@ def add_to_cart(request, item_type, item_id):
 
         if not created:
             cart_item.quantity += 1
-            cart_item.save()
+
+        if cart_item.unit_price is None:
+            if requested_unit_price is not None:
+                cart_item.unit_price = requested_unit_price
+            else:
+                live_price = cart_item.get_live_price()
+                cart_item.unit_price = Decimal(str(round(live_price, 2))) if live_price > 0 else Decimal('0.00')
+
+        cart_item.save()
 
         item_name = item.name if hasattr(item, 'name') else item.title
         success_msg = f'✓ Added {item_name} to cart!'
@@ -1532,6 +1566,10 @@ def update_cart_item(request, cart_item_id):
         
         cart = get_or_create_cart(request)
         cart_item = get_object_or_404(CartItem, id=cart_item_id, cart=cart)
+
+        if cart_item.unit_price is None:
+            live_price = cart_item.get_live_price()
+            cart_item.unit_price = Decimal(str(round(live_price, 2))) if live_price > 0 else Decimal('0.00')
         
         cart_item.quantity = quantity
         cart_item.save()
@@ -2204,10 +2242,19 @@ def order_tracking(request, order_number):
 
 @login_required(login_url='login')
 def my_orders(request):
-    orders = Order.objects.filter(user=request.user)
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+
+    status_filter = request.GET.get('status', '').strip()
+    valid_statuses = {choice[0] for choice in Order.STATUS_CHOICES}
+    if status_filter in valid_statuses:
+        orders = orders.filter(status=status_filter)
+
     paginator = Paginator(orders, 10)
     page_obj = paginator.get_page(request.GET.get('page'))
-    return render(request, 'my_orders.html', {'orders': page_obj})
+    return render(request, 'my_orders.html', {
+        'orders': page_obj,
+        'status_filter': status_filter,
+    })
 
 
 # ══════════════════════════════════════════════════════
@@ -2238,7 +2285,147 @@ def validate_coupon(request):
             return JsonResponse({'valid': False, 'error': 'Invalid coupon code.'})
         except Exception:
             return JsonResponse({'valid': False, 'error': 'Something went wrong.'})
+
+
+# ══════════════════════════════════════════════════════
+# DASHBOARD UTILITIES (CSV Export, JSON Details)
+# ══════════════════════════════════════════════════════
+
+import csv
+from django.http import HttpResponse
+
+@login_required(login_url='login')
+def export_orders_csv(request):
+    if not request.user.is_staff:
+        return HttpResponse("Unauthorized", status=403)
+    from django.utils import timezone
+        
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="orders_{timezone.now().strftime("%Y%m%d")}.csv"'
+    
+    writer = csv.writer(response)
+    writer.writerow(['Order #', 'Customer', 'Email', 'Date', 'Total', 'Status', 'Payment'])
+    
+    orders = Order.objects.all().order_by('-created_at')
+    for o in orders:
+        writer.writerow([o.order_number, o.full_name, o.email, o.created_at.strftime('%Y-%m-%d %H:%M'), o.total, o.status, o.payment_method])
+        
+    return response
+
+@login_required(login_url='login')
+def get_order_details(request, order_id):
+    if not request.user.is_staff:
+        return JsonResponse({'error': 'Unauthorized'}, status=403)
+        
+    order = get_object_or_404(Order, id=order_id)
+    items = []
+    for item in order.items.all():
+        items.append({
+            'name': item.item_name,
+            'quantity': item.quantity,
+            'price': float(item.price),
+            'subtotal': float(item.subtotal)
+        })
+        
+    return JsonResponse({
+        'order_number': order.order_number,
+        'full_name': order.full_name,
+        'email': order.email,
+        'phone': order.phone,
+        'address': order.address,
+        'city': order.city,
+        'status': order.status,
+        'total': float(order.total),
+        'subtotal': float(order.subtotal),
+        'tax': float(order.tax),
+        'shipping': float(order.shipping),
+        'discount': float(order.discount),
+        'items': items
+    })
+
+@login_required(login_url='login')
+@require_POST
+def manage_loyalty_points(request):
+    if not request.user.is_staff:
+        return JsonResponse({'error': 'Unauthorized'}, status=403)
+        
+    try:
+        data = json.loads(request.body)
+        user_id = data.get('user_id')
+        points = int(data.get('points', 0))
+        description = data.get('description', 'Admin adjustment')
+        
+        profile = get_object_or_404(LoyaltyProfile, user_id=user_id)
+        profile.current_points += points
+        if points > 0:
+            profile.total_points_earned += points
+        profile.save()
+        profile.update_tier()
+        
+        LoyaltyHistory.objects.create(
+            profile=profile,
+            points=points,
+            description=description
+        )
+        
+        return JsonResponse({'success': True, 'new_points': profile.current_points, 'tier': profile.get_tier_display()})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
     return JsonResponse({'valid': False, 'error': 'Invalid request.'})
+
+
+@login_required(login_url='login')
+@require_POST
+def admin_inventory_restock(request, inventory_id):
+    if not request.user.is_staff:
+        return JsonResponse({'success': False, 'error': 'Unauthorized'}, status=403)
+
+    try:
+        data = json.loads(request.body)
+        quantity = int(data.get('quantity', 10))
+    except Exception:
+        quantity = 10
+
+    if quantity <= 0:
+        return JsonResponse({'success': False, 'error': 'Quantity must be greater than zero.'}, status=400)
+
+    inv = get_object_or_404(Inventory, id=inventory_id)
+    inv.stock = int(inv.stock) + quantity
+    inv.save(update_fields=['stock'])
+
+    return JsonResponse({
+        'success': True,
+        'stock': inv.stock,
+        'is_low_stock': inv.is_low_stock,
+        'message': f'Stock increased by {quantity}.',
+    })
+
+
+@login_required(login_url='login')
+@require_POST
+def admin_inventory_update_threshold(request, inventory_id):
+    if not request.user.is_staff:
+        return JsonResponse({'success': False, 'error': 'Unauthorized'}, status=403)
+
+    try:
+        data = json.loads(request.body)
+        threshold = int(data.get('threshold', 0))
+    except Exception:
+        return JsonResponse({'success': False, 'error': 'Invalid threshold value.'}, status=400)
+
+    if threshold < 0:
+        return JsonResponse({'success': False, 'error': 'Threshold cannot be negative.'}, status=400)
+
+    inv = get_object_or_404(Inventory, id=inventory_id)
+    inv.low_stock_threshold = threshold
+    inv.save(update_fields=['low_stock_threshold'])
+
+    return JsonResponse({
+        'success': True,
+        'threshold': inv.low_stock_threshold,
+        'is_low_stock': inv.is_low_stock,
+        'message': 'Low-stock threshold updated.',
+    })
 
 
 # ══════════════════════════════════════════════════════
@@ -2262,13 +2449,30 @@ def get_product_variants(request, product_id):
 # ADMIN DASHBOARD (Charts)
 # ══════════════════════════════════════════════════════
 
-@staff_member_required(login_url='login')
 def admin_dashboard(request):
+    if not request.user.is_staff:
+        messages.error(request, 'Access denied.')
+        return redirect('index')
 
     from django.db.models.functions import TruncMonth, TruncDate
     from datetime import timedelta
     from django.utils import timezone as tz
+    from django.db.models import Sum as models_sum, Count, F, Q, Avg
+    from django.contrib.sessions.models import Session
 
+    # 1. REAL-TIME PULSE (Last 5 mins)
+    five_mins_ago = tz.now() - timedelta(minutes=5)
+    active_sessions = Session.objects.filter(expire_date__gte=tz.now()).count()
+    # Simple estimation for "Live Now"
+    live_now = max(1, active_sessions // 4) # Adjusting for session expiry buffer
+
+    # 2. CORE STATS
+    total_orders = Order.objects.count()
+    total_revenue = Order.objects.aggregate(total=models_sum('total'))['total'] or 0
+    total_users = User.objects.count()
+    pending_orders = Order.objects.filter(status='pending').count()
+
+    # 3. REVENUE CHARTS
     six_months_ago = tz.now() - timedelta(days=180)
     monthly_revenue = list(
         Order.objects.filter(created_at__gte=six_months_ago)
@@ -2278,6 +2482,16 @@ def admin_dashboard(request):
         .order_by('month')
     )
 
+    thirty_days_ago = tz.now() - timedelta(days=30)
+    daily_orders = list(
+        Order.objects.filter(created_at__gte=thirty_days_ago)
+        .annotate(date=TruncDate('created_at'))
+        .values('date')
+        .annotate(count=Count('id'), total=models_sum('total'))
+        .order_by('date')
+    )
+
+    # 4. STATUS & TOP PRODUCTS
     status_counts = {
         s['status']: s['count']
         for s in Order.objects.values('status').annotate(count=Count('id'))
@@ -2289,28 +2503,65 @@ def admin_dashboard(request):
         .order_by('-total_qty')[:10]
     )
     for p in top_products:
-        if p.get('total_revenue') is not None:
-            p['total_revenue'] = float(p['total_revenue'])
-        if p.get('total_qty') is not None:
-            p['total_qty'] = int(p['total_qty'])
+        p['total_revenue'] = float(p.get('total_revenue') or 0)
+        p['total_qty'] = int(p.get('total_qty') or 0)
 
-    thirty_days_ago = tz.now() - timedelta(days=30)
-    daily_orders = list(
-        Order.objects.filter(created_at__gte=thirty_days_ago)
-        .annotate(date=TruncDate('created_at'))
-        .values('date')
-        .annotate(count=Count('id'), total=models_sum('total'))
-        .order_by('date')
-    )
+    # 5. CUSTOMER BEHAVIOR (Top Spenders)
+    top_spenders = User.objects.annotate(
+        total_spent=models_sum('orders__total'),
+        order_count=Count('orders')
+    ).filter(total_spent__gt=0).order_by('-total_spent')[:10]
 
+    # 6. ABANDONED CARTS (Carts with items > 2h old)
+    two_hours_ago = tz.now() - timedelta(hours=2)
+    abandoned_carts_count = Cart.objects.filter(
+        items__isnull=False, 
+        updated_at__lte=two_hours_ago
+    ).distinct().count()
+
+    # 7. INVENTORY FORECASTING
     low_stock = Inventory.objects.filter(stock__lte=F('low_stock_threshold'))
+    
+    # Calculate burn rate for forecasting (simple: units sold in last 30 days / 30)
+    forecast_data = []
+    all_inventory = Inventory.objects.all().select_related('cloth', 'toy', 'offer', 'arrival')
+    for inv in all_inventory:
+        product = inv.get_product()
+        name = getattr(product, 'name', None) or getattr(product, 'title', 'Unknown')
+        
+        # Get units sold in last 30 days
+        units_sold = OrderItem.objects.filter(
+            item_name=name, 
+            order__created_at__gte=thirty_days_ago
+        ).aggregate(total=models_sum('quantity'))['total'] or 0
+        
+        daily_burn = units_sold / 30.0
+        days_left = 999
+        if daily_burn > 0:
+            days_left = int(inv.stock / daily_burn)
+            
+        if days_left <= 7: # Only show forecast for items running out soon
+            forecast_data.append({
+                'name': name,
+                'stock': inv.stock,
+                'days_left': days_left,
+                'burn_rate': round(daily_burn, 2)
+            })
+    
+    forecast_data = sorted(forecast_data, key=lambda x: x['days_left'])[:5]
 
-    total_orders = Order.objects.count()
-    total_revenue = Order.objects.aggregate(total=models_sum('total'))['total'] or 0
-    total_users = User.objects.count()
-    pending_orders = Order.objects.filter(status='pending').count()
+    # 8. LOYALTY STATS
+    total_points_awarded = LoyaltyProfile.objects.aggregate(total=models_sum('total_points_earned'))['total'] or 0
+    top_loyalty_users = LoyaltyProfile.objects.select_related('user').order_by('-current_points')[:5]
 
-    # Pass recent orders for management
+    # 9. SITE CONTENT
+    try:
+        active_banners = SiteBanner.objects.filter(is_active=True)
+        site_settings = SiteSettings.get_settings()
+    except Exception:
+        active_banners = []
+        site_settings = None
+
     recent_orders = Order.objects.prefetch_related('user').order_by('-created_at')[:20]
 
     context = {
@@ -2329,6 +2580,15 @@ def admin_dashboard(request):
         'total_users': total_users,
         'pending_orders': pending_orders,
         'recent_orders': recent_orders,
+        'live_now': live_now,
+        'abandoned_carts_count': abandoned_carts_count,
+        'forecast_data': forecast_data,
+        'top_spenders': top_spenders,
+        'total_points_awarded': total_points_awarded,
+        'top_loyalty_users': top_loyalty_users,
+        'active_banners': active_banners,
+        'site_settings': site_settings,
+        'low_stock': low_stock,
     }
     return render(request, 'admin_dashboard.html', context)
 
@@ -2340,7 +2600,7 @@ def admin_dashboard(request):
 @login_required(login_url='login')
 @require_POST
 def admin_update_order_status(request, order_id):
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         return JsonResponse({'success': False, 'error': 'Unauthorized'}, status=403)
         
     try:

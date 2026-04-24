@@ -6,6 +6,7 @@
         align-items: center !important;
         z-index: 1100 !important;
     }
+
     .promo-banner {
         width: 100% !important;
         z-index: 1101 !important;
@@ -14,18 +15,19 @@
 
 <section class="section-0">
     <!-- PROMO BANNER INSIDE STICKY CONTAINER -->
-    <div class="promo-banner" role="alert">
+    <div class="promo-banner" role="alert" style="display: {% if site_settings.is_sale_active %}block{% else %}none{% endif %};">
         <div class="promo-content">
-            <span class="promo-icon">🎉</span> flash sale! use code <strong>KIDS20</strong> for 20% off all orders over Rs. 500! <span class="promo-icon">✨</span>
+            <span class="promo-icon">🎉</span> {{ site_settings.sale_text|safe }} <span class="promo-icon">✨</span>
         </div>
     </div>
     <nav class="navbar">
         <div>
             <!-- Logo on left -->
             <a href="{% url 'index' %}"><img src="{%static 'bird_2.jpg'%}" alt="logo" class="nav-logo"></a>
-            
+
             <!-- Hamburger Toggle Button (mobile only) -->
-            <button class="nav-hamburger" aria-label="Toggle navigation" aria-expanded="false" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('nav-open');this.setAttribute('aria-expanded',this.classList.contains('open'))">
+            <button class="nav-hamburger" aria-label="Toggle navigation" aria-expanded="false"
+                onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('nav-open');this.setAttribute('aria-expanded',this.classList.contains('open'))">
                 <span class="hamburger-line"></span>
                 <span class="hamburger-line"></span>
                 <span class="hamburger-line"></span>
@@ -33,18 +35,21 @@
 
             <!-- Navigation Links Centered -->
             <div class="nav-links-container">
-                <button><a href="{% url 'index' %}" class="nav-link nav-link--home">Home</a></button>
-                <button><a href="{% url 'buy' %}" class="nav-link nav-link--vehicles">BUY</a></button>
-                <button><a href="{% url 'reviews' %}" class="nav-link nav-link--reviews"> Reviews</a></button>
-                <button><a href="{% url 'contact_us' %}" class="nav-link nav-link--contact">Contact</a></button>
-                <button><a href="{% url 'about' %}" class="nav-link nav-link--about">About</a></button>
-                
+                <a href="{% url 'index' %}" class="nav-link nav-link--home">Home</a>
+                <a href="{% url 'buy' %}" class="nav-link nav-link--vehicles">BUY</a>
+                <a href="{% url 'reviews' %}" class="nav-link nav-link--reviews"> Reviews</a>
+                <a href="{% url 'contact_us' %}" class="nav-link nav-link--contact">Contact</a>
+                <a href="{% url 'about' %}" class="nav-link nav-link--about">About</a>
+
                 <!-- Search (icon-first, reveal on hover/focus) -->
                 <form action="{% url 'search' %}" method="GET" class="nav-search-form" aria-label="Search products">
-                    <input type="text" name="q" placeholder="Search products" class="nav-search-input" aria-label="Search query">
+                    <input type="text" name="q" placeholder="Search products" class="nav-search-input"
+                        aria-label="Search query">
                     <button type="submit" class="nav-search-btn" title="Search" aria-label="Search">
                         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                            <path d="M10.5 4a6.5 6.5 0 1 0 4.05 11.58l4.44 4.44a1 1 0 0 0 1.42-1.42l-4.44-4.44A6.5 6.5 0 0 0 10.5 4zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z"></path>
+                            <path
+                                d="M10.5 4a6.5 6.5 0 1 0 4.05 11.58l4.44 4.44a1 1 0 0 0 1.42-1.42l-4.44-4.44A6.5 6.5 0 0 0 10.5 4zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z">
+                            </path>
                         </svg>
                     </button>
                 </form>
@@ -53,34 +58,44 @@
                 {% if user.is_authenticated %}
                 <a href="{% url 'wishlist' %}" class="wishlist-icon-link" title="Wishlist">
                     <span class="wishlist-icon" aria-hidden="true">♡</span>
-                    <span class="wishlist-count-badge" data-wishlist-count>{{ wishlist_count|default:0 }}</span>
+                    <span class="wishlist-count-badge" data-wishlist-count="{{ wishlist_count|default:0 }}">{{ wishlist_count|default:0 }}</span>
                 </a>
                 <a href="{% url 'cart_details' %}" class="cart-icon-link" title="Shopping Cart">
                     <span class="cart-icon">🛒</span>
-                    <span class="cart-count-badge" data-cart-count>{{ cart_count|default:0 }}</span>
+                    <span class="cart-count-badge" data-cart-count="{{ cart_count|default:0 }}">{{ cart_count|default:0 }}</span>
                 </a>
-                <a href="{% url 'loyalty_dashboard' %}" class="loyalty-icon-link" title="G11 Rewards" style="text-decoration:none; margin-left:1.5rem; font-size:1.2rem;">
-                    <span class="loyalty-icon">🎖️</span>
+                <a href="{% url 'loyalty_dashboard' %}" class="loyalty-icon-link" title="G11 Rewards">
+                    <span class="loyalty-icon" aria-hidden="true">🎖️</span>
+                    <span class="loyalty-count-badge" data-loyalty-count="{{ loyalty_points|default:0 }}">{{ loyalty_points|default:0 }}</span>
                 </a>
                 {% endif %}
 
                 <!-- Mobile-only auth links -->
                 {% if user.is_authenticated %}
-                <button class="nav-mobile-auth"><a href="{% url 'profile' %}" class="nav-link">{{ user.username }}</a></button>
-                <form method="post" action="{% url 'logout' %}" class="nav-mobile-auth" style="display:inline">{% csrf_token %}<button type="submit" class="nav-link nav-link--logout" style="background:none;border:none;cursor:pointer;font:inherit;padding:0.75rem 1.5rem;display:block;width:100%;text-align:left">Logout</button></form>
+                <button class="nav-mobile-auth"><a href="{% url 'profile' %}" class="nav-link">{{ user.username
+                        }}</a></button>
+                <form method="post" action="{% url 'logout' %}" class="nav-mobile-auth" style="display:inline">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-link nav-link--logout" style="background:none; border:none; cursor:pointer; font:inherit; padding:0.75rem 1.5rem; display:block; width:100%; text-align:left">Logout</button>
+                </form>
                 {% else %}
-                <button class="nav-mobile-auth"><a href="{% url 'login' %}" class="nav-link nav-link--login">Login</a></button>
+                <button class="nav-mobile-auth"><a href="{% url 'login' %}"
+                        class="nav-link nav-link--login">Login</a></button>
                 {% endif %}
             </div>
 
             <!-- Login/Logout on right (desktop) -->
             {% if user.is_authenticated %}
-            <form method="post" action="{% url 'logout' %}" class="nav-desktop-auth" style="display:inline">{% csrf_token %}<button type="submit" class="nav-link nav-link--logout" style="background:none;border:none;cursor:pointer;font:inherit;letter-spacing:0.2rem;padding:0.5rem;margin-right:2rem">Logout</button></form>
+            <form method="post" action="{% url 'logout' %}" class="nav-desktop-auth" style="display:inline">
+                {% csrf_token %}
+                <button type="submit" class="nav-link nav-link--logout" style="background:none; border:none; cursor:pointer; font:inherit; letter-spacing:0.2rem; padding:0.5rem; margin-right:2rem">Logout</button>
+            </form>
             <button class="user-profile-btn nav-desktop-auth" title="{{ user.username }}">
                 <a href="{% url 'profile' %}" class="nav-link">{{ user.username }}</a>
             </button>
             {% else %}
-            <button class="login-btn nav-desktop-auth"><a href="{% url 'login' %}" class="nav-link nav-link--login">Login</a></button>
+            <button class="login-btn nav-desktop-auth"><a href="{% url 'login' %}"
+                    class="nav-link nav-link--login">Login</a></button>
             {% endif %}
         </div>
     </nav>

@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from decimal import Decimal
 import re
 
 class Card(models.Model):
@@ -327,6 +328,8 @@ class CartItem(models.Model):
     offer = models.ForeignKey('Offers', on_delete=models.CASCADE, null=True, blank=True)
     arrival = models.ForeignKey('NewArrivals', on_delete=models.CASCADE, null=True, blank=True)
     
+    # Snapshot unit price at add-to-cart time so cart totals stay stable.
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
     
@@ -352,7 +355,7 @@ class CartItem(models.Model):
         """
         if value is None:
             return 0.0
-        if isinstance(value, (int, float)):
+        if isinstance(value, (int, float, Decimal)):
             return float(value)
 
         s = str(value).strip()
@@ -366,7 +369,7 @@ class CartItem(models.Model):
         except ValueError:
             return 0.0
 
-    def get_price(self):
+    def get_live_price(self):
         item = self.get_item()
         if not item:
             return 0.0
@@ -380,6 +383,11 @@ class CartItem(models.Model):
         elif self.item_type == 'arrival':
             return self._to_float(item.price or 0)
         return 0.0
+
+    def get_price(self):
+        if self.unit_price is not None:
+            return float(self.unit_price)
+        return self.get_live_price()
     
     def get_subtotal(self):
         return self.get_price() * self.quantity
@@ -701,3 +709,38 @@ class LoyaltyHistory(models.Model):
 
     def __str__(self):
         return f"{self.profile.user.username}: {self.points} pts - {self.description}"
+
+
+# ══════════════════════════════════════════════════════
+# SITE CONTENT MANAGEMENT
+# ══════════════════════════════════════════════════════
+
+class SiteBanner(models.Model):
+    title = models.CharField(max_length=100)
+    subtitle = models.CharField(max_length=200, blank=True)
+    image = models.ImageField(upload_to='banners/')
+    link_url = models.CharField(max_length=200, default='/')
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['order']
+        verbose_name = 'Site Banner'
+        verbose_name_plural = 'Site Banners'
+
+    def __str__(self):
+        return self.title
+
+class SiteSettings(models.Model):
+    sale_text = models.CharField(max_length=200, default="Mega Summer Sale - Up to 50% Off!")
+    is_sale_active = models.BooleanField(default=True)
+    
+    @classmethod
+    def get_settings(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+    class Meta:
+        verbose_name = 'Site Settings'
+        verbose_name_plural = 'Site Settings'

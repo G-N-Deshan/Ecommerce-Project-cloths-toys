@@ -101,7 +101,12 @@ function quickAddToCart() {
     if (!_quickViewData.cartUrl) return;
     fetch(_quickViewData.cartUrl, {
         method: 'POST',
-        headers: { 'X-CSRFToken': getCsrfToken(), 'X-Requested-With': 'XMLHttpRequest' },
+        headers: {
+            'X-CSRFToken': getCsrfToken(),
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ unit_price: _quickViewData.price || null }),
     })
     .then(r => r.json())
     .then(data => {

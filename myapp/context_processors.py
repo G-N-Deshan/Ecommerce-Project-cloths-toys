@@ -1,44 +1,21 @@
-from .models import Cart, WishlistItem
-
-# Breadcrumb mapping: URL path prefix -> (label, url)
-BREADCRUMB_MAP = {
-    '/about/': 'About Us',
-    '/contact/': 'Contact',
-    '/buy/': 'Shop',
-    '/shop-offers/': 'Shop Offers',
-    '/new_arrivals/': 'New Arrivals',
-    '/cloths/': 'Cloths',
-    '/kids_cloths/': 'Kids Cloths',
-    '/women_cloths/': "Women's Cloths",
-    '/mens_cloths/': "Men's Cloths",
-    '/toys/': 'Toys',
-    '/reviews/': 'Reviews',
-    '/service-reviews/': 'Service Reviews',
-    '/cart/': 'Cart',
-    '/cart_details_page/': 'Cart Details',
-    '/wishlist/': 'Wishlist',
-    '/checkout/': 'Checkout',
-    '/profile/': 'Profile',
-    '/search/': 'Search',
-    '/my-orders/': 'My Orders',
-    '/login/': 'Login',
-    '/signup/': 'Sign Up',
-    '/dashboard/': 'Dashboard',
-    '/payment/': 'Payment',
-}
-
+from .models import Cart, WishlistItem, LoyaltyProfile, SiteSettings
 
 def global_context(request):
-    """Provide cart_count, wishlist_count, and breadcrumbs to every template."""
     cart_count = 0
     wishlist_count = 0
+    loyalty_points = 0
 
     try:
         if request.user.is_authenticated:
             cart = Cart.objects.filter(user=request.user).first()
             if cart:
                 cart_count = cart.get_item_count()
+
             wishlist_count = WishlistItem.objects.filter(user=request.user).count()
+
+            profile = LoyaltyProfile.objects.filter(user=request.user).first()
+            if profile:
+                loyalty_points = int(profile.current_points)
         else:
             session_key = getattr(request.session, 'session_key', None)
             if session_key:
@@ -48,22 +25,23 @@ def global_context(request):
     except Exception:
         pass
 
-    # Auto-generate breadcrumbs
-    path = request.path
-    breadcrumbs = []
-    if path != '/':
-        label = BREADCRUMB_MAP.get(path)
-        if label:
-            breadcrumbs = [{'label': label, 'url': None}]
-        elif path.startswith('/product/'):
-            breadcrumbs = [{'label': 'Shop', 'url': '/buy/'}, {'label': 'Product Detail', 'url': None}]
-        elif path.startswith('/order-tracking/'):
-            breadcrumbs = [{'label': 'My Orders', 'url': '/my-orders/'}, {'label': 'Order Tracking', 'url': None}]
-        elif path.startswith('/order-success/'):
-            breadcrumbs = [{'label': 'Order Confirmed', 'url': None}]
+    try:
+        settings_obj = SiteSettings.get_settings()
+    except Exception:
+        settings_obj = None
 
     return {
         'cart_count': cart_count,
         'wishlist_count': wishlist_count,
-        'breadcrumbs': breadcrumbs,
+        'loyalty_points': loyalty_points,
+        'site_settings': settings_obj,
     }
+
+def site_settings(request):
+    """
+    Makes site_settings globally available in all templates.
+    """
+    try:
+        return {'site_settings': SiteSettings.get_settings()}
+    except:
+        return {}

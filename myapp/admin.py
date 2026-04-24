@@ -3,7 +3,8 @@ from django.contrib import admin
 from django.utils.html import format_html
 from .models import (Card, Cloths, Offers, NewArrivals, Review, ContactMessage, Toy,
                      WishlistItem, Cart, CartItem, Order, OrderItem, ProductReview,
-                     ProductImage, Inventory, Coupon, ProductVariant, OrderTracking)
+                     ProductImage, Inventory, Coupon, ProductVariant, OrderTracking,
+                     SiteBanner, SiteSettings)
 from .models import ServiceReview
 
 # Admin site branding
@@ -233,9 +234,12 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ['order_number', 'user__username', 'email', 'full_name']
     readonly_fields = ['order_number', 'created_at', 'updated_at', 'user', 'subtotal', 'tax', 'shipping', 'discount', 'total']
     list_editable = ['payment_method']
+    list_select_related = ['user']
+    list_per_page = 30
     date_hierarchy = 'created_at'
+    save_on_top = True
     inlines = [OrderItemInline, OrderTrackingInline]
-    actions = ['mark_processing', 'mark_shipped', 'mark_delivered', 'mark_cancelled']
+    actions = ['mark_processing', 'mark_shipped', 'mark_delivered', 'mark_cancelled', 'delete_cancelled_orders', 'delete_selected_orders']
     
     fieldsets = (
         ('Order Info', {
@@ -286,6 +290,56 @@ class OrderAdmin(admin.ModelAdmin):
     @admin.action(description='Mark as Cancelled')
     def mark_cancelled(self, request, queryset):
         queryset.update(status='cancelled')
+    
+    @admin.action(description='🗑️ Delete Selected Orders (Permanently)')
+    def delete_selected_orders(self, request, queryset):
+        """
+        Custom delete action with proper confirmation and audit trail.
+        """
+        from django.contrib import messages
+        count = queryset.count()
+        
+        # Delete order items first (cascade safety)
+        OrderItem.objects.filter(order__in=queryset).delete()
+        
+        # Delete order tracking updates
+        OrderTracking.objects.filter(order__in=queryset).delete()
+        
+        # Delete orders
+        queryset.delete()
+        
+        messages.success(
+            request,
+            f'✅ Successfully deleted {count} order{"s" if count > 1 else ""} and their associated data.'
+        )
+    
+    @admin.action(description='🗑️ Delete Only Cancelled Orders')
+    def delete_cancelled_orders(self, request, queryset):
+        """
+        Delete only orders with 'cancelled' status as a safety measure.
+        """
+        from django.contrib import messages
+        
+        cancelled_orders = queryset.filter(status='cancelled')
+        count = cancelled_orders.count()
+        
+        if count == 0:
+            messages.warning(request, 'No cancelled orders selected to delete.')
+            return
+        
+        # Delete order items first
+        OrderItem.objects.filter(order__in=cancelled_orders).delete()
+        
+        # Delete order tracking updates
+        OrderTracking.objects.filter(order__in=cancelled_orders).delete()
+        
+        # Delete orders
+        cancelled_orders.delete()
+        
+        messages.success(
+            request,
+            f'✅ Successfully deleted {count} cancelled order{"s" if count > 1 else ""}.'
+        )
 
 
 @admin.register(OrderItem)
@@ -354,23 +408,25 @@ class ProductImageAdmin(admin.ModelAdmin):
 
 @admin.register(Inventory)
 class InventoryAdmin(admin.ModelAdmin):
-    list_display = ['get_product_name', 'product_type', 'sku', 'stock', 'low_stock_threshold', 'stock_status']
+    list_display = ['get_product_name', 'product_type', 'sku', 'stock', 'low_stock_threshold', 'stock_badge']
     list_filter = ['product_type']
-    search_fields = ['sku']
-    list_editable = ['stock', 'low_stock_threshold']
+    search_fields = ['sku', 'cloth__name', 'toy__name', 'offer__title', 'arrival__title']
+    list_editable = ['stock']
+    ordering = ['stock', 'sku']
+    list_per_page = 50
 
     def get_product_name(self, obj):
         product = obj.get_product()
         return getattr(product, 'name', None) or getattr(product, 'title', '?')
     get_product_name.short_description = 'Product'
 
-    def stock_status(self, obj):
+    def stock_badge(self, obj):
         if not obj.is_in_stock:
-            return format_html('<span style="color:#ef4444;font-weight:600">Out of Stock</span>')
+            return format_html('<span style="color:{};font-weight:600">{}</span>', '#ef4444', 'Out of Stock')
         if obj.is_low_stock:
-            return format_html('<span style="color:#f59e0b;font-weight:600">Low Stock</span>')
-        return format_html('<span style="color:#10b981;font-weight:600">In Stock</span>')
-    stock_status.short_description = 'Status'
+            return format_html('<span style="color:{};font-weight:600">{}</span>', '#f59e0b', 'Low Stock')
+        return format_html('<span style="color:{};font-weight:600">{}</span>', '#10b981', 'In Stock')
+    stock_badge.short_description = 'Status'
 
 
 @admin.register(Coupon)
@@ -383,8 +439,8 @@ class CouponAdmin(admin.ModelAdmin):
 
     def coupon_status(self, obj):
         if obj.is_valid():
-            return format_html('<span style="color:#10b981;font-weight:600">Active</span>')
-        return format_html('<span style="color:#ef4444;font-weight:600">Expired/Invalid</span>')
+            return format_html('<span style="color:{};font-weight:600">{}</span>', '#10b981', 'Active')
+        return format_html('<span style="color:{};font-weight:600">{}</span>', '#ef4444', 'Expired/Invalid')
     coupon_status.short_description = 'Status'
 
 
@@ -410,4 +466,18 @@ class OrderTrackingAdmin(admin.ModelAdmin):
     list_filter = ['status', 'created_at']
     search_fields = ['order__order_number']
     readonly_fields = ['created_at']
+
+
+@admin.register(SiteBanner)
+class SiteBannerAdmin(admin.ModelAdmin):
+    list_display = ['title', 'is_active', 'order', 'created_at']
+    list_filter = ['is_active']
+    search_fields = ['title', 'subtitle']
+    list_editable = ['is_active', 'order']
+    ordering = ['order', 'id']
+
+
+@admin.register(SiteSettings)
+class SiteSettingsAdmin(admin.ModelAdmin):
+    list_display = ['sale_text', 'is_sale_active']
 

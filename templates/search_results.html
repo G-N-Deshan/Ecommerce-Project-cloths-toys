@@ -31,37 +31,43 @@
             font-weight: 600; cursor: pointer; transition: background 0.3s;
         }
         .search-bar button:hover { background: #d97706; }
-        .results-container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .results-container { max-width: 1280px; margin: 3rem auto; padding: 0 1.5rem; position: relative; z-index: 10; }
         .results-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem;
+            margin-bottom: 2.5rem; text-align: center;
         }
-        .results-header h2 { font-size: 1.3rem; color: #1e293b; }
-        .results-header span { color: #64748b; }
+        .results-header h2 { font-size: 1.5rem; color: #0f172a; font-weight: 800; letter-spacing: -0.025em; }
         .results-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
             gap: 1.5rem;
         }
+        @media (min-width: 768px) { .results-grid { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
+        @media (min-width: 1024px) { .results-grid { grid-template-columns: repeat(4, 1fr); } }
+
         .result-card {
-            background: #fff; border-radius: 1rem; overflow: hidden;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition: transform 0.3s, box-shadow 0.3s;
-            text-decoration: none; color: inherit;
+            background: #fff; border-radius: 1.5rem; overflow: hidden;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 4px 20px -4px rgba(0,0,0,0.05); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none; color: inherit; display: flex; flex-direction: column;
         }
-        .result-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(99,102,241,0.15); }
+        .result-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -12px rgba(99,102,241,0.15); border-color: #e0e7ff; }
+        
+        .result-img-wrapper { position: relative; width: 100%; height: 240px; overflow: hidden; background: #f8fafc; }
         .result-card img {
-            width: 100%; height: 220px; object-fit: cover;
-            background: linear-gradient(135deg, #ede9fe, #e0e7ff);
+            width: 100%; height: 100%; object-fit: contain; padding: 1.5rem;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .result-card-body { padding: 1rem; }
+        .result-card:hover img { transform: scale(1.1); }
+        
+        .result-card-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
         .result-type {
-            display: inline-block; padding: 0.2rem 0.6rem;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: #fff; border-radius: 20px; font-size: 0.7rem; font-weight: 600;
-            margin-bottom: 0.5rem;
+            display: inline-block; padding: 0.25rem 0.75rem;
+            background: #f1f5f9; color: #64748b; border-radius: 20px; font-size: 0.65rem; font-weight: 700;
+            margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; align-self: flex-start;
         }
-        .result-card h3 { font-size: 1rem; color: #1e293b; margin-bottom: 0.3rem; }
-        .result-price { font-size: 1.1rem; font-weight: 700; color: #6366f1; }
-        .result-rating { color: var(--accent); font-size: 0.85rem; margin-top: 0.3rem; }
+        .result-card h3 { font-size: 1rem; color: #1e293b; margin-bottom: 0.5rem; font-weight: 700; line-height: 1.4; flex: 1; }
+        .result-price { font-size: 1.25rem; font-weight: 800; color: #4f46e5; margin-top: auto; }
+        .result-rating { color: #f59e0b; font-size: 0.8rem; margin-top: 0.5rem; font-weight: 600; display: flex; align-items: center; gap: 0.25rem; }
         .no-results {
             text-align: center; padding: 4rem 1rem; color: #64748b;
         }
@@ -138,11 +144,13 @@
     <div class="results-grid">
         {% for item in results %}
         <a href="{{ item.url }}" class="result-card">
-            {% if item.image %}
-            <img src="{{ item.image }}" alt="{{ item.name }}" loading="lazy">
-            {% else %}
-            <img src="" alt="{{ item.name }}" style="background:linear-gradient(135deg,#ede9fe,#e0e7ff)">
-            {% endif %}
+            <div class="result-img-wrapper">
+                {% if item.image %}
+                <img src="{{ item.image }}" alt="{{ item.name }}" loading="lazy">
+                {% else %}
+                <img src="" alt="{{ item.name }}">
+                {% endif %}
+            </div>
             <div class="result-card-body">
                 <span class="result-type">{{ item.type }}</span>
                 <h3>{{ item.name }}</h3>

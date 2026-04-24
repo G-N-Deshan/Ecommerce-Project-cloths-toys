@@ -2,7 +2,7 @@
     position: fixed;
     top: 11rem;
     right: 2rem;
-    z-index: 99;
+    z-index: 1500;
 }
 
 .cart-icon-btn {
@@ -100,7 +100,8 @@
     .cart-container {
         top: auto;
         bottom: 2rem;
-        right: 2rem;
+        left: 2rem;
+        right: auto;
     }
 
     .cart-icon-btn {

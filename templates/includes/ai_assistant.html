@@ -305,11 +305,26 @@
         document.getElementById('ai-messages-list').appendChild(typing);
         document.getElementById('ai-messages-list').scrollTop = document.getElementById('ai-messages-list').scrollHeight;
 
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
         fetch('{% url "ai_chat" %}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}'
+                'X-CSRFToken': getCookie('csrftoken')
             },
             body: JSON.stringify({ message: text })
         })

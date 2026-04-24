@@ -95,7 +95,7 @@
 
         .action-buttons {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
             gap: 1rem;
         }
 
@@ -147,6 +147,12 @@
         @media (max-width: 768px) {
             .action-buttons {
                 grid-template-columns: 1fr;
+            }
+
+            .detail-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.35rem;
             }
         }
 
@@ -362,16 +368,14 @@
             </div>
             <div class="detail-row">
                 <span class="detail-label">Total:</span>
-                <span class="detail-value" style="font-size: 1.2rem; color: #6366f1;">${{ order.total|floatformat:2
-                    }}</span>
+                <span class="detail-value" style="font-size: 1.2rem; color: #6366f1;">Rs {{ order.total|floatformat:2 }}</span>
             </div>
-
             <div class="items-list">
                 <h3>Order Items</h3>
                 {% for item in order_items %}
                 <div class="order-item">
                     <span>{{ item.item_name }} x{{ item.quantity }}</span>
-                    <span>${{ item.subtotal|floatformat:2 }}</span>
+                    <span>Rs {{ item.subtotal|floatformat:2 }}</span>
                 </div>
                 {% empty %}
                 <p style="text-align: center; color: #64748b;">No items in order</p>
@@ -381,6 +385,7 @@
 
         <div class="action-buttons">
             <a href="{% url 'order_tracking' order.order_number %}" class="btn btn-primary" style="background: linear-gradient(135deg, #4f46e5, #ec4899); border: none; font-weight: 600; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);">📍 Track Order</a>
+            <a href="{% url 'my_orders' %}" class="btn btn-secondary">Order History</a>
             <a href="{% url 'buy' %}" class="btn btn-secondary">Continue Shopping &rarr;</a>
         </div>
     </div>
