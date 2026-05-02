@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KidZone Order Confirmation</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            color: #1f2937;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .header {
+            background-color: #4f46e5;
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+        .content {
+            padding: 40px;
+        }
+        .greeting {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #111827;
+        }
+        .order-meta {
+            background-color: #f9fafb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid #e5e7eb;
+        }
+        .meta-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .meta-row:last-child {
+            margin-bottom: 0;
+        }
+        .meta-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+        .meta-value {
+            font-weight: 600;
+            color: #111827;
+        }
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        .items-table th {
+            text-align: left;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .items-table td {
+            padding: 16px 0;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 15px;
+        }
+        .item-name {
+            font-weight: 500;
+            color: #111827;
+        }
+        .item-qty {
+            color: #6b7280;
+        }
+        .item-price {
+            text-align: right;
+            font-weight: 500;
+        }
+        .totals {
+            margin-left: auto;
+            width: 60%;
+        }
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+            color: #4b5563;
+        }
+        .total-row.grand-total {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+            border-top: 2px solid #e5e7eb;
+            padding-top: 16px;
+            margin-top: 8px;
+        }
+        .shipping-info {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .shipping-info h3 {
+            font-size: 16px;
+            color: #111827;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+        .shipping-info p {
+            color: #4b5563;
+            font-size: 14px;
+            margin: 4px 0;
+        }
+        .cta-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #4f46e5;
+            color: white;
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .footer {
+            background-color: #f9fafb;
+            padding: 30px 40px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>KidZone</h1>
+        </div>
+        
+        <div class="content">
+            <div class="greeting">Hi {{ order.full_name }},</div>
+            <p style="color: #4b5563; margin-top: 0; margin-bottom: 30px; font-size: 15px;">
+                Thank you for your purchase! We're getting your order ready to be shipped. We will notify you when it has been sent.
+            </p>
+            
+            <div class="order-meta">
+                <div class="meta-row">
+                    <span class="meta-label">Order Number</span>
+                    <span class="meta-value">{{ order.order_number }}</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Order Date</span>
+                    <span class="meta-value">{{ order.created_at|date:"M d, Y" }}</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Payment Method</span>
+                    <span class="meta-value">{{ order.payment_method|title }}</span>
+                </div>
+            </div>
+            
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th style="text-align: center;">Qty</th>
+                        <th style="text-align: right;">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>
+                            <div class="item-name">{{ item.item_name }}</div>
+                        </td>
+                        <td style="text-align: center;" class="item-qty">{{ item.quantity }}</td>
+                        <td class="item-price">Rs. {{ item.subtotal }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <div class="totals">
+                <div class="total-row">
+                    <span>Subtotal</span>
+                    <span>Rs. {{ order.subtotal }}</span>
+                </div>
+                {% if order.discount > 0 %}
+                <div class="total-row" style="color: #059669;">
+                    <span>Discount{% if order.coupon_code %} ({{ order.coupon_code }}){% endif %}</span>
+                    <span>- Rs. {{ order.discount }}</span>
+                </div>
+                {% endif %}
+                <div class="total-row">
+                    <span>Tax</span>
+                    <span>Rs. {{ order.tax }}</span>
+                </div>
+                <div class="total-row">
+                    <span>Shipping</span>
+                    <span>Rs. {{ order.shipping }}</span>
+                </div>
+                <div class="total-row grand-total">
+                    <span>Total</span>
+                    <span>Rs. {{ order.total }}</span>
+                </div>
+            </div>
+            
+            <div class="shipping-info">
+                <h3>Shipping Address</h3>
+                <p>{{ order.full_name }}</p>
+                <p>{{ order.address }}</p>
+                <p>{{ order.city }}{% if order.postal_code %}, {{ order.postal_code }}{% endif %}</p>
+                <p>{{ order.country }}</p>
+                {% if order.phone %}<p>{{ order.phone }}</p>{% endif %}
+            </div>
+            
+            <div class="cta-container">
+                <a href="{{ tracking_url }}" class="btn">View Order Status</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p style="margin-top: 0;">If you have any questions, reply to this email or contact us at support@kidzone.com</p>
+            <p style="margin-bottom: 0;">&copy; {% now "Y" %} KidZone. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

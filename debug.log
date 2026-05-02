@@ -13696,3 +13696,101 @@ INFO 2026-04-24 20:37:59,014 autoreload 18056 8408 Watching for file changes wit
 WARNING 2026-04-24 20:39:37,671 log 18056 9220 Not Found: /favicon.ico
 INFO 2026-04-24 20:50:20,836 autoreload 18056 8408 C:\Users\nipun\Desktop\Ecommerce project\myproject\wsgi.py changed, reloading.
 INFO 2026-04-24 20:50:22,602 autoreload 29636 28708 Watching for file changes with StatReloader
+ERROR 2026-04-25 03:14:41,931 middleware 29636 12172 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-04-25 03:14:42,041 log 29636 12172 Not Found: /media/about-hero.jpg
+WARNING 2026-04-25 03:14:42,212 log 29636 13792 Not Found: /favicon.ico
+INFO 2026-05-02 11:39:48,494 autoreload 3704 26020 Watching for file changes with StatReloader
+WARNING 2026-05-02 11:39:53,987 log 3704 18264 Not Found: /favicon.ico
+ERROR 2026-05-02 11:41:21,907 middleware 3704 15320 Exception: 
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\allauth\socialaccount\providers\oauth2\views.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\allauth\socialaccount\providers\base\views.py", line 15, in dispatch
+    provider = self.get_provider()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\allauth\socialaccount\providers\oauth2\views.py", line 113, in get_provider
+    return self.adapter.get_provider()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\allauth\socialaccount\providers\oauth2\views.py", line 45, in get_provider
+    return get_adapter(self.request).get_provider(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.request, provider=self.provider_id
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\allauth\socialaccount\adapter.py", line 212, in get_provider
+    app = self.get_app(request, provider=provider, client_id=client_id)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\allauth\socialaccount\adapter.py", line 302, in get_app
+    raise SocialApp.DoesNotExist()
+allauth.socialaccount.models.SocialApp.DoesNotExist
+ERROR 2026-05-02 11:41:22,050 log 3704 15320 Internal Server Error: /accounts/google/login/
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\allauth\socialaccount\providers\oauth2\views.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\allauth\socialaccount\providers\base\views.py", line 15, in dispatch
+    provider = self.get_provider()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\allauth\socialaccount\providers\oauth2\views.py", line 113, in get_provider
+    return self.adapter.get_provider()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\allauth\socialaccount\providers\oauth2\views.py", line 45, in get_provider
+    return get_adapter(self.request).get_provider(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.request, provider=self.provider_id
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\allauth\socialaccount\adapter.py", line 212, in get_provider
+    app = self.get_app(request, provider=provider, client_id=client_id)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\allauth\socialaccount\adapter.py", line 302, in get_app
+    raise SocialApp.DoesNotExist()
+allauth.socialaccount.models.SocialApp.DoesNotExist
+INFO 2026-05-02 11:48:13,969 autoreload 3704 26020 C:\Users\nipun\Desktop\Ecommerce project\myproject\settings.py changed, reloading.
+INFO 2026-05-02 11:48:15,133 autoreload 28592 4312 Watching for file changes with StatReloader
+INFO 2026-05-02 11:48:36,797 autoreload 28592 4312 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 11:48:37,880 autoreload 33396 17420 Watching for file changes with StatReloader
+INFO 2026-05-02 11:49:33,693 autoreload 33396 17420 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 11:49:34,945 autoreload 12540 26752 Watching for file changes with StatReloader
+INFO 2026-05-02 12:08:12,110 autoreload 30032 22908 Watching for file changes with StatReloader
+INFO 2026-05-02 12:16:14,803 autoreload 30032 22908 C:\Users\nipun\Desktop\Ecommerce project\myproject\settings.py changed, reloading.
+INFO 2026-05-02 12:16:15,945 autoreload 22044 7068 Watching for file changes with StatReloader
+INFO 2026-05-02 12:17:41,578 autoreload 22044 7068 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 12:17:43,068 autoreload 25172 8700 Watching for file changes with StatReloader
+WARNING 2026-05-02 12:19:36,547 log 25172 14948 Not Found: /favicon.ico
+INFO 2026-05-02 12:24:30,655 autoreload 10576 12596 Watching for file changes with StatReloader
+WARNING 2026-05-02 12:24:38,064 log 10576 392 Not Found: /favicon.ico
+INFO 2026-05-02 12:27:10,957 autoreload 21020 18232 Watching for file changes with StatReloader
+WARNING 2026-05-02 12:27:15,489 log 21020 9268 Not Found: /favicon.ico
+INFO 2026-05-02 12:27:57,112 autoreload 21020 18232 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 12:27:58,307 autoreload 22252 16548 Watching for file changes with StatReloader
+INFO 2026-05-02 12:28:17,275 autoreload 10672 23120 Watching for file changes with StatReloader
+WARNING 2026-05-02 12:28:24,001 log 10672 13176 Not Found: /favicon.ico
+INFO 2026-05-02 12:28:54,014 autoreload 10672 23120 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 12:28:55,060 autoreload 18920 11584 Watching for file changes with StatReloader
+INFO 2026-05-02 12:29:12,659 autoreload 22816 4044 Watching for file changes with StatReloader
+WARNING 2026-05-02 12:29:16,841 log 22816 10444 Not Found: /favicon.ico
+INFO 2026-05-02 12:30:01,255 autoreload 22816 4044 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 12:30:02,275 autoreload 32048 12436 Watching for file changes with StatReloader
+INFO 2026-05-02 12:30:22,067 autoreload 14756 23740 Watching for file changes with StatReloader
+WARNING 2026-05-02 12:30:25,906 log 14756 28420 Not Found: /favicon.ico
+INFO 2026-05-02 12:31:14,418 autoreload 14756 23740 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 12:31:15,619 autoreload 19488 20996 Watching for file changes with StatReloader
+INFO 2026-05-02 12:31:26,728 autoreload 33020 29140 Watching for file changes with StatReloader
+WARNING 2026-05-02 12:31:34,062 log 33020 6928 Not Found: /favicon.ico
+INFO 2026-05-02 12:35:01,208 autoreload 33020 29140 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 12:35:02,348 autoreload 17580 30788 Watching for file changes with StatReloader
+INFO 2026-05-02 12:42:38,621 autoreload 13148 20484 Watching for file changes with StatReloader
+WARNING 2026-05-02 12:42:47,753 log 13148 11032 Not Found: /favicon.ico
+INFO 2026-05-02 13:17:02,006 autoreload 26564 1844 Watching for file changes with StatReloader

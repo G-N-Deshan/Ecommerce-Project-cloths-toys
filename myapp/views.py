@@ -163,114 +163,129 @@ def redeem_loyalty_points(request):
 @csrf_exempt
 @require_POST
 def ai_chat(request):
-    """Smart Concierge AI Assistant Logic"""
+    """Smart Concierge AI Assistant Logic via Gemini API"""
     try:
         data = json.loads(request.body)
-        query = data.get('message', '').lower().strip()
+        query = data.get('message', '').strip()
         
         if not query:
-            return JsonResponse({'message': "I'm your G11 Assistant! How can I help you today?"})
+            return JsonResponse({'message': "I'm your KidZone Assistant! How can I help you today?"})
 
-        # 1. Simple FAQ logic
-        if any(word in query for word in ['ship', 'delivery', 'track', 'arrive']):
-            return JsonResponse({
-                'message': "🎁 **Shipping Info:** We offer standard delivery (3-5 days) and Express (1-2 days). You'll get a tracking link via email as soon as we dispatch your order!",
-                'products': []
-            })
+        api_key = django_settings.GEMINI_API_KEY.strip()
+        if not api_key:
+            return JsonResponse({'message': "I'm currently running in basic mode because my AI brain (API key) isn't configured yet! Check out our New Arrivals in the meantime.", 'products': []})
             
-        if any(word in query for word in ['return', 'refund', 'exchange', 'policy']):
-            return JsonResponse({
-                'message': "🔄 **Returns:** We have a worry-free 30-day return policy. Just ensure the items are unused and have their original tags.",
-                'products': []
-            })
+        import urllib.request
+        
+        api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
+        
+        prompt = f"""You are a helpful and friendly ecommerce assistant for KidZone, a store selling kids clothes, men's clothes, women's clothes, and toys.
+The user says: "{query}"
+
+Analyze the request and return ONLY a valid JSON object matching this exact structure (no markdown blocks like ```json):
+{{
+    "message": "Your friendly, conversational response to the user. Use emojis! Keep it short and helpful. Be conversational.",
+    "search_params": {{
+        "keywords": ["list", "of", "search", "keywords", "if", "they", "are", "looking", "for", "specific", "items"],
+        "category": "Identify if they want 'men', 'women', 'kids-men', 'kids-girl', 'toy', or null if unspecified",
+        "age_mentions": ["list", "of", "numbers", "if", "they", "mention", "age", "like", "5"]
+    }}
+}}"""
+        
+        payload = {
+            "contents": [{
+                "parts": [{"text": prompt}]
+            }]
+        }
+        
+        req = urllib.request.Request(
+            api_url, 
+            data=json.dumps(payload).encode('utf-8'), 
+            headers={'Content-Type': 'application/json'}
+        )
+        
+        with urllib.request.urlopen(req) as response:
+            result = json.loads(response.read().decode('utf-8'))
+            response_text = result['candidates'][0]['content']['parts'][0]['text'].strip()
+        
+        if response_text.startswith('```json'):
+            response_text = response_text[7:]
+        if response_text.startswith('```'):
+            response_text = response_text[3:]
+        if response_text.endswith('```'):
+            response_text = response_text[:-3]
             
-        if any(word in query for word in ['size', 'chart', 'fit', 'measurement']):
-            return JsonResponse({
-                'message': "📏 **Sizing:** Most of our clothes are true-to-size. You can find a specific size guide on every product detail page!",
-                'products': []
-            })
-
-        if any(word in query for word in ['style', 'match', 'advice', 'wear', 'combine', 'outfit']):
-            return JsonResponse({
-                'message': "👗 **Style Advice:** For a balanced look, try pairing our bold patterned tops with neutral-colored pants. Soft pastels work great for spring, while deep indigo and mustard are perfect for cooler seasons! Need a specific match? Tell me what color you're starting with.",
-                'products': []
-            })
-
-        # 2. Product Search Logic
-        import re
+        try:
+            ai_data = json.loads(response_text.strip())
+        except json.JSONDecodeError:
+            return JsonResponse({'message': "Sorry, my brain got a bit tangled up! Could you try rephrasing that?", 'products': []})
+            
+        message = ai_data.get('message', "Here's what I found!")
+        search_params = ai_data.get('search_params', {})
+        keywords = search_params.get('keywords', [])
+        category = search_params.get('category')
+        age_mentions = search_params.get('age_mentions', [])
         
-        # Extract numbers (potentially ages)
-        ages = re.findall(r'\b\d+\b', query)
+        products_out = []
         
-        stop_words = {'i', 'want', 'need', 'to', 'buy', 'shop', 'for', 'a', 'the', 'is', 'find', 'me', 'some', 'looking', 'gift', 'present', 'year', 'years', 'old'}
-        raw_words = query.split()
-        keywords = [word for word in raw_words if word not in stop_words and not word.isdigit()]
-        
-        if not keywords and not ages:
-            return JsonResponse({
-                'message': "I'm ready to help! You can ask me for product recommendations (e.g., 'blue dresses') or gift ideas by age.",
-                'products': []
-            })
-
-        # Initialize Q objects
-        toy_q = Q()
-        cloth_q = Q()
-
-        # Handle gender/category mapping
-        if any(w in raw_words for w in ['boy', 'boys', 'son', 'male']):
-            toy_q |= Q(category__icontains='educational') | Q(category__icontains='building')
-            cloth_q |= Q(category__icontains='kids-men') | Q(category__icontains='men')
-        if any(w in raw_words for w in ['girl', 'girls', 'daughter', 'female']):
-            toy_q |= Q(category__icontains='creative') | Q(category__icontains='plush')
-            cloth_q |= Q(category__icontains='kids-girl') | Q(category__icontains='women')
-
-        # Handle age matching
-        for age in ages:
-            toy_q |= Q(age_range__icontains=age)
-            # For clothes, we search description/name for age mentioned
-            cloth_q |= Q(name__icontains=age) | Q(desccription__icontains=age)
-
-        # Keyword matching
-        for kw in keywords:
-            if len(kw) > 2:
-                toy_q |= Q(name__icontains=kw) | Q(description__icontains=kw) | Q(category__icontains=kw)
-                cloth_q |= Q(name__icontains=kw) | Q(desccription__icontains=kw) | Q(category__icontains=kw)
-
-        toys = Toy.objects.filter(toy_q).distinct()[:3]
-        cloths = Cloths.objects.filter(cloth_q).distinct()[:3]
-        
-        products = []
-        for t in toys:
-            products.append({
-                'name': t.name,
-                'price': f"Rs. {t.price}",
-                'url': f"/product/toy/{t.id}/",
-                'image': t.imageUrl.url if t.imageUrl else ''
-            })
-        for c in cloths:
-            products.append({
-                'name': c.name,
-                'price': c.price2 or c.price1 or c.price,
-                'url': f"/product/cloth/{c.id}/",
-                'image': c.imageUrl.url if c.imageUrl else ''
-            })
-
-        if products:
-            return JsonResponse({
-                'message': f"✨ I've curated a few items for you based on **'{query}'**. Hope you love them!",
-                'products': products
-            })
-        else:
-            if any(w in raw_words for w in ['why', 'how', 'explain', 'what']):
-                return JsonResponse({
-                    'message': "🤔 I'm still learning! Right now, I can find products by color, category, or age (like 'blue dress' or 'toys for 3 year old'). I can also help with shipping and return info. What can I help you find?",
-                    'products': []
+        if keywords or category or age_mentions:
+            toy_q = Q()
+            cloth_q = Q()
+            
+            # Map category strictly
+            if category == 'toy':
+                cloth_q = Q(id__isnull=True) # Exclude cloths
+            elif category in ['men', 'women', 'kids-men', 'kids-girl']:
+                cloth_q &= Q(category=category)
+                toy_q = Q(id__isnull=True) # Exclude toys
+                
+            # Keyword matching
+            kw_toy_q = Q()
+            kw_cloth_q = Q()
+            if keywords:
+                for kw in keywords:
+                    if len(kw) > 2:
+                        kw_toy_q |= Q(name__icontains=kw) | Q(description__icontains=kw) | Q(category__icontains=kw)
+                        kw_cloth_q |= Q(name__icontains=kw) | Q(desccription__icontains=kw) | Q(category__icontains=kw)
+                if kw_toy_q:
+                    toy_q &= kw_toy_q
+                if kw_cloth_q:
+                    cloth_q &= kw_cloth_q
+                        
+            # Age matching
+            age_toy_q = Q()
+            age_cloth_q = Q()
+            if age_mentions:
+                for age in age_mentions:
+                    age_toy_q |= Q(age_range__icontains=str(age))
+                    age_cloth_q |= Q(name__icontains=str(age)) | Q(desccription__icontains=str(age))
+                if age_toy_q:
+                    toy_q &= age_toy_q
+                if age_cloth_q:
+                    cloth_q &= age_cloth_q
+                    
+            toys = Toy.objects.filter(toy_q).distinct()[:3] if category == 'toy' or not category else []
+            cloths = Cloths.objects.filter(cloth_q).distinct()[:3] if category != 'toy' else []
+            
+            for t in toys:
+                products_out.append({
+                    'name': t.name,
+                    'price': f"Rs. {t.price}",
+                    'url': f"/product/toy/{t.id}/",
+                    'image': t.imageUrl.url if t.imageUrl else ''
                 })
-            
-            return JsonResponse({
-                'message': "🔍 I couldn't find an exact match for that specific request, but check out these **New Arrivals** — they're trending right now!",
-                'products': []
-            })
+            for c in cloths:
+                products_out.append({
+                    'name': c.name,
+                    'price': f"Rs. {c.price2 or c.price1 or c.price}",
+                    'url': f"/product/cloth/{c.id}/",
+                    'image': c.imageUrl.url if c.imageUrl else ''
+                })
+                
+        return JsonResponse({
+            'message': message,
+            'products': products_out
+        })
 
     except Exception as e:
         import traceback
@@ -2868,7 +2883,7 @@ def payment_success(request):
     OrderTracking.objects.create(order=order, status='pending', note='Order placed — payment confirmed via Stripe.')
 
     # Send order confirmation email
-    _send_order_confirmation_email(order)
+    _send_order_confirmation_email(order, request)
 
     cart.items.all().delete()
     messages.success(request, f'Payment successful! Order {order_number} placed.')
@@ -2907,38 +2922,39 @@ def stripe_webhook(request):
     return HttpResponse(status=200)
 
 
-def _send_order_confirmation_email(order):
-    """Send a rich order confirmation email."""
+def _send_order_confirmation_email(order, request=None):
+    """Send a rich HTML order confirmation email."""
     try:
-        subject = f'Order Confirmed — {order.order_number}'
-        items = order.items.all()
-        items_text = '\n'.join(f"  - {i.quantity}x {i.item_name} — Rs. {i.subtotal}" for i in items)
-        message = (
-            f"Hi {order.full_name},\n\n"
-            f"Your order {order.order_number} has been placed successfully!\n\n"
-            f"Items:\n{items_text}\n\n"
-            f"Subtotal: Rs. {order.subtotal}\n"
-            f"Tax: Rs. {order.tax}\n"
-            f"Shipping: Rs. {order.shipping}\n"
-        )
-        if order.discount > 0:
-            message += f"Discount: -Rs. {order.discount}\n"
-        message += (
-            f"Total: Rs. {order.total}\n\n"
-            f"Payment: {order.payment_method}\n"
-            f"Shipping to: {order.address}, {order.city}\n\n"
-            f"Track your order at: /order-tracking/{order.order_number}/\n\n"
-            f"Thank you for shopping with KidZone!"
-        )
+        from django.utils.html import strip_tags
+        subject = f'KidZone Order Confirmed — {order.order_number}'
+        
+        tracking_url = f"/order-tracking/{order.order_number}/"
+        if request:
+            tracking_url = request.build_absolute_uri(tracking_url)
+        
+        # Context for the template
+        context = {
+            'order': order,
+            'items': order.items.all(),
+            'tracking_url': tracking_url,
+        }
+        
+        # Render HTML template
+        html_message = render_to_string('emails/order_confirmation.html', context)
+        
+        # Fallback plain text
+        plain_message = strip_tags(html_message)
+        
         send_mail(
             subject=subject,
-            message=message,
+            message=plain_message,
             from_email=django_settings.DEFAULT_FROM_EMAIL,
             recipient_list=[order.email],
             fail_silently=True,
+            html_message=html_message
         )
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"Failed to send order confirmation email: {e}")
 
 
 # ══════════════════════════════════════════════════════

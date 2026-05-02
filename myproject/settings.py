@@ -158,14 +158,16 @@ CSRF_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_HTTPONLY = False  # must be False for JS AJAX
 
 # ── Email ─────────────────────────────────────────────
-if DEBUG:
+EMAIL_HOST_USER_CONFIG = config('EMAIL_HOST_USER', default='')
+
+if DEBUG and (not EMAIL_HOST_USER_CONFIG or EMAIL_HOST_USER_CONFIG == 'your-email@gmail.com'):
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
     EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
     EMAIL_USE_TLS = True
-    EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+    EMAIL_HOST_USER = EMAIL_HOST_USER_CONFIG
     EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 
 DEFAULT_FROM_EMAIL = 'KidZone <noreply@kidzone.com>'
@@ -175,6 +177,9 @@ PASSWORD_RESET_TIMEOUT = 3600
 STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY', default='pk_test_placeholder')
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY', default='sk_test_placeholder')
 STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET', default='whsec_placeholder')
+
+# ── Google Gemini AI ──────────────────────────────────
+GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
 
 # ── REST Framework ────────────────────────────────────
 REST_FRAMEWORK = {
