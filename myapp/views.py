@@ -169,7 +169,7 @@ def ai_chat(request):
         query = data.get('message', '').strip()
         
         if not query:
-            return JsonResponse({'message': "I'm your KidZone Assistant! How can I help you today?"})
+            return JsonResponse({'message': "I'm your G11 shopping assistant! How can I help you today?"})
 
         api_key = django_settings.GEMINI_API_KEY.strip()
         if not api_key:
@@ -177,10 +177,10 @@ def ai_chat(request):
             
         import urllib.request
         
-        api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
+        api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
         
-        prompt = f"""You are a helpful and friendly ecommerce assistant for KidZone, a store selling kids clothes, men's clothes, women's clothes, and toys.
-The user says: "{query}"
+        prompt = f"""You are a helpful and friendly ecommerce assistant for G11 Fashion & Toys, a store selling kids clothes, men's clothes, women's clothes, and toys.
+    The user says: "{query}"
 
 Analyze the request and return ONLY a valid JSON object matching this exact structure (no markdown blocks like ```json):
 {{
@@ -198,27 +198,71 @@ Analyze the request and return ONLY a valid JSON object matching this exact stru
             }]
         }
         
-        req = urllib.request.Request(
-            api_url, 
-            data=json.dumps(payload).encode('utf-8'), 
-            headers={'Content-Type': 'application/json'}
-        )
-        
-        with urllib.request.urlopen(req) as response:
-            result = json.loads(response.read().decode('utf-8'))
-            response_text = result['candidates'][0]['content']['parts'][0]['text'].strip()
-        
-        if response_text.startswith('```json'):
-            response_text = response_text[7:]
-        if response_text.startswith('```'):
-            response_text = response_text[3:]
-        if response_text.endswith('```'):
-            response_text = response_text[:-3]
-            
+        ai_data = None
+
         try:
-            ai_data = json.loads(response_text.strip())
-        except json.JSONDecodeError:
-            return JsonResponse({'message': "Sorry, my brain got a bit tangled up! Could you try rephrasing that?", 'products': []})
+            req = urllib.request.Request(
+                api_url,
+                data=json.dumps(payload).encode('utf-8'),
+                headers={'Content-Type': 'application/json'}
+            )
+
+            with urllib.request.urlopen(req) as response:
+                result = json.loads(response.read().decode('utf-8'))
+                response_text = result['candidates'][0]['content']['parts'][0]['text'].strip()
+
+            if response_text.startswith('```json'):
+                response_text = response_text[7:]
+            if response_text.startswith('```'):
+                response_text = response_text[3:]
+            if response_text.endswith('```'):
+                response_text = response_text[:-3]
+
+            try:
+                ai_data = json.loads(response_text.strip())
+            except json.JSONDecodeError:
+                ai_data = None
+        except Exception:
+            ai_data = None
+
+        if not ai_data:
+            # Fallback: lightweight local parsing so the assistant still returns products
+            lowered = query.lower()
+            age_mentions = [int(m) for m in re.findall(r'\b(\d{1,2})\b', lowered)]
+
+            category = None
+            if any(word in lowered for word in ['toy', 'toys', 'teddy', 'doll', 'lego', 'puzzle', 'game', 'car']):
+                category = 'toy'
+            elif any(word in lowered for word in ['men', "men's", 'mens', 'man', 'gents', 'male']):
+                category = 'men'
+            elif any(word in lowered for word in ['women', "women's", 'womens', 'woman', 'ladies', 'female']):
+                category = 'women'
+            elif any(word in lowered for word in ['boys', 'boy', 'kids boy', 'kid boy']):
+                category = 'kids-men'
+            elif any(word in lowered for word in ['girls', 'girl', 'kids girl', 'kid girl']):
+                category = 'kids-girl'
+
+            raw_words = re.findall(r'[a-z0-9]+', lowered)
+            stop_words = {
+                'show', 'me', 'the', 'a', 'an', 'for', 'to', 'of', 'and', 'or', 'with',
+                'i', 'want', 'need', 'looking', 'find', 'buy', 'get', 'please', 'some',
+                'any', 'my', 'your', 'in', 'on', 'at', 'from', 'is', 'are', 'you', 'today'
+            }
+            keywords = [w for w in raw_words if len(w) > 2 and w not in stop_words]
+
+            if not keywords and category is None and not age_mentions:
+                message = "I can help with toys or clothing. Tell me what you're looking for!"
+            else:
+                message = "I'm having trouble reaching the AI right now, but I can still show matching items."
+
+            ai_data = {
+                'message': message,
+                'search_params': {
+                    'keywords': keywords,
+                    'category': category,
+                    'age_mentions': age_mentions
+                }
+            }
             
         message = ai_data.get('message', "Here's what I found!")
         search_params = ai_data.get('search_params', {})
@@ -292,7 +336,7 @@ Analyze the request and return ONLY a valid JSON object matching this exact stru
         error_msg = traceback.format_exc()
         print(f"AI Chat Error: {error_msg}")
         return JsonResponse({
-            'message': f"I'm sorry, I encountered an internal error. (Debug: {str(e)})",
+            'message': "I'm sorry, I ran into a snag. Please try again in a moment.",
             'products': []
         }, status=200) # Use 200 so the UI can show the error message instead of failing silently
 
@@ -594,31 +638,36 @@ def user_signup(request):
         })
 
     if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
+        username = (request.POST.get('username') or '').strip()
+        email = (request.POST.get('email') or '').strip().lower()
         password = request.POST.get('password')
         password2 = request.POST.get('password2')
 
         signup_data = {
-            'username': (request.POST.get('username') or '').strip(),
+            'username': username,
             'full_name': (request.POST.get('full_name') or '').strip(),
-            'email': (request.POST.get('email') or '').strip(),
+            'email': email,
             'address': (request.POST.get('address') or '').strip(),
             'phone': (request.POST.get('phone') or '').strip(),
         }
-        
+
+        # --- Validations ---
+        if not email or '@' not in email or '.' not in email.split('@')[-1]:
+            messages.error(request, 'Please enter a valid email address.')
+            return render_signup_with_data(signup_data)
+
         if password != password2:
             messages.error(request, 'Passwords do not match')
             return render_signup_with_data(signup_data)
-        
+
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Username already exists')
             return render_signup_with_data(signup_data)
-        
+
         if User.objects.filter(email=email).exists():
-            messages.error(request, 'Email already registered')
+            messages.error(request, 'An account with this email already exists')
             return render_signup_with_data(signup_data)
-        
+
         # Validate password strength
         try:
             validate_password(password, user=User(username=username, email=email))
@@ -626,15 +675,21 @@ def user_signup(request):
             for error in e.messages:
                 messages.error(request, error)
             return render_signup_with_data(signup_data)
-        
+
         user = User.objects.create_user(username=username, email=email, password=password)
+        full_name = signup_data['full_name']
+        if full_name:
+            parts = full_name.split(' ', 1)
+            user.first_name = parts[0]
+            user.last_name = parts[1] if len(parts) > 1 else ''
         user.save()
-        
+
         auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-        messages.success(request, 'Account created successfully!')
+        messages.success(request, 'Account created successfully! Welcome to KidZone 🎉')
         return redirect('index')
-    
+
     return render_signup_with_data()
+
 
 
 @require_POST
@@ -3100,3 +3155,44 @@ def check_updates(request):
     except SiteUpdate.DoesNotExist:
         ts = ''
     return JsonResponse({'ts': ts})
+
+
+def quick_view_api(request, item_type, item_id):
+    """Return product data as JSON for the Quick View modal."""
+    from .models import Cloths, Toy, Offers, NewArrivals
+
+    try:
+        if item_type == 'cloth':
+            item = Cloths.objects.get(id=item_id)
+            title = item.name
+            price = item.price2 or item.price1 or item.price
+            desc = item.desccription
+        elif item_type == 'toy':
+            item = Toy.objects.get(id=item_id)
+            title = item.name
+            price = item.price
+            desc = item.description
+        elif item_type == 'offer':
+            item = Offers.objects.get(id=item_id)
+            title = item.title
+            price = item.price2 or item.price1
+            desc = item.description
+        elif item_type == 'arrival':
+            item = NewArrivals.objects.get(id=item_id)
+            title = item.title
+            price = item.price
+            desc = item.description
+        else:
+            return JsonResponse({'error': 'Invalid item type'}, status=400)
+
+        data = {
+            'id': item.id,
+            'item_type': item_type,
+            'title': title,
+            'price': str(price),
+            'description': desc,
+            'image_url': item.imageUrl.url if item.imageUrl else '',
+        }
+        return JsonResponse(data)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=404)

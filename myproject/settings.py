@@ -159,19 +159,23 @@ CSRF_COOKIE_HTTPONLY = False  # must be False for JS AJAX
 
 # ── Email ─────────────────────────────────────────────
 EMAIL_HOST_USER_CONFIG = config('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD_CONFIG = config('EMAIL_HOST_PASSWORD', default='')
 
-if DEBUG and (not EMAIL_HOST_USER_CONFIG or EMAIL_HOST_USER_CONFIG == 'your-email@gmail.com'):
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-else:
+# Always use real SMTP if credentials are set (even in dev/debug)
+# This ensures Forgot Password emails actually get sent to Gmail.
+if EMAIL_HOST_USER_CONFIG and EMAIL_HOST_PASSWORD_CONFIG:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
     EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
     EMAIL_USE_TLS = True
     EMAIL_HOST_USER = EMAIL_HOST_USER_CONFIG
-    EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+    EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD_CONFIG
+else:
+    # Fallback: print emails to console (dev with no credentials)
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-DEFAULT_FROM_EMAIL = 'KidZone <noreply@kidzone.com>'
-PASSWORD_RESET_TIMEOUT = 3600
+DEFAULT_FROM_EMAIL = f'KidZone <{config("EMAIL_HOST_USER", default="noreply@kidzone.com")}>'
+PASSWORD_RESET_TIMEOUT = 3600  # link valid for 1 hour
 
 # ── Stripe ────────────────────────────────────────────
 STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY', default='pk_test_placeholder')

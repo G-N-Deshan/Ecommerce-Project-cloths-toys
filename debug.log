@@ -13794,3 +13794,184 @@ INFO 2026-05-02 12:35:02,348 autoreload 17580 30788 Watching for file changes wi
 INFO 2026-05-02 12:42:38,621 autoreload 13148 20484 Watching for file changes with StatReloader
 WARNING 2026-05-02 12:42:47,753 log 13148 11032 Not Found: /favicon.ico
 INFO 2026-05-02 13:17:02,006 autoreload 26564 1844 Watching for file changes with StatReloader
+INFO 2026-05-02 13:30:35,413 autoreload 26564 1844 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 13:30:36,503 autoreload 19712 11868 Watching for file changes with StatReloader
+INFO 2026-05-02 13:44:11,469 autoreload 19712 11868 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 13:44:13,268 autoreload 33664 13940 Watching for file changes with StatReloader
+WARNING 2026-05-02 13:45:26,551 log 33664 19508 Not Found: /favicon.ico
+WARNING 2026-05-02 13:48:30,209 log 33664 9936 Not Found: /favicon.ico
+ERROR 2026-05-02 13:48:35,956 middleware 33664 9936 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-05-02 13:48:36,024 log 33664 9936 Not Found: /media/about-hero.jpg
+WARNING 2026-05-02 13:55:05,027 log 33664 22780 Not Found: /favicon.ico
+INFO 2026-05-02 13:58:18,156 autoreload 10912 9832 Watching for file changes with StatReloader
+INFO 2026-05-02 14:01:55,309 autoreload 10912 9832 C:\Users\nipun\Desktop\Ecommerce project\myproject\settings.py changed, reloading.
+INFO 2026-05-02 14:01:55,323 autoreload 33664 13940 C:\Users\nipun\Desktop\Ecommerce project\myproject\settings.py changed, reloading.
+INFO 2026-05-02 14:01:56,571 autoreload 32708 8812 Watching for file changes with StatReloader
+INFO 2026-05-02 14:01:56,749 autoreload 3600 3576 Watching for file changes with StatReloader
+INFO 2026-05-02 14:02:40,364 autoreload 3600 3576 C:\Users\nipun\Desktop\Ecommerce project\myapp\urls.py changed, reloading.
+INFO 2026-05-02 14:02:40,370 autoreload 32708 8812 C:\Users\nipun\Desktop\Ecommerce project\myapp\urls.py changed, reloading.
+INFO 2026-05-02 14:02:41,552 autoreload 7540 26280 Watching for file changes with StatReloader
+INFO 2026-05-02 14:02:41,814 autoreload 26700 32012 Watching for file changes with StatReloader
+WARNING 2026-05-02 14:05:05,116 log 7540 9516 Not Found: /favicon.ico
+INFO 2026-05-02 14:11:28,286 autoreload 26700 32012 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 14:11:28,288 autoreload 7540 26280 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 14:11:29,574 autoreload 30680 6380 Watching for file changes with StatReloader
+INFO 2026-05-02 14:11:29,817 autoreload 9720 17980 Watching for file changes with StatReloader
+INFO 2026-05-02 14:12:26,143 autoreload 34096 34248 Watching for file changes with StatReloader
+WARNING 2026-05-02 14:12:31,416 log 9720 12344 Not Found: /favicon.ico
+INFO 2026-05-02 14:19:35,982 autoreload 23188 27852 Watching for file changes with StatReloader
+WARNING 2026-05-02 14:19:50,515 log 9720 29656 Not Found: /favicon.ico
+WARNING 2026-05-02 14:19:51,565 log 9720 24764 Not Found: /favicon.ico
+ERROR 2026-05-02 14:33:54,844 middleware 9720 15652 Exception: Reverse for 'new-bg-1' not found. 'new-bg-1' is not a valid view function or pattern name.
+Traceback (most recent call last):
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 379, in index
+    return render(request, 'index.html', context)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\defaulttags.py", line 581, in render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\defaulttags.py", line 249, in render
+    nodelist.append(node.render_annotated(context))
+                    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\defaulttags.py", line 333, in render
+    return nodelist.render(context)
+           ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\defaulttags.py", line 511, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\urls\resolvers.py", line 842, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'new-bg-1' not found. 'new-bg-1' is not a valid view function or pattern name.
+ERROR 2026-05-02 14:33:55,056 log 9720 15652 Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 379, in index
+    return render(request, 'index.html', context)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\defaulttags.py", line 581, in render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\defaulttags.py", line 249, in render
+    nodelist.append(node.render_annotated(context))
+                    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\defaulttags.py", line 333, in render
+    return nodelist.render(context)
+           ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\defaulttags.py", line 511, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\urls\resolvers.py", line 842, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'new-bg-1' not found. 'new-bg-1' is not a valid view function or pattern name.
+WARNING 2026-05-02 14:36:40,849 log 9720 16320 Not Found: /favicon.ico
+INFO 2026-05-02 14:37:49,380 autoreload 23188 27852 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 14:37:49,413 autoreload 9720 17980 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 14:37:50,920 autoreload 7272 33464 Watching for file changes with StatReloader
+INFO 2026-05-02 14:37:51,276 autoreload 4328 24876 Watching for file changes with StatReloader
+INFO 2026-05-02 15:00:37,702 autoreload 17860 17800 Watching for file changes with StatReloader
+WARNING 2026-05-02 15:00:46,144 log 4328 28884 Not Found: /favicon.ico
+INFO 2026-05-02 15:07:14,664 autoreload 4100 33020 Watching for file changes with StatReloader
+WARNING 2026-05-02 15:07:24,500 log 4328 2560 Not Found: /favicon.ico
+INFO 2026-05-02 15:08:03,123 autoreload 33324 30440 Watching for file changes with StatReloader
+WARNING 2026-05-02 15:08:09,070 log 4328 27768 Not Found: /favicon.ico
+INFO 2026-05-02 15:10:30,672 autoreload 14976 16068 Watching for file changes with StatReloader
+INFO 2026-05-02 15:11:05,546 autoreload 14976 16068 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 15:11:06,614 autoreload 4488 33676 Watching for file changes with StatReloader
+WARNING 2026-05-02 15:11:23,104 log 4488 27468 Not Found: /favicon.ico
+INFO 2026-05-02 15:11:30,102 autoreload 4716 23920 Watching for file changes with StatReloader
+WARNING 2026-05-02 15:11:33,835 log 4716 1648 Not Found: /favicon.ico
+INFO 2026-05-02 15:12:37,713 autoreload 4716 23920 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 15:12:38,749 autoreload 29148 31640 Watching for file changes with StatReloader
+WARNING 2026-05-02 15:12:48,601 log 29148 28872 Not Found: /favicon.ico
+INFO 2026-05-02 15:13:19,976 autoreload 29148 31640 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 15:13:20,979 autoreload 7540 11096 Watching for file changes with StatReloader
+INFO 2026-05-02 15:16:20,188 autoreload 18316 16452 Watching for file changes with StatReloader
+WARNING 2026-05-02 15:16:26,248 log 18316 22280 Not Found: /favicon.ico
+WARNING 2026-05-02 15:16:27,665 log 18316 9568 Not Found: /favicon.ico
+INFO 2026-05-02 15:17:35,500 autoreload 18316 16452 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 15:17:36,584 autoreload 18968 33692 Watching for file changes with StatReloader
+INFO 2026-05-02 15:18:34,548 autoreload 25400 8204 Watching for file changes with StatReloader
+WARNING 2026-05-02 15:18:39,054 log 25400 20324 Not Found: /favicon.ico
+INFO 2026-05-02 15:19:58,652 autoreload 25400 8204 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-02 15:19:59,691 autoreload 3640 16292 Watching for file changes with StatReloader

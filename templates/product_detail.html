@@ -480,6 +480,43 @@
     <!-- Toast notification -->
     <div id="toast" class="toast">&#10003; Added to cart!</div>
 
+    <!-- ── Sticky Add-to-Cart Bar ── -->
+    <div id="stickyCartBar"
+        style="position:fixed;bottom:0;left:0;right:0;z-index:500;transform:translateY(100%);transition:transform 0.35s cubic-bezier(.16,1,.3,1);background:rgba(255,255,255,0.97);backdrop-filter:blur(16px);border-top:1px solid #e2e8f0;box-shadow:0 -4px 24px rgba(0,0,0,0.10)">
+        <div style="max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+            <img src="{{ product.imageUrl.url }}" alt="{{ product_name }}" style="width:44px;height:44px;object-fit:cover;border-radius:10px;border:1px solid #e2e8f0;flex-shrink:0">
+            <div style="flex:1;min-width:120px">
+                <div style="font-weight:700;font-size:0.95rem;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:340px">{{ product_name }}</div>
+                <div style="font-size:0.85rem;color:#6366f1;font-weight:600">
+                    Rs {% if product_type == 'cloth' %}{{ product.price1|default:product.price }}{% elif product_type == 'toy' %}{{ product.price }}{% elif product_type == 'offer' %}{{ product.price1|default:product.price2 }}{% else %}{{ product.price }}{% endif %}
+                </div>
+            </div>
+            <button
+                style="background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;font-weight:700;padding:10px 28px;border-radius:50px;border:none;cursor:pointer;font-size:0.9rem;white-space:nowrap;box-shadow:0 4px 14px rgba(99,102,241,0.4);transition:transform 0.15s,box-shadow 0.15s"
+                onmouseover="this.style.transform='scale(1.04)'"
+                onmouseout="this.style.transform='scale(1)'"
+                data-add-to-cart data-item-type="{{ product_type }}" data-item-id="{{ product.id }}">
+                🛒 Add to Cart
+            </button>
+        </div>
+    </div>
+    <script>
+        (function() {
+            var bar = document.getElementById('stickyCartBar');
+            var mainBtn = document.getElementById('addToCartBtn');
+            function onScroll() {
+                if (!mainBtn) return;
+                var rect = mainBtn.getBoundingClientRect();
+                if (rect.bottom < 0) {
+                    bar.style.transform = 'translateY(0)';
+                } else {
+                    bar.style.transform = 'translateY(100%)';
+                }
+            }
+            window.addEventListener('scroll', onScroll, {passive: true});
+        })();
+    </script>
+
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         <!-- Breadcrumb -->
@@ -576,6 +613,16 @@
                     <a href="#reviews-section" class="text-sm text-indigo-500 hover:underline mb-5 inline-block">Be the
                         first to review</a>
                     {% endif %}
+
+                    <!-- Social proof row -->
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap">
+                        <span class="live-viewers" style="display:inline-flex;align-items:center;gap:5px;background:#fef2f2;color:#b91c1c;font-size:0.78rem;font-weight:700;padding:5px 12px;border-radius:999px"></span>
+                        {% if inventory and inventory.is_low_stock %}
+                        <span style="display:inline-flex;align-items:center;gap:5px;background:#fff7ed;color:#c2410c;font-size:0.78rem;font-weight:700;padding:5px 12px;border-radius:999px">
+                            ⚡ Hurry — only {{ inventory.stock }} left!
+                        </span>
+                        {% endif %}
+                    </div>
 
                     <!-- Description -->
                     <p class="text-slate-600 leading-relaxed mb-6 text-base">

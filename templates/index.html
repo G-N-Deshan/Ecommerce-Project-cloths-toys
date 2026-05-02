@@ -50,6 +50,42 @@
 
     {% include 'navbar.html' %}
     {% include 'cart.html' %}
+    {% include 'includes/ai_assistant.html' %}
+
+    <!-- ── Loading Overlay ── -->
+    <div id="loadingOverlay" class="fixed inset-0 z-[10000] bg-white/80 backdrop-blur-sm flex items-center justify-center hidden">
+        <div class="flex flex-col items-center gap-3">
+            <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+            <span class="text-sm font-medium text-slate-600">Loading...</span>
+        </div>
+    </div>
+
+    <!-- ── Quick-View Modal ── -->
+    <div id="quickViewModal" class="fixed inset-0 z-[8000] hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeQuickView()"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl max-w-2xl w-[95%] max-h-[90vh] overflow-y-auto p-6">
+            <button onclick="closeQuickView()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-red-100 flex items-center justify-center text-slate-500 hover:text-red-500 transition text-lg font-bold">&times;</button>
+            <div id="quickViewContent" class="flex flex-col md:flex-row gap-6">
+                <div class="md:w-1/2">
+                    <img id="qvImage" src="" alt="" class="w-full rounded-xl object-cover aspect-square" loading="lazy">
+                </div>
+                <div class="md:w-1/2 flex flex-col gap-3">
+                    <span id="qvBadge" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-indigo-100 text-indigo-700 w-fit uppercase tracking-wide"></span>
+                    <h2 id="qvName" class="text-xl font-bold text-slate-900"></h2>
+                    <p id="qvDesc" class="text-sm text-slate-600 line-clamp-4"></p>
+                    <div class="flex items-center gap-3">
+                        <span id="qvPrice" class="text-2xl font-bold text-indigo-600"></span>
+                        <span id="qvOldPrice" class="text-sm text-slate-400 line-through"></span>
+                    </div>
+                    <div id="qvStock" class="text-sm font-semibold"></div>
+                    <div class="flex gap-2 mt-auto pt-2">
+                        <a id="qvDetailLink" href="#" class="flex-1 py-3 text-center rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition">View Full Details</a>
+                        <button id="qvCartBtn" onclick="quickAddToCart()" class="flex-1 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm transition">&#128722; Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ╔══════════════════════════════════════╗
          ║           HERO  SECTION              ║
@@ -62,7 +98,7 @@
                 <img src="{{ banner.image.url }}" alt="{{ banner.title }}" class="w-full h-full object-cover scale-110 banner-image {% if not forloop.first %}hidden{% endif %}" id="heroBg_{{ forloop.index }}">
                 {% endfor %}
             {% else %}
-                <img src="{% static '../media/cloths-page-background.jpg' %}" alt="" class="w-full h-full object-cover scale-110" id="heroBg">
+                <img src="{% static '../media/new-bg-1.jpg' %}" alt="" class="w-full h-full object-cover scale-110" id="heroBg">
             {% endif %}
             <div class="absolute inset-0 bg-gradient-to-br from-sky-50/78 via-white/58 to-indigo-100/62"></div>
         </div>
@@ -321,35 +357,44 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 {% for offer in offers %}
                 <div class="tilt-card reveal-stagger" style="--i:{{ forloop.counter0 }}">
-                    <div
-                        class="card-inner bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-shadow duration-500 group">
-                        <div class="relative overflow-hidden">
-                            <span
-                                class="absolute top-4 left-4 z-10 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full shadow-lg">
+                    <div class="card-inner bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-shadow duration-500 group">
+                        <!-- Image Container with Hover Swap -->
+                        <div class="relative overflow-hidden h-64">
+                            <!-- Primary Image -->
+                            <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }}"
+                                class="img-primary absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:opacity-0 group-hover:scale-105"
+                                loading="lazy">
+                            <!-- Hover / Secondary Image (fades in on hover) -->
+                            <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }} back view"
+                                class="img-secondary absolute inset-0 w-full h-full object-cover scale-105 opacity-0 transition-all duration-700 group-hover:opacity-100 group-hover:scale-110"
+                                loading="lazy">
+
+                            <!-- Sale Badge -->
+                            <span class="absolute top-3 left-3 z-10 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full shadow-lg">
                                 {{ offer.offers_badge }}
                             </span>
-                            <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }}"
-                                class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-                                loading="lazy">
-                            <!-- Overlay -->
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex items-end justify-center pb-6 gap-3">
-                                <a href="{% url 'product_detail' 'offer' offer.id %}"
-                                    class="px-5 py-2 bg-white text-slate-800 font-semibold rounded-full text-sm transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 hover:bg-indigo-500 hover:text-white">
+
+                            <!-- Live Viewers -->
+                            <span class="live-viewers absolute bottom-3 left-3 z-10 px-2 py-1 bg-black/60 backdrop-blur-sm text-white text-[10px] font-semibold rounded-full"></span>
+
+                            <!-- Overlay Actions -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex items-end justify-center pb-5 gap-3">
+                                <button onclick="fetchQuickView('offer', {{ offer.id }}); return false;"
+                                    class="px-4 py-2 bg-white text-slate-800 font-semibold rounded-full text-xs transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 hover:bg-indigo-500 hover:text-white">
                                     <i class="bi bi-eye mr-1"></i>Quick View
-                                </a>
+                                </button>
                                 <button
-                                    class="px-5 py-2 bg-indigo-600 text-white font-semibold rounded-full text-sm transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 delay-75 hover:bg-indigo-700"
+                                    class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-full text-xs transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 delay-75 hover:bg-indigo-700"
                                     data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}">
                                     <i class="bi bi-cart-plus mr-1"></i>Add to Cart
                                 </button>
                             </div>
                         </div>
+
+                        <!-- Card Body -->
                         <div class="p-5">
-                            <h3
-                                class="font-semibold text-slate-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-1">
-                                <a href="{% url 'product_detail' 'offer' offer.id %}" class="hover:text-indigo-600"
-                                    style="color:inherit;text-decoration:none">{{ offer.title }}</a>
+                            <h3 class="font-semibold text-slate-800 mb-1 group-hover:text-indigo-600 transition-colors line-clamp-1">
+                                <a href="{% url 'product_detail' 'offer' offer.id %}" class="hover:text-indigo-600" style="color:inherit;text-decoration:none">{{ offer.title }}</a>
                             </h3>
                             <div class="flex items-center gap-3 mb-2">
                                 {% if offer.price2 %}
@@ -359,9 +404,14 @@
                                 <span class="text-sm text-slate-400 line-through">Rs {{ offer.price1 }}</span>
                                 {% endif %}
                             </div>
-                            {% if offer.stock_text %}
-                            <span class="inline-block px-2 py-0.5 bg-amber-50 text-amber-700 text-xs rounded-full font-medium">{{ offer.stock_text }}</span>
-                            {% endif %}
+                            <div class="flex items-center justify-between">
+                                {% if offer.stock_text %}
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-50 text-amber-700 text-xs rounded-full font-semibold">
+                                    <i class="bi bi-fire text-orange-500"></i> {{ offer.stock_text }}
+                                </span>
+                                {% endif %}
+                                <a href="{% url 'product_detail' 'offer' offer.id %}" class="text-xs text-indigo-500 hover:text-indigo-700 font-medium ml-auto">Details →</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -396,22 +446,31 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 {% for arrival in arrivals %}
                 <div class="tilt-card reveal-stagger" style="--i:{{ forloop.counter0 }}">
-                    <div
-                        class="card-inner bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-shadow duration-500 border border-slate-100 group">
-                        <div class="relative overflow-hidden">
-                            <span
-                                class="absolute top-4 right-4 z-10 px-3 py-1 bg-emerald-500 text-white text-[11px] font-bold rounded-full">NEW</span>
+                    <div class="card-inner bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-shadow duration-500 border border-slate-100 group">
+                        <!-- Image with hover swap -->
+                        <div class="relative overflow-hidden h-56">
                             <img src="{{ arrival.imageUrl.url }}" alt="{{ arrival.title }}"
-                                class="w-full h-56 object-cover transition-transform duration-700 group-hover:scale-110"
+                                class="img-primary absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:opacity-0 group-hover:scale-105"
                                 loading="lazy">
-                            <a href="{% url 'product_detail' 'arrival' arrival.id %}"
-                                class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end justify-center pb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
-                                <span
-                                    class="px-5 py-2 bg-white text-slate-800 font-semibold rounded-full text-sm transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 hover:bg-indigo-500 hover:text-white">
+                            <img src="{{ arrival.imageUrl.url }}" alt="{{ arrival.title }} alternate"
+                                class="img-secondary absolute inset-0 w-full h-full object-cover scale-105 opacity-0 transition-all duration-700 group-hover:opacity-100 group-hover:scale-110"
+                                loading="lazy">
+
+                            <!-- NEW badge -->
+                            <span class="absolute top-3 right-3 z-10 px-3 py-1 bg-emerald-500 text-white text-[11px] font-bold rounded-full">NEW</span>
+
+                            <!-- Live viewers -->
+                            <span class="live-viewers absolute bottom-3 left-3 z-10 px-2 py-1 bg-black/60 backdrop-blur-sm text-white text-[10px] font-semibold rounded-full"></span>
+
+                            <!-- Quick view overlay -->
+                            <button onclick="fetchQuickView('arrival', {{ arrival.id }}); return false;"
+                                class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end justify-center pb-5 opacity-0 group-hover:opacity-100 transition-opacity duration-400 cursor-pointer">
+                                <span class="px-5 py-2 bg-white text-slate-800 font-semibold rounded-full text-sm transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 hover:bg-indigo-500 hover:text-white">
                                     <i class="bi bi-eye mr-1"></i>Quick View
                                 </span>
-                            </a>
+                            </button>
                         </div>
+
                         <div class="p-5">
                             <span class="text-[11px] text-indigo-600 font-bold uppercase tracking-wider">{{ arrival.category }}</span>
                             <h3 class="font-semibold text-slate-800 mt-1 mb-2 line-clamp-1">

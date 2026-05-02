@@ -57,6 +57,33 @@ function hideLoading() {
 
 
 /* ── Quick-View Modal ── */
+function fetchQuickView(itemType, itemId) {
+    showLoading();
+    fetch('/api/quick-view/' + itemType + '/' + itemId + '/')
+    .then(response => response.json())
+    .then(data => {
+        hideLoading();
+        if (data.error) {
+            showToast(data.error, 'error');
+            return;
+        }
+        openQuickView({
+            id: data.id,
+            type: data.item_type,
+            name: data.title,
+            description: data.description,
+            price: data.price,
+            image: data.image_url,
+            url: '/' + (itemType === 'cloth' ? 'product/cloth' : 'product/' + itemType) + '/' + data.id + '/',
+            cartUrl: '/cart/add/' + data.item_type + '/' + data.id + '/'
+        });
+    })
+    .catch(err => {
+        hideLoading();
+        showToast('Failed to load product details.', 'error');
+    });
+}
+
 let _quickViewData = {};
 
 function openQuickView(data) {
@@ -234,4 +261,25 @@ document.addEventListener('DOMContentLoaded', function() {
     initLiveStockUpdates();
     initLazyImages();
     renderRecentlyViewed('recentlyViewedSection');
+    initLiveViewers();
 });
+
+/* ── Keyboard: Esc closes Quick View ── */
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeQuickView();
+});
+
+/* ── Live Viewers Simulator ── */
+function initLiveViewers() {
+    document.querySelectorAll('.live-viewers').forEach(function(el) {
+        var viewers = Math.floor(Math.random() * 14) + 3;
+        el.innerHTML = '<i class="bi bi-eye-fill" style="color:#f87171;margin-right:3px"></i>' + viewers + ' viewing';
+        setInterval(function() {
+            if (Math.random() > 0.5) {
+                viewers += Math.floor(Math.random() * 3) - 1;
+                if (viewers < 1) viewers = 1;
+                el.innerHTML = '<i class="bi bi-eye-fill" style="color:#f87171;margin-right:3px"></i>' + viewers + ' viewing';
+            }
+        }, 12000);
+    });
+}

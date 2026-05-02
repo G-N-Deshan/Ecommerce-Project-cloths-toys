@@ -94,6 +94,7 @@ urlpatterns = [
 
     # REST API
     path('api/products/', views.api_products, name='api_products'),
+    path('api/quick-view/<str:item_type>/<int:item_id>/', views.quick_view_api, name='quick_view_api'),
 
     # Real-time update polling
     path('check-updates/', views.check_updates, name='check_updates'),
@@ -109,6 +110,7 @@ urlpatterns = [
     path('password-reset/', auth_views.PasswordResetView.as_view(
         template_name='password_reset.html',
         email_template_name='password_reset_email.html',
+        html_email_template_name='password_reset_email.html',
         subject_template_name='password_reset_subject.txt',
         success_url='/password-reset/done/',
     ), name='password_reset'),
