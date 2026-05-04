@@ -621,8 +621,7 @@
                                 {% endif %}
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-semibold text-slate-800 truncate">
-                                        {% if real_item.name %}{{ real_item.name }}{% elif real_item.title %}{{
-                                        real_item.title }}{% else %}Item{% endif %}
+                                        {% if real_item.name %}{{ real_item.name }}{% elif real_item.title %}{{ real_item.title }}{% else %}Item{% endif %}
                                     </p>
                                     <div class="flex items-center gap-2 mt-0.5">
                                         <span class="text-xs text-slate-400">Qty: {{ item.quantity }}</span>
@@ -750,6 +749,18 @@
 
             // ── Payment method radio cards ──
             const payCards = document.querySelectorAll('.pay-card');
+            const placeOrderBtn = document.getElementById('placeOrderBtn');
+
+            function updateButtonText(method) {
+                if (placeOrderBtn) {
+                    if (method === 'card') {
+                        placeOrderBtn.innerHTML = '<i class="bi bi-credit-card-fill text-sm"></i> Proceed to Payment <i class="bi bi-arrow-right"></i>';
+                    } else {
+                        placeOrderBtn.innerHTML = '<i class="bi bi-lock-fill text-sm"></i> Place Order <i class="bi bi-arrow-right"></i>';
+                    }
+                }
+            }
+
             payCards.forEach(card => {
                 card.addEventListener('click', function () {
                     payCards.forEach(c => {
@@ -767,7 +778,10 @@
                     const radio = this.querySelector('.pay-radio');
                     if (dot) dot.classList.remove('hidden');
                     if (radio) radio.style.borderColor = '#6366f1';
-                    this.querySelector('input[type=radio]').checked = true;
+                    
+                    const radioInput = this.querySelector('input[type=radio]');
+                    radioInput.checked = true;
+                    updateButtonText(radioInput.value);
                 });
             });
 

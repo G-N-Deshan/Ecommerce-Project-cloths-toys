@@ -13975,3 +13975,55 @@ INFO 2026-05-02 15:18:34,548 autoreload 25400 8204 Watching for file changes wit
 WARNING 2026-05-02 15:18:39,054 log 25400 20324 Not Found: /favicon.ico
 INFO 2026-05-02 15:19:58,652 autoreload 25400 8204 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
 INFO 2026-05-02 15:19:59,691 autoreload 3640 16292 Watching for file changes with StatReloader
+INFO 2026-05-04 08:33:39,477 autoreload 20360 16056 Watching for file changes with StatReloader
+WARNING 2026-05-04 08:33:47,488 log 20360 2928 Not Found: /favicon.ico
+INFO 2026-05-04 12:20:04,237 autoreload 20664 20696 Watching for file changes with StatReloader
+WARNING 2026-05-04 12:20:10,436 log 20664 22512 Not Found: /favicon.ico
+WARNING 2026-05-04 13:16:45,998 log 20664 21892 Not Found: /favicon.ico
+INFO 2026-05-04 13:25:34,567 autoreload 20664 20696 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-04 13:25:35,769 autoreload 18388 22508 Watching for file changes with StatReloader
+INFO 2026-05-04 13:29:58,378 autoreload 18388 22508 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-04 13:29:59,381 autoreload 17800 14484 Watching for file changes with StatReloader
+WARNING 2026-05-04 13:32:41,057 log 17800 23012 Not Found: /favicon.ico
+INFO 2026-05-04 13:42:36,112 autoreload 17800 14484 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-04 13:42:37,206 autoreload 17900 18064 Watching for file changes with StatReloader
+INFO 2026-05-04 13:43:40,057 autoreload 17900 18064 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-04 13:43:41,172 autoreload 22080 2008 Watching for file changes with StatReloader
+INFO 2026-05-04 13:49:54,912 autoreload 22080 2008 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-04 13:49:57,418 autoreload 17108 4048 Watching for file changes with StatReloader
+INFO 2026-05-04 13:50:16,650 autoreload 17108 4048 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-04 13:50:17,720 autoreload 1700 20724 Watching for file changes with StatReloader
+INFO 2026-05-04 13:50:29,540 autoreload 1700 20724 C:\Users\nipun\Desktop\Ecommerce project\myapp\urls.py changed, reloading.
+INFO 2026-05-04 13:50:30,757 autoreload 5516 20052 Watching for file changes with StatReloader
+INFO 2026-05-04 13:53:34,146 autoreload 23752 22628 Watching for file changes with StatReloader
+INFO 2026-05-04 13:59:43,495 autoreload 23752 22628 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-04 13:59:44,605 autoreload 5624 22232 Watching for file changes with StatReloader
+INFO 2026-05-04 14:00:56,690 autoreload 5624 22232 C:\Users\nipun\Desktop\Ecommerce project\myapp\urls.py changed, reloading.
+INFO 2026-05-04 14:00:57,652 autoreload 20156 18748 Watching for file changes with StatReloader
+INFO 2026-05-04 14:21:12,778 autoreload 22968 18004 Watching for file changes with StatReloader
+INFO 2026-05-04 14:36:19,041 autoreload 15276 11556 Watching for file changes with StatReloader
+INFO 2026-05-04 14:37:14,289 autoreload 15276 11556 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-04 14:37:15,352 autoreload 22924 19708 Watching for file changes with StatReloader
+INFO 2026-05-04 14:37:23,627 autoreload 22924 19708 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-04 14:37:24,679 autoreload 6036 14348 Watching for file changes with StatReloader
+WARNING 2026-05-04 14:40:06,454 log 6036 22288 Not Found: /order-success/
+WARNING 2026-05-04 14:40:24,569 log 6036 22288 Not Found: /order_success/
+WARNING 2026-05-04 14:40:51,184 log 6036 22288 Not Found: /order_success/
+INFO 2026-05-04 14:41:16,663 autoreload 6036 14348 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-04 14:41:17,678 autoreload 23756 18808 Watching for file changes with StatReloader
+INFO 2026-05-04 14:46:10,864 autoreload 23756 18808 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-04 14:46:12,026 autoreload 21936 1404 Watching for file changes with StatReloader
+INFO 2026-05-04 14:52:19,693 autoreload 21936 1404 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-04 14:52:20,874 autoreload 17548 19036 Watching for file changes with StatReloader
+WARNING 2026-05-04 14:52:28,199 log 17548 20880 Not Found: /order_success/
+INFO 2026-05-04 14:53:16,274 autoreload 17548 19036 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-04 14:53:17,321 autoreload 18308 13096 Watching for file changes with StatReloader
+INFO 2026-05-04 14:56:36,678 autoreload 18308 13096 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-04 14:56:38,011 autoreload 4236 14644 Watching for file changes with StatReloader
+INFO 2026-05-04 14:57:26,662 autoreload 4236 14644 C:\Users\nipun\Desktop\Ecommerce project\myapp\urls.py changed, reloading.
+INFO 2026-05-04 14:57:27,857 autoreload 6420 12028 Watching for file changes with StatReloader
+INFO 2026-05-04 15:01:48,992 autoreload 6420 12028 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-04 15:01:50,186 autoreload 22912 15676 Watching for file changes with StatReloader
+INFO 2026-05-04 15:03:36,993 autoreload 22736 20080 Watching for file changes with StatReloader
+INFO 2026-05-04 15:05:17,107 autoreload 22736 20080 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-04 15:05:18,255 autoreload 24124 23344 Watching for file changes with StatReloader

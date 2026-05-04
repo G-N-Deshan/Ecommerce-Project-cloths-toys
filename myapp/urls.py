@@ -50,6 +50,8 @@ urlpatterns = [
 
     path('checkout/', views.checkout, name='checkout'),
     path('order-success/<str:order_number>/', views.order_success, name='order_success'),
+    path('order-success/', views.order_success_latest, name='order_success_latest_hyphen'),
+    path('order_success/', views.order_success_latest, name='order_success_latest_underscore'),
 
     # Profile Management URLs
     path('profile/update/', views.update_profile, name='update_profile'),

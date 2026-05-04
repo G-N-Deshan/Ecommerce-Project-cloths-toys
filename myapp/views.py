@@ -1964,6 +1964,21 @@ def checkout(request):
             shipping = Decimal('10.00')
             total = subtotal - discount + tax + shipping
             
+            if payment_method == 'card':
+                # Store shipping info in session for the payment page to pick up
+                request.session['checkout_shipping'] = {
+                    'full_name': full_name,
+                    'email': email,
+                    'phone': phone,
+                    'address': address,
+                    'city': city,
+                    'postal_code': postal_code,
+                    'country': country,
+                    'coupon_code': coupon_code,
+                }
+                return redirect('payment_page')
+
+            # --- CASH ON DELIVERY FLOW ---
             order = Order.objects.create(
                 user=request.user,
                 order_number=order_number,
@@ -2029,14 +2044,12 @@ def checkout(request):
                     points=final_points,
                     description=f"Earned from order {order_number}"
                 )
-            except Exception as e:
-                # Fail silently for loyalty to ensure order success is prioritized
+            except Exception:
                 pass
             
             cart.items.all().delete()
-            
             messages.success(request, f'Order {order_number} placed successfully!')
-            return redirect('order_success', order_number=order_number)
+            return redirect('order_success_latest_hyphen')
         
         except Exception as e:
             messages.error(request, 'Something went wrong placing your order. Please try again.')
@@ -2080,6 +2093,20 @@ def order_success(request, order_number):
         'order_items': order.items.all()
     }
     
+    return render(request, 'order_success.html', context)
+
+
+@login_required(login_url='login')
+def order_success_latest(request):
+    """Render order success page for the latest order at /order-success/."""
+    latest_order = Order.objects.filter(user=request.user).order_by('-created_at').first()
+    if not latest_order:
+        messages.warning(request, 'No recent order found. Please place an order first.')
+        return redirect('checkout')
+    context = {
+        'order': latest_order,
+        'order_items': latest_order.items.all(),
+    }
     return render(request, 'order_success.html', context)
 
 
