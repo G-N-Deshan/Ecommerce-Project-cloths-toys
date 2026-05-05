@@ -14027,3 +14027,539 @@ INFO 2026-05-04 15:01:50,186 autoreload 22912 15676 Watching for file changes wi
 INFO 2026-05-04 15:03:36,993 autoreload 22736 20080 Watching for file changes with StatReloader
 INFO 2026-05-04 15:05:17,107 autoreload 22736 20080 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
 INFO 2026-05-04 15:05:18,255 autoreload 24124 23344 Watching for file changes with StatReloader
+INFO 2026-05-05 07:34:47,545 autoreload 18652 15836 Watching for file changes with StatReloader
+INFO 2026-05-05 07:36:42,293 autoreload 12472 12208 Watching for file changes with StatReloader
+ERROR 2026-05-05 07:37:29,354 middleware 12472 1700 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-05-05 07:37:29,426 log 12472 1700 Not Found: /media/about-hero.jpg
+INFO 2026-05-05 07:44:21,262 autoreload 12472 12208 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-05 07:44:23,060 autoreload 8768 13684 Watching for file changes with StatReloader
+WARNING 2026-05-05 07:45:04,189 log 8768 19960 Not Found: /favicon.ico
+INFO 2026-05-05 07:47:38,784 autoreload 8768 13684 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-05 07:47:40,077 autoreload 18144 14340 Watching for file changes with StatReloader
+INFO 2026-05-05 07:47:49,361 autoreload 18144 14340 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-05 07:47:50,668 autoreload 2972 19624 Watching for file changes with StatReloader
+WARNING 2026-05-05 07:48:06,614 log 2972 7484 Not Found: /favicon.ico
+INFO 2026-05-05 07:59:07,534 autoreload 2972 19624 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-05 07:59:08,838 autoreload 9472 21072 Watching for file changes with StatReloader
+WARNING 2026-05-05 07:59:31,581 log 9472 21176 Not Found: /favicon.ico
+WARNING 2026-05-05 08:00:30,398 log 9472 12744 Not Found: /favicon.ico
+WARNING 2026-05-05 08:00:34,448 log 9472 21176 Not Found: /favicon.ico
+ERROR 2026-05-05 08:00:56,630 log 9472 21176 Internal Server Error: /cart/remove/71/
+INFO 2026-05-05 08:03:04,979 _util 9472 15460 message='Request to Stripe api' method=post url=https://api.stripe.com/v1/checkout/sessions
+INFO 2026-05-05 08:03:05,818 _util 9472 15460 message='Stripe API response' path=https://api.stripe.com/v1/checkout/sessions response_code=401
+INFO 2026-05-05 08:03:05,818 _util 9472 15460 error_code=None error_message='Invalid API Key provided: sk_test_*******lder' error_param=None error_type=invalid_request_error message='Stripe v1 API error received'
+ERROR 2026-05-05 08:03:05,820 log 9472 15460 Internal Server Error: /create-checkout-session/
+INFO 2026-05-05 08:03:17,761 _util 9472 15460 message='Request to Stripe api' method=post url=https://api.stripe.com/v1/checkout/sessions
+INFO 2026-05-05 08:03:17,886 _util 9472 15460 message='Stripe API response' path=https://api.stripe.com/v1/checkout/sessions response_code=401
+INFO 2026-05-05 08:03:17,887 _util 9472 15460 error_code=None error_message='Invalid API Key provided: sk_test_*******lder' error_param=None error_type=invalid_request_error message='Stripe v1 API error received'
+ERROR 2026-05-05 08:03:17,892 log 9472 15460 Internal Server Error: /create-checkout-session/
+INFO 2026-05-05 08:03:24,932 _util 9472 15460 message='Request to Stripe api' method=post url=https://api.stripe.com/v1/checkout/sessions
+INFO 2026-05-05 08:03:25,052 _util 9472 15460 message='Stripe API response' path=https://api.stripe.com/v1/checkout/sessions response_code=401
+INFO 2026-05-05 08:03:25,052 _util 9472 15460 error_code=None error_message='Invalid API Key provided: sk_test_*******lder' error_param=None error_type=invalid_request_error message='Stripe v1 API error received'
+ERROR 2026-05-05 08:03:25,055 log 9472 15460 Internal Server Error: /create-checkout-session/
+INFO 2026-05-05 08:03:40,299 _util 9472 15460 message='Request to Stripe api' method=post url=https://api.stripe.com/v1/checkout/sessions
+INFO 2026-05-05 08:03:40,487 _util 9472 15460 message='Stripe API response' path=https://api.stripe.com/v1/checkout/sessions response_code=401
+INFO 2026-05-05 08:03:40,487 _util 9472 15460 error_code=None error_message='Invalid API Key provided: sk_test_*******lder' error_param=None error_type=invalid_request_error message='Stripe v1 API error received'
+ERROR 2026-05-05 08:03:40,490 log 9472 15460 Internal Server Error: /create-checkout-session/
+INFO 2026-05-05 08:04:28,302 autoreload 9472 21072 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-05 08:04:29,544 autoreload 10732 4996 Watching for file changes with StatReloader
+ERROR 2026-05-05 08:05:09,568 middleware 10732 22128 Exception: Template: C:\Users\nipun\Desktop\Ecommerce project\templates\checkout.html, Could not parse the remainder: ': 2' from 'subtotal| floatformat: 2'
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 1923, in checkout
+    return render(request, 'checkout.html', {
+        'cart': cart,
+    ...<5 lines>...
+        'coupons_available': Coupon.objects.filter(is_active=True).exists(),
+    })
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 556, in parse
+    raise self.error(token, e)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 554, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 676, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 776, in __init__
+    raise TemplateSyntaxError(
+    ...<2 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\nipun\Desktop\Ecommerce project\templates\checkout.html, Could not parse the remainder: ': 2' from 'subtotal| floatformat: 2'
+ERROR 2026-05-05 08:05:09,772 log 10732 22128 Internal Server Error: /checkout/
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 1923, in checkout
+    return render(request, 'checkout.html', {
+        'cart': cart,
+    ...<5 lines>...
+        'coupons_available': Coupon.objects.filter(is_active=True).exists(),
+    })
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 556, in parse
+    raise self.error(token, e)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 554, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 676, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 776, in __init__
+    raise TemplateSyntaxError(
+    ...<2 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\nipun\Desktop\Ecommerce project\templates\checkout.html, Could not parse the remainder: ': 2' from 'subtotal| floatformat: 2'
+ERROR 2026-05-05 08:05:18,034 middleware 10732 22128 Exception: Template: C:\Users\nipun\Desktop\Ecommerce project\templates\checkout.html, Could not parse the remainder: ': 2' from 'subtotal| floatformat: 2'
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 1923, in checkout
+    return render(request, 'checkout.html', {
+        'cart': cart,
+    ...<5 lines>...
+        'coupons_available': Coupon.objects.filter(is_active=True).exists(),
+    })
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 556, in parse
+    raise self.error(token, e)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 554, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 676, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 776, in __init__
+    raise TemplateSyntaxError(
+    ...<2 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\nipun\Desktop\Ecommerce project\templates\checkout.html, Could not parse the remainder: ': 2' from 'subtotal| floatformat: 2'
+ERROR 2026-05-05 08:05:18,085 log 10732 22128 Internal Server Error: /checkout/
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 1923, in checkout
+    return render(request, 'checkout.html', {
+        'cart': cart,
+    ...<5 lines>...
+        'coupons_available': Coupon.objects.filter(is_active=True).exists(),
+    })
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 556, in parse
+    raise self.error(token, e)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 554, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 676, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 776, in __init__
+    raise TemplateSyntaxError(
+    ...<2 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\nipun\Desktop\Ecommerce project\templates\checkout.html, Could not parse the remainder: ': 2' from 'subtotal| floatformat: 2'
+INFO 2026-05-05 08:05:53,639 autoreload 22312 10184 Watching for file changes with StatReloader
+ERROR 2026-05-05 08:05:58,999 middleware 22312 5688 Exception: Template: C:\Users\nipun\Desktop\Ecommerce project\templates\checkout.html, Could not parse the remainder: ': 2' from 'subtotal| floatformat: 2'
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 1923, in checkout
+    return render(request, 'checkout.html', {
+        'cart': cart,
+    ...<5 lines>...
+        'coupons_available': Coupon.objects.filter(is_active=True).exists(),
+    })
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 556, in parse
+    raise self.error(token, e)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 554, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 676, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 776, in __init__
+    raise TemplateSyntaxError(
+    ...<2 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\nipun\Desktop\Ecommerce project\templates\checkout.html, Could not parse the remainder: ': 2' from 'subtotal| floatformat: 2'
+ERROR 2026-05-05 08:05:59,066 log 22312 5688 Internal Server Error: /checkout/
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 1923, in checkout
+    return render(request, 'checkout.html', {
+        'cart': cart,
+    ...<5 lines>...
+        'coupons_available': Coupon.objects.filter(is_active=True).exists(),
+    })
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 556, in parse
+    raise self.error(token, e)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 554, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 676, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 776, in __init__
+    raise TemplateSyntaxError(
+    ...<2 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\nipun\Desktop\Ecommerce project\templates\checkout.html, Could not parse the remainder: ': 2' from 'subtotal| floatformat: 2'
+WARNING 2026-05-05 08:06:07,601 log 22312 12644 Not Found: /favicon.ico
+ERROR 2026-05-05 08:06:10,921 middleware 22312 12644 Exception: Template: C:\Users\nipun\Desktop\Ecommerce project\templates\checkout.html, Could not parse the remainder: ': 2' from 'subtotal| floatformat: 2'
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 1923, in checkout
+    return render(request, 'checkout.html', {
+        'cart': cart,
+    ...<5 lines>...
+        'coupons_available': Coupon.objects.filter(is_active=True).exists(),
+    })
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 556, in parse
+    raise self.error(token, e)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 554, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 676, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 776, in __init__
+    raise TemplateSyntaxError(
+    ...<2 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\nipun\Desktop\Ecommerce project\templates\checkout.html, Could not parse the remainder: ': 2' from 'subtotal| floatformat: 2'
+ERROR 2026-05-05 08:06:10,981 log 22312 12644 Internal Server Error: /checkout/
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 1923, in checkout
+    return render(request, 'checkout.html', {
+        'cart': cart,
+    ...<5 lines>...
+        'coupons_available': Coupon.objects.filter(is_active=True).exists(),
+    })
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 556, in parse
+    raise self.error(token, e)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 554, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 676, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\template\base.py", line 776, in __init__
+    raise TemplateSyntaxError(
+    ...<2 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\nipun\Desktop\Ecommerce project\templates\checkout.html, Could not parse the remainder: ': 2' from 'subtotal| floatformat: 2'
+INFO 2026-05-05 08:18:22,486 autoreload 22312 10184 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-05 08:18:23,709 autoreload 23656 17628 Watching for file changes with StatReloader
+INFO 2026-05-05 08:18:34,337 autoreload 23656 17628 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-05 08:18:35,458 autoreload 7084 17360 Watching for file changes with StatReloader
+INFO 2026-05-05 08:18:57,092 autoreload 7084 17360 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-05 08:18:58,276 autoreload 15464 13072 Watching for file changes with StatReloader
+INFO 2026-05-05 08:19:16,177 autoreload 15464 13072 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-05 08:19:17,276 autoreload 24204 13804 Watching for file changes with StatReloader
+INFO 2026-05-05 08:21:15,414 autoreload 24204 13804 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-05 08:21:16,549 autoreload 20304 11708 Watching for file changes with StatReloader
+ERROR 2026-05-05 08:25:23,532 middleware 20304 20416 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\toys-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\toys-hero.jpg” does not exist
+WARNING 2026-05-05 08:25:23,611 log 20304 20416 Not Found: /media/toys-hero.jpg
+INFO 2026-05-05 08:29:48,648 autoreload 20304 11708 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-05-05 08:29:49,827 autoreload 7724 20544 Watching for file changes with StatReloader
+INFO 2026-05-05 08:30:24,072 autoreload 7724 20544 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-05-05 08:30:25,085 autoreload 22944 20568 Watching for file changes with StatReloader
+INFO 2026-05-05 08:30:41,709 autoreload 22944 20568 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-05 08:30:42,971 autoreload 17812 6188 Watching for file changes with StatReloader
+INFO 2026-05-05 08:31:37,253 autoreload 17812 6188 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-05 08:31:38,313 autoreload 18188 11292 Watching for file changes with StatReloader
+INFO 2026-05-05 08:32:15,423 autoreload 18188 11292 C:\Users\nipun\Desktop\Ecommerce project\myapp\urls.py changed, reloading.
+INFO 2026-05-05 08:32:16,392 autoreload 19148 6168 Watching for file changes with StatReloader
+INFO 2026-05-05 08:32:50,280 autoreload 19148 6168 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-05 08:32:51,287 autoreload 7716 20976 Watching for file changes with StatReloader
+INFO 2026-05-05 08:33:19,744 autoreload 7716 20976 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-05 08:33:20,726 autoreload 1744 23408 Watching for file changes with StatReloader
+INFO 2026-05-05 08:33:36,360 autoreload 1744 23408 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-05 08:33:37,303 autoreload 21276 24324 Watching for file changes with StatReloader
+ERROR 2026-05-05 08:44:35,307 middleware 21276 19960 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\toys-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\toys-hero.jpg” does not exist
+WARNING 2026-05-05 08:44:35,328 log 21276 19960 Not Found: /media/toys-hero.jpg
+INFO 2026-05-05 11:16:33,775 autoreload 20884 9180 Watching for file changes with StatReloader
+ERROR 2026-05-05 11:16:42,646 middleware 20884 16544 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\toys-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\toys-hero.jpg” does not exist
+WARNING 2026-05-05 11:16:42,681 log 20884 16544 Not Found: /media/toys-hero.jpg
+INFO 2026-05-05 11:17:35,767 autoreload 20884 9180 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-05 11:17:36,993 autoreload 18784 1932 Watching for file changes with StatReloader
+INFO 2026-05-05 11:19:33,361 autoreload 18784 1932 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-05 11:19:34,643 autoreload 2716 23840 Watching for file changes with StatReloader
+ERROR 2026-05-05 11:22:14,598 middleware 2716 19788 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\toys-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\toys-hero.jpg” does not exist
+WARNING 2026-05-05 11:22:14,621 log 2716 19788 Not Found: /media/toys-hero.jpg
+INFO 2026-05-05 11:26:28,191 autoreload 2776 23520 Watching for file changes with StatReloader
+WARNING 2026-05-05 11:26:30,824 log 2776 2752 Not Found: /favicon.ico
+INFO 2026-05-05 11:27:11,010 autoreload 2776 23520 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-05 11:27:12,205 autoreload 4616 11948 Watching for file changes with StatReloader
+WARNING 2026-05-05 11:30:01,464 log 4616 22956 Not Found: /favicon.ico
+WARNING 2026-05-05 11:32:12,273 log 4616 3196 Not Found: /favicon.ico
+INFO 2026-05-05 12:50:20,740 autoreload 22888 18504 Watching for file changes with StatReloader
+WARNING 2026-05-05 12:50:29,328 log 22888 7400 Not Found: /favicon.ico
+INFO 2026-05-05 13:04:05,601 autoreload 22888 18504 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-05 13:04:06,981 autoreload 8808 17392 Watching for file changes with StatReloader
+INFO 2026-05-05 13:05:54,032 autoreload 8808 17392 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-05 13:05:55,131 autoreload 2812 13924 Watching for file changes with StatReloader
+INFO 2026-05-05 13:07:51,689 autoreload 21744 5068 Watching for file changes with StatReloader

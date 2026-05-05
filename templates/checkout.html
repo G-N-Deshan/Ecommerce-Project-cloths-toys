@@ -621,11 +621,13 @@
                                 {% endif %}
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-semibold text-slate-800 truncate">
-                                        {% if real_item.name %}{{ real_item.name }}{% elif real_item.title %}{{ real_item.title }}{% else %}Item{% endif %}
+                                        {% if real_item.name %}{{ real_item.name }}{% elif real_item.title %}{{
+                                        real_item.title }}{% else %}Item{% endif %}
                                     </p>
                                     <div class="flex items-center gap-2 mt-0.5">
                                         <span class="text-xs text-slate-400">Qty: {{ item.quantity }}</span>
-                                        <span class="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded font-medium">
+                                        <span
+                                            class="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded font-medium">
                                             {{ item.get_item_type_display }}
                                         </span>
                                     </div>
@@ -778,7 +780,7 @@
                     const radio = this.querySelector('.pay-radio');
                     if (dot) dot.classList.remove('hidden');
                     if (radio) radio.style.borderColor = '#6366f1';
-                    
+
                     const radioInput = this.querySelector('input[type=radio]');
                     radioInput.checked = true;
                     updateButtonText(radioInput.value);
@@ -802,14 +804,14 @@
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json', 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value },
                             body: JSON.stringify({ code: code, subtotal: {{ subtotal|floatformat:2 }} })
-                        });
-                        const data = await res.json();
-                        if (data.valid) {
-                            msg.innerHTML = '<span class="text-emerald-600 flex items-center gap-1"><i class="bi bi-check-circle-fill"></i> Coupon applied! You save Rs ' + data.discount.toFixed(2) + '</span>';
-                            document.getElementById('discountRow').classList.remove('hidden');
-                            document.getElementById('discountVal').textContent = '-Rs ' + data.discount.toFixed(2);
-                            const newTotal = {{ total|floatformat:2 }} - data.discount;
-                            document.getElementById('grandTotal').textContent = 'Rs ' + newTotal.toFixed(2);
+            });
+        const data = await res.json();
+        if (data.valid) {
+            msg.innerHTML = '<span class="text-emerald-600 flex items-center gap-1"><i class="bi bi-check-circle-fill"></i> Coupon applied! You save Rs ' + data.discount.toFixed(2) + '</span>';
+            document.getElementById('discountRow').classList.remove('hidden');
+            document.getElementById('discountVal').textContent = '-Rs ' + data.discount.toFixed(2);
+            const newTotal = {{ total|floatformat:2 }} - data.discount;
+        document.getElementById('grandTotal').textContent = 'Rs ' + newTotal.toFixed(2);
         showToast('Coupon applied successfully!', 'success');
                     } else {
             msg.innerHTML = '<span class="text-red-500 flex items-center gap-1"><i class="bi bi-x-circle-fill"></i> ' + data.error + '</span>';

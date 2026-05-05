@@ -296,6 +296,10 @@ html::-webkit-scrollbar {
     transition: opacity 0.3s ease;
 }
 
+.toy-overlay--visible {
+    opacity: 1;
+}
+
 .toy-card:hover .toy-overlay {
     opacity: 1;
 }
@@ -413,6 +417,48 @@ html::-webkit-scrollbar {
 .add-to-cart-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+}
+
+/* Out of Stock Styles */
+.toy-card.out-of-stock {
+    opacity: 0.65;
+}
+
+.toy-card.out-of-stock:hover {
+    transform: none;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.toy-card.out-of-stock .toy-image img {
+    filter: grayscale(0.3);
+}
+
+.toy-stock-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #ffffff;
+    backdrop-filter: blur(2px);
+    z-index: 10;
+    pointer-events: none;
+}
+
+.btn-disabled-toy {
+    background: #cbd5e1 !important;
+    color: #64748b !important;
+    cursor: not-allowed !important;
+    pointer-events: none;
+}
+
+.btn-disabled-toy:hover {
+    transform: none !important;
+    box-shadow: none !important;
 }
 
 /* No Toys Message */

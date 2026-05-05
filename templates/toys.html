@@ -186,15 +186,25 @@
         <p class="section-subtitle">{{ toys.count }} amazing toys to choose from</p>
         <div class="toys-grid">
             {% for toy in toys %}
-            <div class="toy-card">
+            {% with is_in_stock=toy.inventory.stock|default:0 %}
+            <div class="toy-card {% if is_in_stock == 0 %}out-of-stock{% endif %}">
                 {% if toy.is_bestseller %}
                 <span class="toy-badge bestseller">🔥 Bestseller</span>
                 {% elif toy.is_new %}
                 <span class="toy-badge new">✨ New</span>
+                {% elif is_in_stock == 1 %}
+                <span class="toy-badge low-stock last-one\">Last 1!</span>
+                {% elif is_in_stock <= 3 %}
+                <span class="toy-badge low-stock\">Only {{ is_in_stock }} left!</span>
+                {% elif is_in_stock <= 5 %}
+                <span class="toy-badge low-stock limited\">Low Stock</span>
                 {% endif %}
                 <div class="toy-image">
                     <img src="{{ toy.imageUrl.url }}" alt="{{ toy.name }}" loading="lazy">
-                    <div class="toy-overlay">
+                    {% if is_in_stock == 0 %}
+                    <div class="toy-stock-overlay">Out of Stock</div>
+                    {% endif %}
+                    <div class="toy-overlay {% if is_in_stock == 0 %}toy-overlay--visible{% endif %}">
                         <a href="{% url 'product_detail' 'toy' toy.id %}" class="quick-view-btn">Quick View</a>
                     </div>
                 </div>
@@ -212,6 +222,7 @@
                         <span class="discount-badge">{{ toy.discount_percentage }}% OFF</span>
                         {% endif %}
                     </div>
+                    {% if is_in_stock > 0 %}
                     <a
                         href="{% url 'add_to_cart' 'toy' toy.id %}"
                         class="add-to-cart-btn"
@@ -219,8 +230,12 @@
                         data-item-type="toy"
                         data-item-id="{{ toy.id }}"
                     >Add to Cart</a>
+                    {% else %}
+                    <button class="add-to-cart-btn btn-disabled-toy" disabled title="Item is out of stock">Out of Stock</button>
+                    {% endif %}
                 </div>
             </div>
+            {% endwith %}
             {% empty %}
             <div class="no-toys">
                 <h3>😕 No toys found</h3>

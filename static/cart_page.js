@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     loadCart();
 });
 
@@ -35,7 +35,7 @@ async function loadCart() {
     try {
         const response = await fetch('/cart/get/');
         const data = await response.json();
-        
+
         if (data.success) {
             renderCart(data);
         } else {
@@ -58,7 +58,7 @@ function renderCart(data) {
         if (emptyCartMsg) emptyCartMsg.style.display = 'block';
     } else {
         if (emptyCartMsg) emptyCartMsg.style.display = 'none';
-        
+
         data.items.forEach((item) => {
             const cartItem = document.createElement('div');
             cartItem.className = 'cart-item';
@@ -95,7 +95,7 @@ function renderCart(data) {
 async function updateQuantity(itemId, quantity) {
     quantity = parseInt(quantity);
     if (quantity < 1) return;
-    
+
     try {
         const response = await fetch(`/cart/update/${itemId}/`, {
             method: 'POST',
@@ -106,7 +106,7 @@ async function updateQuantity(itemId, quantity) {
             },
             body: JSON.stringify({ quantity: quantity })
         });
-        
+
         const data = await response.json();
         if (data.success) {
             loadCart();
@@ -121,7 +121,7 @@ async function updateQuantity(itemId, quantity) {
 
 async function removeItem(itemId) {
     if (!confirm('Remove this item from cart?')) return;
-    
+
     try {
         const response = await fetch(`/cart/remove/${itemId}/`, {
             method: 'POST',
@@ -130,7 +130,7 @@ async function removeItem(itemId) {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         });
-        
+
         const data = await response.json();
         if (data.success) {
             loadCart();
@@ -165,7 +165,7 @@ function updateSummary(data) {
     const subtotalEl = document.getElementById('subtotal');
     const taxEl = document.getElementById('tax');
     const totalEl = document.getElementById('total');
-    
+
     if (subtotalEl) subtotalEl.textContent = `Rs ${data.subtotal.toFixed(2)}`;
     if (taxEl) taxEl.textContent = `Rs ${data.tax.toFixed(2)}`;
     if (totalEl) totalEl.textContent = `Rs ${data.total.toFixed(2)}`;
@@ -193,9 +193,9 @@ function showToast(message) {
         font-weight: 600;
         z-index: 9999;
     `;
-    
+
     document.body.appendChild(toast);
-    
+
     setTimeout(() => {
         toast.remove();
     }, 3000);

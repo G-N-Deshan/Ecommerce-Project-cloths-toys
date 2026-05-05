@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Stock Alerts - KidZone{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-900">Stock Alerts</h1>
+        <p class="text-gray-600 mt-2">Get notified when out-of-stock items are back in stock</p>
+    </div>
+
+    {% if alerts %}
+    <div class="grid grid-cols-1 gap-6 mb-12">
+        {% for alert in alerts %}
+        <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+            <div class="flex justify-between items-start gap-4">
+                <div class="flex-1">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">
+                        {% if alert.cloth %}
+                            {{ alert.cloth.name }}
+                        {% elif alert.toy %}
+                            {{ alert.toy.name }}
+                        {% elif alert.offer %}
+                            {{ alert.offer.title }}
+                        {% elif alert.arrival %}
+                            {{ alert.arrival.title }}
+                        {% endif %}
+                    </h3>
+                    <div class="flex gap-6 text-sm text-gray-600">
+                        <span>
+                            <i class="bi bi-bell"></i>
+                            {% if alert.notified_at %}
+                                <span class="text-green-600 font-semibold">
+                                    <i class="bi bi-check-circle"></i> Notified {{ alert.notified_at|date:"M d" }}
+                                </span>
+                            {% else %}
+                                <span class="text-blue-600 font-semibold">
+                                    <i class="bi bi-hourglass"></i> Waiting for restock
+                                </span>
+                            {% endif %}
+                        </span>
+                        <span>
+                            <i class="bi bi-calendar"></i> Alert created {{ alert.created_at|date:"M d, Y" }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Remove Button -->
+                <button class="px-4 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition font-semibold remove-alert-btn"
+                        data-alert-id="{{ alert.id }}">
+                    <i class="bi bi-trash"></i> Remove
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-16 bg-white rounded-lg shadow-md mb-12">
+        <i class="bi bi-bell-slash text-6xl text-gray-300 mb-4 block"></i>
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">No Active Alerts</h2>
+        <p class="text-gray-600 mb-8">You don't have any stock alerts set up yet.</p>
+        <a href="{% url 'cloths' %}" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition">
+            Browse Products <i class="bi bi-arrow-right ml-2"></i>
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- How it Works -->
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">
+            <i class="bi bi-lightbulb"></i> How Stock Alerts Work
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="text-center">
+                <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                    1
+                </div>
+                <h3 class="font-semibold text-gray-900 mb-2">Find Out-of-Stock Items</h3>
+                <p class="text-gray-700 text-sm">
+                    When browsing products, if an item is out of stock, you can set up an alert.
+                </p>
+            </div>
+            <div class="text-center">
+                <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                    2
+                </div>
+                <h3 class="font-semibold text-gray-900 mb-2">We Monitor Inventory</h3>
+                <p class="text-gray-700 text-sm">
+                    Our system automatically monitors the inventory of all your alerted products.
+                </p>
+            </div>
+            <div class="text-center">
+                <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                    3
+                </div>
+                <h3 class="font-semibold text-gray-900 mb-2">Instant Notification</h3>
+                <p class="text-gray-700 text-sm">
+                    Get email notification as soon as the product is back in stock!
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelectorAll('.remove-alert-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        if (confirm('Remove this alert?')) {
+            const alertId = this.dataset.alertId;
+            fetch(`/stock-alerts/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({
+                    action: 'remove',
+                    alert_id: alertId
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(data.error || 'Error removing alert');
+                }
+            })
+            .catch(err => console.error('Error:', err));
+        }
+    });
+});
+</script>
+{% endblock %}

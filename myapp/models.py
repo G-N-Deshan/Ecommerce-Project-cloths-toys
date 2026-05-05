@@ -635,6 +635,11 @@ class OrderTracking(models.Model):
     status = models.CharField(max_length=20, choices=Order.STATUS_CHOICES)
     note = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    # New fields for enhanced tracking
+    estimated_delivery = models.DateField(null=True, blank=True, help_text="Estimated delivery date")
+    tracking_number = models.CharField(max_length=50, blank=True, help_text="Courier tracking number")
+    courier = models.CharField(max_length=100, blank=True, help_text="Courier company name")
 
     class Meta:
         ordering = ['-created_at']
@@ -744,3 +749,117 @@ class SiteSettings(models.Model):
     class Meta:
         verbose_name = 'Site Settings'
         verbose_name_plural = 'Site Settings'
+
+
+# ══════════════════════════════════════════════════════
+# ENHANCED FEATURES
+# ══════════════════════════════════════════════════════
+
+class ViewHistory(models.Model):
+    """Track recently viewed products for personalization"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='view_history')
+    cloth = models.ForeignKey('Cloths', on_delete=models.CASCADE, null=True, blank=True)
+    toy = models.ForeignKey('Toy', on_delete=models.CASCADE, null=True, blank=True)
+    offer = models.ForeignKey('Offers', on_delete=models.CASCADE, null=True, blank=True)
+    arrival = models.ForeignKey('NewArrivals', on_delete=models.CASCADE, null=True, blank=True)
+    
+    viewed_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-viewed_at']
+        verbose_name = 'View History'
+        verbose_name_plural = 'View Histories'
+    
+    def __str__(self):
+        item = self.cloth or self.toy or self.offer or self.arrival
+        return f"{self.user.username} viewed {item}"
+
+
+class Return(models.Model):
+    """Return and refund management system"""
+    STATUS_CHOICES = [
+        ('initiated', 'Initiated'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+        ('shipped', 'Shipped to Us'),
+        ('received', 'Received'),
+        ('processed', 'Refunded'),
+        ('cancelled', 'Cancelled'),
+    ]
+    
+    REASON_CHOICES = [
+        ('damaged', 'Product Damaged'),
+        ('wrong_item', 'Wrong Item Received'),
+        ('not_as_described', 'Not as Described'),
+        ('defective', 'Defective'),
+        ('changed_mind', 'Changed Mind'),
+        ('other', 'Other'),
+    ]
+    
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='returns')
+    order_item = models.ForeignKey(OrderItem, on_delete=models.CASCADE, related_name='returns', null=True, blank=True)
+    
+    reason = models.CharField(max_length=20, choices=REASON_CHOICES)
+    description = models.TextField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='initiated')
+    
+    initiated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    refund_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    admin_notes = models.TextField(blank=True, default='')
+    
+    class Meta:
+        ordering = ['-initiated_at']
+        verbose_name = 'Return'
+        verbose_name_plural = 'Returns'
+    
+    def __str__(self):
+        return f"Return #{self.id} - {self.order.order_number} - {self.status}"
+
+
+class StockAlert(models.Model):
+    """Notify users when out-of-stock items come back"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='stock_alerts')
+    cloth = models.ForeignKey('Cloths', on_delete=models.CASCADE, null=True, blank=True)
+    toy = models.ForeignKey('Toy', on_delete=models.CASCADE, null=True, blank=True)
+    offer = models.ForeignKey('Offers', on_delete=models.CASCADE, null=True, blank=True)
+    arrival = models.ForeignKey('NewArrivals', on_delete=models.CASCADE, null=True, blank=True)
+    
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    notified_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Stock Alert'
+        verbose_name_plural = 'Stock Alerts'
+    
+    def __str__(self):
+        item = self.cloth or self.toy or self.offer or self.arrival
+        return f"{self.user.username} - {item}"
+
+
+class CartAbandon(models.Model):
+    """Track abandoned carts for recovery campaigns"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    session_key = models.CharField(max_length=40, blank=True)
+    
+    cart_total = models.DecimalField(max_digits=10, decimal_places=2)
+    items_count = models.IntegerField()
+    abandoned_at = models.DateTimeField(auto_now_add=True)
+    
+    recovered = models.BooleanField(default=False)
+    recovered_at = models.DateTimeField(null=True, blank=True)
+    
+    email_sent = models.BooleanField(default=False)
+    email_sent_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        ordering = ['-abandoned_at']
+        verbose_name = 'Abandoned Cart'
+        verbose_name_plural = 'Abandoned Carts'
+    
+    def __str__(self):
+        user_info = self.user.email if self.user else self.session_key
+        return f"Cart abandoned by {user_info} - Rs {self.cart_total}"

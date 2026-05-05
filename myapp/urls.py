@@ -59,12 +59,25 @@ urlpatterns = [
     path('profile/notification-preferences/', views.notification_preferences, name='notification_preferences'),
     path('profile/update-email/', views.update_email, name='update_email'),
 
+    # Recently Viewed & Stock Alerts (NEW)
+    path('track-view/<str:product_type>/<int:product_id>/', views.track_view_history, name='track_view_history'),
+    path('recently-viewed/', views.recently_viewed, name='recently_viewed'),
+    path('stock-alert/<str:product_type>/<int:product_id>/add/', views.add_stock_alert, name='add_stock_alert'),
+    path('stock-alerts/', views.stock_alert_settings, name='stock_alert_settings'),
+    
+    # Order Tracking & Returns (ENHANCED)
+    path('orders/', views.order_tracking, name='order_tracking'),
+    path('order/<str:order_number>/', views.order_details, name='order_details'),
+    path('order/<str:order_number>/return/', views.initiate_return, name='initiate_return'),
+    path('returns/', views.my_returns, name='my_returns'),
+    path('return/<int:return_id>/status/', views.return_status, name='return_status'),
+
     # Search
     path('search/', views.search, name='search'),
 
     # Order Tracking & My Orders
     path('my-orders/', views.my_orders, name='my_orders'),
-    path('order-tracking/<str:order_number>/', views.order_tracking, name='order_tracking'),
+    path('order-tracking/<str:order_number>/', views.order_tracking, name='order_tracking_legacy'),
     path('reorder/<str:order_number>/', views.reorder, name='reorder'),
 
     # Coupon Validation (AJAX)

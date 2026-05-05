@@ -4,7 +4,7 @@ from django.utils.html import format_html
 from .models import (Card, Cloths, Offers, NewArrivals, Review, ContactMessage, Toy,
                      WishlistItem, Cart, CartItem, Order, OrderItem, ProductReview,
                      ProductImage, Inventory, Coupon, ProductVariant, OrderTracking,
-                     SiteBanner, SiteSettings)
+                     SiteBanner, SiteSettings, ViewHistory, Return, StockAlert, CartAbandon)
 from .models import ServiceReview
 
 # Admin site branding
@@ -481,3 +481,103 @@ class SiteBannerAdmin(admin.ModelAdmin):
 class SiteSettingsAdmin(admin.ModelAdmin):
     list_display = ['sale_text', 'is_sale_active']
 
+
+# ════════════════════════════════════════════════════
+# New Models Admin (Phase 1 Features)
+# ════════════════════════════════════════════════════
+
+@admin.register(ViewHistory)
+class ViewHistoryAdmin(admin.ModelAdmin):
+    list_display = ['user', 'get_product_name', 'viewed_at']
+    list_filter = ['viewed_at', 'user']
+    search_fields = ['user__username']
+    readonly_fields = ['user', 'cloth', 'toy', 'offer', 'arrival', 'viewed_at']
+    
+    def get_product_name(self, obj):
+        if obj.cloth:
+            return f"Cloth: {obj.cloth.name}"
+        elif obj.toy:
+            return f"Toy: {obj.toy.name}"
+        elif obj.offer:
+            return f"Offer: {obj.offer.title}"
+        elif obj.arrival:
+            return f"Arrival: {obj.arrival.title}"
+        return "Unknown"
+    get_product_name.short_description = 'Product'
+
+
+@admin.register(Return)
+class ReturnAdmin(admin.ModelAdmin):
+    list_display = ['id', 'order', 'order_item', 'status', 'initiated_at', 'refund_amount']
+    list_filter = ['status', 'initiated_at', 'reason']
+    search_fields = ['order__order_number', 'order__user__username', 'order_item__item_name']
+    fieldsets = (
+        ('Order Information', {
+            'fields': ('order', 'order_item'),
+        }),
+        ('Return Details', {
+            'fields': ('reason', 'description', 'status', 'refund_amount'),
+        }),
+        ('Timestamps', {
+            'fields': ('initiated_at', 'updated_at'),
+            'classes': ('collapse',),
+        }),
+    )
+    readonly_fields = ['initiated_at', 'updated_at']
+    
+    def get_order_number(self, obj):
+        return obj.order.order_number
+    get_order_number.short_description = 'Order Number'
+
+
+@admin.register(StockAlert)
+class StockAlertAdmin(admin.ModelAdmin):
+    list_display = ['user', 'get_product_name', 'is_active', 'created_at', 'notified_at']
+    list_filter = ['is_active', 'created_at', 'notified_at']
+    search_fields = ['user__username', 'user__email']
+    readonly_fields = ['created_at', 'notified_at']
+    fieldsets = (
+        ('User', {
+            'fields': ('user',),
+        }),
+        ('Product', {
+            'fields': ('cloth', 'toy', 'offer', 'arrival'),
+        }),
+        ('Status', {
+            'fields': ('is_active', 'notified_at'),
+        }),
+    )
+    
+    def get_product_name(self, obj):
+        if obj.cloth:
+            return f"Cloth: {obj.cloth.name}"
+        elif obj.toy:
+            return f"Toy: {obj.toy.name}"
+        elif obj.offer:
+            return f"Offer: {obj.offer.title}"
+        elif obj.arrival:
+            return f"Arrival: {obj.arrival.title}"
+        return "Unknown"
+    get_product_name.short_description = 'Product'
+
+
+@admin.register(CartAbandon)
+class CartAbandonAdmin(admin.ModelAdmin):
+    list_display = ['get_user_info', 'cart_total', 'abandoned_at', 'recovered', 'email_sent']
+    list_filter = ['recovered', 'email_sent', 'abandoned_at']
+    search_fields = ['user__username', 'user__email', 'session_key']
+    readonly_fields = ['abandoned_at']
+    fieldsets = (
+        ('Cart Information', {
+            'fields': ('user', 'session_key', 'cart_total'),
+        }),
+        ('Recovery Status', {
+            'fields': ('recovered', 'email_sent', 'abandoned_at'),
+        }),
+    )
+    
+    def get_user_info(self, obj):
+        if obj.user:
+            return f"{obj.user.username} ({obj.user.email})"
+        return f"Anonymous ({obj.session_key[:8]}...)"
+    get_user_info.short_description = 'User/Session'

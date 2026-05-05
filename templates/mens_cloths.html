@@ -104,6 +104,38 @@
             transition: transform 0.24s ease, box-shadow 0.24s ease;
         }
 
+        .out-of-stock-badge,
+        .stock-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+            color: #fff;
+            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.18);
+            z-index: 10;
+        }
+
+        .out-of-stock-badge {
+            background: rgba(15, 23, 42, 0.78);
+        }
+
+        .stock-badge-last {
+            background: #ef4444;
+        }
+
+        .stock-badge-low {
+            background: #f59e0b;
+            color: #1f2937;
+        }
+
+        .stock-badge-limited {
+            background: #3b82f6;
+        }
+
         .men-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 15px 28px rgba(15, 23, 42, 0.11);
@@ -266,12 +298,22 @@
 
                     <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                         {% for cloth in section.items %}
+                        {% with is_in_stock=cloth.inventory.stock|default:999 %}
                         <article class="men-card men-product" data-name="{{ cloth.name|lower }}" data-price="{{ cloth.numeric_price }}">
                             <div class="aspect-[4/5] bg-sky-50 overflow-hidden relative group">
                                 <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
                                 <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     <span class="bg-white text-slate-900 px-5 py-2.5 rounded-lg font-bold text-sm hover:scale-105 transition-transform">Quick View</span>
                                 </a>
+                                {% if is_in_stock == 0 %}
+                                <span class="out-of-stock-badge">Out of Stock</span>
+                                {% elif is_in_stock == 1 %}
+                                <span class="stock-badge stock-badge-last">Last 1!</span>
+                                {% elif is_in_stock <= 3 %}
+                                <span class="stock-badge stock-badge-low">Only {{ is_in_stock }} left!</span>
+                                {% elif is_in_stock <= 5 %}
+                                <span class="stock-badge stock-badge-limited">Low Stock</span>
+                                {% endif %}
                             </div>
                             <div class="p-4 grid gap-2">
                                 <h3 class="font-extrabold text-slate-900 leading-6"><a href="{% url 'product_detail' 'cloth' cloth.id %}" class="hover:text-blue-600 transition-colors" style="color:inherit;text-decoration:none">{{ cloth.name }}</a></h3>
@@ -292,6 +334,7 @@
                                 </div>
                             </div>
                         </article>
+                        {% endwith %}
                         {% endfor %}
                     </div>
                 </section>

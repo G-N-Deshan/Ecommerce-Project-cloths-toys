@@ -75,8 +75,18 @@
     {% if all_offers %}
     <div class="offers-grid" id="offersGrid">
         {% for offer in all_offers %}
+        {% with is_in_stock=offer.inventory.stock|default:999 %}
         <article class="offer-card" data-category="{{ offer.category }}" data-title="{{ offer.title|lower }}">
             <span class="offer-badge">{{ offer.offers_badge }}</span>
+            {% if is_in_stock == 0 %}
+            <span class="stock-alert out-of-stock-badge">Out of Stock</span>
+            {% elif is_in_stock == 1 %}
+            <span class="stock-alert last-one">Last 1!</span>
+            {% elif is_in_stock <= 3 %}
+            <span class="stock-alert low-stock">Only {{ is_in_stock }} left!</span>
+            {% elif is_in_stock <= 5 %}
+            <span class="stock-alert limited">Low Stock</span>
+            {% endif %}
             <a href="{% url 'product_detail' 'offer' offer.id %}" class="offer-media">
                 <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }}" loading="lazy">
             </a>
@@ -101,6 +111,7 @@
                 </div>
             </div>
         </article>
+        {% endwith %}
         {% endfor %}
     </div>
     {% else %}

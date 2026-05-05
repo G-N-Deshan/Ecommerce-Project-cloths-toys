@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Returns - KidZone{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <!-- Header -->
+    <div class="mb-8 flex justify-between items-center">
+        <div>
+            <h1 class="text-4xl font-bold text-gray-900">My Returns</h1>
+            <p class="text-gray-600 mt-2">Track all your return requests</p>
+        </div>
+        <a href="{% url 'order_tracking' %}" class="text-blue-600 hover:text-blue-700">
+            <i class="bi bi-arrow-left"></i> Back to Orders
+        </a>
+    </div>
+
+    {% if returns %}
+    <div class="grid grid-cols-1 gap-6">
+        {% for ret in returns %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                    <!-- Return Info -->
+                    <div>
+                        <p class="text-sm text-gray-600 mb-1">Return ID</p>
+                        <p class="font-bold text-lg text-gray-900">#{{ ret.id }}</p>
+                    </div>
+
+                    <!-- Item Info -->
+                    <div>
+                        <p class="text-sm text-gray-600 mb-1">Item</p>
+                        <p class="font-semibold text-gray-900">{{ ret.order_item.item_name }}</p>
+                        <p class="text-xs text-gray-500">Order: {{ ret.order.order_number }}</p>
+                    </div>
+
+                    <!-- Status -->
+                    <div>
+                        <p class="text-sm text-gray-600 mb-1">Status</p>
+                        <span class="inline-block px-3 py-1 rounded-full text-white text-sm font-bold
+                            {% if ret.status == 'initiated' %}bg-blue-600{% elif ret.status == 'approved' %}bg-green-600{% elif ret.status == 'shipped' %}bg-purple-600{% elif ret.status == 'received' %}bg-orange-600{% elif ret.status == 'processed' %}bg-green-600{% else %}bg-gray-600{% endif %}">
+                            {{ ret.get_status_display|upper }}
+                        </span>
+                    </div>
+
+                    <!-- Refund Amount -->
+                    <div>
+                        <p class="text-sm text-gray-600 mb-1">Refund Amount</p>
+                        <p class="font-bold text-lg text-green-600">Rs. {{ ret.refund_amount }}</p>
+                    </div>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="mt-4 pt-4 border-t grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                    <div>
+                        <span class="text-gray-600">Reason:</span> {{ ret.get_reason_display }}
+                    </div>
+                    <div>
+                        <span class="text-gray-600">Initiated:</span> {{ ret.initiated_at|date:"M d, Y" }}
+                    </div>
+                    <div class="text-right">
+                        <a href="{% url 'return_status' ret.id %}" class="text-blue-600 hover:text-blue-700 font-semibold">
+                            View Details <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-16 bg-white rounded-lg shadow-md">
+        <i class="bi bi-inbox text-6xl text-gray-300 mb-4 block"></i>
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">No Returns Yet</h2>
+        <p class="text-gray-600 mb-8">You haven't initiated any returns.</p>
+        <a href="{% url 'order_tracking' %}" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition">
+            View Your Orders <i class="bi bi-arrow-right ml-2"></i>
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- Return Policy Section -->
+    <div class="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Return Policy</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <h3 class="font-semibold text-gray-900 mb-3">
+                    <i class="bi bi-calendar-event text-blue-600"></i> 30-Day Return Window
+                </h3>
+                <p class="text-gray-700">
+                    You have 30 days from the date of purchase to initiate a return. After 30 days, items cannot be returned.
+                </p>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-900 mb-3">
+                    <i class="bi bi-box-seam text-blue-600"></i> Condition Requirements
+                </h3>
+                <p class="text-gray-700">
+                    Items must be unused, in original condition, with all original packaging and documentation included.
+                </p>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-900 mb-3">
+                    <i class="bi bi-cash text-blue-600"></i> Full Refund Guaranteed
+                </h3>
+                <p class="text-gray-700">
+                    Once your return is approved and received, your full refund will be processed within 5-7 business days.
+                </p>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-900 mb-3">
+                    <i class="bi bi-truck text-blue-600"></i> Free Return Shipping
+                </h3>
+                <p class="text-gray-700">
+                    We provide prepaid return shipping labels for all approved returns. Simply print and ship!
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

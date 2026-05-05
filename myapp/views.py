@@ -5,7 +5,8 @@ from .models import (Card, Offers, NewArrivals, Cloths, Review, ContactMessage, 
                      WishlistItem, Cart, CartItem, Order, OrderItem, ProductReview,
                      ProductImage, Inventory, Coupon, ProductVariant, OrderTracking,
                      SiteUpdate, ServiceReview, NewsletterSubscription,
-                     LoyaltyProfile, LoyaltyHistory, SiteBanner, SiteSettings)
+                     LoyaltyProfile, LoyaltyHistory, SiteBanner, SiteSettings,
+                     ViewHistory, Return, StockAlert, CartAbandon)
 from .forms import ReviewForm, ContactForm, ServiceReviewForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -26,6 +27,7 @@ from django.db.models import Q, Avg, Count, Sum as models_sum, F
 from django.core.mail import send_mail
 from django.conf import settings as django_settings
 from django.template.loader import render_to_string
+from django.utils import timezone
 
 
 # Helper function for cart management
@@ -64,6 +66,34 @@ def parse_query_float(raw_value):
         return float(raw_value)
     except (TypeError, ValueError):
         return None
+
+
+def sort_items_by_stock(items, sort_key=None):
+    """
+    Separate items into in-stock and out-of-stock groups.
+    In-stock items appear first, then out-of-stock items.
+    Within each group, items are sorted by the provided sort_key function.
+    """
+    in_stock = []
+    out_of_stock = []
+    
+    for item in items:
+        # Check if item has inventory and if it's in stock
+        has_inventory = hasattr(item, 'inventory') and item.inventory
+        is_available = has_inventory and item.inventory.stock > 0 if has_inventory else True
+        
+        if is_available:
+            in_stock.append(item)
+        else:
+            out_of_stock.append(item)
+    
+    # Sort each group if sort_key provided
+    if sort_key:
+        in_stock.sort(key=sort_key)
+        out_of_stock.sort(key=sort_key)
+    
+    # Return in-stock items first, then out-of-stock
+    return in_stock + out_of_stock
 
 
 # Loyalty Program Helpers
@@ -933,18 +963,31 @@ def cloths(request):
     for item in items:
         item.numeric_price = parse_catalog_price(item.price2 or item.price1 or item.price)
 
+    # Sort by criteria first
     if sort == 'price_asc':
-        items.sort(key=lambda item: item.numeric_price)
+        sort_key = lambda item: item.numeric_price
     elif sort == 'price_desc':
-        items.sort(key=lambda item: item.numeric_price, reverse=True)
+        sort_key = lambda item: item.numeric_price
+        items.sort(key=sort_key, reverse=True)
+        sort_key = None  # Already sorted
     elif sort == 'name_asc':
-        items.sort(key=lambda item: item.name.lower())
+        sort_key = lambda item: item.name.lower()
     elif sort == 'name_desc':
-        items.sort(key=lambda item: item.name.lower(), reverse=True)
+        sort_key = lambda item: item.name.lower()
+        items.sort(key=sort_key, reverse=True)
+        sort_key = None  # Already sorted
     elif sort == 'oldest':
-        items.sort(key=lambda item: item.id)
+        sort_key = lambda item: item.id
     else:
-        items.sort(key=lambda item: item.id, reverse=True)
+        sort_key = lambda item: item.id
+        items.sort(key=sort_key, reverse=True)
+        sort_key = None  # Already sorted
+    
+    # Now apply stock-based sorting with the sort criteria
+    if sort in ['price_asc', 'name_asc', 'oldest']:
+        items = sort_items_by_stock(items, sort_key)
+    else:
+        items = sort_items_by_stock(items)
 
     paginator = Paginator(items, 12)
     page_obj = paginator.get_page(request.GET.get('page'))
@@ -1073,20 +1116,35 @@ def kids_cloths(request):
     if max_price is not None:
         all_filtered_items = [item for item in all_filtered_items if item.numeric_price <= max_price]
 
+    # Sort by criteria first
     if sort == 'price_asc':
-        all_filtered_items.sort(key=lambda item: item.numeric_price)
+        sort_key = lambda item: item.numeric_price
     elif sort == 'price_desc':
-        all_filtered_items.sort(key=lambda item: item.numeric_price, reverse=True)
+        sort_key = lambda item: item.numeric_price
+        all_filtered_items.sort(key=sort_key, reverse=True)
+        sort_key = None
     elif sort == 'name_asc':
-        all_filtered_items.sort(key=lambda item: item.name.lower())
+        sort_key = lambda item: item.name.lower()
     elif sort == 'name_desc':
-        all_filtered_items.sort(key=lambda item: item.name.lower(), reverse=True)
+        sort_key = lambda item: item.name.lower()
+        all_filtered_items.sort(key=sort_key, reverse=True)
+        sort_key = None
     elif sort == 'newest':
-        all_filtered_items.sort(key=lambda item: item.id, reverse=True)
+        sort_key = lambda item: item.id
+        all_filtered_items.sort(key=sort_key, reverse=True)
+        sort_key = None
     elif sort == 'oldest':
-        all_filtered_items.sort(key=lambda item: item.id)
+        sort_key = lambda item: item.id
     else:
-        all_filtered_items.sort(key=lambda item: item.id, reverse=True)
+        sort_key = lambda item: item.id
+        all_filtered_items.sort(key=sort_key, reverse=True)
+        sort_key = None
+
+    # Apply stock-based sorting
+    if sort in ['price_asc', 'name_asc', 'oldest']:
+        all_filtered_items = sort_items_by_stock(all_filtered_items, sort_key)
+    else:
+        all_filtered_items = sort_items_by_stock(all_filtered_items)
 
     kids_girls_cloths = [item for item in all_filtered_items if item.category == 'kids-girl']
     kids_cloths = [item for item in all_filtered_items if item.category == 'kids-men']
@@ -1226,18 +1284,31 @@ def mens_cloths(request):
     if max_price is not None:
         products = [product for product in products if product.numeric_price <= max_price]
 
+    # Sort by criteria first
     if sort == 'price_asc':
-        products.sort(key=lambda item: item.numeric_price)
+        sort_key = lambda item: item.numeric_price
     elif sort == 'price_desc':
-        products.sort(key=lambda item: item.numeric_price, reverse=True)
+        sort_key = lambda item: item.numeric_price
+        products.sort(key=sort_key, reverse=True)
+        sort_key = None
     elif sort == 'name_asc':
-        products.sort(key=lambda item: item.name.lower())
+        sort_key = lambda item: item.name.lower()
     elif sort == 'name_desc':
-        products.sort(key=lambda item: item.name.lower(), reverse=True)
+        sort_key = lambda item: item.name.lower()
+        products.sort(key=sort_key, reverse=True)
+        sort_key = None
     elif sort == 'oldest':
-        products.sort(key=lambda item: item.id)
+        sort_key = lambda item: item.id
     else:
-        products.sort(key=lambda item: item.id, reverse=True)
+        sort_key = lambda item: item.id
+        products.sort(key=sort_key, reverse=True)
+        sort_key = None
+
+    # Apply stock-based sorting
+    if sort in ['price_asc', 'name_asc', 'oldest']:
+        products = sort_items_by_stock(products, sort_key)
+    else:
+        products = sort_items_by_stock(products)
 
     sections_map = {}
     for item in products:
@@ -1477,17 +1548,23 @@ def toys_page(request):
     age_range = request.GET.get('age', 'all')
     
     # Filter toys
-    toys = Toy.objects.all().annotate(avg_rating=Avg('product_reviews__rating'), review_count=Count('product_reviews')).order_by('-id')
+    toys = list(Toy.objects.all().annotate(avg_rating=Avg('product_reviews__rating'), review_count=Count('product_reviews')).order_by('-id'))
     
     if category != 'all':
-        toys = toys.filter(category=category)
+        toys = [toy for toy in toys if toy.category == category]
     
     if age_range != 'all':
-        toys = toys.filter(age_range=age_range)
+        toys = [toy for toy in toys if toy.age_range == age_range]
+    
+    # Apply stock-based sorting
+    toys = sort_items_by_stock(toys)
     
     # Get featured toys
-    featured_toys = Toy.objects.filter(is_bestseller=True).annotate(avg_rating=Avg('product_reviews__rating'), review_count=Count('product_reviews'))[:4]
-    new_toys = Toy.objects.filter(is_new=True).annotate(avg_rating=Avg('product_reviews__rating'), review_count=Count('product_reviews'))[:4]
+    featured_toys = list(Toy.objects.filter(is_bestseller=True).annotate(avg_rating=Avg('product_reviews__rating'), review_count=Count('product_reviews'))[:4])
+    featured_toys = sort_items_by_stock(featured_toys)
+    
+    new_toys = list(Toy.objects.filter(is_new=True).annotate(avg_rating=Avg('product_reviews__rating'), review_count=Count('product_reviews'))[:4])
+    new_toys = sort_items_by_stock(new_toys)
     
     # Pagination
     paginator = Paginator(toys, 12)
@@ -1537,6 +1614,17 @@ def cart_page(request):
 def _wants_json(request):
     return request.headers.get('x-requested-with') == 'XMLHttpRequest' or 'application/json' in request.headers.get('Accept', '')
 
+def _get_inventory(item):
+    if item and hasattr(item, 'inventory') and item.inventory:
+        return item.inventory
+    return None
+
+def _stock_error_response(request, message):
+    if request.method == 'POST' or _wants_json(request):
+        return JsonResponse({'success': False, 'error': message}, status=400)
+    messages.error(request, message)
+    return redirect(request.META.get('HTTP_REFERER', 'index'))
+
 def add_to_cart(request, item_type, item_id):
     try:
         cart = get_or_create_cart(request)
@@ -1556,44 +1644,61 @@ def add_to_cart(request, item_type, item_id):
         item = None
         if item_type == 'cloth':
             item = get_object_or_404(Cloths, id=item_id)
-            cart_item, created = CartItem.objects.get_or_create(
-                cart=cart,
-                item_type='cloth',
-                cloth=item,
-                defaults={'quantity': 1}
-            )
+            inv = _get_inventory(item)
+            if inv and inv.stock <= 0:
+                return _stock_error_response(request, 'This item is out of stock.')
+            cart_item = CartItem.objects.filter(cart=cart, item_type='cloth', cloth=item).first()
+            created = cart_item is None
+            if not cart_item:
+                cart_item = CartItem(cart=cart, item_type='cloth', cloth=item, quantity=1)
+            else:
+                if inv and cart_item.quantity + 1 > inv.stock:
+                    return _stock_error_response(request, f'Only {inv.stock} left in stock.')
+                cart_item.quantity += 1
         elif item_type == 'toy':
             item = get_object_or_404(Toy, id=item_id)
-            cart_item, created = CartItem.objects.get_or_create(
-                cart=cart,
-                item_type='toy',
-                toy=item,
-                defaults={'quantity': 1}
-            )
+            inv = _get_inventory(item)
+            if inv and inv.stock <= 0:
+                return _stock_error_response(request, 'This item is out of stock.')
+            cart_item = CartItem.objects.filter(cart=cart, item_type='toy', toy=item).first()
+            created = cart_item is None
+            if not cart_item:
+                cart_item = CartItem(cart=cart, item_type='toy', toy=item, quantity=1)
+            else:
+                if inv and cart_item.quantity + 1 > inv.stock:
+                    return _stock_error_response(request, f'Only {inv.stock} left in stock.')
+                cart_item.quantity += 1
         elif item_type == 'offer':
             item = get_object_or_404(Offers, id=item_id)
-            cart_item, created = CartItem.objects.get_or_create(
-                cart=cart,
-                item_type='offer',
-                offer=item,
-                defaults={'quantity': 1}
-            )
+            inv = _get_inventory(item)
+            if inv and inv.stock <= 0:
+                return _stock_error_response(request, 'This item is out of stock.')
+            cart_item = CartItem.objects.filter(cart=cart, item_type='offer', offer=item).first()
+            created = cart_item is None
+            if not cart_item:
+                cart_item = CartItem(cart=cart, item_type='offer', offer=item, quantity=1)
+            else:
+                if inv and cart_item.quantity + 1 > inv.stock:
+                    return _stock_error_response(request, f'Only {inv.stock} left in stock.')
+                cart_item.quantity += 1
         elif item_type == 'arrival':
             item = get_object_or_404(NewArrivals, id=item_id)
-            cart_item, created = CartItem.objects.get_or_create(
-                cart=cart,
-                item_type='arrival',
-                arrival=item,
-                defaults={'quantity': 1}
-            )
+            inv = _get_inventory(item)
+            if inv and inv.stock <= 0:
+                return _stock_error_response(request, 'This item is out of stock.')
+            cart_item = CartItem.objects.filter(cart=cart, item_type='arrival', arrival=item).first()
+            created = cart_item is None
+            if not cart_item:
+                cart_item = CartItem(cart=cart, item_type='arrival', arrival=item, quantity=1)
+            else:
+                if inv and cart_item.quantity + 1 > inv.stock:
+                    return _stock_error_response(request, f'Only {inv.stock} left in stock.')
+                cart_item.quantity += 1
         else:
             if _wants_json(request):
                 return JsonResponse({'success': False, 'error': 'Invalid item type'}, status=400)
             messages.error(request, 'Invalid item type')
             return redirect(request.META.get('HTTP_REFERER', 'index'))
-
-        if not created:
-            cart_item.quantity += 1
 
         if cart_item.unit_price is None:
             if requested_unit_price is not None:
@@ -1636,6 +1741,14 @@ def update_cart_item(request, cart_item_id):
         
         cart = get_or_create_cart(request)
         cart_item = get_object_or_404(CartItem, id=cart_item_id, cart=cart)
+
+        item = cart_item.get_item()
+        inv = _get_inventory(item)
+        if inv:
+            if inv.stock <= 0:
+                return JsonResponse({'success': False, 'error': 'This item is out of stock.'}, status=400)
+            if quantity > inv.stock:
+                return JsonResponse({'success': False, 'error': f'Only {inv.stock} left in stock.'}, status=400)
 
         if cart_item.unit_price is None:
             live_price = cart_item.get_live_price()
@@ -1859,6 +1972,11 @@ def move_to_cart(request, wishlist_id):
         
         item = wishlist_item.get_item()
         product_name = item.name
+
+        inv = _get_inventory(item)
+        if inv and inv.stock <= 0:
+            messages.warning(request, f'"{product_name}" is out of stock and cannot be added to cart.')
+            return redirect('wishlist')
         
         # Add to cart
         cart = get_or_create_cart(request)
@@ -1879,6 +1997,9 @@ def move_to_cart(request, wishlist_id):
             )
         
         if not created:
+            if inv and cart_item.quantity + 1 > inv.stock:
+                messages.warning(request, f'Only {inv.stock} left for "{product_name}".')
+                return redirect('wishlist')
             cart_item.quantity += 1
             cart_item.save()
         
@@ -2238,6 +2359,295 @@ def update_email(request):
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     
     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=400)
+
+
+# ══════════════════════════════════════════════════════
+# ENHANCED FEATURES: Recently Viewed, Returns, Order Tracking
+# ══════════════════════════════════════════════════════
+
+@login_required(login_url='login')
+def track_view_history(request, product_type, product_id):
+    """Track when user views a product"""
+    try:
+        product_fk_field = None
+        product = None
+        
+        if product_type == 'cloth':
+            product = get_object_or_404(Cloths, id=product_id)
+            product_fk_field = 'cloth'
+        elif product_type == 'toy':
+            product = get_object_or_404(Toy, id=product_id)
+            product_fk_field = 'toy'
+        elif product_type == 'offer':
+            product = get_object_or_404(Offers, id=product_id)
+            product_fk_field = 'offer'
+        elif product_type == 'arrival':
+            product = get_object_or_404(NewArrivals, id=product_id)
+            product_fk_field = 'arrival'
+        
+        if product and product_fk_field:
+            # Remove old view of same product (to update timestamp)
+            ViewHistory.objects.filter(user=request.user, **{product_fk_field: product}).delete()
+            
+            # Create new view record
+            ViewHistory.objects.create(user=request.user, **{product_fk_field: product})
+        
+        return JsonResponse({'success': True})
+    except Exception:
+        return JsonResponse({'success': False}, status=500)
+
+
+@login_required(login_url='login')
+def recently_viewed(request):
+    """Display recently viewed products"""
+    cart_count = 0
+    try:
+        cart_count = get_or_create_cart(request).get_item_count()
+    except:
+        cart_count = 0
+    
+    # Get last 20 viewed products
+    viewed = ViewHistory.objects.filter(user=request.user)[:20]
+    
+    items = []
+    for view in viewed:
+        item = None
+        url = '#'
+        item_type = ''
+        
+        if view.cloth:
+            item = view.cloth
+            item_type = 'cloth'
+            url = f"/product/cloth/{item.id}/"
+        elif view.toy:
+            item = view.toy
+            item_type = 'toy'
+            url = f"/product/toy/{item.id}/"
+        elif view.offer:
+            item = view.offer
+            item_type = 'offer'
+            url = f"/product/offer/{item.id}/"
+        elif view.arrival:
+            item = view.arrival
+            item_type = 'arrival'
+            url = f"/product/arrival/{item.id}/"
+        
+        if item:
+            items.append({
+                'name': getattr(item, 'name', None) or getattr(item, 'title', ''),
+                'price': getattr(item, 'price', None) or getattr(item, 'price2', None) or getattr(item, 'price1', ''),
+                'image': item.imageUrl.url if hasattr(item, 'imageUrl') and item.imageUrl else '',
+                'url': url,
+                'type': item_type,
+                'viewed_at': view.viewed_at,
+            })
+    
+    return render(request, 'recently_viewed.html', {
+        'items': items,
+        'cart_count': cart_count,
+    })
+
+
+@login_required(login_url='login')
+def order_tracking(request):
+    """Display order tracking with detailed status"""
+    cart_count = get_or_create_cart(request).get_item_count()
+    
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    
+    orders_data = []
+    for order in orders:
+        tracking = order.tracking_updates.all().order_by('-created_at')
+        current_status = tracking.first().status if tracking else 'pending'
+        
+        orders_data.append({
+            'order': order,
+            'current_status': current_status,
+            'tracking_updates': tracking,
+            'can_return': (timezone.now() - order.created_at).days <= 30,
+            'has_return': Return.objects.filter(order=order).exists(),
+        })
+    
+    return render(request, 'order_tracking.html', {
+        'orders_data': orders_data,
+        'cart_count': cart_count,
+    })
+
+
+@login_required(login_url='login')
+def order_details(request, order_number):
+    """View detailed order information"""
+    order = get_object_or_404(Order, order_number=order_number, user=request.user)
+    cart_count = get_or_create_cart(request).get_item_count()
+    
+    tracking_updates = order.tracking_updates.all().order_by('-created_at')
+    returns = Return.objects.filter(order=order)
+    
+    context = {
+        'order': order,
+        'order_items': order.items.all(),
+        'tracking_updates': tracking_updates,
+        'returns': returns,
+        'current_status': tracking_updates.first().status if tracking_updates else 'pending',
+        'can_return': (timezone.now() - order.created_at).days <= 30,
+        'cart_count': cart_count,
+    }
+    
+    return render(request, 'order_details.html', context)
+
+
+@login_required(login_url='login')
+def initiate_return(request, order_number):
+    """Initiate a product return/refund"""
+    order = get_object_or_404(Order, order_number=order_number, user=request.user)
+    cart_count = get_or_create_cart(request).get_item_count()
+    
+    # Check if return is allowed (within 30 days)
+    days_passed = (timezone.now() - order.created_at).days
+    if days_passed > 30:
+        messages.error(request, 'Returns are only allowed within 30 days of purchase')
+        return redirect('order_details', order_number=order_number)
+    
+    if request.method == 'POST':
+        try:
+            item_id = request.POST.get('item_id')
+            reason = request.POST.get('reason')
+            description = request.POST.get('description')
+            
+            if not all([item_id, reason, description]):
+                messages.error(request, 'Please fill in all required fields')
+                return redirect('initiate_return', order_number=order_number)
+            
+            order_item = get_object_or_404(OrderItem, id=item_id, order=order)
+            
+            # Create return record
+            return_obj = Return.objects.create(
+                order=order,
+                order_item=order_item,
+                reason=reason,
+                description=description,
+                refund_amount=order_item.subtotal,
+                status='initiated'
+            )
+            
+            messages.success(request, f'Return initiated for {order_item.item_name}. Your return ID is: #{return_obj.id}')
+            return redirect('return_status', return_id=return_obj.id)
+        except Exception as e:
+            messages.error(request, f'Error creating return: {str(e)}')
+    
+    return render(request, 'initiate_return.html', {
+        'order': order,
+        'order_items': order.items.all(),
+        'cart_count': cart_count,
+        'return_reasons': Return.REASON_CHOICES,
+    })
+
+
+@login_required(login_url='login')
+def return_status(request, return_id):
+    """Check return/refund status"""
+    return_obj = get_object_or_404(Return, id=return_id, order__user=request.user)
+    cart_count = get_or_create_cart(request).get_item_count()
+    
+    context = {
+        'return': return_obj,
+        'order': return_obj.order,
+        'order_item': return_obj.order_item,
+        'cart_count': cart_count,
+        'status_timeline': [
+            {'status': 'initiated', 'label': 'Return Initiated', 'icon': 'bi-check-circle'},
+            {'status': 'approved', 'label': 'Return Approved', 'icon': 'bi-check-circle'},
+            {'status': 'shipped', 'label': 'Shipped to Warehouse', 'icon': 'bi-truck'},
+            {'status': 'received', 'label': 'Received at Warehouse', 'icon': 'bi-bag-check'},
+            {'status': 'processed', 'label': 'Refund Processed', 'icon': 'bi-cash'},
+        ]
+    }
+    
+    return render(request, 'return_status.html', context)
+
+
+@login_required(login_url='login')
+def my_returns(request):
+    """View all returns/refunds for user"""
+    cart_count = get_or_create_cart(request).get_item_count()
+    
+    returns = Return.objects.filter(order__user=request.user).order_by('-initiated_at')
+    
+    return render(request, 'my_returns.html', {
+        'returns': returns,
+        'cart_count': cart_count,
+    })
+
+
+@login_required(login_url='login')
+def stock_alert_settings(request):
+    """Manage stock alerts for products"""
+    cart_count = get_or_create_cart(request).get_item_count()
+    
+    alerts = StockAlert.objects.filter(user=request.user, is_active=True)
+    
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body) if request.body else {}
+            action = data.get('action')
+            alert_id = data.get('alert_id')
+            
+            if action == 'remove':
+                alert = get_object_or_404(StockAlert, id=alert_id, user=request.user)
+                alert.is_active = False
+                alert.save()
+                return JsonResponse({'success': True, 'message': 'Alert removed'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    
+    return render(request, 'stock_alert_settings.html', {
+        'alerts': alerts,
+        'cart_count': cart_count,
+    })
+
+
+@require_POST
+@login_required(login_url='login')
+def add_stock_alert(request, product_type, product_id):
+    """Add a stock alert for an out-of-stock product"""
+    try:
+        product_fk_field = None
+        
+        if product_type == 'cloth':
+            product = get_object_or_404(Cloths, id=product_id)
+            product_fk_field = 'cloth'
+        elif product_type == 'toy':
+            product = get_object_or_404(Toy, id=product_id)
+            product_fk_field = 'toy'
+        elif product_type == 'offer':
+            product = get_object_or_404(Offers, id=product_id)
+            product_fk_field = 'offer'
+        elif product_type == 'arrival':
+            product = get_object_or_404(NewArrivals, id=product_id)
+            product_fk_field = 'arrival'
+        else:
+            return JsonResponse({'success': False, 'error': 'Invalid product type'}, status=400)
+        
+        # Check if already alerting for this product
+        existing = StockAlert.objects.filter(
+            user=request.user,
+            is_active=True,
+            **{product_fk_field: product}
+        ).first()
+        
+        if existing:
+            return JsonResponse({'success': True, 'message': 'Already monitoring this product'})
+        
+        # Create alert
+        alert = StockAlert.objects.create(user=request.user, **{product_fk_field: product})
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'We\'ll notify you when this item is back in stock!',
+            'alert_id': alert.id
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 
 # ══════════════════════════════════════════════════════
@@ -3064,6 +3474,10 @@ def reorder(request, order_number):
         if not item:
             continue
 
+        inv = _get_inventory(item)
+        if inv and inv.stock <= 0:
+            continue
+
         kwargs = {'cart': cart, 'item_type': oi.item_type, oi.item_type: item}
         # For cloth type the FK field is 'cloth'
         fk_field = oi.item_type
@@ -3074,7 +3488,10 @@ def reorder(request, order_number):
 
         ci, created = CartItem.objects.get_or_create(**kwargs, defaults={'quantity': oi.quantity})
         if not created:
-            ci.quantity += oi.quantity
+            if inv and ci.quantity + oi.quantity > inv.stock:
+                ci.quantity = inv.stock
+            else:
+                ci.quantity += oi.quantity
             ci.save()
         added += 1
 

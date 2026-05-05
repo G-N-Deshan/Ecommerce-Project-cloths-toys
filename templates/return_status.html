@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Return Status #{{ return.id }} - KidZone{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <!-- Header -->
+    <div class="mb-8 flex justify-between items-center">
+        <div>
+            <h1 class="text-4xl font-bold text-gray-900">Return Status</h1>
+            <p class="text-gray-600 mt-2">Return ID: <strong>#{{ return.id }}</strong></p>
+        </div>
+        <a href="{% url 'my_returns' %}" class="text-blue-600 hover:text-blue-700">
+            <i class="bi bi-arrow-left"></i> Back to Returns
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Return Timeline -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow-md p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Return Progress</h2>
+
+                <!-- Status Timeline -->
+                <div class="relative">
+                    <!-- Timeline Line -->
+                    <div class="absolute left-4 top-12 bottom-0 w-1 bg-gray-300"></div>
+
+                    <!-- Timeline Items -->
+                    {% for step in status_timeline %}
+                    <div class="relative mb-8 pl-20">
+                        <!-- Timeline Circle -->
+                        <div class="absolute left-0 w-10 h-10 rounded-full flex items-center justify-center {% if step.status == return.status %}bg-green-600{% else %}bg-gray-300{% endif %}">
+                            <i class="bi {{ step.icon }} text-white text-lg"></i>
+                        </div>
+
+                        <!-- Status Label -->
+                        <div class="pb-4">
+                            <h3 class="font-bold text-gray-900 text-lg capitalize">{{ step.label }}</h3>
+                            {% if step.status == return.status %}
+                            <span class="inline-block mt-2 px-3 py-1 bg-green-100 text-green-800 text-xs font-bold rounded-full">
+                                Current Status
+                            </span>
+                            {% elif step.status == 'initiated' %}
+                            <p class="text-sm text-gray-600 mt-1">{{ return.initiated_at|date:"M d, Y H:i" }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Return Details -->
+            <div class="bg-white rounded-lg shadow-md p-8 mt-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Return Details</h2>
+
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <p class="text-gray-600 text-sm">Return ID</p>
+                        <p class="font-bold text-gray-900 text-lg">#{{ return.id }}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 text-sm">Return Status</p>
+                        <p class="font-bold text-lg">
+                            <span class="px-3 py-1 rounded-full text-white text-sm
+                                {% if return.status == 'initiated' %}bg-blue-600{% elif return.status == 'approved' %}bg-green-600{% elif return.status == 'shipped' %}bg-purple-600{% elif return.status == 'received' %}bg-orange-600{% elif return.status == 'processed' %}bg-green-600{% else %}bg-gray-600{% endif %}">
+                                {{ return.get_status_display|upper }}
+                            </span>
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 text-sm">Return Reason</p>
+                        <p class="font-bold text-gray-900">{{ return.get_reason_display }}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 text-sm">Refund Amount</p>
+                        <p class="font-bold text-gray-900 text-lg">Rs. {{ return.refund_amount }}</p>
+                    </div>
+                    <div class="col-span-2">
+                        <p class="text-gray-600 text-sm">Description</p>
+                        <p class="text-gray-900">{{ return.description }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Return Instructions -->
+            <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-lg mt-6">
+                <h3 class="font-bold text-gray-900 mb-3">
+                    <i class="bi bi-box-seam"></i> Next Steps
+                </h3>
+                {% if return.status == 'initiated' %}
+                <p class="text-gray-700 mb-3">
+                    Your return has been initiated. Check your email for detailed return instructions and a prepaid return shipping label.
+                </p>
+                <p class="text-sm text-gray-600">
+                    Please ship the item within <strong>14 days</strong> to ensure timely processing.
+                </p>
+                {% elif return.status == 'approved' %}
+                <p class="text-gray-700">
+                    Your return has been approved! Check your email for the return shipping instructions. Print the prepaid label and ship the item back to us.
+                </p>
+                {% elif return.status == 'shipped' %}
+                <p class="text-gray-700">
+                    Great! We've received your return shipment information. Your package is on its way to our warehouse.
+                </p>
+                {% elif return.status == 'received' %}
+                <p class="text-gray-700">
+                    We've received your return! Our team is inspecting the item. This typically takes 2-3 business days.
+                </p>
+                {% elif return.status == 'processed' %}
+                <p class="text-gray-700">
+                    Your refund has been processed! The amount Rs. {{ return.refund_amount }} will be credited to your original payment method within 5-7 business days.
+                </p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Return Info Card -->
+        <div class="lg:col-span-1">
+            <!-- Original Order -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h3 class="font-bold text-gray-900 mb-4">Original Order</h3>
+                <div class="text-gray-700 space-y-3">
+                    <div>
+                        <p class="text-sm text-gray-600">Order Number</p>
+                        <a href="{% url 'order_details' order.order_number %}" class="text-blue-600 hover:text-blue-700 font-bold">
+                            {{ order.order_number }}
+                        </a>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Order Date</p>
+                        <p>{{ order.created_at|date:"M d, Y" }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Item</p>
+                        <p class="font-bold">{{ order_item.item_name }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Return Timeline Summary -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h3 class="font-bold text-gray-900 mb-4">Timeline</h3>
+                <div class="text-sm text-gray-700 space-y-2">
+                    <div>
+                        <p class="text-gray-600">Initiated</p>
+                        <p>{{ return.initiated_at|date:"M d, Y" }}</p>
+                    </div>
+                    {% if return.updated_at %}
+                    <div>
+                        <p class="text-gray-600">Last Updated</p>
+                        <p>{{ return.updated_at|date:"M d, Y H:i" }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Contact Support -->
+            <div class="bg-gray-50 border border-gray-300 rounded-lg p-6">
+                <h3 class="font-bold text-gray-900 mb-3">Need Help?</h3>
+                <p class="text-sm text-gray-700 mb-4">
+                    If you have any questions about your return, our support team is here to help.
+                </p>
+                <a href="{% url 'contact_us' %}" class="w-full inline-block text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-semibold">
+                    Contact Support
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

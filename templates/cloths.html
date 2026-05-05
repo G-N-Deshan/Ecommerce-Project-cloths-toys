@@ -112,11 +112,21 @@
         {% if cloths_items %}
         <div class="catalog-grid">
             {% for cloth in cloths_items %}
-            <article class="product-card" data-product-card>
+            {% with is_in_stock=cloth.inventory.stock|default:0 %}
+            <article class="product-card {% if is_in_stock == 0 %}out-of-stock{% endif %}" data-product-card>
                 <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="product-card__image-wrap">
                     <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" class="product-card__image" loading="lazy">
                     {% if cloth.discount_text %}
                     <span class="product-badge">{{ cloth.discount_text }}</span>
+                    {% endif %}
+                    {% if is_in_stock == 0 %}
+                    <span class="out-of-stock-badge">Out of Stock</span>
+                    {% elif is_in_stock == 1 %}
+                    <span class="stock-badge stock-badge-last">Last 1!</span>
+                    {% elif is_in_stock <= 3 %}
+                    <span class="stock-badge stock-badge-low">Only {{ is_in_stock }} left!</span>
+                    {% elif is_in_stock <= 5 %}
+                    <span class="stock-badge stock-badge-limited">Low Stock</span>
                     {% endif %}
                 </a>
 
@@ -142,12 +152,17 @@
 
                     <div class="product-actions">
                         <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="btn-view">Quick View</a>
+                        {% if is_in_stock > 0 %}
                         <button class="btn-add" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}">Add to Cart</button>
+                        {% else %}
+                        <button class="btn-add btn-disabled" disabled title="Item is out of stock">Out of Stock</button>
+                        {% endif %}
                     </div>
 
                     <div class="compare-row">
                         <button
                             class="btn-compare"
+                            {% if is_in_stock == 0 %}disabled{% endif %}
                             data-compare-toggle
                             data-product-id="{{ cloth.id }}"
                             data-product-name="{{ cloth.name|escape }}"
@@ -163,6 +178,7 @@
                     </div>
                 </div>
             </article>
+            {% endwith %}
             {% endfor %}
         </div>
 

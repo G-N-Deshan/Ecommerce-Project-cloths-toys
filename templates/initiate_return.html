@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Initiate Return - KidZone{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-900">Initiate Return</h1>
+        <p class="text-gray-600 mt-2">Order {{ order.order_number }} - {{ order.created_at|date:"M d, Y" }}</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Return Form -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow-md p-8">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <!-- Select Item -->
+                    <div class="mb-6">
+                        <label class="block text-gray-900 font-semibold mb-3">
+                            <i class="bi bi-box-seam"></i> Select Item to Return
+                        </label>
+                        <select name="item_id" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-blue-600 focus:outline-none">
+                            <option value="">-- Choose an item --</option>
+                            {% for item in order_items %}
+                            <option value="{{ item.id }}">{{ item.item_name }} (Qty: {{ item.quantity }} x Rs. {{ item.price }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Return Reason -->
+                    <div class="mb-6">
+                        <label class="block text-gray-900 font-semibold mb-3">
+                            <i class="bi bi-question-circle"></i> Reason for Return
+                        </label>
+                        <select name="reason" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-blue-600 focus:outline-none">
+                            <option value="">-- Select a reason --</option>
+                            <option value="defective">Item is Defective/Damaged</option>
+                            <option value="not_as_described">Not as Described</option>
+                            <option value="wrong_size">Wrong Size</option>
+                            <option value="wrong_color">Wrong Color</option>
+                            <option value="changed_mind">Changed Mind</option>
+                            <option value="quality_issue">Quality Issue</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Detailed Description -->
+                    <div class="mb-6">
+                        <label class="block text-gray-900 font-semibold mb-3">
+                            <i class="bi bi-file-text"></i> Detailed Description
+                        </label>
+                        <textarea name="description" rows="5" required placeholder="Please provide details about the issue..." 
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-blue-600 focus:outline-none"></textarea>
+                        <p class="text-xs text-gray-500 mt-2">Be specific so we can resolve your issue faster</p>
+                    </div>
+
+                    <!-- Info Box -->
+                    <div class="bg-blue-50 border-l-4 border-blue-600 p-4 rounded-lg mb-6">
+                        <p class="text-sm text-gray-700">
+                            <strong>Return Process:</strong><br>
+                            1. Submit this form to initiate return<br>
+                            2. Receive return instructions via email<br>
+                            3. Ship the item back to us<br>
+                            4. We inspect and process your refund<br>
+                            5. Refund credited within 5-7 business days
+                        </p>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="flex gap-4">
+                        <button type="submit" class="flex-1 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition font-semibold">
+                            <i class="bi bi-arrow-counterclockwise"></i> Initiate Return
+                        </button>
+                        <a href="{% url 'order_details' order.order_number %}" class="flex-1 bg-gray-200 text-gray-900 py-3 rounded-lg hover:bg-gray-300 transition font-semibold text-center">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Eligibility Info -->
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="font-bold text-gray-900 mb-4">
+                    <i class="bi bi-info-circle"></i> Return Policy
+                </h3>
+                <div class="space-y-4 text-sm text-gray-700">
+                    <div>
+                        <p class="font-semibold text-gray-900 mb-1">Return Window</p>
+                        <p>30 days from purchase date</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-900 mb-1">Condition</p>
+                        <p>Item must be unused and in original condition</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-900 mb-1">Refund Method</p>
+                        <p>Original payment method</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-900 mb-1">Processing Time</p>
+                        <p>5-7 business days after inspection</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-600 p-4 rounded-lg mt-6">
+                <p class="font-semibold text-yellow-900 mb-2">
+                    <i class="bi bi-exclamation-circle"></i> Important
+                </p>
+                <p class="text-sm text-gray-700">
+                    Please ensure the item is in original condition with all packaging and documentation.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
