@@ -395,8 +395,8 @@ def subscribe_newsletter(request):
 
 
 def index(request):
-    offers = Offers.objects.all()
-    arrivals = NewArrivals.objects.all()
+    offers = Offers.objects.annotate(avg_rating=Avg('product_reviews__rating')).all()
+    arrivals = NewArrivals.objects.annotate(avg_rating=Avg('product_reviews__rating')).all()
     cards = Card.objects.all()
     wishlist_items = []
     wishlist_count = 0
@@ -1861,9 +1861,17 @@ def get_cart_data(request):
 
 def cart_details(request):
     cart = get_or_create_cart(request)
+    subtotal = Decimal(str(cart.get_total()))
+    tax = subtotal * Decimal('0.10')
+    total = subtotal + tax
+    
     return render(request, 'cart_details_page.html', {
         'cart': cart,
         'cart_count': cart.get_item_count(),
+        'cart_items': cart.items.all(),
+        'subtotal': float(subtotal),
+        'tax': float(tax),
+        'total': float(total),
     })
 
 
@@ -2022,11 +2030,24 @@ def checkout(request):
     cart = get_or_create_cart(request)
     
     if cart.get_item_count() == 0:
+        # Check if the user placed an order in the last 1 minute (to handle double-clicks)
+        from django.utils import timezone
+        from datetime import timedelta
+        recent_order = Order.objects.filter(
+            user=request.user, 
+            created_at__gte=timezone.now() - timedelta(minutes=1)
+        ).order_by('-created_at').first()
+        
+        if recent_order:
+            return redirect('order_success', order_number=recent_order.order_number)
+            
         messages.warning(request, 'Your cart is empty')
         return redirect('cart_details')
     
     if request.method == 'POST':
         full_name = request.POST.get('full_name', '').strip()
+        if not full_name and request.user.is_authenticated:
+            full_name = request.user.get_full_name() or request.user.username
         email = request.POST.get('email', '').strip()
         phone = request.POST.get('phone', '').strip()
         address = request.POST.get('address', '').strip()
@@ -2041,6 +2062,7 @@ def checkout(request):
             subtotal = Decimal(str(cart.get_total()))
             tax = subtotal * Decimal('0.10')
             shipping = Decimal('10.00')
+            last_order = Order.objects.filter(user=request.user).order_by('-created_at').first()
             return render(request, 'checkout.html', {
                 'cart': cart,
                 'cart_items': cart.items.all(),
@@ -2049,6 +2071,8 @@ def checkout(request):
                 'shipping': float(shipping),
                 'total': float(subtotal + tax + shipping),
                 'coupons_available': Coupon.objects.filter(is_active=True).exists(),
+                'post_data': request.POST,
+                'last_order': last_order,
             })
         
         try:
@@ -2122,7 +2146,9 @@ def checkout(request):
             # Create order items and reduce inventory
             for cart_item in cart.items.all():
                 item = cart_item.get_item()
-                item_name = item.name if hasattr(item, 'name') else item.title
+                if item is None:
+                    continue
+                item_name = getattr(item, 'name', None) or getattr(item, 'title', 'Unknown Item')
                 OrderItem.objects.create(
                     order=order,
                     item_name=item_name,
@@ -2170,13 +2196,14 @@ def checkout(request):
             
             cart.items.all().delete()
             messages.success(request, f'Order {order_number} placed successfully!')
-            return redirect('order_success_latest_hyphen')
+            return redirect('order_success', order_number=order_number)
         
         except Exception as e:
             messages.error(request, 'Something went wrong placing your order. Please try again.')
             subtotal = Decimal(str(cart.get_total()))
             tax = subtotal * Decimal('0.10')
             shipping = Decimal('10.00')
+            last_order = Order.objects.filter(user=request.user).order_by('-created_at').first()
             return render(request, 'checkout.html', {
                 'cart': cart,
                 'cart_items': cart.items.all(),
@@ -2185,6 +2212,8 @@ def checkout(request):
                 'shipping': float(shipping),
                 'total': float(subtotal + tax + shipping),
                 'coupons_available': Coupon.objects.filter(is_active=True).exists(),
+                'post_data': request.POST,
+                'last_order': last_order,
             })
     
     subtotal = Decimal(str(cart.get_total()))
@@ -2732,15 +2761,19 @@ def search(request):
 # ══════════════════════════════════════════════════════
 
 @login_required(login_url='login')
-def order_tracking(request, order_number):
+def order_tracking_legacy(request, order_number):
     order = get_object_or_404(Order, order_number=order_number, user=request.user)
-    tracking_updates = order.tracking_updates.all()
+    tracking_updates = order.tracking_updates.all().order_by('-created_at')
 
     status_steps = ['pending', 'processing', 'shipped', 'delivered']
     current_index = status_steps.index(order.status) if order.status in status_steps else -1
+    
+    # Check if any items are in this order
+    order_items = order.items.all()
 
     return render(request, 'order_tracking.html', {
         'order': order,
+        'order_items': order_items,
         'tracking_updates': tracking_updates,
         'status_steps': status_steps,
         'current_index': current_index,
@@ -3195,6 +3228,8 @@ def payment_page(request):
     shipping = Decimal('10.00')
     total = subtotal + tax + shipping
 
+    shipping_info = request.session.get('checkout_shipping', {})
+
     context = {
         'cart_items': items_data,
         'subtotal': float(subtotal),
@@ -3202,6 +3237,7 @@ def payment_page(request):
         'shipping': float(shipping),
         'total': float(total),
         'stripe_publishable_key': django_settings.STRIPE_PUBLISHABLE_KEY,
+        'shipping_info': shipping_info,
     }
     return render(request, 'payment.html', context)
 
@@ -3264,7 +3300,7 @@ def create_checkout_session(request):
         body = {}
 
     # Store shipping info in session for later use
-    request.session['checkout_shipping'] = {
+    shipping_data = {
         'full_name': body.get('full_name', request.user.get_full_name() or request.user.username),
         'email': body.get('email', request.user.email),
         'phone': body.get('phone', ''),
@@ -3274,8 +3310,16 @@ def create_checkout_session(request):
         'country': body.get('country', ''),
         'coupon_code': body.get('coupon_code', ''),
     }
+    request.session['checkout_shipping'] = shipping_data
 
     try:
+        # Prepare metadata (ensure all values are strings)
+        metadata = {
+            'user_id': str(request.user.id),
+        }
+        for k, v in shipping_data.items():
+            metadata[f'shipping_{k}'] = str(v)
+
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=line_items,
@@ -3283,7 +3327,7 @@ def create_checkout_session(request):
             success_url=request.build_absolute_uri('/payment-success/') + '?session_id={CHECKOUT_SESSION_ID}',
             cancel_url=request.build_absolute_uri('/payment-cancel/'),
             customer_email=request.user.email,
-            metadata={'user_id': str(request.user.id)},
+            metadata=metadata,
         )
         return JsonResponse({'sessionId': session.id})
     except Exception as e:
@@ -3291,30 +3335,24 @@ def create_checkout_session(request):
 
 
 @login_required(login_url='login')
-def payment_success(request):
-    """Handle Stripe redirect after successful payment."""
-    session_id = request.GET.get('session_id')
-    if not session_id:
-        return redirect('index')
-
-    stripe.api_key = django_settings.STRIPE_SECRET_KEY
-    try:
-        session = stripe.checkout.Session.retrieve(session_id)
-    except Exception:
-        messages.error(request, 'Could not verify payment.')
-        return redirect('index')
-
-    if session.payment_status != 'paid':
-        messages.error(request, 'Payment was not completed.')
-        return redirect('payment_page')
-
-    # Check if order already created for this session
-    existing = Order.objects.filter(tracking_number=session_id).first()
+def _finalize_order_from_stripe_session(session, user, cart, request=None):
+    """Helper to create order from Stripe session data."""
+    # Double check if order already exists for this session
+    existing = Order.objects.filter(tracking_number=session.id).first()
     if existing:
-        return redirect('order_success', order_number=existing.order_number)
+        return existing
 
-    cart = get_or_create_cart(request)
-    shipping_info = request.session.pop('checkout_shipping', {})
+    metadata = session.metadata
+    shipping_info = {
+        'full_name': metadata.get('shipping_full_name', user.get_full_name() or user.username),
+        'email': metadata.get('shipping_email', user.email),
+        'phone': metadata.get('shipping_phone', ''),
+        'address': metadata.get('shipping_address', ''),
+        'city': metadata.get('shipping_city', ''),
+        'postal_code': metadata.get('shipping_postal_code', ''),
+        'country': metadata.get('shipping_country', ''),
+        'coupon_code': metadata.get('shipping_coupon_code', ''),
+    }
 
     order_number = f"ORD-{uuid.uuid4().hex[:8].upper()}"
     subtotal = Decimal(str(cart.get_total()))
@@ -3337,15 +3375,15 @@ def payment_success(request):
     total = subtotal - discount + tax + shipping
 
     order = Order.objects.create(
-        user=request.user,
+        user=user,
         order_number=order_number,
-        full_name=shipping_info.get('full_name', request.user.username),
-        email=shipping_info.get('email', request.user.email),
-        phone=shipping_info.get('phone', ''),
-        address=shipping_info.get('address', ''),
-        city=shipping_info.get('city', ''),
-        postal_code=shipping_info.get('postal_code', ''),
-        country=shipping_info.get('country', ''),
+        full_name=shipping_info.get('full_name'),
+        email=shipping_info.get('email'),
+        phone=shipping_info.get('phone'),
+        address=shipping_info.get('address'),
+        city=shipping_info.get('city'),
+        postal_code=shipping_info.get('postal_code'),
+        country=shipping_info.get('country'),
         subtotal=subtotal,
         tax=tax,
         shipping=shipping,
@@ -3353,7 +3391,7 @@ def payment_success(request):
         coupon_code=coupon_code,
         total=total,
         payment_method='stripe',
-        tracking_number=session_id,
+        tracking_number=session.id,
     )
 
     for cart_item in cart.items.all():
@@ -3377,9 +3415,34 @@ def payment_success(request):
     # Send order confirmation email
     _send_order_confirmation_email(order, request)
 
+    # Clear cart
     cart.items.all().delete()
-    messages.success(request, f'Payment successful! Order {order_number} placed.')
-    return redirect('order_success', order_number=order_number)
+    return order
+
+
+@login_required(login_url='login')
+def payment_success(request):
+    """Handle Stripe redirect after successful payment."""
+    session_id = request.GET.get('session_id')
+    if not session_id:
+        return redirect('index')
+
+    stripe.api_key = django_settings.STRIPE_SECRET_KEY
+    try:
+        session = stripe.checkout.Session.retrieve(session_id)
+    except Exception:
+        messages.error(request, 'Could not verify payment.')
+        return redirect('index')
+
+    if session.payment_status != 'paid':
+        messages.error(request, 'Payment was not completed.')
+        return redirect('payment_page')
+
+    cart = get_or_create_cart(request)
+    order = _finalize_order_from_stripe_session(session, request.user, cart, request)
+    
+    messages.success(request, f'Payment successful! Order {order.order_number} placed.')
+    return redirect('order_success', order_number=order.order_number)
 
 
 @login_required(login_url='login')
@@ -3404,12 +3467,14 @@ def stripe_webhook(request):
 
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
-        # Order is created on redirect; webhook is a safety net
-        order = Order.objects.filter(tracking_number=session['id']).first()
-        if order and order.status == 'pending':
-            order.status = 'processing'
-            order.save()
-            OrderTracking.objects.create(order=order, status='processing', note='Payment confirmed via webhook.')
+        user_id = session.metadata.get('user_id')
+        if user_id:
+            try:
+                user = User.objects.get(id=user_id)
+                cart = Cart.objects.get(user=user)
+                _finalize_order_from_stripe_session(session, user, cart)
+            except Exception as e:
+                print(f"Webhook order creation error: {e}")
 
     return HttpResponse(status=200)
 

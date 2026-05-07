@@ -133,11 +133,7 @@
                 <div class="product-card__content">
                     <div class="product-meta-top">
                         <span class="product-category">{{ cloth.get_category_display }}</span>
-                        {% if cloth.review_count %}
-                        <span class="product-rating">{{ cloth.avg_rating|floatformat:1 }} ({{ cloth.review_count }})</span>
-                        {% else %}
-                        <span class="product-rating">No reviews yet</span>
-                        {% endif %}
+                        {% with item_rating=cloth.avg_rating item_review_count=cloth.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
                     </div>
 
                     <h3>{{ cloth.name }}</h3>

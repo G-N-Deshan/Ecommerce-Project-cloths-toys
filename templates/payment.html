@@ -177,7 +177,7 @@
             <!-- Coupon -->
             <div class="mt-4">
                 <div class="flex gap-2">
-                    <input type="text" id="couponInput" placeholder="Coupon code" class="flex-1 px-3 py-2 rounded-lg bg-white/10 border border-white/15 text-white placeholder:text-white/40 text-sm focus:outline-none focus:border-indigo-400">
+                    <input type="text" id="couponInput" placeholder="Coupon code" value="{{ shipping_info.coupon_code }}" class="flex-1 px-3 py-2 rounded-lg bg-white/10 border border-white/15 text-white placeholder:text-white/40 text-sm focus:outline-none focus:border-indigo-400">
                     <button onclick="applyCoupon()" class="px-4 py-2 rounded-lg bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-semibold transition">Apply</button>
                 </div>
                 <p id="couponMsg" class="text-xs mt-1.5 hidden"></p>
@@ -207,31 +207,31 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div class="col-span-2 sm:col-span-1">
                         <label class="pay-label">Full Name</label>
-                        <input type="text" id="payFullName" class="pay-field" value="{{ user.get_full_name|default:user.username }}" required>
+                        <input type="text" id="payFullName" class="pay-field" value="{{ shipping_info.full_name|default:user.get_full_name|default:user.username }}" required>
                     </div>
                     <div class="col-span-2 sm:col-span-1">
                         <label class="pay-label">Email</label>
-                        <input type="email" id="payEmail" class="pay-field" value="{{ user.email }}" required>
+                        <input type="email" id="payEmail" class="pay-field" value="{{ shipping_info.email|default:user.email }}" required>
                     </div>
                     <div class="col-span-2 sm:col-span-1">
                         <label class="pay-label">Phone</label>
-                        <input type="tel" id="payPhone" class="pay-field" required>
+                        <input type="tel" id="payPhone" class="pay-field" value="{{ shipping_info.phone }}" required>
                     </div>
                     <div class="col-span-2 sm:col-span-1">
                         <label class="pay-label">City</label>
-                        <input type="text" id="payCity" class="pay-field" required>
+                        <input type="text" id="payCity" class="pay-field" value="{{ shipping_info.city }}" required>
                     </div>
                     <div class="col-span-2">
                         <label class="pay-label">Address</label>
-                        <input type="text" id="payAddress" class="pay-field" required>
+                        <input type="text" id="payAddress" class="pay-field" value="{{ shipping_info.address }}" required>
                     </div>
                     <div>
                         <label class="pay-label">Postal Code</label>
-                        <input type="text" id="payPostalCode" class="pay-field" required>
+                        <input type="text" id="payPostalCode" class="pay-field" value="{{ shipping_info.postal_code }}" required>
                     </div>
                     <div>
                         <label class="pay-label">Country</label>
-                        <input type="text" id="payCountry" class="pay-field" value="Sri Lanka" required>
+                        <input type="text" id="payCountry" class="pay-field" value="{{ shipping_info.country|default:'Sri Lanka' }}" required>
                     </div>
                 </div>
             </div>

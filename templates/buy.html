@@ -162,7 +162,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="offersGrid">
                 {% for offer in offers %}
                 <article
-                    class="product-card js-buy-product group bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+                    class="product-card js-buy-product group bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden {% if offer.inventory and offer.inventory.stock <= 0 %}opacity-75{% endif %}"
                     data-kind="offer"
                     data-id="{{ offer.id }}"
                     data-category="{{ offer.category }}"
@@ -178,10 +178,17 @@
                         {% if offer.offers_badge %}
                         <span class="absolute top-3 right-3 z-10 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full animate-pulse">{{ offer.offers_badge }}</span>
                         {% endif %}
+                        <button onclick="window.location.href='{% url 'add_to_wishlist' 'offer' offer.id %}'" class="absolute top-3 left-3 z-10 w-8 h-8 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full text-slate-400 hover:text-pink-500 hover:bg-pink-50 shadow-md transition-all">
+                            <i class="bi bi-heart-fill"></i>
+                        </button>
                         <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }}" class="w-full h-56 object-contain bg-slate-50 p-4 group-hover:scale-105 transition-transform duration-500" loading="lazy">
                         <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 gap-2">
                             <button type="button" class="px-5 py-2 bg-white text-slate-800 font-semibold rounded-full text-sm hover:scale-105 transition-transform js-quick-view">Quick View</button>
-                            <a href="{% url 'product_detail' 'offer' offer.id %}" class="px-5 py-2 bg-indigo-600 text-white font-semibold rounded-full text-sm hover:scale-105 transition-transform">Details</a>
+                            <button
+                                class="px-5 py-2 font-semibold rounded-full text-sm hover:scale-105 transition-transform {% if offer.inventory and offer.inventory.stock <= 0 %}bg-slate-400 text-slate-200 cursor-not-allowed opacity-50{% else %}bg-indigo-600 text-white hover:bg-indigo-700{% endif %}"
+                                {% if offer.inventory and offer.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}"{% endif %}>
+                                Add to Cart
+                            </button>
                         </div>
                     </div>
                     <div class="p-5">
@@ -201,8 +208,8 @@
                             <span class="ml-auto text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded-full">{{ offer.stock_text }}</span>
                             {% endif %}
                         </div>
-                        <button class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-indigo-500/30 hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2" data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}">
-                            <i class="bi bi-cart-plus"></i> {{ offer.button_text }}
+                        <button class="w-full py-3 font-bold rounded-xl hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 {% if offer.inventory and offer.inventory.stock <= 0 %}bg-slate-300 text-slate-500 cursor-not-allowed{% else %}bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:shadow-indigo-500/30 hover:scale-[1.02]{% endif %}" {% if offer.inventory and offer.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}"{% endif %}>
+                            <i class="bi bi-cart-plus"></i> {% if offer.inventory and offer.inventory.stock <= 0 %}Out of Stock{% else %}{{ offer.button_text }}{% endif %}
                         </button>
                         <button type="button" class="buy-compare-btn js-compare-toggle">Compare</button>
                     </div>
@@ -229,7 +236,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="arrivalsGrid">
                 {% for item in kids_arrivals %}
                 <article
-                    class="product-card js-buy-product group bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+                    class="product-card js-buy-product group bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden {% if item.inventory and item.inventory.stock <= 0 %}opacity-75{% endif %}"
                     data-kind="arrival"
                     data-id="{{ item.id }}"
                     data-category="{{ item.category }}"
@@ -245,10 +252,17 @@
                         {% if item.offers_badge %}
                         <span class="absolute bottom-3 left-3 z-10 px-3 py-1 bg-emerald-500 text-white text-xs font-bold rounded-full">{{ item.offers_badge }}</span>
                         {% endif %}
+                        <button onclick="window.location.href='{% url 'add_to_wishlist' 'arrival' item.id %}'" class="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full text-slate-400 hover:text-pink-500 hover:bg-pink-50 shadow-md transition-all">
+                            <i class="bi bi-heart-fill"></i>
+                        </button>
                         <img src="{{ item.imageUrl.url }}" alt="{{ item.title }}" class="w-full h-56 object-contain p-4 group-hover:scale-105 transition-transform duration-500" loading="lazy">
                         <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 gap-2">
                             <button type="button" class="px-5 py-2 bg-white text-slate-800 font-semibold rounded-full text-sm hover:scale-105 transition-transform js-quick-view">Quick View</button>
-                            <a href="{% url 'product_detail' 'arrival' item.id %}" class="px-5 py-2 bg-indigo-600 text-white font-semibold rounded-full text-sm hover:scale-105 transition-transform">Details</a>
+                            <button
+                                class="px-5 py-2 font-semibold rounded-full text-sm hover:scale-105 transition-transform {% if item.inventory and item.inventory.stock <= 0 %}bg-slate-400 text-slate-200 cursor-not-allowed opacity-50{% else %}bg-indigo-600 text-white hover:bg-indigo-700{% endif %}"
+                                {% if item.inventory and item.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}"{% endif %}>
+                                Add to Cart
+                            </button>
                         </div>
                     </div>
                     <div class="p-5">
@@ -259,8 +273,8 @@
                         {% with item_rating=item.avg_rating item_review_count=item.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
                         <div class="flex items-center justify-between">
                             <span class="text-xl font-black text-indigo-600">{{ item.price }}</span>
-                            <button class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-indigo-500/30 hover:scale-[1.02] transition-all duration-300 flex items-center gap-2 text-sm" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}">
-                                <i class="bi bi-cart-plus"></i> Add to cart
+                            <button class="px-5 py-2.5 font-bold rounded-xl hover:shadow-lg transition-all duration-300 flex items-center gap-2 text-sm {% if item.inventory and item.inventory.stock <= 0 %}bg-slate-300 text-slate-500 cursor-not-allowed{% else %}bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:shadow-indigo-500/30 hover:scale-[1.02]{% endif %}" {% if item.inventory and item.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}"{% endif %}>
+                                <i class="bi bi-cart-plus"></i> {% if item.inventory and item.inventory.stock <= 0 %}Out of Stock{% else %}Add to cart{% endif %}
                             </button>
                         </div>
                         <button type="button" class="buy-compare-btn js-compare-toggle">Compare</button>

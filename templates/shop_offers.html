@@ -76,7 +76,7 @@
     <div class="offers-grid" id="offersGrid">
         {% for offer in all_offers %}
         {% with is_in_stock=offer.inventory.stock|default:999 %}
-        <article class="offer-card" data-category="{{ offer.category }}" data-title="{{ offer.title|lower }}">
+        <article class="offer-card{% if is_in_stock == 0 %} opacity-75{% endif %}" data-category="{{ offer.category }}" data-title="{{ offer.title|lower }}">
             <span class="offer-badge">{{ offer.offers_badge }}</span>
             {% if is_in_stock == 0 %}
             <span class="stock-alert out-of-stock-badge">Out of Stock</span>
@@ -107,7 +107,11 @@
                 </div>
                 <div class="offer-actions">
                     <a href="{% url 'product_detail' 'offer' offer.id %}" class="offer-link">View details</a>
+                    {% if is_in_stock == 0 %}
+                    <button class="offer-btn btn-disabled cursor-not-allowed opacity-50" disabled style="background-color: #cbd5e1; color: white;">Out of Stock</button>
+                    {% else %}
                     <a href="{% url 'add_to_cart' 'offer' offer.id %}" class="offer-btn" data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}">{{ offer.button_text|default:'Add to cart' }}</a>
+                    {% endif %}
                 </div>
             </div>
         </article>

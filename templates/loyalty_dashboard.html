@@ -335,7 +335,7 @@
                         {% if entry.points > 0 %}+{% endif %}{{ entry.points }} PTS
                     </span>
                     {% if entry.order %}
-                    <a href="{% url 'order_tracking' entry.order.order_number %}" class="block text-[10px] text-indigo-500 hover:underline mt-1 font-bold">VIEW ORDER</a>
+                    <a href="{% url 'order_details' entry.order.order_number %}" class="block text-[10px] text-indigo-500 hover:underline mt-1 font-bold">VIEW ORDER</a>
                     {% endif %}
                 </div>
             </div>

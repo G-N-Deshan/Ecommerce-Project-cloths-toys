@@ -76,7 +76,7 @@
     <div class="arrivals-grid">
         {% for item in all_arrivals %}
         {% with is_in_stock=item.inventory.stock|default:999 %}
-        <article class="arrival-card">
+        <article class="arrival-card{% if is_in_stock == 0 %} opacity-75{% endif %}">
             <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-media">
                 <img src="{{ item.imageUrl.url }}" alt="{{ item.title }}" loading="lazy">
                 {% if item.offers_badge %}<span class="arrival-badge">{{ item.offers_badge }}</span>{% endif %}
@@ -100,7 +100,11 @@
                 </div>
                 <div class="arrival-actions">
                     <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-link">View details</a>
+                    {% if is_in_stock == 0 %}
+                    <button class="arrival-btn btn-disabled cursor-not-allowed opacity-50" disabled style="background-color: #cbd5e1; color: white;">Out of Stock</button>
+                    {% else %}
                     <a href="{% url 'add_to_cart' 'arrival' item.id %}" class="arrival-btn arrival-btn--dark" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}">Add to cart</a>
+                    {% endif %}
                 </div>
             </div>
         </article>

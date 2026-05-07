@@ -176,4 +176,18 @@
     {% include 'includes/ai_assistant.html' %}
 </footer>
 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.star-rating').forEach(el => {
+            const rating = parseFloat(el.dataset.rating) || 0;
+            let starsHtml = '';
+            for(let i=1; i<=5; i++) {
+                if(rating >= i) starsHtml += '<i class="bi bi-star-fill text-amber-400"></i>';
+                else if(rating >= i - 0.5) starsHtml += '<i class="bi bi-star-half text-amber-400"></i>';
+                else starsHtml += '<i class="bi bi-star text-slate-300"></i>';
+            }
+            el.innerHTML = starsHtml;
+        });
+    });
+</script>
 <script src="{% static 'live_reload.js' %}"></script>

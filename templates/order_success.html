@@ -5,393 +5,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Confirmed</title>
+    <title>Order Confirmed - KidZone</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{% static 'navbar.css' %}">
     <link rel="stylesheet" href="{% static 'footer.css' %}">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #f8fafc;
-            padding: 3rem 2rem;
-        }
-
-        .success-container {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .success-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            animation: bounce 0.6s ease;
-        }
-
-        .success-title {
-            font-size: 2rem;
-            color: #0f172a;
-            margin-bottom: 0.5rem;
-        }
-
-        .success-message {
-            color: #64748b;
-            margin-bottom: 2rem;
-            font-size: 1.05rem;
-        }
-
-        .order-details {
-            background: #fff;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-            text-align: left;
-        }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem 0;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .detail-label {
-            color: #64748b;
-            font-weight: 600;
-        }
-
-        .detail-value {
-            color: #0f172a;
-            font-weight: 600;
-        }
-
-        .detail-row:last-child {
-            border-bottom: none;
-        }
-
-        .items-list {
-            background: #f8fafc;
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .items-list h3 {
-            text-align: center;
-            color: #0f172a;
-            margin-bottom: 1rem;
-        }
-
-        .order-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.8rem 0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .order-item:last-child {
-            border-bottom: none;
-        }
-
-        .action-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 1rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background: #6366f1;
-            color: #fff;
-        }
-
-        .btn-primary:hover {
-            background: #4f46e5;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: #f1f5f9;
-            color: #6366f1;
-            border: 2px solid #6366f1;
-        }
-
-        .btn-secondary:hover {
-            background: #6366f1;
-            color: #fff;
-        }
-
-        @keyframes bounce {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .action-buttons {
-                grid-template-columns: 1fr;
-            }
-
-            .detail-row {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.35rem;
-            }
-        }
-
-        /* 3D Floating Shapes */
-        .os-shapes {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .os-s {
-            position: absolute;
-            opacity: .07;
-            animation: osFloat 8s ease-in-out infinite;
-        }
-
-        .os-s--c {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #818cf8, #c084fc);
-            top: 10%;
-            left: 5%;
-            animation-duration: 7s;
-        }
-
-        .os-s--sq {
-            width: 70px;
-            height: 70px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #10b981, #34d399);
-            bottom: 15%;
-            right: 8%;
-            animation-delay: 2s;
-            animation-duration: 9s;
-            transform: rotate(45deg);
-        }
-
-        .os-s--r {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 4px solid rgba(99, 102, 241, .1);
-            top: 45%;
-            right: 15%;
-            animation-delay: 3.5s;
-            animation-duration: 10s;
-        }
-
-        .os-s--burst1 {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 3px solid rgba(16, 185, 129, .12);
-            top: 20%;
-            left: 30%;
-            animation: osBurst 5s ease-out infinite;
-        }
-
-        .os-s--burst2 {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid rgba(251, 191, 36, .1);
-            bottom: 30%;
-            right: 25%;
-            animation: osBurst 7s ease-out infinite 2s;
-        }
-
-        .os-s--rise1 {
-            width: 14px;
-            height: 40px;
-            border-radius: 6px;
-            background: linear-gradient(to top, rgba(99, 102, 241, .15), transparent);
-            top: 60%;
-            left: 15%;
-            animation: osRise 8s ease-in-out infinite;
-        }
-
-        .os-s--rise2 {
-            width: 10px;
-            height: 30px;
-            border-radius: 4px;
-            background: linear-gradient(to top, rgba(16, 185, 129, .12), transparent);
-            bottom: 10%;
-            left: 55%;
-            animation: osRise 10s ease-in-out infinite 3s;
-        }
-
-        .os-s--dot {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: rgba(245, 158, 11, .15);
-            top: 35%;
-            left: 60%;
-            animation: osFloat 6s ease-in-out infinite 1.5s;
-        }
-
-        @keyframes osFloat {
-
-            0%,
-            100% {
-                transform: translateY(0) rotate(0deg);
-            }
-
-            25% {
-                transform: translateY(-22px) rotate(5deg);
-            }
-
-            50% {
-                transform: translateY(-32px) rotate(-4deg);
-            }
-
-            75% {
-                transform: translateY(-12px) rotate(3deg);
-            }
-        }
-
-        @keyframes osBurst {
-            0% {
-                transform: scale(0.7);
-                opacity: .14;
-            }
-
-            60% {
-                transform: scale(1.6);
-                opacity: 0;
-            }
-
-            100% {
-                transform: scale(0.7);
-                opacity: 0;
-            }
-        }
-
-        @keyframes osRise {
-
-            0%,
-            100% {
-                transform: translateY(0) scaleY(1);
-                opacity: .14;
-            }
-
-            50% {
-                transform: translateY(-35px) scaleY(1.3);
-                opacity: .04;
-            }
-        }
-
-        .success-container {
-            position: relative;
-            z-index: 1;
-            animation: osSlideUp .5s ease-out;
-        }
-
-        @keyframes osSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(24px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
     <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f8fafc; overflow-x: hidden; }
+        .receipt-card {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08), 0 0 20px rgba(99, 102, 241, 0.05);
+            position: relative;
+        }
+        /* Jagged bottom edge for receipt */
+        .receipt-card::after {
+            content: "";
+            position: absolute;
+            bottom: -10px; left: 0; right: 0;
+            height: 10px;
+            background-size: 20px 20px;
+            background-image: radial-gradient(circle at 10px 0, transparent 10px, #ffffff 11px);
+        }
+        
+        /* Animated Checkmark */
+        .success-checkmark {
+            width: 80px; height: 80px;
+            margin: 0 auto;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 3; stroke: #fff;
+            stroke-miterlimit: 10;
+            box-shadow: inset 0px 0px 0px #10b981;
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+        }
+        .checkmark__circle {
+            stroke-dasharray: 166; stroke-dashoffset: 166;
+            stroke-width: 3; stroke-miterlimit: 10;
+            stroke: #10b981; fill: none;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48; stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+        @keyframes stroke { 100% { stroke-dashoffset: 0; } }
+        @keyframes scale { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
+        @keyframes fill { 100% { box-shadow: inset 0px 0px 0px 50px #10b981; } }
+
+        /* Confetti Canvas */
+        #confetti { position: fixed; inset: 0; z-index: 50; pointer-events: none; }
+    </style>
 </head>
 
-<body>
+<body class="font-sans antialiased text-slate-800 flex flex-col min-h-screen">
     {% include 'navbar.html' %}
-    <!-- 3D Floating Shapes -->
-    <div class="os-shapes" aria-hidden="true">
-        <div class="os-s os-s--c"></div>
-        <div class="os-s os-s--sq"></div>
-        <div class="os-s os-s--r"></div>
-        <div class="os-s os-s--burst1"></div>
-        <div class="os-s os-s--burst2"></div>
-        <div class="os-s os-s--rise1"></div>
-        <div class="os-s os-s--rise2"></div>
-        <div class="os-s os-s--dot"></div>
-    </div>
+    
+    <canvas id="confetti"></canvas>
 
-    <div class="success-container" data-reveal="scale">
-        <div class="success-icon">✓</div>
-        <h1 class="success-title">Order Confirmed!</h1>
-        <p class="success-message">Thank you for your purchase. Your order has been placed successfully.</p>
+    <main class="flex-grow pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto w-full relative z-10">
+        
+        <!-- Animated Icon & Title -->
+        <div class="text-center mb-8">
+            <svg class="success-checkmark mb-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">Order Confirmed!</h1>
+            <p class="text-slate-500 mt-2 text-lg">Thank you for your purchase, {{ request.user.first_name|default:request.user.username }}.</p>
+        </div>
 
-        <div class="order-details">
-            <div class="detail-row">
-                <span class="detail-label">Order Number:</span>
-                <span class="detail-value">{{ order.order_number }}</span>
+        <!-- Digital Receipt -->
+        <div class="receipt-card p-6 sm:p-10 mb-10">
+            <!-- Header -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b-2 border-dashed border-slate-200">
+                <div>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Order Number</p>
+                    <p class="text-lg font-extrabold text-indigo-600">{{ order.order_number }}</p>
+                </div>
+                <div class="sm:text-right">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Date</p>
+                    <p class="font-semibold text-slate-700">{{ order.created_at|date:"M d, Y - h:i A" }}</p>
+                </div>
             </div>
-            <div class="detail-row">
-                <span class="detail-label">Date:</span>
-                <span class="detail-value">{{ order.created_at|date:"M d, Y - h:i A" }}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Shipping To:</span>
-                <span class="detail-value">{{ order.city }}, {{ order.country }}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Status:</span>
-                <span class="detail-value" style="color: #10b981;">{{ order.get_status_display }}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Payment Method:</span>
-                <span class="detail-value">{{ order.get_payment_method_display|default:order.payment_method }}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Total:</span>
-                <span class="detail-value" style="font-size: 1.2rem; color: #6366f1;">Rs {{ order.total|floatformat:2 }}</span>
-            </div>
-            <div class="items-list">
-                <h3>Order Items</h3>
+
+            <!-- Items -->
+            <div class="py-6 space-y-4">
+                <h3 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">Order Items</h3>
                 {% for item in order_items %}
-                <div class="order-item">
-                    <span>{{ item.item_name }} x{{ item.quantity }}</span>
-                    <span>Rs {{ item.subtotal|floatformat:2 }}</span>
+                <div class="flex justify-between items-center text-sm">
+                    <div class="flex items-center gap-3">
+                        <span class="w-6 h-6 bg-slate-100 rounded text-xs font-bold text-slate-600 flex items-center justify-center">{{ item.quantity }}x</span>
+                        <span class="font-medium text-slate-700">{{ item.item_name }}</span>
+                    </div>
+                    <span class="font-bold text-slate-900">Rs {{ item.subtotal|floatformat:2 }}</span>
                 </div>
                 {% empty %}
-                <p style="text-align: center; color: #64748b;">No items in order</p>
+                <p class="text-sm text-slate-500 text-center">No items found.</p>
                 {% endfor %}
+            </div>
+
+            <!-- Summary -->
+            <div class="pt-6 border-t-2 border-dashed border-slate-200 space-y-3 text-sm">
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Payment Method</span>
+                    <span class="font-semibold text-slate-800">{{ order.get_payment_method_display|default:order.payment_method }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Shipping To</span>
+                    <span class="font-semibold text-slate-800 text-right max-w-[200px] truncate" title="{{ order.address }}, {{ order.city }}">{{ order.city }}, {{ order.country }}</span>
+                </div>
+                <div class="flex justify-between items-center mt-4 pt-4 border-t border-slate-100">
+                    <span class="text-base font-bold text-slate-900">Total Paid</span>
+                    <span class="text-2xl font-extrabold text-indigo-600">Rs {{ order.total|floatformat:2 }}</span>
+                </div>
             </div>
         </div>
 
-        <div class="action-buttons">
-            <a href="{% url 'order_tracking' order.order_number %}" class="btn btn-primary" style="background: linear-gradient(135deg, #4f46e5, #ec4899); border: none; font-weight: 600; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);">📍 Track Order</a>
-            <a href="{% url 'my_orders' %}" class="btn btn-secondary">Order History</a>
-            <a href="{% url 'buy' %}" class="btn btn-secondary">Continue Shopping &rarr;</a>
+        <!-- Action Buttons -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <a href="{% url 'order_tracking_legacy' order.order_number %}" class="py-4 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-xl text-center shadow-lg shadow-indigo-500/30 transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                <i class="bi bi-geo-alt"></i> Track Order
+            </a>
+            <a href="{% url 'buy' %}" class="py-4 px-6 bg-white border-2 border-indigo-100 text-indigo-600 hover:bg-indigo-50 font-bold rounded-xl text-center transition-all flex items-center justify-center gap-2">
+                Continue Shopping <i class="bi bi-arrow-right"></i>
+            </a>
         </div>
-    </div>
+
+    </main>
 
     {% include 'footer.html' %}
     <script src="{% static 'scroll-reveal.js' %}"></script>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Confetti explosion
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
 
+            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        });
+    </script>
+</body>
 </html>

@@ -77,7 +77,7 @@ urlpatterns = [
 
     # Order Tracking & My Orders
     path('my-orders/', views.my_orders, name='my_orders'),
-    path('order-tracking/<str:order_number>/', views.order_tracking, name='order_tracking_legacy'),
+    path('order-tracking/<str:order_number>/', views.order_tracking_legacy, name='order_tracking_legacy'),
     path('reorder/<str:order_number>/', views.reorder, name='reorder'),
 
     # Coupon Validation (AJAX)

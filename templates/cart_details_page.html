@@ -1,69 +1,225 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart</title>
-    <link rel="stylesheet" href="{% static 'cart_details_page.css' %}">
+    <title>Your Cart - KidZone</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'footer.css' %}">
     <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f8fafc; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+        }
+        .qty-btn { transition: all 0.2s; }
+        .qty-btn:hover:not(:disabled) { background: #e2e8f0; }
+        .qty-btn:active:not(:disabled) { transform: scale(0.95); }
+        .item-row { transition: all 0.4s ease-out; }
+        .item-removing { transform: translateX(100px); opacity: 0; }
+    </style>
 </head>
 
-<body>
-    <!-- 3D Floating Shapes -->
-    <div class="page-shapes" aria-hidden="true">
-        <div class="pshape pshape--circle"></div>
-        <div class="pshape pshape--square"></div>
-        <div class="pshape pshape--ring"></div>
-        <div class="pshape pshape--dot"></div>
-        <div class="pshape pshape--pend1"></div>
-        <div class="pshape pshape--pend2"></div>
-        <div class="pshape pshape--slide1"></div>
-        <div class="pshape pshape--slide2"></div>
-    </div>
-    <div class="cart-page-container" data-reveal="up">
-        <h1>Shopping Cart</h1>
+<body class="font-sans antialiased text-slate-800 flex flex-col min-h-screen">
+    {% include 'navbar.html' %}
 
-        <div class="cart-content">
-            <div class="cart-items-section">
-                <div id="cartItems" class="cart-items">
-                    <!-- Cart items will be dynamically loaded here -->
+    <main class="flex-grow pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        <div class="flex items-center justify-between mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">Your Cart</h1>
+            {% if cart_count > 0 %}
+            <span class="px-4 py-1.5 bg-indigo-100 text-indigo-700 font-bold rounded-full text-sm">
+                {{ cart_count }} Item{{ cart_count|pluralize }}
+            </span>
+            {% endif %}
+        </div>
+
+        {% if cart_count > 0 %}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            <!-- Left: Cart Items List -->
+            <div class="lg:col-span-2 space-y-4" id="cartItemsContainer">
+                {% for item in cart_items %}
+                {% with real_item=item.get_item %}
+                <div class="item-row bg-white rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center gap-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow relative" data-item-id="{{ item.id }}">
+                    
+                    <!-- Remove Button (Top Right Mobile) -->
+                    <button class="remove-btn absolute top-3 right-3 sm:hidden text-slate-300 hover:text-red-500 transition-colors p-2" onclick="removeCartItem({{ item.id }})">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+
+                    <!-- Image -->
+                    <div class="w-full sm:w-28 h-28 flex-shrink-0 bg-slate-50 rounded-xl overflow-hidden border border-slate-100 p-2">
+                        {% if real_item.imageUrl %}
+                        <img src="{{ real_item.imageUrl.url }}" alt="{{ real_item.name|default:real_item.title }}" class="w-full h-full object-contain">
+                        {% else %}
+                        <div class="w-full h-full flex items-center justify-center text-slate-300">
+                            <i class="bi bi-box text-3xl"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Details -->
+                    <div class="flex-1 w-full text-center sm:text-left">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900 leading-tight mb-1">
+                                    {{ real_item.name|default:real_item.title }}
+                                </h3>
+                                <span class="inline-block px-2 py-0.5 bg-slate-100 text-slate-500 text-[10px] font-bold uppercase tracking-wider rounded">
+                                    {{ item.get_item_type_display }}
+                                </span>
+                            </div>
+                            <!-- Remove Button (Desktop) -->
+                            <button class="remove-btn hidden sm:block text-slate-300 hover:text-red-500 transition-colors p-1" onclick="removeCartItem({{ item.id }})" title="Remove item">
+                                <i class="bi bi-trash3 text-lg"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <!-- Quantity Controls -->
+                            <div class="inline-flex items-center bg-slate-50 border border-slate-200 rounded-lg p-1 mx-auto sm:mx-0">
+                                <button class="qty-btn w-8 h-8 flex items-center justify-center text-slate-500 rounded-md hover:text-indigo-600" onclick="updateQuantity({{ item.id }}, {{ item.quantity|add:'-1' }})" {% if item.quantity <= 1 %}disabled class="opacity-50 cursor-not-allowed"{% endif %}>
+                                    <i class="bi bi-dash"></i>
+                                </button>
+                                <span class="w-10 text-center font-semibold text-slate-800 text-sm" id="qty-{{ item.id }}">{{ item.quantity }}</span>
+                                <button class="qty-btn w-8 h-8 flex items-center justify-center text-slate-500 rounded-md hover:text-indigo-600" onclick="updateQuantity({{ item.id }}, {{ item.quantity|add:'1' }})">
+                                    <i class="bi bi-plus"></i>
+                                </button>
+                            </div>
+
+                            <!-- Price -->
+                            <div class="text-right">
+                                <p class="text-sm text-slate-400 mb-0.5"><span class="sm:hidden">Subtotal: </span>Rs {{ real_item.price|floatformat:2 }} each</p>
+                                <p class="text-xl font-extrabold text-indigo-600" id="subtotal-{{ item.id }}">Rs {{ item.get_subtotal|floatformat:2 }}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div id="emptyCartMessage" class="empty-cart">
-                    <p>Your cart is empty</p>
-                    <a href="{% url 'buy' %}" class="continue-shopping-btn">Continue Shopping</a>
-                </div>
+                {% endwith %}
+                {% endfor %}
             </div>
 
-            <div class="cart-summary">
-                <h2>Order Summary</h2>
-                <div class="summary-row">
-                    <span>Subtotal:</span>
-                    <span id="subtotal">Rs 0.00</span>
+            <!-- Right: Summary Card -->
+            <div class="lg:col-span-1">
+                <div class="glass-card rounded-3xl p-6 sticky top-24">
+                    <h2 class="text-xl font-bold text-slate-900 mb-5 flex items-center gap-2">
+                        <i class="bi bi-receipt text-indigo-500"></i> Order Summary
+                    </h2>
+                    
+                    <div class="space-y-3 pb-5 border-b border-slate-200">
+                        <div class="flex justify-between text-slate-600">
+                            <span>Subtotal</span>
+                            <span class="font-semibold" id="cartSubtotal">Rs {{ subtotal|floatformat:2 }}</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>Tax (10%)</span>
+                            <span class="font-semibold" id="cartTax">Rs {{ tax|floatformat:2 }}</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>Shipping</span>
+                            <span class="font-semibold text-emerald-600">Calculated at checkout</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-5 mb-6">
+                        <div class="flex justify-between items-end">
+                            <span class="text-lg font-bold text-slate-900">Total</span>
+                            <span class="text-3xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent" id="cartTotal">Rs {{ total|floatformat:2 }}</span>
+                        </div>
+                    </div>
+
+                    <form action="{% url 'checkout' %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="w-full py-4 px-6 bg-slate-900 hover:bg-indigo-600 text-white font-bold rounded-xl text-lg transition-all duration-300 shadow-lg shadow-slate-900/20 hover:shadow-indigo-500/30 flex items-center justify-center gap-2 group">
+                            Proceed to Checkout
+                            <i class="bi bi-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </form>
+
+                    <a href="{% url 'buy' %}" class="block text-center mt-4 text-sm font-semibold text-slate-500 hover:text-indigo-600 transition-colors">
+                        <i class="bi bi-arrow-left mr-1"></i> Continue Shopping
+                    </a>
                 </div>
-                <div class="summary-row">
-                    <span>Tax (10%):</span>
-                    <span id="tax">Rs 0.00</span>
-                </div>
-                <div class="summary-row total">
-                    <span>Total:</span>
-                    <span id="total">Rs 0.00</span>
-                </div>
-                <form action="{% url 'checkout' %}" method="POST" style="width: 100%;">
-                    {% csrf_token %}
-                    <button type="submit" class="checkout-btn" id="checkoutBtn">Proceed to Checkout</button>
-                </form>
-                <a href="{% url 'buy' %}" class="continue-shopping">Continue Shopping</a>
             </div>
         </div>
-    </div>
+        {% else %}
+        <!-- Empty State -->
+        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-12 flex flex-col items-center justify-center text-center min-h-[50vh]">
+            <div class="w-24 h-24 bg-indigo-50 rounded-full flex items-center justify-center mb-6">
+                <i class="bi bi-cart-x text-5xl text-indigo-300"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900 mb-2">Your cart is empty</h2>
+            <p class="text-slate-500 max-w-md mx-auto mb-8">Looks like you haven't added anything to your cart yet. Discover our latest collections and find something you love!</p>
+            <a href="{% url 'buy' %}" class="inline-flex items-center gap-2 px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/20 transition-all hover:-translate-y-0.5">
+                <i class="bi bi-bag-heart"></i> Start Shopping
+            </a>
+        </div>
+        {% endif %}
+    </main>
 
-    <script src="{% static 'cart_utils.js' %}"></script>
-    <script src="{% static 'cart_page.js' %}"></script>
-    <script src="{% static 'global.js' %}"></script>
+    {% include 'footer.html' %}
     <script src="{% static 'scroll-reveal.js' %}"></script>
+    <script>
+        // Update Cart Logic via existing endpoints
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+
+        async function updateQuantity(itemId, newQty) {
+            if (newQty < 1) return;
+            try {
+                const res = await fetch(`/cart/update/${itemId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({ quantity: newQty })
+                });
+                if (res.ok) {
+                    window.location.reload(); // Quick refresh to guarantee server precision
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function removeCartItem(itemId) {
+            const row = document.querySelector(`.item-row[data-item-id="${itemId}"]`);
+            if(row) {
+                row.classList.add('item-removing');
+            }
+            try {
+                const res = await fetch(`/cart/remove/${itemId}/`, {
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': csrfToken }
+                });
+                if (res.ok) {
+                    setTimeout(() => window.location.reload(), 300); // Wait for animation
+                }
+            } catch (e) {
+                console.error(e);
+                if(row) row.classList.remove('item-removing');
+            }
+        }
+    </script>
 </body>
 
 </html>
