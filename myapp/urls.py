@@ -14,6 +14,7 @@ urlpatterns = [
 
     path('buy/', views.buy, name='buy'),
     path('shop-offers/', views.shop_offers, name='shop_offers'),
+    path('trending/', views.trending_page, name='trending'),
     path('new_arrivals/', views.new_arrivals, name='new_arrivals'),
 
     path('login/', views.user_login, name='login'),
@@ -37,6 +38,7 @@ urlpatterns = [
 
     path('cart/', views.cart_page, name='cart'),
     path('cart/add/<str:item_type>/<int:item_id>/', views.add_to_cart, name='add_to_cart'),
+    path('buy-now/<str:item_type>/<int:item_id>/', views.buy_now, name='buy_now'),
     path('cart/update/<int:cart_item_id>/', views.update_cart_item, name='update_cart_item'),
     path('cart/remove/<int:cart_item_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('cart/clear/', views.clear_cart, name='clear_cart'),
@@ -74,6 +76,7 @@ urlpatterns = [
 
     # Search
     path('search/', views.search, name='search'),
+    path('live-search/', views.live_search, name='live_search'),
 
     # Order Tracking & My Orders
     path('my-orders/', views.my_orders, name='my_orders'),

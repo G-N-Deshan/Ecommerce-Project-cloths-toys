@@ -1,4 +1,4 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,15 +11,17 @@
     <link rel="stylesheet" href="{% static 'navbar.css'%}">
     <link rel="stylesheet" href="{%static 'footer.css'%}">
     <link rel="stylesheet" href="{%static 'toys.css'%}">
-    <link rel="stylesheet" href="{%static 'scroll-reveal.css'%}">
+    <link rel="stylesheet" href="{% static 'footer.css'%}">
+    <link rel="stylesheet" href="{% static 'toys.css'%}">
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css'%}">
 </head>
 <body>
 
     {%include 'navbar.html'%}
 
-    <!-- Hero Section -->
-    <section class="toys-hero">
-        <div class="toys-hero__overlay"></div>
+    <section class="toys-hero relative overflow-hidden">
+        <div class="toys-hero__overlay absolute inset-0 z-10 bg-black/40"></div>
+        <div class="absolute inset-0 z-0 hero-scroll-x" style="background-image: url('/media/backgrounds/hero_toys.png'); background-size: cover;"></div>
         <!-- 3D Floating Shapes -->
         <div class="hero-shapes" aria-hidden="true">
             <div class="shape shape--circle"></div>

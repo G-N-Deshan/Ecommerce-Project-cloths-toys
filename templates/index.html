@@ -1,4 +1,4 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,10 +15,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <link rel="stylesheet" href="{% static 'navbar.css'%}">
-    <link rel="stylesheet" href="{%static 'footer.css'%}">
-    <link rel="stylesheet" href="{%static 'index.css'%}">
-    <link rel="stylesheet" href="{%static 'scroll-reveal.css'%}">
+    <link rel="stylesheet" href="{% static 'navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'footer.css' %}">
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
 
     <script>
         tailwind.config = {
@@ -52,7 +52,8 @@
     {% include 'includes/ai_assistant.html' %}
 
     <!-- ── Loading Overlay ── -->
-    <div id="loadingOverlay" class="fixed inset-0 z-[10000] bg-white/80 backdrop-blur-sm flex items-center justify-center hidden">
+    <div id="loadingOverlay"
+        class="fixed inset-0 z-[10000] bg-white/80 backdrop-blur-sm flex items-center justify-center hidden">
         <div class="flex flex-col items-center gap-3">
             <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
             <span class="text-sm font-medium text-slate-600">Loading...</span>
@@ -62,14 +63,17 @@
     <!-- ── Quick-View Modal ── -->
     <div id="quickViewModal" class="fixed inset-0 z-[8000] hidden">
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeQuickView()"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl max-w-2xl w-[95%] max-h-[90vh] overflow-y-auto p-6">
-            <button onclick="closeQuickView()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-red-100 flex items-center justify-center text-slate-500 hover:text-red-500 transition text-lg font-bold">&times;</button>
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl max-w-2xl w-[95%] max-h-[90vh] overflow-y-auto p-6">
+            <button onclick="closeQuickView()"
+                class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-red-100 flex items-center justify-center text-slate-500 hover:text-red-500 transition text-lg font-bold">&times;</button>
             <div id="quickViewContent" class="flex flex-col md:flex-row gap-6">
                 <div class="md:w-1/2">
                     <img id="qvImage" src="" alt="" class="w-full rounded-xl object-cover aspect-square" loading="lazy">
                 </div>
                 <div class="md:w-1/2 flex flex-col gap-3">
-                    <span id="qvBadge" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-indigo-100 text-indigo-700 w-fit uppercase tracking-wide"></span>
+                    <span id="qvBadge"
+                        class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-indigo-100 text-indigo-700 w-fit uppercase tracking-wide"></span>
                     <h2 id="qvName" class="text-xl font-bold text-slate-900"></h2>
                     <p id="qvDesc" class="text-sm text-slate-600 line-clamp-4"></p>
                     <div class="flex items-center gap-3">
@@ -78,8 +82,12 @@
                     </div>
                     <div id="qvStock" class="text-sm font-semibold"></div>
                     <div class="flex gap-2 mt-auto pt-2">
-                        <a id="qvDetailLink" href="#" class="flex-1 py-3 text-center rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition">View Full Details</a>
-                        <button id="qvCartBtn" onclick="quickAddToCart()" class="flex-1 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm transition">&#128722; Add to Cart</button>
+                        <a id="qvDetailLink" href="#"
+                            class="flex-1 py-3 text-center rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition">View
+                            Full Details</a>
+                        <button id="qvCartBtn" onclick="quickAddToCart()"
+                            class="flex-1 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm transition">&#128722;
+                            Add to Cart</button>
                     </div>
                 </div>
             </div>
@@ -89,15 +97,18 @@
     <!-- ╔══════════════════════════════════════╗
          ║           HERO  SECTION              ║
          ╚══════════════════════════════════════╝ -->
-    <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero" class="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
         <!-- BG layers -->
         <div class="absolute inset-0 z-0">
             {% if active_banners %}
-                {% for banner in active_banners %}
-                <img src="{{ banner.image.url }}" alt="{{ banner.title }}" class="w-full h-full object-cover scale-110 banner-image {% if not forloop.first %}hidden{% endif %}" id="heroBg_{{ forloop.index }}">
-                {% endfor %}
+            {% for banner in active_banners %}
+            <img src="{{ banner.image.url }}" alt="{{ banner.title }}"
+                class="w-full h-full object-cover scale-110 banner-image {% if not forloop.first %}hidden{% endif %}"
+                id="heroBg_{{ forloop.index }}">
+            {% endfor %}
             {% else %}
-                <img src="{% static '../media/new-bg-1.jpg' %}" alt="" class="w-full h-full object-cover scale-110" id="heroBg">
+            <img src="{% static '../media/new-bg-1.jpg' %}" alt="" class="w-full h-full object-cover scale-110"
+                id="heroBg">
             {% endif %}
             <div class="absolute inset-0 bg-gradient-to-br from-sky-50/78 via-white/58 to-indigo-100/62"></div>
         </div>
@@ -199,7 +210,271 @@
         </div>
     </section>
 
+    <!-- ╔══════════════════════════════════════╗
+         ║           HOT  DEALS                  ║
+         ╚══════════════════════════════════════╝ -->
+    <section class="py-14 bg-gradient-to-b from-slate-50 to-white" id="hotDeals" data-reveal>
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-10 reveal">
+                <span
+                    class="inline-flex items-center gap-2 px-4 py-1.5 bg-red-50 text-red-600 font-semibold rounded-full text-sm mb-5">
+                    <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span> Limited Time
+                </span>
+                <h2 class="text-4xl md:text-5xl font-bold font-playfair mb-3">Hot Deals</h2>
+                <p class="text-slate-500 text-lg">Grab them before they're gone!</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                {% for offer in offers %}
+                <div class="tilt-card reveal-stagger" style="--i:{{ forloop.counter0 }}">
+                    <div
+                        class="card-inner bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-shadow duration-500 group {% if offer.inventory and offer.inventory.stock <= 0 %}opacity-75{% endif %}">
+                        <!-- Image Container with Hover Swap -->
+                        <div class="relative overflow-hidden h-64">
+                            <!-- Primary Image -->
+                            <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }}"
+                                class="img-primary absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:opacity-0 group-hover:scale-105"
+                                loading="lazy">
+                            <!-- Hover / Secondary Image (fades in on hover) -->
+                            <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }} back view"
+                                class="img-secondary absolute inset-0 w-full h-full object-cover scale-105 opacity-0 transition-all duration-700 group-hover:opacity-100 group-hover:scale-110"
+                                loading="lazy">
+
+                            <!-- Sale Badge -->
+                            <span
+                                class="absolute top-3 left-3 z-10 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full shadow-lg">
+                                {{ offer.offers_badge }}
+                            </span>
+                            <!-- Heart button -->
+                            <button onclick="window.location.href='{% url 'add_to_wishlist' 'offer' offer.id %}'"
+                                class="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full text-slate-400 hover:text-pink-500 hover:bg-pink-50 shadow-md transition-all">
+                                <i class="bi bi-heart-fill"></i>
+                            </button>
+
+                            <!-- Live Viewers -->
+                            <span
+                                class="live-viewers absolute bottom-3 left-3 z-10 px-2 py-1 bg-black/60 backdrop-blur-sm text-white text-[10px] font-semibold rounded-full"></span>
+
+                            <!-- Overlay Actions -->
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex items-end justify-center pb-5 gap-3">
+                                <button onclick="fetchQuickView('offer', {{ offer.id }}); return false;"
+                                    class="px-4 py-2 bg-white text-slate-800 font-semibold rounded-full text-xs transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 hover:bg-indigo-500 hover:text-white">
+                                    <i class="bi bi-eye mr-1"></i>Quick View
+                                </button>
+                                <button
+                                    class="px-3 py-2 bg-indigo-600 text-white font-semibold rounded-full text-[10px] transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 hover:bg-indigo-700"
+                                    {% if offer.inventory and offer.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}"{% endif %}>
+                                    + Cart
+                                </button>
+                                <a href="{% url 'buy_now' 'offer' offer.id %}"
+                                    class="px-3 py-2 bg-amber-500 text-white font-bold rounded-full text-[10px] transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 delay-75 hover:bg-amber-600">
+                                    Buy Now
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="p-5">
+                            <h3
+                                class="font-semibold text-slate-800 mb-1 group-hover:text-indigo-600 transition-colors line-clamp-1">
+                                <a href="{% url 'product_detail' 'offer' offer.id %}" class="hover:text-indigo-600"
+                                    style="color:inherit;text-decoration:none">{{ offer.title }}</a>
+                            </h3>
+                            <div class="star-rating mb-2" data-rating="{{ offer.avg_rating|default:0|floatformat:1 }}">
+                            </div>
+                            <div class="flex items-center gap-3 mb-2">
+                                {% if offer.price2 %}
+                                <span class="text-xl font-bold text-indigo-600">Rs {{ offer.price2 }}</span>
+                                {% endif %}
+                                {% if offer.price1 %}
+                                <span class="text-sm text-slate-400 line-through">Rs {{ offer.price1 }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="flex items-center justify-between">
+                                {% if offer.stock_text %}
+                                <span
+                                    class="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-50 text-amber-700 text-xs rounded-full font-semibold">
+                                    <i class="bi bi-fire text-orange-500"></i> {{ offer.stock_text }}
+                                </span>
+                                {% endif %}
+                                <a href="{% url 'product_detail' 'offer' offer.id %}"
+                                    class="text-xs text-indigo-500 hover:text-indigo-700 font-medium ml-auto">Details
+                                    →</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-14 reveal">
+                <a href="{% url 'shop_offers' %}"
+                    class="mag-btn inline-flex items-center gap-2 px-9 py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-full hover:shadow-xl hover:shadow-indigo-500/30 transition-all duration-300 hover:scale-105">
+                    View All Offers <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ╔══════════════════════════════════════╗
+         ║        NEW  ARRIVALS                 ║
+         ╚══════════════════════════════════════╝ -->
+    <section class="py-14 bg-white" id="newArrivals" data-reveal>
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-10 reveal">
+                <span
+                    class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-600 font-semibold rounded-full text-sm mb-5">
+                    <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span> Just Landed
+                </span>
+                <h2 class="text-4xl md:text-5xl font-bold font-playfair mb-3">New Arrivals</h2>
+                <p class="text-slate-500 text-lg">Fresh products just dropped!</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {% for arrival in arrivals %}
+                <div class="tilt-card reveal-stagger" style="--i:{{ forloop.counter0 }}">
+                    <div
+                        class="card-inner bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-shadow duration-500 border border-slate-100 group {% if arrival.inventory and arrival.inventory.stock <= 0 %}opacity-75{% endif %}">
+                        <!-- Image with hover swap -->
+                        <div class="relative overflow-hidden h-56">
+                            <img src="{{ arrival.imageUrl.url }}" alt="{{ arrival.title }}"
+                                class="img-primary absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:opacity-0 group-hover:scale-105"
+                                loading="lazy">
+                            <img src="{{ arrival.imageUrl.url }}" alt="{{ arrival.title }} alternate"
+                                class="img-secondary absolute inset-0 w-full h-full object-cover scale-105 opacity-0 transition-all duration-700 group-hover:opacity-100 group-hover:scale-110"
+                                loading="lazy">
+
+                            <!-- NEW badge -->
+                            <span
+                                class="absolute top-3 left-3 z-10 px-3 py-1 bg-emerald-500 text-white text-[11px] font-bold rounded-full">NEW</span>
+
+                            <!-- Heart -->
+                            <button onclick="window.location.href='{% url 'add_to_wishlist' 'arrival' arrival.id %}'"
+                                class="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full text-slate-400 hover:text-pink-500 hover:bg-pink-50 shadow-md transition-all">
+                                <i class="bi bi-heart-fill"></i>
+                            </button>
+
+                            <!-- Live viewers -->
+                            <span
+                                class="live-viewers absolute bottom-3 left-3 z-10 px-2 py-1 bg-black/60 backdrop-blur-sm text-white text-[10px] font-semibold rounded-full"></span>
+
+                            <!-- Overlay Actions -->
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex items-end justify-center pb-5 gap-3">
+                                <button onclick="fetchQuickView('arrival', {{ arrival.id }}); return false;"
+                                    class="px-4 py-2 bg-white text-slate-800 font-semibold rounded-full text-xs transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 hover:bg-indigo-500 hover:text-white">
+                                    <i class="bi bi-eye mr-1"></i>Quick View
+                                </button>
+                                <button
+                                    class="px-3 py-2 bg-indigo-600 text-white font-semibold rounded-full text-[10px] transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 hover:bg-indigo-700"
+                                    {% if arrival.inventory and arrival.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart data-item-type="arrival" data-item-id="{{ arrival.id }}"{% endif %}>
+                                    + Cart
+                                </button>
+                                <a href="{% url 'buy_now' 'arrival' arrival.id %}"
+                                    class="px-3 py-2 bg-amber-500 text-white font-bold rounded-full text-[10px] transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 delay-75 hover:bg-amber-600">
+                                    Buy Now
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="p-5">
+                            <span class="text-[11px] text-indigo-600 font-bold uppercase tracking-wider">{{ arrival.category }}</span>
+                            <div class="star-rating text-sm mb-1"
+                                data-rating="{{ arrival.avg_rating|default:0|floatformat:1 }}"></div>
+                            <h3 class="font-semibold text-slate-800 mt-1 mb-2 line-clamp-1">
+                                <a href="{% url 'product_detail' 'arrival' arrival.id %}"
+                                    class="hover:text-indigo-600 transition-colors"
+                                    style="color:inherit;text-decoration:none">{{ arrival.title }}</a>
+                            </h3>
+                            <p class="text-sm text-slate-400 mb-4 line-clamp-2">{{ arrival.description }}</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-slate-800">Rs {{ arrival.price }}</span>
+                                <button
+                                    class="w-10 h-10 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg shadow-indigo-500/25 {% if arrival.inventory and arrival.inventory.stock <= 0 %}bg-slate-300 text-slate-500 cursor-not-allowed opacity-50{% else %}bg-indigo-600 text-white hover:bg-indigo-700{% endif %}"
+                                    {% if arrival.inventory and arrival.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart data-item-type="arrival" data-item-id="{{ arrival.id }}"{% endif %}>
+                                    <i class="bi bi-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-span-full text-center py-16">
+                    <i class="bi bi-inbox text-6xl text-slate-200 mb-4 block"></i>
+                    <p class="text-slate-400 text-lg">No new arrivals yet. Check back soon!</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
     {% include 'includes/promo_strip.html' with variant="green" %}
+
+    <!-- ╔══════════════════════════════════════╗
+         ║          TRENDING NOW                ║
+         ╚══════════════════════════════════════╝ -->
+    <section class="py-14 bg-white relative z-20" id="trendingNow" data-reveal>
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-10 reveal">
+                <span
+                    class="inline-flex items-center gap-2 px-4 py-1.5 bg-indigo-50 text-indigo-600 font-semibold rounded-full text-sm mb-5">
+                    <i class="bi bi-graph-up-arrow"></i> Most Popular
+                </span>
+                <h2 class="text-4xl md:text-5xl font-bold font-playfair mb-3">Trending Now</h2>
+                <p class="text-slate-500 text-lg">See what everyone is talking about</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {% for t_prod in trending_products %}
+                <div class="tilt-card reveal-stagger" style="--i:{{ forloop.counter0 }}">
+                    <div
+                        class="card-inner bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group border border-slate-100">
+                        <div class="relative overflow-hidden h-72">
+                            <img src="{{ t_prod.image.url }}" alt="{{ t_prod.name }}"
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <span
+                                class="absolute top-4 left-4 z-10 px-3 py-1 bg-indigo-600 text-white text-[11px] font-bold rounded-full shadow-lg">{{ t_prod.badge }}</span>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+                                <a href="{{ t_prod.link_url }}"
+                                    class="px-6 py-2 bg-white text-indigo-600 font-bold rounded-full text-sm hover:bg-indigo-600 hover:text-white transition-colors">View
+                                    Details</a>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <span class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest mb-1 block">{{ t_prod.get_category_display }}</span>
+                            <h3 class="font-bold text-slate-800 text-lg mb-2 line-clamp-1">{{ t_prod.name }}</h3>
+                            <div class="flex items-center justify-between">
+                                <div class="flex flex-col">
+                                    <span class="text-xl font-bold text-slate-900">Rs {{ t_prod.price }}</span>
+                                    {% if t_prod.original_price %}
+                                    <span class="text-xs text-slate-400 line-through">Rs {{ t_prod.original_price }}</span>
+                                    {% endif %}
+                                </div>
+                                <a href="{{ t_prod.link_url }}"
+                                    class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
+                                    <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-span-full text-center py-10">
+                    <p class="text-slate-400">Stay tuned for trending products!</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-12 reveal">
+                <a href="{% url 'trending' %}"
+                    class="mag-btn inline-flex items-center gap-2 px-8 py-3 bg-slate-900 text-white font-bold rounded-full hover:bg-indigo-600 transition-all duration-300 hover:scale-105">
+                    Show More Trending <i class="bi bi-plus-lg ml-1"></i>
+                </a>
+            </div>
+        </div>
+    </section>
 
     <!-- ╔══════════════════════════════════════╗
          ║    CATEGORY QUICK-ACCESS GRID        ║
@@ -325,7 +600,8 @@
             <div class="max-w-3xl mx-auto text-center reveal">
                 {% if user.is_authenticated %}
                 <h2 class="text-4xl md:text-5xl font-bold mb-4 font-playfair">
-                    Welcome back, <span class="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{{ user.username }}</span>! 👋
+                    Welcome back, <span
+                        class="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{{ user.username }}</span>! 👋
                 </h2>
                 {% else %}
                 <h2 class="text-4xl md:text-5xl font-bold mb-4 font-playfair">
@@ -338,184 +614,6 @@
             </div>
         </div>
     </section>
-
-    <!-- ╔══════════════════════════════════════╗
-         ║          HOT  DEALS                  ║
-         ╚══════════════════════════════════════╝ -->
-    <section class="py-14 bg-gradient-to-b from-slate-50 to-white" id="hotDeals" data-reveal>
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-10 reveal">
-                <span
-                    class="inline-flex items-center gap-2 px-4 py-1.5 bg-red-50 text-red-600 font-semibold rounded-full text-sm mb-5">
-                    <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span> Limited Time
-                </span>
-                <h2 class="text-4xl md:text-5xl font-bold font-playfair mb-3">Hot Deals</h2>
-                <p class="text-slate-500 text-lg">Grab them before they're gone!</p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                {% for offer in offers %}
-                <div class="tilt-card reveal-stagger" style="--i:{{ forloop.counter0 }}">
-                    <div class="card-inner bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-shadow duration-500 group {% if offer.inventory and offer.inventory.stock <= 0 %}opacity-75{% endif %}">
-                        <!-- Image Container with Hover Swap -->
-                        <div class="relative overflow-hidden h-64">
-                            <!-- Primary Image -->
-                            <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }}"
-                                class="img-primary absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:opacity-0 group-hover:scale-105"
-                                loading="lazy">
-                            <!-- Hover / Secondary Image (fades in on hover) -->
-                            <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }} back view"
-                                class="img-secondary absolute inset-0 w-full h-full object-cover scale-105 opacity-0 transition-all duration-700 group-hover:opacity-100 group-hover:scale-110"
-                                loading="lazy">
-
-                            <!-- Sale Badge -->
-                            <span class="absolute top-3 left-3 z-10 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full shadow-lg">
-                                {{ offer.offers_badge }}
-                            </span>
-                            <!-- Heart button -->
-                            <button onclick="window.location.href='{% url 'add_to_wishlist' 'offer' offer.id %}'" class="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full text-slate-400 hover:text-pink-500 hover:bg-pink-50 shadow-md transition-all">
-                                <i class="bi bi-heart-fill"></i>
-                            </button>
-
-                            <!-- Live Viewers -->
-                            <span class="live-viewers absolute bottom-3 left-3 z-10 px-2 py-1 bg-black/60 backdrop-blur-sm text-white text-[10px] font-semibold rounded-full"></span>
-
-                            <!-- Overlay Actions -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex items-end justify-center pb-5 gap-3">
-                                <button onclick="fetchQuickView('offer', {{ offer.id }}); return false;"
-                                    class="px-4 py-2 bg-white text-slate-800 font-semibold rounded-full text-xs transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 hover:bg-indigo-500 hover:text-white">
-                                    <i class="bi bi-eye mr-1"></i>Quick View
-                                </button>
-                                <button
-                                    class="px-4 py-2 font-semibold rounded-full text-xs transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 delay-75 {% if offer.inventory and offer.inventory.stock <= 0 %}bg-slate-400 text-slate-200 cursor-not-allowed opacity-50{% else %}bg-indigo-600 text-white hover:bg-indigo-700{% endif %}"
-                                    {% if offer.inventory and offer.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}"{% endif %}>
-                                    <i class="bi bi-cart-plus mr-1"></i>Add to Cart
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Card Body -->
-                        <div class="p-5">
-                            <h3 class="font-semibold text-slate-800 mb-1 group-hover:text-indigo-600 transition-colors line-clamp-1">
-                                <a href="{% url 'product_detail' 'offer' offer.id %}" class="hover:text-indigo-600" style="color:inherit;text-decoration:none">{{ offer.title }}</a>
-                            </h3>
-                            <div class="star-rating mb-2" data-rating="{{ offer.avg_rating|default:0|floatformat:1 }}"></div>
-                            <div class="flex items-center gap-3 mb-2">
-                                {% if offer.price2 %}
-                                <span class="text-xl font-bold text-indigo-600">Rs {{ offer.price2 }}</span>
-                                {% endif %}
-                                {% if offer.price1 %}
-                                <span class="text-sm text-slate-400 line-through">Rs {{ offer.price1 }}</span>
-                                {% endif %}
-                            </div>
-                            <div class="flex items-center justify-between">
-                                {% if offer.stock_text %}
-                                <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-50 text-amber-700 text-xs rounded-full font-semibold">
-                                    <i class="bi bi-fire text-orange-500"></i> {{ offer.stock_text }}
-                                </span>
-                                {% endif %}
-                                <a href="{% url 'product_detail' 'offer' offer.id %}" class="text-xs text-indigo-500 hover:text-indigo-700 font-medium ml-auto">Details →</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-
-            <div class="text-center mt-14 reveal">
-                <a href="{% url 'shop_offers' %}"
-                    class="mag-btn inline-flex items-center gap-2 px-9 py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-full hover:shadow-xl hover:shadow-indigo-500/30 transition-all duration-300 hover:scale-105">
-                    View All Offers <i class="bi bi-arrow-right"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    {% include 'includes/promo_strip.html' with variant="orange" %}
-
-    <!-- ╔══════════════════════════════════════╗
-         ║        NEW  ARRIVALS                 ║
-         ╚══════════════════════════════════════╝ -->
-    <section class="py-14 bg-white" id="newArrivals" data-reveal>
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-10 reveal">
-                <span
-                    class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-600 font-semibold rounded-full text-sm mb-5">
-                    <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span> Just Landed
-                </span>
-                <h2 class="text-4xl md:text-5xl font-bold font-playfair mb-3">New Arrivals</h2>
-                <p class="text-slate-500 text-lg">Fresh products just dropped!</p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                {% for arrival in arrivals %}
-                <div class="tilt-card reveal-stagger" style="--i:{{ forloop.counter0 }}">
-                    <div class="card-inner bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-shadow duration-500 border border-slate-100 group {% if arrival.inventory and arrival.inventory.stock <= 0 %}opacity-75{% endif %}">
-                        <!-- Image with hover swap -->
-                        <div class="relative overflow-hidden h-56">
-                            <img src="{{ arrival.imageUrl.url }}" alt="{{ arrival.title }}"
-                                class="img-primary absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:opacity-0 group-hover:scale-105"
-                                loading="lazy">
-                            <img src="{{ arrival.imageUrl.url }}" alt="{{ arrival.title }} alternate"
-                                class="img-secondary absolute inset-0 w-full h-full object-cover scale-105 opacity-0 transition-all duration-700 group-hover:opacity-100 group-hover:scale-110"
-                                loading="lazy">
-
-                            <!-- NEW badge -->
-                            <span class="absolute top-3 left-3 z-10 px-3 py-1 bg-emerald-500 text-white text-[11px] font-bold rounded-full">NEW</span>
-
-                            <!-- Heart -->
-                            <button onclick="window.location.href='{% url 'add_to_wishlist' 'arrival' arrival.id %}'" class="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full text-slate-400 hover:text-pink-500 hover:bg-pink-50 shadow-md transition-all">
-                                <i class="bi bi-heart-fill"></i>
-                            </button>
-
-                            <!-- Live viewers -->
-                            <span class="live-viewers absolute bottom-3 left-3 z-10 px-2 py-1 bg-black/60 backdrop-blur-sm text-white text-[10px] font-semibold rounded-full"></span>
-
-                            <!-- Overlay Actions -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex items-end justify-center pb-5 gap-3">
-                                <button onclick="fetchQuickView('arrival', {{ arrival.id }}); return false;"
-                                    class="px-4 py-2 bg-white text-slate-800 font-semibold rounded-full text-xs transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 hover:bg-indigo-500 hover:text-white">
-                                    <i class="bi bi-eye mr-1"></i>Quick View
-                                </button>
-                                <button
-                                    class="px-4 py-2 font-semibold rounded-full text-xs transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 delay-75 {% if arrival.inventory and arrival.inventory.stock <= 0 %}bg-slate-400 text-slate-200 cursor-not-allowed opacity-50{% else %}bg-indigo-600 text-white hover:bg-indigo-700{% endif %}"
-                                    {% if arrival.inventory and arrival.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart data-item-type="arrival" data-item-id="{{ arrival.id }}"{% endif %}>
-                                    <i class="bi bi-cart-plus mr-1"></i>Add to Cart
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="p-5">
-                            <span class="text-[11px] text-indigo-600 font-bold uppercase tracking-wider">{{ arrival.category }}</span>
-                            <div class="star-rating text-sm mb-1" data-rating="{{ arrival.avg_rating|default:0|floatformat:1 }}"></div>
-                            <h3 class="font-semibold text-slate-800 mt-1 mb-2 line-clamp-1">
-                                <a href="{% url 'product_detail' 'arrival' arrival.id %}"
-                                    class="hover:text-indigo-600 transition-colors"
-                                    style="color:inherit;text-decoration:none">{{ arrival.title }}</a>
-                            </h3>
-                            <p class="text-sm text-slate-400 mb-4 line-clamp-2">{{ arrival.description }}</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-xl font-bold text-slate-800">Rs {{ arrival.price }}</span>
-                                <button
-                                    class="w-10 h-10 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg shadow-indigo-500/25 {% if arrival.inventory and arrival.inventory.stock <= 0 %}bg-slate-300 text-slate-500 cursor-not-allowed opacity-50{% else %}bg-indigo-600 text-white hover:bg-indigo-700{% endif %}"
-                                    {% if arrival.inventory and arrival.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart data-item-type="arrival" data-item-id="{{ arrival.id }}"{% endif %}>
-                                    <i class="bi bi-cart-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% empty %}
-                <div class="col-span-full text-center py-16">
-                    <i class="bi bi-inbox text-6xl text-slate-200 mb-4 block"></i>
-                    <p class="text-slate-400 text-lg">No new arrivals yet. Check back soon!</p>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
-
-    {% include 'includes/promo_strip.html' with variant="green" %}
 
     <!-- ╔══════════════════════════════════════╗
          ║          WISHLIST SECTION            ║
@@ -589,7 +687,8 @@
                             <div class="relative">
                                 <img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-40 object-cover"
                                     loading="lazy">
-                                <span class="absolute top-2 left-2 px-2 py-0.5 bg-slate-800/70 text-white text-[10px] font-semibold rounded-md backdrop-blur-sm">{{ item.category }}</span>
+                                <span
+                                    class="absolute top-2 left-2 px-2 py-0.5 bg-slate-800/70 text-white text-[10px] font-semibold rounded-md backdrop-blur-sm">{{ item.category }}</span>
                             </div>
                             <div class="p-3">
                                 <h4 class="font-semibold text-sm truncate text-slate-800">{{ item.name }}</h4>
@@ -675,9 +774,8 @@
                             </div>
                             {% endif %}
                             <!-- Floating badge on image -->
-                            <div class="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-bold
-                                {% if forloop.counter == 1 %}text-indigo-600{% elif forloop.counter == 2 %}text-emerald-600{% else %}text-amber-600{% endif %}
-                                shadow-lg">
+                            <div
+                                class="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-bold {% if forloop.counter == 1 %}text-indigo-600{% elif forloop.counter == 2 %}text-emerald-600{% else %}text-amber-600{% endif %} shadow-lg">
                                 {% if forloop.counter == 1 %}500+ Products{% elif forloop.counter == 2 %}4.9★ Rating{% else %}Fast Checkout{% endif %}
                             </div>
                             <!-- Title overlay on image -->
@@ -862,19 +960,22 @@
                         <li class="flex items-center gap-3 text-white/80">
                             <div
                                 class="w-6 h-6 rounded-full bg-emerald-400/20 flex items-center justify-center flex-shrink-0">
-                                <i class="bi bi-check-lg text-emerald-400 text-xs"></i></div>
+                                <i class="bi bi-check-lg text-emerald-400 text-xs"></i>
+                            </div>
                             <span>Premium quality products at unbeatable prices</span>
                         </li>
                         <li class="flex items-center gap-3 text-white/80">
                             <div
                                 class="w-6 h-6 rounded-full bg-emerald-400/20 flex items-center justify-center flex-shrink-0">
-                                <i class="bi bi-check-lg text-emerald-400 text-xs"></i></div>
+                                <i class="bi bi-check-lg text-emerald-400 text-xs"></i>
+                            </div>
                             <span>Free shipping on orders over $49</span>
                         </li>
                         <li class="flex items-center gap-3 text-white/80">
                             <div
                                 class="w-6 h-6 rounded-full bg-emerald-400/20 flex items-center justify-center flex-shrink-0">
-                                <i class="bi bi-check-lg text-emerald-400 text-xs"></i></div>
+                                <i class="bi bi-check-lg text-emerald-400 text-xs"></i>
+                            </div>
                             <span>30-day hassle-free returns &amp; exchanges</span>
                         </li>
                     </ul>
@@ -960,7 +1061,8 @@
                 <p class="text-slate-300 text-lg mb-8">Subscribe to get special offers, free giveaways, and
                     once-in-a-lifetime deals.</p>
 
-                <form action="{% url 'subscribe_newsletter' %}" method="POST" class="relative max-w-lg mx-auto flex text-left newsletter-form-ajax">
+                <form action="{% url 'subscribe_newsletter' %}" method="POST"
+                    class="relative max-w-lg mx-auto flex text-left newsletter-form-ajax">
                     {% csrf_token %}
                     <i class="bi bi-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
                     <input type="email" name="email" placeholder="Enter your email address"

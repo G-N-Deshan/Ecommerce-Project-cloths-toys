@@ -1,0 +1,37 @@
+/* 
+   Hero Background Scrolling Animation 
+   Created for G11 Fashion & Toys 
+*/
+
+@keyframes scrollBgX {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes scrollObjectX {
+    0% { object-position: 0% 50%; }
+    50% { object-position: 100% 50%; }
+    100% { object-position: 0% 50%; }
+}
+
+.hero-scroll-x {
+    background-size: 150% auto !important;
+    animation: scrollBgX 40s ease-in-out infinite !important;
+}
+
+.hero-object-scroll-x {
+    object-size: 150% auto !important; /* This is not valid CSS, use scale instead */
+    transform: scale(1.5);
+    animation: scrollObjectX 40s ease-in-out infinite !important;
+}
+
+/* Subtle zoom effect overlay */
+@keyframes heroZoom {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.05); }
+}
+
+.hero-zoom-slow {
+    animation: heroZoom 20s ease-in-out infinite alternate;
+}

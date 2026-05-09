@@ -884,3 +884,34 @@ class CartAbandon(models.Model):
     def __str__(self):
         user_info = self.user.email if self.user else self.session_key
         return f"Cart abandoned by {user_info} - Rs {self.cart_total}"
+
+
+class TrendingProduct(models.Model):
+    """Curated products that show up in the Trending section"""
+    CATEGORY_CHOICES = [
+        ('kids', 'Kids'),
+        ('men', 'Men'),
+        ('women', 'Women'),
+        ('toys', 'Toys'),
+    ]
+
+    name = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='trending/')
+    price = models.CharField(max_length=50)
+    original_price = models.CharField(max_length=50, blank=True, null=True)
+    badge = models.CharField(max_length=50, default='Trending', blank=True)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    link_url = models.CharField(max_length=500, help_text="Paste the full URL to the product detail page here")
+    
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['order', '-created_at']
+        verbose_name = 'Trending Product'
+        verbose_name_plural = 'Trending Products'
+
+    def __str__(self):
+        return f"{self.name} ({self.category})"

@@ -272,7 +272,9 @@
                                     {% endif %}
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <h4 class="font-semibold text-slate-800 text-sm truncate">{{ real_item.name|default:real_item.title }}</h4>
+                                    <h4 class="font-semibold text-slate-800 text-sm truncate">
+                                        {% if real_item.name %}{{ real_item.name }}{% else %}{{ real_item.title }}{% endif %}
+                                    </h4>
                                     <p class="text-xs text-slate-500 mt-0.5">Qty: {{ item.quantity }}</p>
                                 </div>
                                 <div class="text-right flex-shrink-0">

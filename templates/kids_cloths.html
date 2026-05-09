@@ -48,10 +48,23 @@
             text-align: center;
             position: relative;
             overflow: hidden;
-            background:
-                linear-gradient(120deg, rgba(14, 165, 233, 0.92), rgba(251, 146, 60, 0.9)),
-                url('{% static "kids-card-page-background.jpg" %}') center/cover no-repeat;
             box-shadow: 0 20px 40px rgba(14, 165, 233, 0.2);
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background: linear-gradient(120deg, rgba(14, 165, 233, 0.8), rgba(251, 146, 60, 0.75));
+        }
+
+        .hero-image {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background-image: url('/media/backgrounds/hero_kids.png');
+            background-size: cover;
+            background-position: center;
         }
 
         .hero::after {
@@ -493,7 +506,10 @@
     <div class="kids-wrap">
         <div id="top-section" data-observe="top-section" class="section-anchor-top"></div>
         <section class="hero">
-            <!-- 3D Floating Shapes -->
+            <div class="hero-bg"></div>
+            <div class="hero-image hero-scroll-x"></div>
+            <div class="relative z-10">
+                <!-- 3D Floating Shapes -->
             <div class="absolute top-[10%] left-[6%] w-24 h-24 rounded-full bg-white/10 pointer-events-none" style="position:absolute;animation:pgFloat 7s ease-in-out infinite"></div>
             <div class="absolute bottom-[12%] right-[7%] w-16 h-16 rounded-2xl bg-white/8 rotate-45 pointer-events-none" style="position:absolute;animation:pgFloat 9s 2s ease-in-out infinite"></div>
             <div class="absolute top-[25%] right-[15%] w-20 h-20 rounded-full border-4 border-white/10 pointer-events-none" style="position:absolute;animation:pgFloat 10s 3.5s ease-in-out infinite"></div>
@@ -504,6 +520,7 @@
             <div class="absolute top-[60%] right-[8%] w-8 h-8 rounded-full bg-cyan-300/10 pointer-events-none" style="position:absolute;animation:kcBounce 3s 0.5s cubic-bezier(.36,.07,.19,.97) infinite"></div>
             <h1>Playful Kids Wardrobe</h1>
             <p>Fresh fits for school, park time, birthday plans, and everything in-between. Use filters and sorting to quickly find what families actually want.</p>
+            </div>
         </section>
 
         {% include 'includes/promo_strip.html' with variant="orange" %}

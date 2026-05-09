@@ -1,11 +1,10 @@
-
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import (Card, Cloths, Offers, NewArrivals, Review, ContactMessage, Toy,
                      WishlistItem, Cart, CartItem, Order, OrderItem, ProductReview,
                      ProductImage, Inventory, Coupon, ProductVariant, OrderTracking,
                      SiteBanner, SiteSettings, ViewHistory, Return, StockAlert, CartAbandon,
-                     NewsletterSubscription)
+                     NewsletterSubscription, TrendingProduct)
 from .models import ServiceReview
 
 # Admin site branding
@@ -598,3 +597,17 @@ class NewsletterSubscriptionAdmin(admin.ModelAdmin):
     search_fields = ['email']
     readonly_fields = ['subscribed_at']
     ordering = ['-subscribed_at']
+
+
+@admin.register(TrendingProduct)
+class TrendingProductAdmin(admin.ModelAdmin):
+    list_display = ['get_image', 'name', 'category', 'price', 'order', 'is_active']
+    list_filter = ['category', 'is_active', 'created_at']
+    search_fields = ['name', 'category']
+    list_editable = ['order', 'is_active', 'price']
+    
+    def get_image(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="width: 50px; height: 50px; border-radius: 8px; object-fit: cover;" />', obj.image.url)
+        return "-"
+    get_image.short_description = 'Image'

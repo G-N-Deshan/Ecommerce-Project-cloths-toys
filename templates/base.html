@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800;900&display=swap"
+        rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -32,6 +35,7 @@
     {% block extra_css %}{% endblock %}
     <title>{% block title %}KidZone{% endblock %}</title>
 </head>
+
 <body class="font-inter bg-[#fafafa] text-slate-800 overflow-x-hidden">
 
     <!-- ── Toast Notifications ── -->
@@ -39,7 +43,7 @@
 
     {% if messages %}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             {% for message in messages %}
             showToast('{{ message|escapejs }}', '{{ message.tags }}');
             {% endfor %}
@@ -48,7 +52,8 @@
     {% endif %}
 
     <!-- ── Loading Overlay ── -->
-    <div id="loadingOverlay" class="fixed inset-0 z-[10000] bg-white/80 backdrop-blur-sm flex items-center justify-center hidden">
+    <div id="loadingOverlay"
+        class="fixed inset-0 z-[10000] bg-white/80 backdrop-blur-sm flex items-center justify-center hidden">
         <div class="flex flex-col items-center gap-3">
             <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
             <span class="text-sm font-medium text-slate-600">Loading...</span>
@@ -59,44 +64,98 @@
 
     <!-- 3D Floating Shapes -->
     <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
-        <div style="position:absolute;width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,#818cf8,#c084fc);top:8%;right:5%;opacity:.08;animation:baseFloat 7s ease-in-out infinite"></div>
-        <div style="position:absolute;width:70px;height:70px;border-radius:14px;background:linear-gradient(135deg,#ec4899,#f472b6);bottom:15%;left:6%;opacity:.08;animation:baseFloat 9s ease-in-out infinite 2s;transform:rotate(45deg)"></div>
-        <div style="position:absolute;width:80px;height:80px;border-radius:50%;border:4px solid rgba(99,102,241,.1);top:45%;left:12%;opacity:.08;animation:baseFloat 10s ease-in-out infinite 3.5s"></div>
-        <div style="position:absolute;width:0;height:0;border-left:35px solid transparent;border-right:35px solid transparent;border-bottom:60px solid rgba(245,158,11,.06);bottom:35%;right:10%;opacity:.08;animation:baseFloat 11s ease-in-out infinite 1.5s"></div>
-        <div style="position:absolute;width:90px;height:14px;border-radius:40px;background:linear-gradient(90deg,rgba(99,102,241,.12),transparent);top:25%;left:30%;animation:baseDrift 10s ease-in-out infinite"></div>
-        <div style="position:absolute;width:60px;height:10px;border-radius:30px;background:linear-gradient(90deg,rgba(236,72,153,.1),transparent);bottom:25%;right:25%;animation:baseDrift 12s ease-in-out infinite reverse"></div>
-        <div style="position:absolute;width:55px;height:55px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,.1),transparent 70%);top:60%;right:20%;animation:basePulse 6s ease-in-out infinite"></div>
-        <div style="position:absolute;width:35px;height:35px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,.08),transparent 70%);top:15%;left:55%;animation:basePulse 8s ease-in-out infinite 2s"></div>
+        <div
+            style="position:absolute;width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,#818cf8,#c084fc);top:8%;right:5%;opacity:.08;animation:baseFloat 7s ease-in-out infinite">
+        </div>
+        <div
+            style="position:absolute;width:70px;height:70px;border-radius:14px;background:linear-gradient(135deg,#ec4899,#f472b6);bottom:15%;left:6%;opacity:.08;animation:baseFloat 9s ease-in-out infinite 2s;transform:rotate(45deg)">
+        </div>
+        <div
+            style="position:absolute;width:80px;height:80px;border-radius:50%;border:4px solid rgba(99,102,241,.1);top:45%;left:12%;opacity:.08;animation:baseFloat 10s ease-in-out infinite 3.5s">
+        </div>
+        <div
+            style="position:absolute;width:0;height:0;border-left:35px solid transparent;border-right:35px solid transparent;border-bottom:60px solid rgba(245,158,11,.06);bottom:35%;right:10%;opacity:.08;animation:baseFloat 11s ease-in-out infinite 1.5s">
+        </div>
+        <div
+            style="position:absolute;width:90px;height:14px;border-radius:40px;background:linear-gradient(90deg,rgba(99,102,241,.12),transparent);top:25%;left:30%;animation:baseDrift 10s ease-in-out infinite">
+        </div>
+        <div
+            style="position:absolute;width:60px;height:10px;border-radius:30px;background:linear-gradient(90deg,rgba(236,72,153,.1),transparent);bottom:25%;right:25%;animation:baseDrift 12s ease-in-out infinite reverse">
+        </div>
+        <div
+            style="position:absolute;width:55px;height:55px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,.1),transparent 70%);top:60%;right:20%;animation:basePulse 6s ease-in-out infinite">
+        </div>
+        <div
+            style="position:absolute;width:35px;height:35px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,.08),transparent 70%);top:15%;left:55%;animation:basePulse 8s ease-in-out infinite 2s">
+        </div>
     </div>
     <style>
         @keyframes baseFloat {
-            0%,100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-22px) rotate(5deg); }
-            50% { transform: translateY(-34px) rotate(-4deg); }
-            75% { transform: translateY(-14px) rotate(3deg); }
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            25% {
+                transform: translateY(-22px) rotate(5deg);
+            }
+
+            50% {
+                transform: translateY(-34px) rotate(-4deg);
+            }
+
+            75% {
+                transform: translateY(-14px) rotate(3deg);
+            }
         }
+
         @keyframes baseDrift {
-            0%   { transform: translateX(0) scaleX(1); opacity: .12; }
-            50%  { transform: translateX(50px) scaleX(1.3); opacity: .04; }
-            100% { transform: translateX(0) scaleX(1); opacity: .12; }
+            0% {
+                transform: translateX(0) scaleX(1);
+                opacity: .12;
+            }
+
+            50% {
+                transform: translateX(50px) scaleX(1.3);
+                opacity: .04;
+            }
+
+            100% {
+                transform: translateX(0) scaleX(1);
+                opacity: .12;
+            }
         }
+
         @keyframes basePulse {
-            0%, 100% { transform: scale(1); opacity: .1; }
-            50%  { transform: scale(1.4); opacity: .03; }
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: .1;
+            }
+
+            50% {
+                transform: scale(1.4);
+                opacity: .03;
+            }
         }
     </style>
 
     <!-- ── Quick-View Modal ── -->
     <div id="quickViewModal" class="fixed inset-0 z-[8000] hidden">
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeQuickView()"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl max-w-2xl w-[95%] max-h-[90vh] overflow-y-auto p-6">
-            <button onclick="closeQuickView()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-red-100 flex items-center justify-center text-slate-500 hover:text-red-500 transition">&times;</button>
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl max-w-2xl w-[95%] max-h-[90vh] overflow-y-auto p-6">
+            <button onclick="closeQuickView()"
+                class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-red-100 flex items-center justify-center text-slate-500 hover:text-red-500 transition">&times;</button>
             <div id="quickViewContent" class="flex flex-col md:flex-row gap-6">
                 <div class="md:w-1/2">
                     <img id="qvImage" src="" alt="" class="w-full rounded-xl object-cover aspect-square" loading="lazy">
                 </div>
                 <div class="md:w-1/2 flex flex-col gap-3">
-                    <span id="qvBadge" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-indigo-100 text-indigo-700 w-fit"></span>
+                    <span id="qvBadge"
+                        class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-indigo-100 text-indigo-700 w-fit"></span>
                     <h2 id="qvName" class="text-xl font-bold text-slate-900"></h2>
                     <p id="qvDesc" class="text-sm text-slate-600 line-clamp-4"></p>
                     <div class="flex items-center gap-3">
@@ -105,8 +164,12 @@
                     </div>
                     <div id="qvStock" class="text-sm font-semibold"></div>
                     <div class="flex gap-2 mt-auto">
-                        <a id="qvDetailLink" href="#" class="flex-1 py-2.5 text-center rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition">View Details</a>
-                        <button id="qvCartBtn" onclick="quickAddToCart()" class="flex-1 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm transition">Add to Cart</button>
+                        <a id="qvDetailLink" href="#"
+                            class="flex-1 py-2.5 text-center rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition">View
+                            Details</a>
+                        <button id="qvCartBtn" onclick="quickAddToCart()"
+                            class="flex-1 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm transition">Add
+                            to Cart</button>
                     </div>
                 </div>
             </div>
@@ -127,4 +190,5 @@
     <script src="{% static 'scroll-reveal.js' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>
+
 </html>

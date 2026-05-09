@@ -99,19 +99,30 @@
         <div class="catalog-toolbar__inner">
             <form method="get" class="filter-form">
                 <div class="filter-grid">
-                    <div class="filter-control filter-control--wide">
+                    <div class="filter-control filter-control--wide filter-control--search">
                         <label for="q">Search</label>
-                        <input id="q" name="q" type="text" value="{{ search_query }}"
-                            placeholder="Search by product name or style">
+                        <div class="search-field">
+                            <span class="search-field__icon" aria-hidden="true">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input id="q" name="q" type="text" value="{{ search_query }}"
+                                placeholder="Search by product name or style" autocomplete="off"
+                                aria-label="Search cloths">
+                            <button type="submit" class="search-field__button">Search</button>
+                        </div>
+                        <p class="search-help">Try a brand, style, color, or material keyword.</p>
                     </div>
 
                     <div class="filter-control">
                         <label for="category">Category</label>
                         <select id="category" name="category">
                             <option value="all" {% if selected_category == 'all' %}selected{% endif %}>All</option>
-                            <option value="men" {% if selected_category == 'men' %}selected{% endif %}>Men ({{ category_counts.men }})</option>
-                            <option value="women" {% if selected_category == 'women' %}selected{% endif %}>Women ({{ category_counts.women }})</option>
-                            <option value="kids" {% if selected_category == 'kids' %}selected{% endif %}>Kids ({{ category_counts.kids }})</option>
+                            <option value="men" {% if selected_category == 'men' %}selected{% endif %}>Men ({{
+                                category_counts.men }})</option>
+                            <option value="women" {% if selected_category == 'women' %}selected{% endif %}>Women ({{
+                                category_counts.women }})</option>
+                            <option value="kids" {% if selected_category == 'kids' %}selected{% endif %}>Kids ({{
+                                category_counts.kids }})</option>
                         </select>
                     </div>
 
@@ -147,12 +158,14 @@
                 <div class="toolbar-actions">
                     <button type="submit" class="btn-filter">Apply Filters</button>
                     <a href="{% url 'cloths' %}" class="btn-reset">Reset</a>
+                    {% if search_query %}
+                    <a href="{% url 'cloths' %}" class="btn-reset btn-reset--ghost">Clear Search</a>
+                    {% endif %}
                 </div>
             </form>
 
             <div class="toolbar-meta">
                 <p class="catalog-count">Showing {{ cloths_items|length }} of {{ products_count }} products</p>
-                <div class="toolbar-note">Tip: Use sort + subcategory together for faster product discovery.</div>
             </div>
         </div>
     </section>
@@ -230,7 +243,8 @@
             <a href="?page={{ cloths_items.previous_page_number }}&q={{ search_query }}&category={{ selected_category }}&subcategory={{ selected_subcategory }}&sort={{ selected_sort }}"
                 class="pagination-btn">Previous</a>
             {% endif %}
-            <span class="pagination-state">Page {{ cloths_items.number }} of {{ cloths_items.paginator.num_pages }}</span>
+            <span class="pagination-state">Page {{ cloths_items.number }} of {{ cloths_items.paginator.num_pages
+                }}</span>
             {% if cloths_items.has_next %}
             <a href="?page={{ cloths_items.next_page_number }}&q={{ search_query }}&category={{ selected_category }}&subcategory={{ selected_subcategory }}&sort={{ selected_sort }}"
                 class="pagination-btn">Next</a>

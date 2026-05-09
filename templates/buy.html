@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="{% static 'buy.css' %}">
     <link rel="stylesheet" href="{% static 'cart.css' %}">
     <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
+    <link rel="stylesheet" href="{% static 'hero-effects.css' %}">
     <script>
         tailwind.config = {
             theme: { extend: { fontFamily: { inter: ['Inter'], playfair: ['Playfair Display'] } } }
@@ -44,8 +45,8 @@
 
     <!-- ═══ HERO ═══ -->
     <section class="buy-hero relative overflow-hidden py-24 md:py-32 min-h-[75vh] flex items-center">
-        <div class="buy-hero-media absolute inset-0 z-0">
-            <div class="absolute inset-0 bg-black/10"></div>
+        <div class="buy-hero-media absolute inset-0 z-0 hero-scroll-x" style="background-image: url('/media/backgrounds/hero_buy.png'); background-size: cover;">
+            <div class="absolute inset-0 bg-black/20"></div>
         </div>
 
         <!-- Subtle Floating Elements -->

@@ -6,7 +6,7 @@ from .models import (Card, Offers, NewArrivals, Cloths, Review, ContactMessage, 
                      ProductImage, Inventory, Coupon, ProductVariant, OrderTracking,
                      SiteUpdate, ServiceReview, NewsletterSubscription,
                      LoyaltyProfile, LoyaltyHistory, SiteBanner, SiteSettings,
-                     ViewHistory, Return, StockAlert, CartAbandon)
+                     ViewHistory, Return, StockAlert, CartAbandon, TrendingProduct)
 from .forms import ReviewForm, ContactForm, ServiceReviewForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -394,9 +394,31 @@ def subscribe_newsletter(request):
         return JsonResponse({'status': 'error', 'message': 'Something went wrong. Please try again later.'}, status=500)
 
 
+def trending_page(request):
+    """View to display all trending products with category filtering"""
+    category = request.GET.get('category', '')
+    trending_qs = TrendingProduct.objects.filter(is_active=True)
+    
+    if category:
+        trending_qs = trending_qs.filter(category=category)
+    
+    # Pagination
+    paginator = Paginator(trending_qs, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'trending_products': page_obj,
+        'current_category': category,
+        'cart_count': get_or_create_cart(request).get_item_count(),
+    }
+    return render(request, 'trending.html', context)
+
+
 def index(request):
     offers = Offers.objects.annotate(avg_rating=Avg('product_reviews__rating')).all()
     arrivals = NewArrivals.objects.annotate(avg_rating=Avg('product_reviews__rating')).all()
+    trending_products = TrendingProduct.objects.filter(is_active=True)[:4]
     cards = Card.objects.all()
     wishlist_items = []
     wishlist_count = 0
@@ -423,14 +445,16 @@ def index(request):
         
         # Prepare wishlist data for template
         for item in user_wishlist[:6]:  # Show only first 6 items on home page
-            wishlist_items.append({
-                'id': item.id,
-                'name': item.get_item().name,
-                'price': item.get_price(),
-                'image': item.get_item().imageUrl.url if item.get_item().imageUrl else '',
-                'category': item.get_category(),
-                'item_type': item.item_type,
-            })
+            wish_real_item = item.get_item()
+            if wish_real_item:
+                wishlist_items.append({
+                    'id': item.id,
+                    'name': wish_real_item.name if hasattr(wish_real_item, 'name') else wish_real_item.title,
+                    'price': item.get_price(),
+                    'image': wish_real_item.imageUrl.url if wish_real_item.imageUrl else '',
+                    'category': item.get_category(),
+                    'item_type': item.item_type,
+                })
 
     try:
         active_banners = SiteBanner.objects.filter(is_active=True).order_by('order')
@@ -443,13 +467,13 @@ def index(request):
         'cards': cards,
         'offers': offers,
         'arrivals': arrivals,
+        'trending_products': trending_products,
         'wishlist_items': wishlist_items,
         'wishlist_count': wishlist_count,
         'cart_count': cart_count,
         'active_banners': active_banners,
         'site_settings': site_settings_obj,
     }
-    
     return render(request, 'index.html', context)
 
 def about(request):
@@ -1835,6 +1859,37 @@ def add_to_cart(request, item_type, item_id):
         messages.error(request, 'Something went wrong. Please try again.')
         return redirect(request.META.get('HTTP_REFERER', 'index'))
 
+def buy_now(request, item_type, item_id):
+    """Adds item to cart and redirects to checkout immediately"""
+    try:
+        cart = get_or_create_cart(request)
+        if item_type == 'cloth':
+            item = get_object_or_404(Cloths, id=item_id)
+            cart_item, created = CartItem.objects.get_or_create(cart=cart, item_type='cloth', cloth=item)
+        elif item_type == 'toy':
+            item = get_object_or_404(Toy, id=item_id)
+            cart_item, created = CartItem.objects.get_or_create(cart=cart, item_type='toy', toy=item)
+        elif item_type == 'offer':
+            item = get_object_or_404(Offers, id=item_id)
+            cart_item, created = CartItem.objects.get_or_create(cart=cart, item_type='offer', offer=item)
+        elif item_type == 'arrival':
+            item = get_object_or_404(NewArrivals, id=item_id)
+            cart_item, created = CartItem.objects.get_or_create(cart=cart, item_type='arrival', arrival=item)
+        else:
+            messages.error(request, 'Invalid item type')
+            return redirect('index')
+
+        if not created:
+            cart_item.quantity += 1
+        if cart_item.unit_price is None:
+            live_price = cart_item.get_live_price()
+            cart_item.unit_price = Decimal(str(round(live_price, 2))) if live_price > 0 else Decimal('0.00')
+        cart_item.save()
+        return redirect('checkout')
+    except Exception as e:
+        messages.error(request, f'Error: {str(e)}')
+        return redirect('index')
+
 
 @require_POST
 def update_cart_item(request, cart_item_id):
@@ -2791,6 +2846,51 @@ def add_stock_alert(request, product_type, product_id):
 # ══════════════════════════════════════════════════════
 # SEARCH FUNCTIONALITY
 # ══════════════════════════════════════════════════════
+
+def live_search(request):
+    query = request.GET.get('q', '').strip()
+    results = []
+    if len(query) >= 2:
+        cloths = Cloths.objects.filter(Q(name__icontains=query))[:3]
+        toys = Toy.objects.filter(Q(name__icontains=query))[:3]
+        offers = Offers.objects.filter(Q(title__icontains=query))[:3]
+        arrivals = NewArrivals.objects.filter(Q(title__icontains=query))[:3]
+
+        for item in cloths:
+            results.append({
+                'name': item.name,
+                'price': f"Rs {item.price2 or item.price or item.price1}",
+                'image': item.imageUrl.url if item.imageUrl else '',
+                'url': f'/product/cloth/{item.id}/',
+                'type': 'Clothing'
+            })
+        for item in toys:
+            results.append({
+                'name': item.name,
+                'price': f"Rs {item.price}",
+                'image': item.imageUrl.url if item.imageUrl else '',
+                'url': f'/product/toy/{item.id}/',
+                'type': 'Toy'
+            })
+        for item in offers:
+            results.append({
+                'name': item.title,
+                'price': f"Rs {item.price2 or item.price1}",
+                'image': item.imageUrl.url if item.imageUrl else '',
+                'url': f'/product/offer/{item.id}/',
+                'type': 'Offer'
+            })
+        for item in arrivals:
+            results.append({
+                'name': item.title,
+                'price': f"Rs {item.price}",
+                'image': item.imageUrl.url if item.imageUrl else '',
+                'url': f'/product/arrival/{item.id}/',
+                'type': 'New Arrival'
+            })
+
+    return JsonResponse({'results': results[:8]})
+
 
 def search(request):
     query = request.GET.get('q', '').strip()

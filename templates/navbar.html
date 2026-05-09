@@ -36,23 +36,53 @@
             <!-- Navigation Links Centered -->
             <div class="nav-links-container">
                 <a href="{% url 'index' %}" class="nav-link nav-link--home">Home</a>
-                <a href="{% url 'buy' %}" class="nav-link nav-link--vehicles">BUY</a>
+                <div class="nav-dropdown">
+                    <a href="{% url 'buy' %}" class="nav-link nav-link--vehicles">Shop <i class="bi bi-chevron-down text-[10px]"></i></a>
+                    <div class="mega-menu">
+                        <div class="mega-menu-grid">
+                            <div class="mega-menu-column">
+                                <h3>Fashion</h3>
+                                <a href="{% url 'women_cloths' %}">Women's Collection</a>
+                                <a href="{% url 'mens_cloths' %}">Men's Collection</a>
+                                <a href="{% url 'kids_cloths' %}">Kids' Clothing</a>
+                            </div>
+                            <div class="mega-menu-column">
+                                <h3>Play time</h3>
+                                <a href="{% url 'toys_page' %}">All Toys</a>
+                                <a href="{% url 'toys_page' %}?category=educational">Educational Toys</a>
+                                <a href="{% url 'toys_page' %}?category=building">Building Sets</a>
+                            </div>
+                            <div class="mega-menu-column">
+                                <h3>Quick Links</h3>
+                                <a href="{% url 'shop_offers' %}">Hot Deals</a>
+                                <a href="{% url 'trending' %}">Trending Now</a>
+                                <a href="{% url 'new_arrivals' %}">Just Landed</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="{% url 'trending' %}" class="nav-link nav-link--trending">Trending</a>
                 <a href="{% url 'reviews' %}" class="nav-link nav-link--reviews"> Reviews</a>
                 <a href="{% url 'contact_us' %}" class="nav-link nav-link--contact">Contact</a>
                 <a href="{% url 'about' %}" class="nav-link nav-link--about">About</a>
 
                 <!-- Search (icon-first, reveal on hover/focus) -->
-                <form action="{% url 'search' %}" method="GET" class="nav-search-form" aria-label="Search products">
-                    <input type="text" name="q" placeholder="Search products" class="nav-search-input"
-                        aria-label="Search query">
-                    <button type="submit" class="nav-search-btn" title="Search" aria-label="Search">
-                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                            <path
-                                d="M10.5 4a6.5 6.5 0 1 0 4.05 11.58l4.44 4.44a1 1 0 0 0 1.42-1.42l-4.44-4.44A6.5 6.5 0 0 0 10.5 4zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z">
-                            </path>
-                        </svg>
-                    </button>
-                </form>
+                <div class="relative">
+                    <form action="{% url 'search' %}" method="GET" class="nav-search-form" id="navSearchForm" aria-label="Search products">
+                        <input type="text" name="q" placeholder="Search products..." class="nav-search-input" id="navSearchInput"
+                            aria-label="Search query" autocomplete="off">
+                        <button type="submit" class="nav-search-btn" title="Search" aria-label="Search">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path
+                                    d="M10.5 4a6.5 6.5 0 1 0 4.05 11.58l4.44 4.44a1 1 0 0 0 1.42-1.42l-4.44-4.44A6.5 6.5 0 0 0 10.5 4zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z">
+                                </path>
+                            </svg>
+                        </button>
+                    </form>
+                    <div id="liveSearchResults" class="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl overflow-hidden hidden z-[3000] border border-slate-100"></div>
+                </div>
+
+                <script src="{% static 'live_search.js' %}"></script>
 
                 <!-- Cart Icon - Only for authenticated users -->
                 {% if user.is_authenticated %}
