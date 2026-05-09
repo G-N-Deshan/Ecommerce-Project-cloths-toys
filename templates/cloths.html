@@ -1,56 +1,97 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cloths</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="{% static 'navbar.css'%}">
     <link rel="stylesheet" href="{%static 'footer.css'%}">
     <link rel="stylesheet" href="{% static 'cloths-page.css'%}">
     <link rel="stylesheet" href="{% static 'scroll-reveal.css'%}">
 </head>
+
 <body>
 
     {%include 'navbar.html'%}
-    {% include 'cart.html' %}
 
-<div class="section-9">
-        <div class="section-9__overlay"></div>
-        <!-- 3D Floating Shapes -->
-        <div class="hero-shapes" aria-hidden="true">
-            <div class="shape shape--circle"></div>
-            <div class="shape shape--square"></div>
-            <div class="shape shape--ring"></div>
-            <div class="shape shape--wave1"></div>
-            <div class="shape shape--wave2"></div>
-            <div class="shape shape--morph1"></div>
-            <div class="shape shape--morph2"></div>
-            <div class="shape shape--streak"></div>
+    <!-- ═══ INTERACTIVE HERO ═══ -->
+    <div class="cloths-hero-interactive">
+        <!-- Hotspots -->
+        <div class="hotspot" style="top: 32%; right: 28%;">
+            <div class="hotspot__dot"></div>
+            <div class="hotspot__label">
+                <strong>Wool Blend Coat</strong>
+                <span>$189.00</span>
+            </div>
         </div>
-        <div class="section-9__content">
-            <h1 class="section-9__title">Clothing Collection</h1>
-            <p class="section-9__subtitle">Discover best-selling fits with smarter filters, trusted reviews, and quick actions.</p>
 
-            <div class="cloths-kpi" data-reveal="up">
-                <div class="kpi-card">
-                    <strong>{{ products_count }}</strong>
-                    <span>Products</span>
+        <div class="hotspot" style="top: 65%; right: 35%;">
+            <div class="hotspot__dot"></div>
+            <div class="hotspot__label">
+                <strong>Straight Leg Trousers</strong>
+                <span>$89.00</span>
+            </div>
+        </div>
+
+        <div class="hero-editorial-content">
+            <span class="editorial-tag"
+                style="display:inline-block; font-weight:700; text-transform:uppercase; letter-spacing:2px; font-size:0.85rem; margin-bottom:1.5rem; color:#fcc419;">Limited
+                Edition</span>
+            <h1>Autumn <br> Collection 24</h1>
+            <p>Discover the new season's definitive pieces. Earth tones, rich textures, and effortless silhouettes for
+                the colder days ahead.</p>
+
+            <a href="#clothsCatalog" class="hero-editorial-cta">
+                EXPLORE COLLECTION <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+        <!-- Quick Shop Card -->
+        <div class="quick-shop-floating">
+            <h3>Quick Shop</h3>
+            <div class="quick-shop-items">
+                {% if recommended_products %}
+                {% for item in recommended_products|slice:":3" %}
+                <div class="quick-shop-item" data-add-to-cart data-item-type="cloth" data-item-id="{{ item.id }}"
+                    title="Add {{ item.name }} to cart">
+                    <img src="{{ item.imageUrl.url }}" alt="{{ item.name }}">
+                    <div class="add-hint">
+                        <i class="bi bi-plus-lg"></i>
+                    </div>
                 </div>
-                <div class="kpi-card">
-                    <strong>${{ price_min|floatformat:0 }} - ${{ price_max|floatformat:0 }}</strong>
-                    <span>Price Range</span>
+                {% endfor %}
+                {% else %}
+                <p style="font-size: 0.8rem; opacity: 0.6;">Trending items loading...</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ KPI STRIP (Relocated) ═══ -->
+    <div class="kpi-strip-wrap" style="background: #fff; border-bottom: 1px solid #eee;">
+        <div class="container mx-auto px-6">
+            <div class="cloths-kpi"
+                style="margin: 20px auto; max-width: 900px; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+                <div class="kpi-card" style="background: #f8fafc; border: 1px solid #e2e8f0; color: #1a1a1a;">
+                    <strong style="color: #6366f1;">{{ products_count }}</strong>
+                    <span style="color: #64748b;">Curated Products</span>
                 </div>
-                <div class="kpi-card">
-                    <strong>Free Delivery</strong>
-                    <span>Above $49</span>
+                <div class="kpi-card" style="background: #f8fafc; border: 1px solid #e2e8f0; color: #1a1a1a;">
+                    <strong style="color: #6366f1;">${{ price_min|floatformat:0 }} - ${{ price_max|floatformat:0 }}</strong>
+                    <span style="color: #64748b;">Price Range</span>
+                </div>
+                <div class="kpi-card" style="background: #f8fafc; border: 1px solid #e2e8f0; color: #1a1a1a;">
+                    <strong style="color: #6366f1;">Premium Quality</strong>
+                    <span style="color: #64748b;">Verified Materials</span>
                 </div>
             </div>
-
-            <a href="#clothsCatalog" class="hero-primary-cta">Shop Clothing</a>
         </div>
     </div>
 
@@ -60,7 +101,8 @@
                 <div class="filter-grid">
                     <div class="filter-control filter-control--wide">
                         <label for="q">Search</label>
-                        <input id="q" name="q" type="text" value="{{ search_query }}" placeholder="Search by product name or style">
+                        <input id="q" name="q" type="text" value="{{ search_query }}"
+                            placeholder="Search by product name or style">
                     </div>
 
                     <div class="filter-control">
@@ -76,9 +118,11 @@
                     <div class="filter-control">
                         <label for="subcategory">Subcategory</label>
                         <select id="subcategory" name="subcategory">
-                            <option value="all" {% if selected_subcategory == 'all' %}selected{% endif %}>All Styles</option>
+                            <option value="all" {% if selected_subcategory == 'all' %}selected{% endif %}>All Styles
+                            </option>
                             {% for value, label in subcategory_options %}
-                            <option value="{{ value }}" {% if selected_subcategory == value %}selected{% endif %}>{{ label }}</option>
+                            <option value="{{ value }}" {% if selected_subcategory == value %}selected{% endif %}>{{ label
+                                }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -86,11 +130,16 @@
                     <div class="filter-control">
                         <label for="sort">Sort By</label>
                         <select id="sort" name="sort">
-                            <option value="featured" {% if selected_sort == 'featured' %}selected{% endif %}>Featured</option>
-                            <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
-                            <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
-                            <option value="name_asc" {% if selected_sort == 'name_asc' %}selected{% endif %}>Name: A to Z</option>
-                            <option value="name_desc" {% if selected_sort == 'name_desc' %}selected{% endif %}>Name: Z to A</option>
+                            <option value="featured" {% if selected_sort == 'featured' %}selected{% endif %}>Featured
+                            </option>
+                            <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price: Low
+                                to High</option>
+                            <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price:
+                                High to Low</option>
+                            <option value="name_asc" {% if selected_sort == 'name_asc' %}selected{% endif %}>Name: A to Z
+                            </option>
+                            <option value="name_desc" {% if selected_sort == 'name_desc' %}selected{% endif %}>Name: Z to
+                                A</option>
                         </select>
                     </div>
                 </div>
@@ -115,7 +164,8 @@
             {% with is_in_stock=cloth.inventory.stock|default:0 %}
             <article class="product-card {% if is_in_stock == 0 %}out-of-stock{% endif %}" data-product-card>
                 <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="product-card__image-wrap">
-                    <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" class="product-card__image" loading="lazy">
+                    <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" class="product-card__image"
+                        loading="lazy">
                     {% if cloth.discount_text %}
                     <span class="product-badge">{{ cloth.discount_text }}</span>
                     {% endif %}
@@ -123,11 +173,10 @@
                     <span class="out-of-stock-badge">Out of Stock</span>
                     {% elif is_in_stock == 1 %}
                     <span class="stock-badge stock-badge-last">Last 1!</span>
-                    {% elif is_in_stock <= 3 %}
-                    <span class="stock-badge stock-badge-low">Only {{ is_in_stock }} left!</span>
-                    {% elif is_in_stock <= 5 %}
-                    <span class="stock-badge stock-badge-limited">Low Stock</span>
-                    {% endif %}
+                    {% elif is_in_stock <= 3 %} <span class="stock-badge stock-badge-low">Only {{ is_in_stock }}
+                        left!</span>
+                        {% elif is_in_stock <= 5 %} <span class="stock-badge stock-badge-limited">Low Stock</span>
+                            {% endif %}
                 </a>
 
                 <div class="product-card__content">
@@ -137,7 +186,7 @@
                     </div>
 
                     <h3>{{ cloth.name }}</h3>
-                    <p>{{ cloth.desccription|truncatechars:95 }}</p>
+                    <p>{{ cloth.description|truncatechars:95 }}</p>
 
                     <div class="product-price-row">
                         <strong class="price-current">{{ cloth.price2|default:cloth.price1|default:cloth.price }}</strong>
@@ -149,19 +198,16 @@
                     <div class="product-actions">
                         <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="btn-view">Quick View</a>
                         {% if is_in_stock > 0 %}
-                        <button class="btn-add" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}">Add to Cart</button>
+                        <button class="btn-add" data-add-to-cart data-item-type="cloth"
+                            data-item-id="{{ cloth.id }}">Add to Cart</button>
                         {% else %}
                         <button class="btn-add btn-disabled" disabled title="Item is out of stock">Out of Stock</button>
                         {% endif %}
                     </div>
 
                     <div class="compare-row">
-                        <button
-                            class="btn-compare"
-                            {% if is_in_stock == 0 %}disabled{% endif %}
-                            data-compare-toggle
-                            data-product-id="{{ cloth.id }}"
-                            data-product-name="{{ cloth.name|escape }}"
+                        <button class="btn-compare" {% if is_in_stock == 0 %}disabled{% endif %} data-compare-toggle
+                            data-product-id="{{ cloth.id }}" data-product-name="{{ cloth.name|escape }}"
                             data-product-price="{{ cloth.price2|default:cloth.price1|default:cloth.price|escape }}"
                             data-product-category="{{ cloth.get_category_display|escape }}"
                             data-product-subcategory="{{ cloth.get_subcategory_display|default:'N/A'|escape }}"
@@ -181,11 +227,13 @@
         {% if is_paginated %}
         <div class="pagination-wrap">
             {% if cloths_items.has_previous %}
-            <a href="?page={{ cloths_items.previous_page_number }}&q={{ search_query }}&category={{ selected_category }}&subcategory={{ selected_subcategory }}&sort={{ selected_sort }}" class="pagination-btn">Previous</a>
+            <a href="?page={{ cloths_items.previous_page_number }}&q={{ search_query }}&category={{ selected_category }}&subcategory={{ selected_subcategory }}&sort={{ selected_sort }}"
+                class="pagination-btn">Previous</a>
             {% endif %}
             <span class="pagination-state">Page {{ cloths_items.number }} of {{ cloths_items.paginator.num_pages }}</span>
             {% if cloths_items.has_next %}
-            <a href="?page={{ cloths_items.next_page_number }}&q={{ search_query }}&category={{ selected_category }}&subcategory={{ selected_subcategory }}&sort={{ selected_sort }}" class="pagination-btn">Next</a>
+            <a href="?page={{ cloths_items.next_page_number }}&q={{ search_query }}&category={{ selected_category }}&subcategory={{ selected_subcategory }}&sort={{ selected_sort }}"
+                class="pagination-btn">Next</a>
             {% endif %}
         </div>
         {% endif %}
@@ -234,13 +282,15 @@
 
             <div class="mini-grid mini-grid--recommend">
                 {% for item in recommended_products %}
-                <article class="mini-product-card" data-recommend-item data-category="{{ item.category }}" data-subcategory="{{ item.subcategory }}">
+                <article class="mini-product-card" data-recommend-item data-category="{{ item.category }}"
+                    data-subcategory="{{ item.subcategory }}">
                     <a href="{% url 'product_detail' 'cloth' item.id %}">
                         <img src="{{ item.imageUrl.url }}" alt="{{ item.name }}" loading="lazy">
                     </a>
                     <div>
                         <h3>{{ item.name }}</h3>
-                        <p>{{ item.get_category_display }}{% if item.subcategory %} - {{ item.get_subcategory_display }}{% endif %}</p>
+                        <p>{{ item.get_category_display }}{% if item.subcategory %} - {{ item.get_subcategory_display
+                            }}{% endif %}</p>
                         <span>{{ item.price2|default:item.price1|default:item.price }}</span>
                     </div>
                 </article>
@@ -324,8 +374,8 @@
         </div>
     </section>
 
- {%include 'footer.html'%}
-     <script src="{% static 'cart_utils.js' %}"></script>
+    {%include 'footer.html'%}
+    <script src="{% static 'cart_utils.js' %}"></script>
     <script src="{% static 'global.js' %}"></script>
     <script src="{% static 'cloths-page.js' %}"></script>
     <script src="{% static 'scroll-reveal.js'%}"></script>
@@ -356,4 +406,5 @@
         </div>
     </div>
 </body>
+
 </html>

@@ -1,13 +1,16 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop - G11 Fashion & Toys</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800;900&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{% static 'navbar.css' %}">
@@ -21,6 +24,7 @@
         }
     </script>
 </head>
+
 <body class="font-inter bg-[#fafafa] text-slate-800" style="display:block">
 
     <!-- Toast Container -->
@@ -28,7 +32,7 @@
 
     {% if messages %}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             {% for message in messages %}
             showToast('{{ message|escapejs }}', '{{ message.tags }}');
             {% endfor %}
@@ -37,63 +41,75 @@
     {% endif %}
 
     {% include 'navbar.html' %}
-    {% include 'cart.html' %}
 
     <!-- ═══ HERO ═══ -->
-    <section class="buy-hero relative overflow-hidden py-16 md:py-20 min-h-[56vh] md:min-h-[64vh] flex items-center">
+    <section class="buy-hero relative overflow-hidden py-24 md:py-32 min-h-[75vh] flex items-center">
         <div class="buy-hero-media absolute inset-0 z-0">
-            <div class="absolute inset-0 bg-gradient-to-br from-indigo-700/84 via-purple-600/76 to-fuchsia-500/74"></div>
-            <div class="absolute inset-0 opacity-20" style="background-image:url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221.5%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E');"></div>
+            <div class="absolute inset-0 bg-black/10"></div>
         </div>
-        <!-- 3D Floating shapes -->
-        <div class="hero-float absolute top-8 left-[10%] w-16 h-16 bg-white/10 rounded-2xl backdrop-blur-sm border border-white/20"></div>
-        <div class="hero-float absolute bottom-12 right-[15%] w-20 h-20 bg-white/10 rounded-full backdrop-blur-sm border border-white/20" style="animation-delay:1s"></div>
-        <div class="hero-float absolute top-1/2 left-[5%] w-12 h-12 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20" style="animation-delay:2s"></div>
-        <div class="by-spiral absolute top-[15%] right-[8%] w-14 h-14 rounded-full border-2 border-white/15" style="animation-delay:0.5s"></div>
-        <div class="by-spiral absolute bottom-[20%] left-[8%] w-10 h-10 rounded-xl bg-white/8 border border-white/15" style="animation-delay:1.5s"></div>
-        <div class="by-breathe absolute top-[35%] right-[3%] w-16 h-16 rounded-full bg-gradient-to-br from-white/10 to-transparent"></div>
-        <div class="by-breathe absolute bottom-[30%] left-[15%] w-12 h-12 rounded-2xl border-2 border-white/10" style="animation-delay:2s"></div>
-        <div class="by-spiral absolute top-[60%] right-[25%] w-8 h-8 rounded-full bg-white/10" style="animation-delay:3s"></div>
 
-        <div class="container mx-auto px-6 relative z-10 text-center">
-            <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/15 border border-white/20 text-white font-semibold rounded-full text-sm mb-6 backdrop-blur-sm">
-                <i class="bi bi-bag-heart-fill text-pink-300"></i> Shop Collection
-            </span>
-            <h1 class="text-4xl md:text-6xl font-black text-white font-playfair mb-4">Explore Our Store</h1>
-            <p class="text-lg text-white/80 max-w-2xl mx-auto">Discover fashion, toys, and exclusive deals. Everything you need in one place.</p>
+        <!-- Subtle Floating Elements -->
+        <div
+            class="hero-float absolute top-[15%] left-[5%] w-24 h-24 bg-white/5 rounded-3xl backdrop-blur-md border border-white/10 rotate-12">
+        </div>
+        <div class="hero-float absolute bottom-[20%] right-[10%] w-32 h-32 bg-white/5 rounded-full backdrop-blur-md border border-white/10"
+            style="animation-delay:1s"></div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-3xl">
+                <h1 class="text-5xl md:text-8xl font-black text-white font-playfair mb-6 leading-tight">
+                    Explore <br> Our Store
+                </h1>
+                <div class="h-1 w-24 bg-white/40 mb-8 rounded-full"></div>
+                <p class="text-lg md:text-xl text-white/90 font-medium max-w-xl mb-10 leading-relaxed">
+                    Curated fashion, toys, and exclusive deals for the discerning shopper. Elevate your lifestyle.
+                </p>
+                <a href="#buyStickyFilter"
+                    class="group inline-flex items-center gap-4 px-10 py-5 bg-slate-900 text-white font-bold rounded-full hover:bg-black transition-all shadow-2xl hover:shadow-slate-900/40 hover:scale-[1.02] active:scale-95">
+                    SHOP ALL COLLECTIONS
+                    <i class="bi bi-arrow-right group-hover:translate-x-2 transition-transform"></i>
+                </a>
+            </div>
         </div>
     </section>
 
     <!-- ═══ CATEGORIES ═══ -->
-    <section class="buy-categories py-12 border-b border-slate-100" data-reveal="up">
-        <div class="container mx-auto px-6 buy-categories-shell">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl md:text-3xl font-bold font-playfair text-slate-900">Shop by Category</h2>
-                <p class="text-slate-500 mt-2">Choose your favourite section</p>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
-                <a href="{% url 'cloths' %}" class="category-card category-card--fashion group relative overflow-hidden rounded-2xl border p-8 text-center">
-                    <span class="category-card-glow" aria-hidden="true"></span>
-                    <div class="category-icon-wrap">
-                        <img src="{% static 'clothes.png' %}" alt="Cloths" class="category-icon-img" loading="lazy">
-                    </div>
-                    <h3 class="category-title">Fashion & Cloths</h3>
-                    <p class="category-subtitle">Men, Women & Kids</p>
-                    <span class="category-cta" aria-hidden="true">
-                        Explore <i class="bi bi-arrow-up-right"></i>
-                    </span>
-                </a>
-                <a href="{% url 'toys_page' %}" class="category-card category-card--toys group relative overflow-hidden rounded-2xl border p-8 text-center">
-                    <span class="category-card-glow" aria-hidden="true"></span>
-                    <div class="category-icon-wrap">
-                        <img src="{% static 'teddy-bear.png' %}" alt="Toys" class="category-icon-img" loading="lazy">
-                    </div>
-                    <h3 class="category-title">Toys & Games</h3>
-                    <p class="category-subtitle">Fun for all ages</p>
-                    <span class="category-cta" aria-hidden="true">
-                        Explore <i class="bi bi-arrow-up-right"></i>
-                    </span>
-                </a>
+    <section class="buy-categories relative z-20 -mt-20 md:-mt-32 pb-16">
+        <div class="container mx-auto px-6">
+            <div class="buy-categories-shell">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold font-playfair text-slate-900 mb-2">Shop by Category</h2>
+                    <p class="text-slate-500 font-medium">Choose your favourite section</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    <!-- Fashion Card -->
+                    <a href="{% url 'cloths' %}" class="category-card category-card--fashion group">
+                        <span class="hot-badge-premium">HOT</span>
+                        <div class="category-icon-wrap bg-amber-50 group-hover:bg-amber-100 transition-colors">
+                            <img src="{% static 'clothes.png' %}" alt="Cloths" class="w-12 h-12">
+                        </div>
+                        <h3 class="category-title">FASHION & CLOTHING</h3>
+                        <p class="category-subtitle text-slate-400">Men, Women & Kids</p>
+                        <div
+                            class="mt-6 flex items-center gap-2 text-sm font-bold text-slate-900 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
+                            VIEW COLLECTION <i class="bi bi-arrow-right"></i>
+                        </div>
+                    </a>
+
+                    <!-- Toys Card -->
+                    <a href="{% url 'toys_page' %}" class="category-card category-card--toys group">
+                        <div class="category-icon-wrap bg-blue-50 group-hover:bg-blue-100 transition-colors">
+                            <img src="{% static 'teddy-bear.png' %}" alt="Toys" class="w-12 h-12">
+                        </div>
+                        <h3 class="category-title">TOYS & GAMES</h3>
+                        <p class="category-subtitle text-slate-400">Fun for all ages</p>
+                        <div
+                            class="mt-6 flex items-center gap-2 text-sm font-bold text-slate-900 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
+                            VIEW COLLECTION <i class="bi bi-arrow-right"></i>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -151,10 +167,12 @@
             <div class="flex flex-wrap items-end justify-between gap-4 mb-10">
                 <div>
                     <span class="text-indigo-600 font-bold text-sm uppercase tracking-wider">Limited Time</span>
-                    <h2 class="text-3xl md:text-4xl font-bold font-playfair text-slate-900 mt-1">Hot Offers for Kids</h2>
+                    <h2 class="text-3xl md:text-4xl font-bold font-playfair text-slate-900 mt-1">Hot Offers for Kids
+                    </h2>
                     <p class="text-slate-500 mt-1">Save on outfits, toys, and bundles picked for busy parents.</p>
                 </div>
-                <a href="{% url 'shop_offers' %}" class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white font-bold rounded-full hover:bg-indigo-700 hover:shadow-lg transition-all duration-300">
+                <a href="{% url 'shop_offers' %}"
+                    class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white font-bold rounded-full hover:bg-indigo-700 hover:shadow-lg transition-all duration-300">
                     Shop Offers <i class="bi bi-arrow-right"></i>
                 </a>
             </div>
@@ -163,37 +181,42 @@
                 {% for offer in offers %}
                 <article
                     class="product-card js-buy-product group bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden {% if offer.inventory and offer.inventory.stock <= 0 %}opacity-75{% endif %}"
-                    data-kind="offer"
-                    data-id="{{ offer.id }}"
-                    data-category="{{ offer.category }}"
-                    data-name="{{ offer.title|escape }}"
-                    data-description="{{ offer.description|escape }}"
+                    data-kind="offer" data-id="{{ offer.id }}" data-category="{{ offer.category }}"
+                    data-name="{{ offer.title|escape }}" data-description="{{ offer.description|escape }}"
                     data-price="{{ offer.price1|default:offer.price2|default:'0'|escape }}"
-                    data-rating="{{ offer.avg_rating|default:0 }}"
-                    data-image="{{ offer.imageUrl.url|escape }}"
+                    data-rating="{{ offer.avg_rating|default:0 }}" data-image="{{ offer.imageUrl.url|escape }}"
                     data-url="{% url 'product_detail' 'offer' offer.id %}"
                     data-stock="{{ offer.stock_text|default:''|escape }}"
                     data-badge="{{ offer.offers_badge|default:''|escape }}">
                     <div class="relative overflow-hidden">
                         {% if offer.offers_badge %}
-                        <span class="absolute top-3 right-3 z-10 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full animate-pulse">{{ offer.offers_badge }}</span>
+                        <span
+                            class="absolute top-3 right-3 z-10 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full animate-pulse">{{ offer.offers_badge }}</span>
                         {% endif %}
-                        <button onclick="window.location.href='{% url 'add_to_wishlist' 'offer' offer.id %}'" class="absolute top-3 left-3 z-10 w-8 h-8 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full text-slate-400 hover:text-pink-500 hover:bg-pink-50 shadow-md transition-all">
+                        <button onclick="window.location.href='{% url 'add_to_wishlist' 'offer' offer.id %}'"
+                            class="absolute top-3 left-3 z-10 w-8 h-8 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full text-slate-400 hover:text-pink-500 hover:bg-pink-50 shadow-md transition-all">
                             <i class="bi bi-heart-fill"></i>
                         </button>
-                        <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }}" class="w-full h-56 object-contain bg-slate-50 p-4 group-hover:scale-105 transition-transform duration-500" loading="lazy">
-                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 gap-2">
-                            <button type="button" class="px-5 py-2 bg-white text-slate-800 font-semibold rounded-full text-sm hover:scale-105 transition-transform js-quick-view">Quick View</button>
+                        <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }}"
+                            class="w-full h-56 object-contain bg-slate-50 p-4 group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy">
+                        <div
+                            class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 gap-2">
+                            <button type="button"
+                                class="px-5 py-2 bg-white text-slate-800 font-semibold rounded-full text-sm hover:scale-105 transition-transform js-quick-view">Quick
+                                View</button>
                             <button
                                 class="px-5 py-2 font-semibold rounded-full text-sm hover:scale-105 transition-transform {% if offer.inventory and offer.inventory.stock <= 0 %}bg-slate-400 text-slate-200 cursor-not-allowed opacity-50{% else %}bg-indigo-600 text-white hover:bg-indigo-700{% endif %}"
-                                {% if offer.inventory and offer.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}"{% endif %}>
+                                {% if offer.inventory and offer.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart
+                                data-item-type="offer" data-item-id="{{ offer.id }}" {% endif %}>
                                 Add to Cart
                             </button>
                         </div>
                     </div>
                     <div class="p-5">
                         <h3 class="font-bold text-slate-800 text-lg mb-1">
-                            <a href="{% url 'product_detail' 'offer' offer.id %}" class="hover:text-indigo-600 transition-colors">{{ offer.title }}</a>
+                            <a href="{% url 'product_detail' 'offer' offer.id %}"
+                                class="hover:text-indigo-600 transition-colors">{{ offer.title }}</a>
                         </h3>
                         <p class="text-slate-500 text-sm line-clamp-2 mb-3">{{ offer.description }}</p>
                         {% with item_rating=offer.avg_rating item_review_count=offer.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
@@ -208,10 +231,12 @@
                             <span class="ml-auto text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded-full">{{ offer.stock_text }}</span>
                             {% endif %}
                         </div>
-                        <button class="w-full py-3 font-bold rounded-xl hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 {% if offer.inventory and offer.inventory.stock <= 0 %}bg-slate-300 text-slate-500 cursor-not-allowed{% else %}bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:shadow-indigo-500/30 hover:scale-[1.02]{% endif %}" {% if offer.inventory and offer.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}"{% endif %}>
-                            <i class="bi bi-cart-plus"></i> {% if offer.inventory and offer.inventory.stock <= 0 %}Out of Stock{% else %}{{ offer.button_text }}{% endif %}
-                        </button>
-                        <button type="button" class="buy-compare-btn js-compare-toggle">Compare</button>
+                        <button
+                            class="w-full py-3 font-bold rounded-xl hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 {% if offer.inventory and offer.inventory.stock <= 0 %}bg-slate-300 text-slate-500 cursor-not-allowed{% else %}bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:shadow-indigo-500/30 hover:scale-[1.02]{% endif %}"
+                            {% if offer.inventory and offer.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart
+                            data-item-type="offer" data-item-id="{{ offer.id }}" {% endif %}>
+                            <i class="bi bi-cart-plus"></i> {% if offer.inventory and offer.inventory.stock <= 0 %}Out of Stock{% else %}{{ offer.button_text }}{% endif %} </button>
+                                <button type="button" class="buy-compare-btn js-compare-toggle">Compare</button>
                     </div>
                 </article>
                 {% endfor %}
@@ -220,64 +245,49 @@
     </section>
 
     <!-- ═══ NEW ARRIVALS ═══ -->
-    <section class="py-14 bg-white" data-reveal="right">
+    <section class="py-24 bg-white" data-reveal="right">
         <div class="container mx-auto px-6">
-            <div class="flex flex-wrap items-end justify-between gap-4 mb-10">
-                <div>
-                    <span class="text-pink-600 font-bold text-sm uppercase tracking-wider">Just Dropped</span>
-                    <h2 class="text-3xl md:text-4xl font-bold font-playfair text-slate-900 mt-1">New Arrivals</h2>
-                    <p class="text-slate-500 mt-1">Fresh styles and playful toys your kids will love.</p>
+            <div class="flex flex-wrap items-end justify-between gap-4 mb-12">
+                <div class="max-w-xl">
+                    <span class="inline-block px-4 py-1.5 bg-pink-100 text-pink-600 font-black text-xs uppercase tracking-widest rounded-full mb-3">Just Landed</span>
+                    <h2 class="text-4xl md:text-5xl font-black font-playfair text-slate-900 leading-tight">The New Arrival Edit</h2>
+                    <p class="text-slate-500 text-lg mt-3">Fresh styles and playful toys designed to inspire joy and creativity.</p>
                 </div>
-                <a href="{% url 'new_arrivals' %}" class="inline-flex items-center gap-2 px-6 py-3 bg-pink-600 text-white font-bold rounded-full hover:bg-pink-700 hover:shadow-lg transition-all duration-300">
-                    View All <i class="bi bi-arrow-right"></i>
+                <a href="{% url 'new_arrivals' %}" class="group inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white font-bold rounded-full hover:bg-black hover:shadow-xl transition-all duration-300">
+                    View New Arrivals <i class="bi bi-arrow-right transition-transform group-hover:translate-x-1"></i>
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="arrivalsGrid">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="arrivalsGrid">
                 {% for item in kids_arrivals %}
-                <article
-                    class="product-card js-buy-product group bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden {% if item.inventory and item.inventory.stock <= 0 %}opacity-75{% endif %}"
-                    data-kind="arrival"
-                    data-id="{{ item.id }}"
-                    data-category="{{ item.category }}"
-                    data-name="{{ item.title|escape }}"
-                    data-description="{{ item.description|escape }}"
-                    data-price="{{ item.price|default:'0'|escape }}"
-                    data-rating="{{ item.avg_rating|default:0 }}"
-                    data-image="{{ item.imageUrl.url|escape }}"
-                    data-url="{% url 'product_detail' 'arrival' item.id %}"
-                    data-stock=""
-                    data-badge="{{ item.offers_badge|default:''|escape }}">
-                    <div class="relative overflow-hidden bg-slate-50 rounded-t-2xl">
+                <article class="product-card js-buy-product group" data-kind="arrival" data-id="{{ item.id }}" data-category="{{ item.category }}" data-name="{{ item.title|escape }}" data-description="{{ item.description|escape }}" data-price="{{ item.price|default:'0'|escape }}" data-rating="{{ item.avg_rating|default:0 }}" data-image="{{ item.imageUrl.url|escape }}" data-url="{% url 'product_detail' 'arrival' item.id %}" data-stock="" data-badge="{{ item.offers_badge|default:''|escape }}">
+                    <div class="relative overflow-hidden bg-slate-50 rounded-2xl">
                         {% if item.offers_badge %}
-                        <span class="absolute bottom-3 left-3 z-10 px-3 py-1 bg-emerald-500 text-white text-xs font-bold rounded-full">{{ item.offers_badge }}</span>
+                        <span class="absolute top-3 left-3 z-10 px-3 py-1 bg-emerald-500 text-white text-xs font-bold rounded-full">{{ item.offers_badge }}</span>
                         {% endif %}
-                        <button onclick="window.location.href='{% url 'add_to_wishlist' 'arrival' item.id %}'" class="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full text-slate-400 hover:text-pink-500 hover:bg-pink-50 shadow-md transition-all">
+                        <button onclick="window.location.href='{% url 'add_to_wishlist' 'arrival' item.id %}'" class="absolute top-3 right-3 z-10 w-10 h-10 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full text-slate-400 hover:text-pink-500 hover:bg-white shadow-lg transition-all">
                             <i class="bi bi-heart-fill"></i>
                         </button>
-                        <img src="{{ item.imageUrl.url }}" alt="{{ item.title }}" class="w-full h-56 object-contain p-4 group-hover:scale-105 transition-transform duration-500" loading="lazy">
-                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 gap-2">
-                            <button type="button" class="px-5 py-2 bg-white text-slate-800 font-semibold rounded-full text-sm hover:scale-105 transition-transform js-quick-view">Quick View</button>
-                            <button
-                                class="px-5 py-2 font-semibold rounded-full text-sm hover:scale-105 transition-transform {% if item.inventory and item.inventory.stock <= 0 %}bg-slate-400 text-slate-200 cursor-not-allowed opacity-50{% else %}bg-indigo-600 text-white hover:bg-indigo-700{% endif %}"
-                                {% if item.inventory and item.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}"{% endif %}>
-                                Add to Cart
+                        <img src="{{ item.imageUrl.url }}" alt="{{ item.title }}" class="w-full h-64 object-contain p-6 group-hover:scale-105 transition-transform duration-500">
+                        
+                        <!-- Floating Actions Overlay -->
+                        <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 bg-slate-900/10 backdrop-blur-[2px] flex flex-col justify-end p-6 gap-3">
+                            <button type="button" class="w-full py-3 bg-white text-slate-900 font-bold rounded-xl shadow-xl hover:scale-[1.02] transition-transform js-quick-view">Quick View</button>
+                            <button class="w-full py-3 font-bold rounded-xl shadow-xl transition-all duration-300 flex items-center justify-center gap-2 {% if item.inventory and item.inventory.stock <= 0 %}bg-slate-300 text-slate-500 cursor-not-allowed{% else %}bg-indigo-600 text-white hover:bg-indigo-700 hover:scale-[1.02]{% endif %}" {% if item.inventory and item.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}"{% endif %}>
+                                <i class="bi bi-cart-plus"></i> {% if item.inventory and item.inventory.stock <= 0 %}Out of Stock{% else %}Add to Cart{% endif %}
                             </button>
                         </div>
                     </div>
-                    <div class="p-5">
-                        <h3 class="font-bold text-slate-800 text-lg mb-1">
+                    <div class="pt-6">
+                        <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest mb-2 block">{{ item.category }}</span>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">
                             <a href="{% url 'product_detail' 'arrival' item.id %}" class="hover:text-indigo-600 transition-colors">{{ item.title }}</a>
                         </h3>
-                        <p class="text-slate-500 text-sm line-clamp-2 mb-3">{{ item.description }}</p>
                         {% with item_rating=item.avg_rating item_review_count=item.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
-                        <div class="flex items-center justify-between">
-                            <span class="text-xl font-black text-indigo-600">{{ item.price }}</span>
-                            <button class="px-5 py-2.5 font-bold rounded-xl hover:shadow-lg transition-all duration-300 flex items-center gap-2 text-sm {% if item.inventory and item.inventory.stock <= 0 %}bg-slate-300 text-slate-500 cursor-not-allowed{% else %}bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:shadow-indigo-500/30 hover:scale-[1.02]{% endif %}" {% if item.inventory and item.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}"{% endif %}>
-                                <i class="bi bi-cart-plus"></i> {% if item.inventory and item.inventory.stock <= 0 %}Out of Stock{% else %}Add to cart{% endif %}
-                            </button>
+                        <div class="mt-4 flex items-center justify-between">
+                            <span class="text-2xl font-black text-slate-900">{{ item.price }}</span>
+                            <button type="button" class="text-xs font-bold text-slate-400 hover:text-indigo-600 transition-colors js-compare-toggle">COMPARE</button>
                         </div>
-                        <button type="button" class="buy-compare-btn js-compare-toggle">Compare</button>
                     </div>
                 </article>
                 {% endfor %}
@@ -297,7 +307,8 @@
                             <img src="{{ offer.imageUrl.url }}" alt="{{ offer.title }}" loading="lazy">
                             <div>
                                 <strong>{{ offer.title }}</strong>
-                                <span>{{ offer.avg_rating|floatformat:1 }} stars • {{ offer.review_count }} reviews</span>
+                                <span>{{ offer.avg_rating|floatformat:1 }} stars • {{ offer.review_count }}
+                                    reviews</span>
                             </div>
                         </a>
                         {% empty %}
@@ -401,4 +412,5 @@
     <script src="{% static 'global.js' %}"></script>
     <script src="{% static 'scroll-reveal.js' %}"></script>
 </body>
+
 </html>

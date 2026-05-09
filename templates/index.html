@@ -49,7 +49,6 @@
     {% endif %}
 
     {% include 'navbar.html' %}
-    {% include 'cart.html' %}
     {% include 'includes/ai_assistant.html' %}
 
     <!-- ── Loading Overlay ── -->
@@ -961,10 +960,10 @@
                 <p class="text-slate-300 text-lg mb-8">Subscribe to get special offers, free giveaways, and
                     once-in-a-lifetime deals.</p>
 
-                <form action="#" method="POST" class="relative max-w-lg mx-auto flex text-left"
-                    onsubmit="event.preventDefault(); alert('Subscribed successfully!');">
+                <form action="{% url 'subscribe_newsletter' %}" method="POST" class="relative max-w-lg mx-auto flex text-left newsletter-form-ajax">
+                    {% csrf_token %}
                     <i class="bi bi-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
-                    <input type="email" placeholder="Enter your email address"
+                    <input type="email" name="email" placeholder="Enter your email address"
                         class="w-full pl-12 pr-36 py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full outline-none focus:bg-white/20 transition-all duration-300 placeholder-slate-400"
                         required>
                     <button type="submit"
@@ -972,6 +971,7 @@
                         Subscribe
                     </button>
                 </form>
+                <div class="newsletter-message-ajax mt-4 font-semibold text-sm" style="display: none;"></div>
                 <p class="text-slate-400 text-sm mt-4"><i class="bi bi-shield-check text-emerald-400 mr-1"></i> We
                     respect your privacy. No spam ever.</p>
             </div>

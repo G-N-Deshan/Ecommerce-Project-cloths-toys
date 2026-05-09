@@ -488,7 +488,7 @@
             <div style="flex:1;min-width:120px">
                 <div style="font-weight:700;font-size:0.95rem;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:340px">{{ product_name }}</div>
                 <div style="font-size:0.85rem;color:#6366f1;font-weight:600">
-                    Rs {% if product_type == 'cloth' %}{{ product.price1|default:product.price }}{% elif product_type == 'toy' %}{{ product.price }}{% elif product_type == 'offer' %}{{ product.price1|default:product.price2 }}{% else %}{{ product.price }}{% endif %}
+                    Rs {{ product_display_price }}
                 </div>
             </div>
             <button
@@ -501,7 +501,8 @@
                 style="background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;font-weight:700;padding:10px 28px;border-radius:50px;border:none;cursor:pointer;font-size:0.9rem;white-space:nowrap;box-shadow:0 4px 14px rgba(99,102,241,0.4);transition:transform 0.15s,box-shadow 0.15s"
                 onmouseover="this.style.transform='scale(1.04)'"
                 onmouseout="this.style.transform='scale(1)'"
-                data-add-to-cart data-item-type="{{ product_type }}" data-item-id="{{ product.id }}">
+                data-add-to-cart data-item-type="{{ product_type }}" data-item-id="{{ product.id }}" data-price="{{ product_display_price }}"
+                onclick="addToCartWithVariants(event)">
                 <i class="bi bi-cart-plus"></i> Add to Cart
                 {% endif %}
             </button>
@@ -656,7 +657,7 @@
                             {% elif product.price %}
                             <span class="text-3xl font-bold text-slate-900">{{ product.price }}</span>
                             {% endif %}
-                            {% if product.price2 %}
+                            {% if product_type == 'cloth' and product.price2 %}
                             <span class="text-lg text-slate-400 line-through">{{ product.price2 }}</span>
                             {% endif %}
                             {% if product.discount_text %}
@@ -668,7 +669,7 @@
                             {% if product.price1 %}
                             <span class="text-3xl font-bold text-slate-900">{{ product.price1 }}</span>
                             {% endif %}
-                            {% if product.price2 %}
+                            {% if product_type == 'offer' and product.price2 %}
                             <span class="text-lg text-slate-400 line-through">{{ product.price2 }}</span>
                             {% endif %}
                             {% if product.stock_text %}
@@ -731,41 +732,38 @@
                     </div>
                     {% endif %}
 
-                    <!-- Size / Color Variants -->
-                    {% if variants %}
+                    <!-- Size / Color Options -->
+                    {% if size_options or color_options %}
                     <div class="mb-4">
-                        {% with sizes=variants|dictsort:"size" %}
-                        {% if sizes.0.size %}
+                        {% if size_options %}
                         <p class="text-sm font-medium text-slate-600 mb-2">Size</p>
                         <div class="flex flex-wrap gap-2 mb-3" id="sizeOptions">
-                            {% for v in variants %}
-                            {% if v.size %}
+                            {% for size in size_options %}
                             <button type="button"
-                                class="variant-size-btn px-3 py-1.5 border-2 border-slate-200 rounded-lg text-sm font-medium hover:border-indigo-500 hover:text-indigo-600 transition-all {% if v.stock == 0 %}opacity-40 cursor-not-allowed line-through{% endif %}"
-                                data-size="{{ v.size }}" data-extra="{{ v.extra_price }}" data-stock="{{ v.stock }}"
-                                onclick="selectVariant(this, 'size')">{{ v.size }}</button>
-                            {% endif %}
+                                class="variant-size-btn px-3 py-1.5 border-2 border-slate-200 rounded-lg text-sm font-medium hover:border-indigo-500 hover:text-indigo-600 transition-all"
+                                data-size="{{ size }}" onclick="selectVariant(this, 'size')">{{ size }}</button>
                             {% endfor %}
                         </div>
                         {% endif %}
-                        {% endwith %}
 
-                        {% with colors=variants|dictsort:"color" %}
-                        {% if colors.0.color %}
+                        {% if color_options %}
                         <p class="text-sm font-medium text-slate-600 mb-2">Color</p>
                         <div class="flex flex-wrap gap-2" id="colorOptions">
-                            {% for v in variants %}
-                            {% if v.color %}
+                            {% for color in color_options %}
+                            {% if color.code %}
                             <button type="button"
-                                class="variant-color-btn w-8 h-8 rounded-full border-2 border-transparent hover:border-indigo-500 transition-all {% if v.stock == 0 %}opacity-40{% endif %}"
-                                style="background:{{ v.color_code|default:'#ccc' }}" title="{{ v.color }}"
-                                data-color="{{ v.color }}" data-extra="{{ v.extra_price }}" data-stock="{{ v.stock }}"
+                                class="variant-color-btn w-8 h-8 rounded-full border-2 border-transparent hover:border-indigo-500 transition-all"
+                                style="background:{{ color.code }}" title="{{ color.name }}"
+                                data-color="{{ color.name }}" data-color-code="{{ color.code }}"
                                 onclick="selectVariant(this, 'color')"></button>
+                            {% else %}
+                            <button type="button"
+                                class="variant-size-btn px-3 py-1.5 border-2 border-slate-200 rounded-lg text-sm font-medium hover:border-indigo-500 hover:text-indigo-600 transition-all"
+                                data-color="{{ color.name }}" onclick="selectVariant(this, 'color')">{{ color.name }}</button>
                             {% endif %}
                             {% endfor %}
                         </div>
                         {% endif %}
-                        {% endwith %}
                     </div>
                     {% endif %}
 
@@ -794,8 +792,8 @@
                         {% else %}
                         <a id="addToCartBtn" href="{% url 'add_to_cart' product_type product.id %}"
                             class="btn-cart flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 px-6 rounded-xl text-center transition-all duration-300 hover:shadow-lg hover:shadow-indigo-200 flex items-center justify-center gap-2"
-                            data-add-to-cart data-item-type="{{ product_type }}" data-item-id="{{ product.id }}"
-                            onclick="showCartToast(event)">
+                            data-add-to-cart data-item-type="{{ product_type }}" data-item-id="{{ product.id }}" data-price="{{ product_display_price }}"
+                            onclick="addToCartWithVariants(event)">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
@@ -886,7 +884,7 @@
                 {% endif %}
 
                 <!-- Specifications grid -->
-                {% if material or sizes_available or dimensions or care_instructions or safety_info %}
+                {% if material or sizes_available or colors_available or dimensions or care_instructions or safety_info %}
                 <div class="mb-8">
                     <h3 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
                         <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -902,6 +900,12 @@
                                 <tr class="border-b border-slate-100">
                                     <td class="px-5 py-3 bg-slate-50 font-medium text-slate-700 w-1/3">Material</td>
                                     <td class="px-5 py-3 text-slate-600">{{ material }}</td>
+                                </tr>
+                                {% endif %}
+                                {% if colors_available %}
+                                <tr class="border-b border-slate-100">
+                                    <td class="px-5 py-3 bg-slate-50 font-medium text-slate-700 w-1/3">Colors Available</td>
+                                    <td class="px-5 py-3 text-slate-600">{{ colors_available }}</td>
                                 </tr>
                                 {% endif %}
                                 {% if sizes_available %}
@@ -1155,6 +1159,8 @@
 
     {% include 'footer.html' %}
 
+    {{ variant_data|json_script:"variantData" }}
+
     <script src="{% static 'cart_utils.js' %}"></script>
     <script>
         /* ── Zoom ── */
@@ -1172,10 +1178,49 @@
         }
 
         /* ── Variant selector ── */
+        const variantData = (() => {
+            const el = document.getElementById('variantData');
+            if (!el) return [];
+            try {
+                return JSON.parse(el.textContent || '[]');
+            } catch (err) {
+                return [];
+            }
+        })();
+
+        const selectedVariants = {
+            size: null,
+            color: null,
+            extraPrice: 0,
+            stock: null
+        };
+
         function selectVariant(btn, type) {
             const group = type === 'size' ? '#sizeOptions' : '#colorOptions';
             document.querySelectorAll(group + ' button').forEach(b => b.classList.remove('border-indigo-500', 'bg-indigo-50'));
             btn.classList.add('border-indigo-500', 'bg-indigo-50');
+            if (type === 'size') {
+                selectedVariants.size = btn.dataset.size || btn.textContent.trim();
+            } else {
+                selectedVariants.color = btn.dataset.color || btn.textContent.trim();
+            }
+            updateVariantState();
+        }
+
+        function updateVariantState() {
+            if (!variantData.length) {
+                selectedVariants.extraPrice = 0;
+                selectedVariants.stock = null;
+                return;
+            }
+            const match = variantData.find(v => (v.size || '') === (selectedVariants.size || '') && (v.color || '') === (selectedVariants.color || ''));
+            if (match) {
+                selectedVariants.extraPrice = match.extra_price || 0;
+                selectedVariants.stock = match.stock;
+            } else {
+                selectedVariants.extraPrice = 0;
+                selectedVariants.stock = null;
+            }
         }
 
         /* ── Quantity ── */
@@ -1186,11 +1231,55 @@
             inp.value = v;
         }
 
-        /* ── Toast ── */
-        function showCartToast(e) {
-            const toast = document.getElementById('toast');
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2500);
+        function showVariantToast(message) {
+            if (typeof showGlobalToast === 'function') {
+                showGlobalToast(message, 'error');
+            } else {
+                alert(message);
+            }
+        }
+
+        function addToCartWithVariants(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            const btn = event && (event.currentTarget || event.target);
+            if (!btn) return;
+
+            const itemType = btn.dataset.itemType;
+            const itemId = btn.dataset.itemId;
+            const unitPrice = btn.dataset.price || null;
+            const sizeRequired = document.querySelectorAll('#sizeOptions button').length > 0;
+            const colorRequired = document.querySelectorAll('#colorOptions button').length > 0;
+
+            if (sizeRequired && !selectedVariants.size) {
+                showVariantToast('Please select a size.');
+                return;
+            }
+            if (colorRequired && !selectedVariants.color) {
+                showVariantToast('Please select a color.');
+                return;
+            }
+            if (selectedVariants.stock !== null && selectedVariants.stock <= 0) {
+                showVariantToast('This variant is out of stock.');
+                return;
+            }
+
+            const qtyInput = document.getElementById('qtyInput');
+            const quantity = qtyInput ? parseInt(qtyInput.value, 10) || 1 : 1;
+            const options = {
+                size: selectedVariants.size,
+                color: selectedVariants.color,
+                variant_extra_price: selectedVariants.extraPrice,
+                quantity: quantity
+            };
+
+            if (window.addToCart) {
+                window.addToCart(itemType, itemId, btn, unitPrice, options);
+            } else {
+                window.location.href = `/cart/add/${itemType}/${itemId}/`;
+            }
         }
 
         /* ── Tabs ── */

@@ -69,7 +69,7 @@
                     <!-- Image -->
                     <div class="w-full sm:w-28 h-28 flex-shrink-0 bg-slate-50 rounded-xl overflow-hidden border border-slate-100 p-2">
                         {% if real_item.imageUrl %}
-                        <img src="{{ real_item.imageUrl.url }}" alt="{{ real_item.name|default:real_item.title }}" class="w-full h-full object-contain">
+                        <img src="{{ real_item.imageUrl.url }}" alt="{% if real_item.name %}{{ real_item.name }}{% elif real_item.title %}{{ real_item.title }}{% else %}Product{% endif %}" class="w-full h-full object-contain">
                         {% else %}
                         <div class="w-full h-full flex items-center justify-center text-slate-300">
                             <i class="bi bi-box text-3xl"></i>
@@ -82,8 +82,17 @@
                         <div class="flex items-start justify-between">
                             <div>
                                 <h3 class="text-lg font-bold text-slate-900 leading-tight mb-1">
-                                    {{ real_item.name|default:real_item.title }}
+                                    {% if real_item.name %}{{ real_item.name }}{% elif real_item.title %}{{ real_item.title }}{% else %}Product{% endif %}
                                 </h3>
+                                {% if item.selected_size or item.selected_color %}
+                                <p class="text-xs text-slate-500">
+                                    {% if item.selected_size %}Size: {{ item.selected_size }}{% endif %}
+                                    {% if item.selected_color %}{% if item.selected_size %} | {% endif %}Color: {{ item.selected_color }}{% endif %}
+                                </p>
+                                {% endif %}
+                                {% if item.variant_extra_price and item.variant_extra_price > 0 %}
+                                <p class="text-xs font-semibold text-emerald-600">+ Rs {{ item.variant_extra_price|floatformat:2 }} variant</p>
+                                {% endif %}
                                 <span class="inline-block px-2 py-0.5 bg-slate-100 text-slate-500 text-[10px] font-bold uppercase tracking-wider rounded">
                                     {{ item.get_item_type_display }}
                                 </span>
@@ -108,7 +117,7 @@
 
                             <!-- Price -->
                             <div class="text-right">
-                                <p class="text-sm text-slate-400 mb-0.5"><span class="sm:hidden">Subtotal: </span>Rs {{ real_item.price|floatformat:2 }} each</p>
+                                <p class="text-sm text-slate-400 mb-0.5"><span class="sm:hidden">Subtotal: </span>Rs {{ item.get_price|floatformat:2 }} each</p>
                                 <p class="text-xl font-extrabold text-indigo-600" id="subtotal-{{ item.id }}">Rs {{ item.get_subtotal|floatformat:2 }}</p>
                             </div>
                         </div>

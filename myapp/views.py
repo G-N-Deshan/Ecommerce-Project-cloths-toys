@@ -876,19 +876,61 @@ def product_detail(request, product_type, product_id):
     material = getattr(product, 'material', '') or ''
     care_instructions = getattr(product, 'care_instructions', '') or ''
     sizes_available = getattr(product, 'sizes_available', '') or ''
+    colors_available = getattr(product, 'colors_available', '') or ''
     safety_info = getattr(product, 'safety_info', '') or ''
     dimensions = getattr(product, 'dimensions', '') or ''
 
-    # Normalize price (Offers/NewArrivals have price2/price1, Cloths have price1, Toys have price)
-    product_display_price = getattr(product, 'price2', None) or getattr(product, 'price1', None) or getattr(product, 'price', '') or ''
+    # Normalize price for UI and tracking (avoid price2 on arrivals)
+    if product_type == 'cloth':
+        product_display_price = getattr(product, 'price1', None) or getattr(product, 'price', '') or ''
+    elif product_type == 'offer':
+        product_display_price = getattr(product, 'price1', None) or getattr(product, 'price2', '') or ''
+    else:
+        product_display_price = getattr(product, 'price', '') or ''
 
     # ── Gallery images ──
     gallery_images = ProductImage.objects.filter(product_type=product_type, **{fk_field: product})
 
-    # ── Product variants (cloth only) ──
+    def _parse_option_list(raw_value):
+        if not raw_value:
+            return []
+        parts = re.split(r'[,/;\n]+', str(raw_value))
+        return [p.strip() for p in parts if p.strip()]
+
+    # ── Product variants (cloth only) + size/color options for all ──
     variants = []
+    variant_data = []
+    size_options = []
+    color_options = []
     if product_type == 'cloth':
         variants = list(product.variants.all())
+        if variants:
+            variant_data = [
+                {
+                    'size': v.size or '',
+                    'color': v.color or '',
+                    'color_code': v.color_code or '',
+                    'extra_price': float(v.extra_price or 0),
+                    'stock': v.stock,
+                } for v in variants
+            ]
+            size_options = sorted({v['size'] for v in variant_data if v['size']})
+            seen_colors = set()
+            for v in variant_data:
+                name = v['color']
+                if not name:
+                    continue
+                key = name.lower()
+                if key in seen_colors:
+                    continue
+                seen_colors.add(key)
+                color_options.append({'name': name, 'code': v['color_code'] or ''})
+        else:
+            size_options = _parse_option_list(sizes_available)
+            color_options = [{'name': c, 'code': ''} for c in _parse_option_list(colors_available)]
+    else:
+        size_options = _parse_option_list(sizes_available)
+        color_options = [{'name': c, 'code': ''} for c in _parse_option_list(colors_available)]
 
     # ── Inventory status ──
     inventory = None
@@ -924,10 +966,14 @@ def product_detail(request, product_type, product_id):
         'material': material,
         'care_instructions': care_instructions,
         'sizes_available': sizes_available,
+        'colors_available': colors_available,
         'safety_info': safety_info,
         'dimensions': dimensions,
         'gallery_images': gallery_images,
         'variants': variants,
+        'variant_data': variant_data,
+        'size_options': size_options,
+        'color_options': color_options,
         'inventory': inventory,
         'product_display_price': product_display_price,
     })
@@ -1629,6 +1675,10 @@ def add_to_cart(request, item_type, item_id):
     try:
         cart = get_or_create_cart(request)
         requested_unit_price = None
+        selected_size = None
+        selected_color = None
+        variant_extra_price = Decimal('0.00')
+        requested_qty = 1
 
         # Optional unit price sent by frontend (price shown to user when clicking Add to Cart).
         if request.method == 'POST' and request.body:
@@ -1637,6 +1687,16 @@ def add_to_cart(request, item_type, item_id):
                 parsed_price = parse_catalog_price(payload.get('unit_price'))
                 if parsed_price > 0:
                     requested_unit_price = Decimal(str(round(parsed_price, 2)))
+                selected_size = (payload.get('size') or '').strip() or None
+                selected_color = (payload.get('color') or '').strip() or None
+                raw_qty = payload.get('quantity', 1)
+                try:
+                    requested_qty = max(1, int(raw_qty))
+                except (TypeError, ValueError):
+                    requested_qty = 1
+                parsed_extra = parse_catalog_price(payload.get('variant_extra_price'))
+                if parsed_extra:
+                    variant_extra_price = Decimal(str(round(parsed_extra, 2)))
             except (TypeError, ValueError, json.JSONDecodeError):
                 requested_unit_price = None
         
@@ -1647,53 +1707,95 @@ def add_to_cart(request, item_type, item_id):
             inv = _get_inventory(item)
             if inv and inv.stock <= 0:
                 return _stock_error_response(request, 'This item is out of stock.')
-            cart_item = CartItem.objects.filter(cart=cart, item_type='cloth', cloth=item).first()
+            variant = None
+            if selected_size or selected_color:
+                variant = ProductVariant.objects.filter(
+                    cloth=item,
+                    size=selected_size or '',
+                    color=selected_color or ''
+                ).first()
+                if variant and variant.stock <= 0:
+                    return _stock_error_response(request, 'This variant is out of stock.')
+                if variant:
+                    variant_extra_price = variant.extra_price
+            cart_item = CartItem.objects.filter(
+                cart=cart,
+                item_type='cloth',
+                cloth=item,
+                selected_size=selected_size,
+                selected_color=selected_color
+            ).first()
             created = cart_item is None
             if not cart_item:
-                cart_item = CartItem(cart=cart, item_type='cloth', cloth=item, quantity=1)
+                cart_item = CartItem(
+                    cart=cart,
+                    item_type='cloth',
+                    cloth=item,
+                    quantity=requested_qty
+                )
             else:
-                if inv and cart_item.quantity + 1 > inv.stock:
+                if variant and cart_item.quantity + requested_qty > variant.stock:
+                    return _stock_error_response(request, f'Only {variant.stock} left in stock for this variant.')
+                if inv and cart_item.quantity + requested_qty > inv.stock:
                     return _stock_error_response(request, f'Only {inv.stock} left in stock.')
-                cart_item.quantity += 1
+                cart_item.quantity += requested_qty
         elif item_type == 'toy':
             item = get_object_or_404(Toy, id=item_id)
             inv = _get_inventory(item)
             if inv and inv.stock <= 0:
                 return _stock_error_response(request, 'This item is out of stock.')
-            cart_item = CartItem.objects.filter(cart=cart, item_type='toy', toy=item).first()
+            cart_item = CartItem.objects.filter(
+                cart=cart,
+                item_type='toy',
+                toy=item,
+                selected_size=selected_size,
+                selected_color=selected_color
+            ).first()
             created = cart_item is None
             if not cart_item:
-                cart_item = CartItem(cart=cart, item_type='toy', toy=item, quantity=1)
+                cart_item = CartItem(cart=cart, item_type='toy', toy=item, quantity=requested_qty)
             else:
-                if inv and cart_item.quantity + 1 > inv.stock:
+                if inv and cart_item.quantity + requested_qty > inv.stock:
                     return _stock_error_response(request, f'Only {inv.stock} left in stock.')
-                cart_item.quantity += 1
+                cart_item.quantity += requested_qty
         elif item_type == 'offer':
             item = get_object_or_404(Offers, id=item_id)
             inv = _get_inventory(item)
             if inv and inv.stock <= 0:
                 return _stock_error_response(request, 'This item is out of stock.')
-            cart_item = CartItem.objects.filter(cart=cart, item_type='offer', offer=item).first()
+            cart_item = CartItem.objects.filter(
+                cart=cart,
+                item_type='offer',
+                offer=item,
+                selected_size=selected_size,
+                selected_color=selected_color
+            ).first()
             created = cart_item is None
             if not cart_item:
-                cart_item = CartItem(cart=cart, item_type='offer', offer=item, quantity=1)
+                cart_item = CartItem(cart=cart, item_type='offer', offer=item, quantity=requested_qty)
             else:
-                if inv and cart_item.quantity + 1 > inv.stock:
+                if inv and cart_item.quantity + requested_qty > inv.stock:
                     return _stock_error_response(request, f'Only {inv.stock} left in stock.')
-                cart_item.quantity += 1
+                cart_item.quantity += requested_qty
         elif item_type == 'arrival':
             item = get_object_or_404(NewArrivals, id=item_id)
             inv = _get_inventory(item)
             if inv and inv.stock <= 0:
                 return _stock_error_response(request, 'This item is out of stock.')
-            cart_item = CartItem.objects.filter(cart=cart, item_type='arrival', arrival=item).first()
+            cart_item = CartItem.objects.filter(
+                cart=cart,
+                item_type='arrival',
+                arrival=item,
+                selected_size=selected_size,
+                selected_color=selected_color
+            ).first()
             created = cart_item is None
             if not cart_item:
-                cart_item = CartItem(cart=cart, item_type='arrival', arrival=item, quantity=1)
+                cart_item = CartItem(cart=cart, item_type='arrival', arrival=item, quantity=requested_qty)
             else:
-                if inv and cart_item.quantity + 1 > inv.stock:
+                if inv and cart_item.quantity + requested_qty > inv.stock:
                     return _stock_error_response(request, f'Only {inv.stock} left in stock.')
-                cart_item.quantity += 1
+                cart_item.quantity += requested_qty
         else:
             if _wants_json(request):
                 return JsonResponse({'success': False, 'error': 'Invalid item type'}, status=400)
@@ -1706,6 +1808,10 @@ def add_to_cart(request, item_type, item_id):
             else:
                 live_price = cart_item.get_live_price()
                 cart_item.unit_price = Decimal(str(round(live_price, 2))) if live_price > 0 else Decimal('0.00')
+
+        cart_item.selected_size = selected_size
+        cart_item.selected_color = selected_color
+        cart_item.variant_extra_price = variant_extra_price
 
         cart_item.save()
 
@@ -2149,6 +2255,9 @@ def checkout(request):
                 if item is None:
                     continue
                 item_name = getattr(item, 'name', None) or getattr(item, 'title', 'Unknown Item')
+                variant_label = cart_item.get_variant_display()
+                if variant_label:
+                    item_name = f"{item_name} ({variant_label})"
                 OrderItem.objects.create(
                     order=order,
                     item_name=item_name,

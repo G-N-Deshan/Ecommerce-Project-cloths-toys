@@ -20,15 +20,15 @@
                 <div class="contact-info">
                     <div class="contact-item">
                         <span class="contact-icon">📍</span>
-                        <span>123 Fashion Street, City</span>
+                        <span>Colombo, Sri Lanka</span>
                     </div>
                     <div class="contact-item">
                         <span class="contact-icon">📧</span>
-                        <span>contact@g11shop.com</span>
+                        <span>contact@kidzone.lk</span>
                     </div>
                     <div class="contact-item">
                         <span class="contact-icon">📞</span>
-                        <span>+1 234 567 8900</span>
+                        <span>+94 76 244 0558</span>
                     </div>
                 </div>
                 
@@ -95,12 +95,12 @@
             <div class="footer-column newsletter-column">
                 <h3 class="footer-title">Newsletter</h3>
                 <p class="newsletter-text">Subscribe to get special offers and exclusive deals!</p>
-                <form class="newsletter-form" id="newsletterForm" action="{% url 'subscribe_newsletter' %}" method="POST">
+                <form class="newsletter-form newsletter-form-ajax" id="newsletterForm" action="{% url 'subscribe_newsletter' %}" method="POST">
                     {% csrf_token %}
                     <input type="email" name="email" id="newsletterEmail" placeholder="Enter your email" required>
-                    <button type="submit" id="newsletterSubmit">Subscribe</button>
+                    <button type="submit" id="newsletterSubmit" class="newsletter-submit-btn">Subscribe</button>
                 </form>
-                <div id="newsletterMessage" style="margin-top: 10px; font-size: 0.85rem; font-weight: 600; display: none;"></div>
+                <div id="newsletterMessage" class="newsletter-message-ajax" style="margin-top: 10px; font-size: 0.85rem; font-weight: 600; display: none;"></div>
                 <p class="newsletter-note">By subscribing, you agree to our Privacy Policy.</p>
             </div>
         </div>
@@ -109,20 +109,25 @@
     <!-- AJAX Newsletter Submission script -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const newsletterForm = document.getElementById('newsletterForm');
-        const newsletterMessage = document.getElementById('newsletterMessage');
-        const newsletterSubmit = document.getElementById('newsletterSubmit');
+        const newsletterForms = document.querySelectorAll('.newsletter-form-ajax');
 
-        if (newsletterForm) {
-            newsletterForm.addEventListener('submit', function(e) {
+        newsletterForms.forEach(form => {
+            form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const messageDiv = this.nextElementSibling && this.nextElementSibling.classList.contains('newsletter-message-ajax') 
+                                    ? this.nextElementSibling 
+                                    : this.parentElement.querySelector('.newsletter-message-ajax');
+                
+                if (!messageDiv) return;
+
                 const formData = new FormData(this);
-                const email = formData.get('email');
                 
                 // Disable button and show loading state
-                newsletterSubmit.disabled = true;
-                newsletterSubmit.innerHTML = '<i class="bi bi-hourglass-split"></i>';
+                const originalBtnText = submitBtn.innerHTML;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i>';
                 
                 fetch(this.action, {
                     method: 'POST',
@@ -133,36 +138,36 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    newsletterMessage.style.display = 'block';
-                    newsletterMessage.textContent = data.message;
+                    messageDiv.style.display = 'block';
+                    messageDiv.textContent = data.message;
                     
                     if (data.status === 'success') {
-                        newsletterMessage.style.color = '#10b981'; // Emerald-500
-                        newsletterForm.reset();
+                        messageDiv.style.color = '#10b981'; // Emerald-500
+                        this.reset();
                     } else if (data.status === 'info') {
-                        newsletterMessage.style.color = '#3b82f6'; // Blue-500
+                        messageDiv.style.color = '#3b82f6'; // Blue-500
                     } else {
-                        newsletterMessage.style.color = '#ef4444'; // Red-500
+                        messageDiv.style.color = '#ef4444'; // Red-500
                     }
                 })
                 .catch(error => {
-                    newsletterMessage.style.display = 'block';
-                    newsletterMessage.textContent = 'Something went wrong. Please try again.';
-                    newsletterMessage.style.color = '#ef4444';
+                    messageDiv.style.display = 'block';
+                    messageDiv.textContent = 'Something went wrong. Please try again.';
+                    messageDiv.style.color = '#ef4444';
                 })
                 .finally(() => {
-                    newsletterSubmit.disabled = false;
-                    newsletterSubmit.textContent = 'Subscribe';
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
                 });
             });
-        }
+        });
     });
     </script>
 
     <!-- Footer Bottom -->
     <div class="footer-bottom">
         <div class="footer-bottom-content">
-            <p>© 2026 G11 Shop. All rights reserved.</p>
+            <p>© 2026 KidZone Sri Lanka. All rights reserved.</p>
             <div class="footer-bottom-links">
                 <a href="#">Privacy Policy</a>
                 <span>|</span>

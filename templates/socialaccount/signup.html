@@ -1,0 +1,108 @@
+{% load static %}
+{% load i18n %}
+{% load socialaccount %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { inter: ['Inter'] },
+                    colors: { brand: '#6366f1', accent: '#f59e0b' }
+                }
+            }
+        }
+    </script>
+    <title>Complete Sign Up — G11 Fashion & Toys</title>
+</head>
+<body class="font-inter min-h-screen overflow-x-hidden relative bg-slate-50">
+
+    <div class="relative z-10 min-h-screen flex items-center justify-center px-4 py-12">
+        <div class="lg-card reveal-lg visible">
+
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/30 mb-4">
+                    <i class="bi bi-google text-white text-2xl"></i>
+                </div>
+                <h1 class="text-2xl font-extrabold text-slate-800 tracking-tight">Final Step</h1>
+                <p class="text-slate-500 text-sm mt-1">You're almost there! Just a few more details to complete your registration with Google.</p>
+            </div>
+
+            <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-4 mb-8">
+                <p class="text-indigo-700 text-sm leading-relaxed text-center">
+                    {% blocktrans with provider_name=account.get_provider.name site_name=site.name %}You are about to use your {{provider_name}} account to login to {{site_name}}. As a final step, please complete the following form:{% endblocktrans %}
+                </p>
+            </div>
+
+            <!-- Signup Form -->
+            <form class="signup space-y-5" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
+                {% csrf_token %}
+
+                {% for field in form %}
+                <div class="space-y-1.5">
+                    <label for="{{ field.id_for_label }}" class="text-sm font-semibold text-slate-700 ml-1">
+                        {{ field.label }}
+                    </label>
+                    <div class="lg-input-group {% if field.errors %}border-red-400{% endif %}">
+                        <i class="bi {% if field.name == 'email' %}bi-envelope{% else %}bi-person{% endif %} lg-input-icon"></i>
+                        <input type="{{ field.field.widget.input_type|default:'text' }}" 
+                               name="{{ field.name }}" 
+                               id="{{ field.id_for_label }}"
+                               placeholder="{{ field.label }}"
+                               value="{{ field.value|default:'' }}"
+                               class="lg-input"
+                               {% if field.field.required %}required{% endif %}>
+                    </div>
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                            <p class="text-xs text-red-500 mt-1 ml-1">{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+
+                <!-- Submit -->
+                <button type="submit" class="lg-submit-btn group mt-4">
+                    <span class="relative z-10 flex items-center justify-center gap-2">
+                        <i class="bi bi-check-circle"></i> {% trans "Sign Up" %}
+                    </span>
+                </button>
+            </form>
+
+            <!-- Footer Links -->
+            <div class="text-center mt-8 space-y-2">
+                <a href="{% url 'index' %}" class="inline-flex items-center gap-1 text-slate-500 hover:text-slate-700 text-xs transition-colors">
+                    <i class="bi bi-arrow-left"></i> Cancel and return to home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'global.js' %}"></script>
+    <script>
+        document.querySelectorAll('.lg-input').forEach(function(inp) {
+            inp.addEventListener('focus', function() {
+                inp.parentElement.classList.add('lg-focused');
+            });
+            inp.addEventListener('blur', function() {
+                inp.parentElement.classList.remove('lg-focused');
+            });
+        });
+    </script>
+</body>
+</html>

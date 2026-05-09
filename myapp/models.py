@@ -36,6 +36,8 @@ class Offers(models.Model):
     long_description = models.TextField(blank=True, default='', help_text='Detailed description shown on the product detail page')
     features = models.TextField(blank=True, default='', help_text='Key features, one per line')
     material = models.CharField(max_length=200, blank=True, default='', help_text='e.g. 100% Cotton, Polyester blend')
+    sizes_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. S, M, L, XL')
+    colors_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. Red, Blue, Black')
     
     def __str__(self):
         return self.title
@@ -58,6 +60,8 @@ class NewArrivals(models.Model):
     long_description = models.TextField(blank=True, default='', help_text='Detailed description shown on the product detail page')
     features = models.TextField(blank=True, default='', help_text='Key features, one per line')
     material = models.CharField(max_length=200, blank=True, default='', help_text='e.g. 100% Cotton, Polyester blend')
+    sizes_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. S, M, L, XL')
+    colors_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. Red, Blue, Black')
     
     def __str__(self):
         return self.title
@@ -96,6 +100,7 @@ class Cloths(models.Model):
     material = models.CharField(max_length=200, blank=True, default='', help_text='e.g. 100% Cotton, Polyester blend')
     care_instructions = models.TextField(blank=True, default='', help_text='Washing and care instructions')
     sizes_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. S, M, L, XL or 2T, 3T, 4T')
+    colors_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. Red, Blue, Black')
     
     def __str__(self):
         return self.name
@@ -217,6 +222,8 @@ class Toy(models.Model):
     material = models.CharField(max_length=200, blank=True, default='', help_text='e.g. Wood, Plastic, Plush fabric')
     safety_info = models.TextField(blank=True, default='', help_text='Safety certifications and age warnings')
     dimensions = models.CharField(max_length=200, blank=True, default='', help_text='e.g. 30cm x 20cm x 15cm')
+    sizes_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. S, M, L, XL')
+    colors_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. Red, Blue, Black')
 
     def __str__(self):
         return self.name
@@ -330,12 +337,19 @@ class CartItem(models.Model):
     
     # Snapshot unit price at add-to-cart time so cart totals stay stable.
     unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    selected_size = models.CharField(max_length=20, null=True, blank=True)
+    selected_color = models.CharField(max_length=50, null=True, blank=True)
+    variant_extra_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         item = self.get_item()
-        return f"{self.quantity}x {item.name if hasattr(item, 'name') else item.title}"
+        item_name = item.name if hasattr(item, 'name') else item.title
+        variant = self.get_variant_display()
+        if variant:
+            return f"{self.quantity}x {item_name} ({variant})"
+        return f"{self.quantity}x {item_name}"
     
     def get_item(self):
         if self.cloth:
@@ -385,12 +399,19 @@ class CartItem(models.Model):
         return 0.0
 
     def get_price(self):
-        if self.unit_price is not None:
-            return float(self.unit_price)
-        return self.get_live_price()
+        base_price = float(self.unit_price) if self.unit_price is not None else self.get_live_price()
+        return base_price + self._to_float(self.variant_extra_price)
     
     def get_subtotal(self):
         return self.get_price() * self.quantity
+
+    def get_variant_display(self):
+        parts = []
+        if self.selected_size:
+            parts.append(f"Size: {self.selected_size}")
+        if self.selected_color:
+            parts.append(f"Color: {self.selected_color}")
+        return " | ".join(parts)
     
     class Meta:
         verbose_name = 'Cart Item'

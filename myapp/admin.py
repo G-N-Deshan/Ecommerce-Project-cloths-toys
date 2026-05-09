@@ -4,7 +4,8 @@ from django.utils.html import format_html
 from .models import (Card, Cloths, Offers, NewArrivals, Review, ContactMessage, Toy,
                      WishlistItem, Cart, CartItem, Order, OrderItem, ProductReview,
                      ProductImage, Inventory, Coupon, ProductVariant, OrderTracking,
-                     SiteBanner, SiteSettings, ViewHistory, Return, StockAlert, CartAbandon)
+                     SiteBanner, SiteSettings, ViewHistory, Return, StockAlert, CartAbandon,
+                     NewsletterSubscription)
 from .models import ServiceReview
 
 # Admin site branding
@@ -39,7 +40,7 @@ class OffersAdmin(admin.ModelAdmin):
             'fields': ('price1', 'price2', 'stock_text', 'end_time'),
         }),
         ('Product Detail Page Content', {
-            'fields': ('long_description', 'features', 'material'),
+            'fields': ('long_description', 'features', 'material', 'sizes_available', 'colors_available'),
             'description': 'These fields appear on the product detail page. '
                            'For "Features", enter one feature per line.',
             'classes': ('collapse',),
@@ -58,12 +59,18 @@ class NewArrivalsAdmin(admin.ModelAdmin):
             'fields': ('imageUrl', 'title', 'offers_badge', 'description', 'price', 'category'),
         }),
         ('Product Detail Page Content', {
-            'fields': ('long_description', 'features', 'material'),
+            'fields': ('long_description', 'features', 'material', 'sizes_available', 'colors_available'),
             'description': 'These fields appear on the product detail page. '
                            'For "Features", enter one feature per line.',
             'classes': ('collapse',),
         }),
     )
+
+
+class ProductVariantInline(admin.TabularInline):
+    model = ProductVariant
+    extra = 1
+    fields = ('size', 'color', 'color_code', 'extra_price', 'stock')
 
 
 @admin.register(Cloths)
@@ -80,13 +87,14 @@ class ClothsAdmin(admin.ModelAdmin):
             'fields': ('price', 'price1', 'price2', 'discount_text'),
         }),
         ('Product Detail Page Content', {
-            'fields': ('long_description', 'features', 'material', 'care_instructions', 'sizes_available'),
+            'fields': ('long_description', 'features', 'material', 'care_instructions', 'sizes_available', 'colors_available'),
             'description': 'These fields appear on the product detail page. '
                            'Enter "Features" one per line. '
                            'Enter "Sizes" comma-separated (e.g. S, M, L, XL).',
             'classes': ('collapse',),
         }),
     )
+    inlines = [ProductVariantInline]
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
@@ -150,13 +158,14 @@ class ToyAdmin(admin.ModelAdmin):
             'fields': ('price', 'original_price', 'rating', 'is_bestseller', 'is_new'),
         }),
         ('Product Detail Page Content', {
-            'fields': ('long_description', 'features', 'material', 'safety_info', 'dimensions'),
+            'fields': ('long_description', 'features', 'material', 'safety_info', 'dimensions', 'sizes_available', 'colors_available'),
             'description': 'These fields appear on the product detail page. '
                            'Enter "Features" one per line.',
             'classes': ('collapse',),
         }),
     )
-    
+
+
     
 @admin.register(WishlistItem)
 class WishlistItemAdmin(admin.ModelAdmin):
@@ -581,3 +590,11 @@ class CartAbandonAdmin(admin.ModelAdmin):
             return f"{obj.user.username} ({obj.user.email})"
         return f"Anonymous ({obj.session_key[:8]}...)"
     get_user_info.short_description = 'User/Session'
+
+@admin.register(NewsletterSubscription)
+class NewsletterSubscriptionAdmin(admin.ModelAdmin):
+    list_display = ['email', 'subscribed_at']
+    list_filter = ['subscribed_at']
+    search_fields = ['email']
+    readonly_fields = ['subscribed_at']
+    ordering = ['-subscribed_at']

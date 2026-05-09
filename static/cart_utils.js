@@ -31,7 +31,7 @@ if (window.__cartUtilsBootstrapped) {
 } else {
     window.__cartUtilsBootstrapped = true;
 
-    async function addToCart(itemType, itemId, buttonElement = null, unitPrice = null) {
+    async function addToCart(itemType, itemId, buttonElement = null, unitPrice = null, options = {}) {
         const fallbackUrl = `/cart/add/${itemType}/${itemId}/`;
 
         try {
@@ -51,6 +51,16 @@ if (window.__cartUtilsBootstrapped) {
                 return false;
             }
 
+            const payload = { unit_price: unitPrice };
+            if (options && typeof options === 'object') {
+                if (options.size) payload.size = options.size;
+                if (options.color) payload.color = options.color;
+                if (options.quantity) payload.quantity = options.quantity;
+                if (options.variant_extra_price !== undefined) {
+                    payload.variant_extra_price = options.variant_extra_price;
+                }
+            }
+
             const response = await fetch(fallbackUrl, {
                 method: 'POST',
                 headers: {
@@ -58,7 +68,7 @@ if (window.__cartUtilsBootstrapped) {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ unit_price: unitPrice })
+                body: JSON.stringify(payload)
             });
 
             if (!response.ok) {
@@ -111,7 +121,7 @@ if (window.__cartUtilsBootstrapped) {
 
         document.body.addEventListener('click', function (e) {
             const btn = e.target.closest('[data-add-to-cart]');
-            if (!btn) return;
+            if (!btn || e.defaultPrevented) return;
 
             const itemType = btn.dataset.itemType;
             const itemId = btn.dataset.itemId;

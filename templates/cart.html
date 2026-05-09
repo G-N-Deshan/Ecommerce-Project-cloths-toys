@@ -1,10 +1,11 @@
 {% load static %}
 
 {% if user.is_authenticated %}
-<div class="cart-container">
-    <a href="{% url 'cart_details' %}" class="cart-icon-btn" title="Shopping Cart">
-        <span class="cart-icon">🛒</span>
-        <span class="cart-badge cart-count" id="cartCount" data-cart-count>{{ cart_count|default:0 }}</span>
+<div class="cart-floating-wrapper">
+    <a href="{% url 'cart_details' %}" class="cart-floating-btn" title="View Shopping Cart">
+        <div class="cart-glass-bg"></div>
+        <i class="bi bi-cart3 cart-main-icon"></i>
+        <span class="cart-floating-badge cart-count" id="cartCount" data-cart-count>{{ cart_count|default:0 }}</span>
     </a>
 </div>
 {% endif %}

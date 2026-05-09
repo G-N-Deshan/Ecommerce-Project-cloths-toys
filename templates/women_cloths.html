@@ -158,6 +158,19 @@
             border: 1px solid #fecdd3;
         }
 
+        .sizes-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 999px;
+            border: 1px solid #fed7aa;
+            background: #fff7ed;
+            color: #9a3412;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+        }
+
         /* 3D Floating Shapes */
         @keyframes pgFloat {
             0%,100% { transform: translateY(0) rotate(0deg); }
@@ -310,6 +323,9 @@
                                 <h3 class="font-extrabold text-slate-900 leading-6"><a href="{% url 'product_detail' 'cloth' cloth.id %}" class="hover:text-rose-600 transition-colors" style="color:inherit;text-decoration:none">{{ cloth.name }}</a></h3>
                                 <p class="text-xs uppercase tracking-wide font-semibold text-slate-500">{{ cloth.get_subcategory_display|default:'Featured Style' }}</p>
                                 {% with item_rating=cloth.avg_rating item_review_count=cloth.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
+                                {% if cloth.sizes_available %}
+                                <span class="sizes-badge">Sizes: {{ cloth.sizes_available }}</span>
+                                {% endif %}
                                 <div class="flex items-center gap-2 flex-wrap">
                                     <span class="text-lg font-extrabold text-slate-900">Rs {{ cloth.price2|default:cloth.price1|default:cloth.price }}</span>
                                     {% if cloth.price1 and cloth.price2 %}
