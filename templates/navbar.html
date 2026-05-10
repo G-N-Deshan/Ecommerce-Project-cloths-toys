@@ -87,26 +87,29 @@
                 <!-- Cart Icon - Only for authenticated users -->
                 {% if user.is_authenticated %}
                 <a href="{% url 'wishlist' %}" class="wishlist-icon-link" title="Wishlist">
-                    <span class="wishlist-icon" aria-hidden="true">♡</span>
+                    <i class="bi bi-heart wishlist-icon"></i>
                     <span class="wishlist-count-badge" data-wishlist-count="{{ wishlist_count|default:0 }}">{{ wishlist_count|default:0 }}</span>
                 </a>
                 <a href="{% url 'cart_details' %}" class="cart-icon-link" title="Shopping Cart">
-                    <span class="cart-icon">🛒</span>
+                    <i class="bi bi-bag-check cart-icon"></i>
                     <span class="cart-count-badge" data-cart-count="{{ cart_count|default:0 }}">{{ cart_count|default:0 }}</span>
                 </a>
                 <a href="{% url 'loyalty_dashboard' %}" class="loyalty-icon-link" title="G11 Rewards">
-                    <span class="loyalty-icon" aria-hidden="true">🎖️</span>
+                    <i class="bi bi-star-fill loyalty-icon"></i>
                     <span class="loyalty-count-badge" data-loyalty-count="{{ loyalty_points|default:0 }}">{{ loyalty_points|default:0 }}</span>
                 </a>
                 {% endif %}
 
                 <!-- Mobile-only auth links -->
                 {% if user.is_authenticated %}
-                <button class="nav-mobile-auth"><a href="{% url 'profile' %}" class="nav-link">{{ user.username
-                        }}</a></button>
-                <form method="post" action="{% url 'logout' %}" class="nav-mobile-auth" style="display:inline">
+                <a href="{% url 'profile' %}" class="nav-mobile-auth nav-icon-btn" title="Profile" aria-label="Profile">
+                    <i class="bi bi-person-circle"></i>
+                </a>
+                <form method="post" action="{% url 'logout' %}" class="nav-mobile-auth nav-icon-form">
                     {% csrf_token %}
-                    <button type="submit" class="nav-link nav-link--logout" style="background:none; border:none; cursor:pointer; font:inherit; padding:0.75rem 1.5rem; display:block; width:100%; text-align:left">Logout</button>
+                    <button type="submit" class="nav-icon-btn nav-icon-btn--logout" title="Logout" aria-label="Logout">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </button>
                 </form>
                 {% else %}
                 <button class="nav-mobile-auth"><a href="{% url 'login' %}"
@@ -116,13 +119,15 @@
 
             <!-- Login/Logout on right (desktop) -->
             {% if user.is_authenticated %}
-            <form method="post" action="{% url 'logout' %}" class="nav-desktop-auth" style="display:inline">
+            <form method="post" action="{% url 'logout' %}" class="nav-desktop-auth nav-icon-form">
                 {% csrf_token %}
-                <button type="submit" class="nav-link nav-link--logout" style="background:none; border:none; cursor:pointer; font:inherit; letter-spacing:0.2rem; padding:0.5rem; margin-right:2rem">Logout</button>
+                <button type="submit" class="nav-icon-btn nav-icon-btn--logout" title="Logout" aria-label="Logout">
+                    <i class="bi bi-box-arrow-right"></i>
+                </button>
             </form>
-            <button class="user-profile-btn nav-desktop-auth" title="{{ user.username }}">
-                <a href="{% url 'profile' %}" class="nav-link">{{ user.username }}</a>
-            </button>
+            <a href="{% url 'profile' %}" class="user-profile-btn nav-desktop-auth nav-icon-btn" title="Profile" aria-label="Profile">
+                <i class="bi bi-person-circle"></i>
+            </a>
             {% else %}
             <button class="login-btn nav-desktop-auth"><a href="{% url 'login' %}"
                     class="nav-link nav-link--login">Login</a></button>

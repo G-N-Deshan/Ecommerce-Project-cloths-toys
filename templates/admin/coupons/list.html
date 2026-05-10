@@ -1,0 +1,86 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Coupon Management - G11 Admin{% endblock %}
+{% block page_title %}Marketing & Coupons{% endblock %}
+
+{% block content %}
+<div class="space-y-10">
+    <!-- Header -->
+    <div class="flex justify-between items-center gap-6">
+        <div>
+            <h3 class="text-2xl font-black text-slate-800">Discount Coupons</h3>
+            <p class="text-sm text-slate-400 font-medium">Create and manage active discount codes</p>
+        </div>
+        <a href="{% url 'custom_admin:coupon_add' %}" class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-2xl flex items-center gap-2 shadow-lg shadow-indigo-100 hover:scale-105 transition-transform">
+            <i class="bi bi-plus-lg"></i> New Coupon
+        </a>
+    </div>
+
+    <!-- Coupons Table -->
+    <div class="glass rounded-[2.5rem] overflow-hidden shadow-2xl">
+        <table class="w-full text-left border-collapse">
+            <thead class="bg-slate-50/50">
+                <tr>
+                    <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-widest">Code</th>
+                    <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-widest">Discount</th>
+                    <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-widest">Status</th>
+                    <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-widest">Validity</th>
+                    <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-widest text-center">Usage</th>
+                    <th class="px-8 py-5"></th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                {% for coupon in coupons %}
+                <tr class="hover:bg-slate-50/50 transition-all">
+                    <td class="px-8 py-5">
+                        <code class="px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-xl font-black text-sm border border-indigo-100">
+                            {{ coupon.code }}
+                        </code>
+                    </td>
+                    <td class="px-8 py-5">
+                        <div class="flex flex-col">
+                            <span class="font-bold text-slate-800 text-lg">
+                                {{ coupon.discount_value }}{% if coupon.discount_type == 'percentage' %}%{% else %} Rs{% endif %}
+                            </span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Min Order: Rs {{ coupon.min_order_amount }}</span>
+                        </div>
+                    </td>
+                    <td class="px-8 py-5">
+                        <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest
+                            {% if coupon.is_active %}bg-emerald-100 text-emerald-600{% else %}bg-rose-100 text-rose-500{% endif %}">
+                            {% if coupon.is_active %}Active{% else %}Disabled{% endif %}
+                        </span>
+                    </td>
+                    <td class="px-8 py-5">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-bold text-slate-600">{{ coupon.valid_until|date:"M d, Y" }}</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Expires in {{ coupon.valid_until|timeuntil }}</span>
+                        </div>
+                    </td>
+                    <td class="px-8 py-5 text-center">
+                        <div class="flex flex-col items-center">
+                            <span class="font-black text-slate-800">{{ coupon.used_count }}</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Uses</span>
+                        </div>
+                    </td>
+                    <td class="px-8 py-5 text-right">
+                        <div class="flex gap-2 justify-end">
+                            <a href="{% url 'custom_admin:coupon_edit' coupon.id %}" class="p-2 hover:bg-white rounded-lg text-slate-400 hover:text-indigo-600 transition-colors">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a href="{% url 'custom_admin:coupon_delete' coupon.id %}" class="p-2 hover:bg-rose-50 rounded-lg text-slate-400 hover:text-rose-500 transition-colors" onclick="return confirm('Delete this coupon?')">
+                                <i class="bi bi-trash3"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="px-8 py-32 text-center text-slate-400 italic">No coupons created yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

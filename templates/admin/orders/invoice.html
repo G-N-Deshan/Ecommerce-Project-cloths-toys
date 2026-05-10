@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice #{{ order.order_number }} - G11 Ecommerce</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        @media print {
+            .no-print { display: none; }
+            body { background: white; padding: 0; }
+            .invoice-card { box-shadow: none; border: none; }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 p-4 md:p-10">
+
+    <div class="max-w-4xl mx-auto no-print mb-6 flex justify-between items-center">
+        <a href="{% url 'custom_admin:order_detail' order.id %}" class="px-4 py-2 bg-white rounded-xl shadow-sm font-bold text-slate-600 hover:text-indigo-600 transition-colors">
+            &larr; Back to Order
+        </a>
+        <button onclick="window.print()" class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-2xl shadow-lg hover:bg-indigo-700 transition-all">
+            Print Invoice
+        </button>
+    </div>
+
+    <div class="invoice-card max-w-4xl mx-auto bg-white shadow-2xl p-10 md:p-16 border border-slate-200">
+        <!-- Header -->
+        <div class="flex justify-between items-start border-b-2 border-slate-100 pb-12 mb-12">
+            <div>
+                <h1 class="text-4xl font-black text-indigo-600 mb-2">INVOICE</h1>
+                <p class="text-slate-400 font-bold uppercase tracking-widest text-sm">#{{ order.order_number }}</p>
+                <div class="mt-8 space-y-1">
+                    <p class="text-sm font-bold text-slate-800">G11 Ecommerce Store</p>
+                    <p class="text-xs text-slate-500 font-medium">123 Main Street, Colombo 03</p>
+                    <p class="text-xs text-slate-500 font-medium">Sri Lanka</p>
+                    <p class="text-xs text-slate-500 font-medium">Contact: +94 11 234 5678</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <div class="w-16 h-16 bg-indigo-600 rounded-2xl ml-auto mb-6 flex items-center justify-center">
+                    <span class="text-white font-black text-2xl">G11</span>
+                </div>
+                <div class="space-y-1">
+                    <p class="text-xs font-black text-slate-400 uppercase tracking-widest">Date Issued</p>
+                    <p class="text-sm font-bold text-slate-800">{{ order.created_at|date:"F d, Y" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bill To -->
+        <div class="grid grid-cols-2 gap-12 mb-12">
+            <div>
+                <p class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Billed To</p>
+                <div class="space-y-1">
+                    <p class="text-lg font-black text-slate-800">{{ order.full_name }}</p>
+                    <p class="text-sm text-slate-500 font-medium">{{ order.email }}</p>
+                    <p class="text-sm text-slate-500 font-medium">{{ order.phone }}</p>
+                </div>
+            </div>
+            <div>
+                <p class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Shipping Address</p>
+                <div class="space-y-1">
+                    <p class="text-sm text-slate-800 font-bold">{{ order.address }}</p>
+                    <p class="text-sm text-slate-500 font-medium">{{ order.city }}, {{ order.postal_code }}</p>
+                    <p class="text-sm text-slate-500 font-medium">Sri Lanka</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Items Table -->
+        <table class="w-full text-left mb-12">
+            <thead>
+                <tr class="border-b border-slate-200">
+                    <th class="py-4 text-xs font-black text-slate-400 uppercase tracking-widest">Description</th>
+                    <th class="py-4 text-xs font-black text-slate-400 uppercase tracking-widest text-center">Qty</th>
+                    <th class="py-4 text-xs font-black text-slate-400 uppercase tracking-widest text-right">Price</th>
+                    <th class="py-4 text-xs font-black text-slate-400 uppercase tracking-widest text-right">Total</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                {% for item in order.items.all %}
+                <tr>
+                    <td class="py-6">
+                        <p class="font-bold text-slate-800 text-lg">{{ item.item_name }}</p>
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">{{ item.item_type }}</p>
+                    </td>
+                    <td class="py-6 text-center font-bold text-slate-600">{{ item.quantity }}</td>
+                    <td class="py-6 text-right font-bold text-slate-600">Rs {{ item.price }}</td>
+                    <td class="py-6 text-right font-black text-slate-900">Rs {{ item.subtotal }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Totals -->
+        <div class="flex justify-end border-t border-slate-200 pt-8">
+            <div class="w-72 space-y-4">
+                <div class="flex justify-between text-slate-500 font-bold">
+                    <span>Subtotal</span>
+                    <span>Rs {{ order.subtotal }}</span>
+                </div>
+                <div class="flex justify-between text-slate-500 font-bold">
+                    <span>Shipping</span>
+                    <span>Rs {{ order.shipping }}</span>
+                </div>
+                <div class="flex justify-between items-center text-indigo-600 border-t border-slate-100 pt-4 mt-4">
+                    <span class="text-xl font-black">Total Due</span>
+                    <span class="text-2xl font-black">Rs {{ order.total }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-20 pt-10 border-t border-slate-100 text-center">
+            <p class="text-slate-400 text-sm font-bold">Thank you for your business!</p>
+            <p class="text-slate-300 text-[10px] mt-2 font-medium">This is a computer-generated document and does not require a physical signature.</p>
+        </div>
+    </div>
+
+</body>
+</html>

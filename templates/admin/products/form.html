@@ -1,0 +1,60 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}{% if is_edit %}Edit{% else %}Add{% endif %} {{ item_type|title }} - G11 Admin{% endblock %}
+{% block page_title %}{{ item_type|title }} Management{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-input {
+        @apply w-full px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all font-semibold text-slate-700;
+    }
+    label {
+        @apply block text-sm font-black text-slate-400 uppercase tracking-widest ml-1 mb-2;
+    }
+    .helptext {
+        @apply block text-[10px] text-slate-400 mt-1 ml-1;
+    }
+    .errorlist {
+        @apply text-rose-500 text-xs font-bold mt-2 ml-1 list-none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto animate-fade-in">
+    <div class="flex items-center gap-4 mb-8">
+        <a href="{% url 'custom_admin:product_list' %}" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white glass text-slate-500 hover:text-indigo-600 transition-colors">
+            <i class="bi bi-chevron-left text-lg"></i>
+        </a>
+        <h3 class="text-3xl font-black text-slate-800">{% if is_edit %}Edit{% else %}New{% endif %} {{ item_type|title }}</h3>
+    </div>
+
+    <div class="glass rounded-[3rem] p-8 md:p-14 shadow-2xl border border-white/50">
+        <form method="POST" enctype="multipart/form-data" class="space-y-8">
+            {% csrf_token %}
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {% for field in form %}
+                <div class="{% if field.name == 'description' or field.name == 'desccription' or field.name == 'long_description' or field.name == 'features' %}md:col-span-2{% endif %} space-y-2">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.help_text %}
+                    <span class="helptext">{{ field.help_text|safe }}</span>
+                    {% endif %}
+                    {{ field.errors }}
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="pt-10 flex flex-col md:flex-row gap-4">
+                <button type="submit" class="flex-1 py-5 bg-slate-900 text-white font-black rounded-[2rem] hover:bg-indigo-600 transition-all shadow-2xl active:scale-95 text-lg">
+                    {% if is_edit %}Update{% else %}Create{% endif %} Product
+                </button>
+                <a href="{% url 'custom_admin:product_list' %}" class="px-10 py-5 bg-white text-slate-500 font-bold rounded-[2rem] glass hover:bg-slate-50 transition-all text-center">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

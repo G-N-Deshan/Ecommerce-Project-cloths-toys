@@ -1,0 +1,110 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Site Settings - G11 Admin{% endblock %}
+{% block page_title %}Site Settings & CMS{% endblock %}
+
+{% block content %}
+<div class="space-y-10">
+    <!-- General Settings -->
+    <div class="glass rounded-[2.5rem] p-8 md:p-12 shadow-xl">
+        <h3 class="text-2xl font-black text-slate-800 mb-8 flex items-center gap-3">
+            <i class="bi bi-gear-wide-connected text-indigo-600"></i> Global Settings
+        </h3>
+        <form method="post" class="space-y-8 max-w-2xl">
+            {% csrf_token %}
+            <div class="space-y-4">
+                <label class="text-sm font-black text-slate-400 uppercase tracking-widest ml-1">Announcement Bar Text</label>
+                <input type="text" name="sale_text" value="{{ settings_form.sale_text.value|default:settings.sale_text }}" class="w-full px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all font-semibold text-slate-700">
+            </div>
+            
+            <div class="flex items-center gap-4 p-6 bg-slate-50 rounded-[2rem] border border-slate-100">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white text-xl">
+                    <i class="bi bi-megaphone"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="font-bold text-slate-800">Enable Sale Mode</p>
+                    <p class="text-xs text-slate-500">Shows the sale banner across the whole site</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" name="is_sale_active" {% if settings_form.is_sale_active.value %}checked{% endif %} class="sr-only peer">
+                    <div class="w-14 h-8 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-indigo-600"></div>
+                </label>
+            </div>
+
+            <button type="submit" class="px-10 py-4 bg-slate-900 text-white font-black rounded-2xl hover:bg-indigo-600 transition-all shadow-xl shadow-indigo-100 active:scale-95">
+                Save All Changes
+            </button>
+        </form>
+    </div>
+
+    <!-- Banners CMS -->
+    <div class="space-y-6">
+        <div class="flex justify-between items-center px-4">
+            <h3 class="text-2xl font-black text-slate-800">Homepage Banners</h3>
+            <button class="px-5 py-2.5 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:scale-105 transition-all text-sm">Add Banner</button>
+        </div>
+        
+        <div class="flex items-center justify-between px-4">
+            <p class="text-sm text-slate-500">Drag banners to reorder them. Changes are saved instantly.</p>
+            <a href="/admin/myapp/sitebanner/" class="text-sm font-bold text-indigo-600 hover:underline">Open full banner admin</a>
+        </div>
+        <div id="bannerContainer" class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+            {% for b in banners %}
+            <div data-id="{{ b.id }}" class="glass rounded-[2.5rem] overflow-hidden shadow-xl group border-2 border-transparent hover:border-indigo-500 transition-all cursor-move">
+                <div class="h-48 relative overflow-hidden">
+                    <img src="{{ b.image.url }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                        <div class="text-white">
+                            <h4 class="font-black text-xl">{{ b.title }}</h4>
+                            <p class="text-xs font-medium text-white/80">{{ b.subtitle }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 flex justify-between items-center bg-white/50 backdrop-blur-sm">
+                    <div class="flex gap-4">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Order: {{ b.order }}</span>
+                        <span class="text-xs font-bold {% if b.is_active %}text-emerald-500{% else %}text-rose-400{% endif %} uppercase tracking-widest">{% if b.is_active %}Active{% else %}Inactive{% endif %}</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="p-2 hover:bg-white rounded-lg text-slate-400 hover:text-indigo-600 transition-colors"><i class="bi bi-pencil-square"></i></button>
+                        <button class="p-2 hover:bg-rose-50 rounded-lg text-slate-400 hover:text-rose-500 transition-colors"><i class="bi bi-trash3"></i></button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script>
+    const bannerContainer = document.getElementById('bannerContainer');
+    if (bannerContainer) {
+        new Sortable(bannerContainer, {
+            animation: 150,
+            ghostClass: 'opacity-50',
+            onEnd: function() {
+                const order = Array.from(bannerContainer.querySelectorAll('[data-id]'))
+                                   .map(el => el.dataset.id);
+                
+                fetch("{% url 'custom_admin:reorder_banners' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ order: order })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        console.log('Order updated');
+                    }
+                });
+            }
+        });
+    }
+</script>
+{% endblock %}

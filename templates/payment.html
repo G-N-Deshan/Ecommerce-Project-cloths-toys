@@ -316,8 +316,8 @@ function handleStripePay() {
     })
     .then(r => r.json())
     .then(data => {
-        if (data.sessionId) {
-            stripe.redirectToCheckout({ sessionId: data.sessionId });
+        if (data.url) {
+            window.location.href = data.url;
         } else {
             showToast(data.error || 'Failed to create session', 'error');
             btn.disabled = false;

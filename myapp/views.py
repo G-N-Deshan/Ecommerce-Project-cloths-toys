@@ -2271,7 +2271,7 @@ def checkout(request):
             total = subtotal - discount + tax + shipping
             
             if payment_method == 'card':
-                # Store shipping info in session for the payment page to pick up
+                # Store shipping info so the Stripe session can be created from the same checkout page.
                 request.session['checkout_shipping'] = {
                     'full_name': full_name,
                     'email': email,
@@ -2282,7 +2282,18 @@ def checkout(request):
                     'country': country,
                     'coupon_code': coupon_code,
                 }
-                return redirect('payment_page')
+                return render(request, 'checkout.html', {
+                    'cart': cart,
+                    'cart_items': cart.items.all(),
+                    'subtotal': float(subtotal),
+                    'tax': float(tax),
+                    'shipping': float(shipping),
+                    'total': float(total),
+                    'coupons_available': Coupon.objects.filter(is_active=True).exists(),
+                    'post_data': request.POST,
+                    'last_order': Order.objects.filter(user=request.user).order_by('-created_at').first(),
+                    'payment_method': 'card',
+                })
 
             # --- CASH ON DELIVERY FLOW ---
             order = Order.objects.create(
@@ -2393,6 +2404,7 @@ def checkout(request):
         'shipping': float(shipping),
         'total': float(total),
         'coupons_available': Coupon.objects.filter(is_active=True).exists(),
+        'last_order': Order.objects.filter(user=request.user).order_by('-created_at').first() if request.user.is_authenticated else None,
     }
     
     return render(request, 'checkout.html', context)
@@ -3458,8 +3470,13 @@ def create_checkout_session(request):
     stripe.api_key = django_settings.STRIPE_SECRET_KEY
 
     cart = get_or_create_cart(request)
+    total = cart.get_total()
     if cart.get_item_count() == 0:
         return JsonResponse({'error': 'Cart is empty'}, status=400)
+    
+    # Stripe minimum amount check (approx $0.50)
+    if float(total) < 150:
+        return JsonResponse({'error': 'Order total must be at least Rs. 150 for card payments.'}, status=400)
 
     line_items = []
     for item in cart.items.all():
@@ -3482,31 +3499,63 @@ def create_checkout_session(request):
             'quantity': item.quantity,
         })
 
-    # Add tax and shipping
-    subtotal = cart.get_total()
-    tax_cents = int(float(subtotal) * 0.10 * 100)
-    if tax_cents > 0:
-        line_items.append({
-            'price_data': {
-                'currency': 'lkr',
-                'product_data': {'name': 'Tax (10%)'},
-                'unit_amount': tax_cents,
-            },
-            'quantity': 1,
-        })
-    line_items.append({
-        'price_data': {
-            'currency': 'lkr',
-            'product_data': {'name': 'Shipping'},
-            'unit_amount': 1000,
-        },
-        'quantity': 1,
-    })
-
     try:
         body = json.loads(request.body)
     except Exception:
         body = {}
+
+    # [NEW] Handle Coupon logic for Stripe charging
+    subtotal = float(cart.get_total())
+    discount = 0.0
+    coupon_code = body.get('coupon_code', '')
+    
+    if coupon_code:
+        try:
+            from .models import Coupon
+            coupon = Coupon.objects.get(code__iexact=coupon_code)
+            if coupon.is_valid() and subtotal >= float(coupon.min_order_amount):
+                discount = float(coupon.get_discount(Decimal(str(subtotal))))
+        except Exception:
+            pass
+
+    discounted_subtotal = max(0, subtotal - discount)
+    tax = discounted_subtotal * 0.10
+    shipping = 1000.0
+    total_payable = discounted_subtotal + tax + shipping
+
+    # Stripe does not allow negative line items. 
+    # If a discount is applied, we'll send a single consolidated line item for the total.
+    if discount > 0:
+        line_items = [{
+            'price_data': {
+                'currency': 'lkr',
+                'product_data': {
+                    'name': f'Order Total (Discount {coupon_code} applied)',
+                    'description': f'Original: Rs. {subtotal:.2f}, Discount: Rs. {discount:.2f}, Tax: Rs. {tax:.2f}',
+                },
+                'unit_amount': int(total_payable * 100),
+            },
+            'quantity': 1,
+        }]
+    else:
+        # Standard flow with individual items
+        if int(tax * 100) > 0:
+            line_items.append({
+                'price_data': {
+                    'currency': 'lkr',
+                    'product_data': {'name': 'Tax (10%)'},
+                    'unit_amount': int(tax * 100),
+                },
+                'quantity': 1,
+            })
+        line_items.append({
+            'price_data': {
+                'currency': 'lkr',
+                'product_data': {'name': 'Shipping'},
+                'unit_amount': int(shipping * 100),
+            },
+            'quantity': 1,
+        })
 
     # Store shipping info in session for later use
     shipping_data = {
@@ -3517,7 +3566,8 @@ def create_checkout_session(request):
         'city': body.get('city', ''),
         'postal_code': body.get('postal_code', ''),
         'country': body.get('country', ''),
-        'coupon_code': body.get('coupon_code', ''),
+        'coupon_code': coupon_code,
+        'discount_amount': str(discount),
     }
     request.session['checkout_shipping'] = shipping_data
 
@@ -3538,12 +3588,12 @@ def create_checkout_session(request):
             customer_email=request.user.email,
             metadata=metadata,
         )
-        return JsonResponse({'sessionId': session.id})
+        return JsonResponse({'sessionId': session.id, 'url': session.url})
     except Exception as e:
+        print(f"STRIPE ERROR: {str(e)}")
         return JsonResponse({'error': str(e)}, status=500)
 
 
-@login_required(login_url='login')
 def _finalize_order_from_stripe_session(session, user, cart, request=None):
     """Helper to create order from Stripe session data."""
     # Double check if order already exists for this session
@@ -3551,7 +3601,8 @@ def _finalize_order_from_stripe_session(session, user, cart, request=None):
     if existing:
         return existing
 
-    metadata = session.metadata
+    # Convert StripeObject to dict using .to_dict() to avoid AttributeError on .get()
+    metadata = (session.metadata or {}).to_dict()
     shipping_info = {
         'full_name': metadata.get('shipping_full_name', user.get_full_name() or user.username),
         'email': metadata.get('shipping_email', user.email),
@@ -3676,7 +3727,8 @@ def stripe_webhook(request):
 
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
-        user_id = session.metadata.get('user_id')
+        metadata = (session.metadata or {}).to_dict()
+        user_id = metadata.get('user_id')
         if user_id:
             try:
                 user = User.objects.get(id=user_id)

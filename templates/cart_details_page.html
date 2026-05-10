@@ -156,13 +156,10 @@
                         </div>
                     </div>
 
-                    <form action="{% url 'checkout' %}" method="POST">
-                        {% csrf_token %}
-                        <button type="submit" class="w-full py-4 px-6 bg-slate-900 hover:bg-indigo-600 text-white font-bold rounded-xl text-lg transition-all duration-300 shadow-lg shadow-slate-900/20 hover:shadow-indigo-500/30 flex items-center justify-center gap-2 group">
-                            Proceed to Checkout
-                            <i class="bi bi-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                        </button>
-                    </form>
+                    <a href="{% url 'checkout' %}" class="w-full py-4 px-6 bg-slate-900 hover:bg-indigo-600 text-white font-bold rounded-xl text-lg transition-all duration-300 shadow-lg shadow-slate-900/20 hover:shadow-indigo-500/30 flex items-center justify-center gap-2 group">
+                        Proceed to Checkout
+                        <i class="bi bi-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </a>
 
                     <a href="{% url 'buy' %}" class="block text-center mt-4 text-sm font-semibold text-slate-500 hover:text-indigo-600 transition-colors">
                         <i class="bi bi-arrow-left mr-1"></i> Continue Shopping

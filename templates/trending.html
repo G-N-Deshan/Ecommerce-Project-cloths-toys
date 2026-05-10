@@ -33,7 +33,7 @@
     {% include 'navbar.html' %}
 
     <!-- ═══ TRENDING HERO ═══ -->
-    <section class="relative pt-48 pb-56 bg-slate-900 overflow-hidden">
+    <section class="relative pt-48 pb-64 md:pb-80 bg-slate-900 overflow-hidden">
         <!-- Scrolling Background -->
         <div class="absolute inset-0 z-0 opacity-40 hero-scroll-x" style="background-image: url('/media/backgrounds/hero_trending.png'); background-size: cover;"></div>
         
@@ -41,18 +41,18 @@
             <div class="absolute top-0 left-0 w-64 h-64 bg-indigo-500 rounded-full blur-[120px]"></div>
             <div class="absolute bottom-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[120px]"></div>
         </div>
-        <div class="container mx-auto px-6 relative z-50 text-center">
-            <span class="inline-block px-4 py-1 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full text-xs font-bold uppercase tracking-widest mb-10 animate-pulse">🔥 What's Hot Right Now</span>
-            <h1 class="text-5xl md:text-8xl font-black text-white font-playfair mb-10 leading-tight">Trending Now</h1>
-            <p class="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">Discover the most popular products validated by our community. <br class="hidden md:block"> Curated styles and favorites that are flying off the shelves.</p>
+        <div class="container mx-auto px-6 relative z-50 text-center max-w-5xl">
+            <span class="inline-block px-4 py-1 bg-indigo-500/20 text-indigo-200 border border-indigo-500/30 rounded-full text-xs font-bold uppercase tracking-widest mb-10 animate-pulse shadow-lg shadow-indigo-950/20">🔥 What's Hot Right Now</span>
+            <h1 class="text-5xl md:text-8xl font-black text-white font-playfair mb-8 leading-tight drop-shadow-[0_10px_24px_rgba(0,0,0,0.45)]">Trending Now</h1>
+            <p class="text-slate-100/95 text-lg max-w-2xl mx-auto leading-relaxed drop-shadow-[0_6px_16px_rgba(0,0,0,0.45)]">Discover the most popular products validated by our community. <br class="hidden md:block"> Curated styles and favorites that are flying off the shelves.</p>
         </div>
     </section>
 
     <!-- ═══ TRENDING GRID ═══ -->
-    <section class="relative z-30 -mt-24 pb-24">
+    <section class="relative z-30 -mt-8 md:-mt-12 pb-24">
         <div class="container mx-auto px-6">
             <!-- Filter Chips Shell -->
-            <div class="bg-white rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-4 md:p-6 mb-16 border border-slate-100 flex flex-wrap justify-center gap-3">
+            <div class="bg-white rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-4 md:p-6 mb-16 border border-slate-100 flex flex-wrap justify-center gap-3 relative z-40 mt-6 md:mt-8">
                 <a href="{% url 'trending' %}" class="px-6 py-3 rounded-2xl text-sm font-bold transition-all {% if not current_category %}bg-slate-900 text-white shadow-xl shadow-slate-900/20{% else %}text-slate-500 hover:bg-slate-50 hover:text-indigo-600{% endif %}">
                     All Trends
                 </a>

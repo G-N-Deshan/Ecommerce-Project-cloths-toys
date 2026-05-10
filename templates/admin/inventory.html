@@ -1,0 +1,86 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Inventory Tracking - G11 Admin{% endblock %}
+{% block page_title %}Inventory & Stock{% endblock %}
+
+{% block content %}
+<div class="space-y-10">
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="glass p-6 rounded-[2rem] border-l-8 border-indigo-500">
+            <p class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Total Items In Stock</p>
+            <h3 class="text-3xl font-black text-slate-800">{{ total_stock|default:0 }}</h3>
+        </div>
+        <div class="glass p-6 rounded-[2rem] border-l-8 border-rose-500">
+            <p class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Out of Stock</p>
+            <h3 class="text-3xl font-black text-slate-800">{{ out_of_stock_count|default:0 }}</h3>
+        </div>
+        <div class="glass p-6 rounded-[2rem] border-l-8 border-amber-500">
+            <p class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Low Stock Items</p>
+            <h3 class="text-3xl font-black text-slate-800">{{ low_stock_count|default:0 }}</h3>
+        </div>
+    </div>
+
+    <!-- Inventory Table -->
+    <div class="glass rounded-[2.5rem] overflow-hidden shadow-2xl">
+        <div class="p-8 border-b border-slate-100 flex justify-between items-center">
+            <h3 class="text-xl font-bold text-slate-800">Stock Management</h3>
+            <div class="flex gap-4">
+                <a href="{% url 'custom_admin:inventory_export' %}" class="px-5 py-2.5 bg-slate-900 text-white font-bold rounded-xl hover:bg-indigo-600 transition-all text-sm shadow-lg">
+                    Export Inventory
+                </a>
+            </div>
+        </div>
+        
+        <table class="w-full text-left border-collapse">
+            <thead class="bg-slate-50/50">
+                <tr>
+                    <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-widest">Product</th>
+                    <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-widest">SKU</th>
+                    <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-widest">Type</th>
+                    <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-widest text-center">Stock Level</th>
+                    <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-widest text-center">Threshold</th>
+                    <th class="px-8 py-5"></th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                {% for inv in inventory %}
+                <tr class="hover:bg-slate-50/50 transition-all">
+                    <td class="px-8 py-5">
+                        <span class="font-bold text-slate-800">{{ inv }}</span>
+                    </td>
+                    <td class="px-8 py-5">
+                        <code class="px-2 py-1 bg-slate-100 rounded-md text-xs font-bold text-slate-600">{{ inv.sku|default:"N/A" }}</code>
+                    </td>
+                    <td class="px-8 py-5">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">{{ inv.product_type }}</span>
+                    </td>
+                    <td class="px-8 py-5">
+                        <div class="flex flex-col items-center gap-1.5">
+                            <span class="font-black text-lg {% if inv.stock <= inv.low_stock_threshold %}text-rose-600{% else %}text-slate-800{% endif %}">
+                                {{ inv.stock }}
+                            </span>
+                            <div class="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full {% if inv.stock <= inv.low_stock_threshold %}bg-rose-500{% else %}bg-indigo-500{% endif %}" style="width: {% widthratio inv.stock 100 1 %}%"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-8 py-5 text-center font-bold text-slate-500">
+                        {{ inv.low_stock_threshold }}
+                    </td>
+                    <td class="px-8 py-5 text-right">
+                        <button class="p-2 hover:bg-indigo-50 text-slate-400 hover:text-indigo-600 rounded-lg transition-colors">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="px-8 py-32 text-center text-slate-400 italic font-medium">No inventory data available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,156 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Order #{{ order.order_number }} - G11 Admin{% endblock %}
+{% block page_title %}Order Management{% endblock %}
+
+{% block content %}
+<div class="space-y-8 animate-fade-in">
+    <!-- Breadcrumb & Actions -->
+    <div class="flex justify-between items-center px-2">
+        <div class="flex items-center gap-4">
+            <a href="{% url 'custom_admin:order_list' %}" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white glass text-slate-500 hover:text-indigo-600 transition-colors">
+                <i class="bi bi-chevron-left text-lg"></i>
+            </a>
+            <div>
+                <h3 class="text-2xl font-black text-slate-800">Order #{{ order.order_number }}</h3>
+                <p class="text-sm text-slate-400 font-medium">Placed on {{ order.created_at|date:"F d, Y \a\t H:i" }}</p>
+            </div>
+        </div>
+        <div class="flex gap-3">
+            <a href="{% url 'custom_admin:order_invoice' order.id %}" target="_blank" class="px-5 py-2.5 bg-white text-slate-700 font-bold rounded-xl glass hover:bg-slate-50 transition-all flex items-center gap-2">
+                <i class="bi bi-printer"></i> Print Invoice
+            </a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Main Info -->
+        <div class="lg:col-span-2 space-y-8">
+            <!-- Order Items -->
+            <div class="glass rounded-[2.5rem] p-8 shadow-xl">
+                <h4 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-3">
+                    <i class="bi bi-box-seam text-indigo-600"></i> Order Items
+                </h4>
+                <div class="divide-y divide-slate-100">
+                    {% for item in order.items.all %}
+                    <div class="py-6 flex items-center justify-between group">
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 font-black">
+                                IMG
+                            </div>
+                            <div>
+                                <p class="font-bold text-slate-800">{{ item.item_name }}</p>
+                                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">{{ item.item_type }} &bull; Qty: {{ item.quantity }}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-black text-slate-900">Rs {{ item.subtotal }}</p>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Rs {{ item.price }} / unit</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="mt-8 pt-8 border-t border-slate-100 space-y-3">
+                    <div class="flex justify-between text-slate-500 font-semibold">
+                        <span>Subtotal</span>
+                        <span>Rs {{ order.subtotal }}</span>
+                    </div>
+                    <div class="flex justify-between text-slate-500 font-semibold">
+                        <span>Shipping</span>
+                        <span>Rs {{ order.shipping }}</span>
+                    </div>
+                    <div class="flex justify-between text-indigo-600 text-xl font-black pt-4">
+                        <span>Grand Total</span>
+                        <span>Rs {{ order.total }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Info -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass rounded-[2rem] p-8 shadow-lg">
+                    <h4 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-6">Customer Details</h4>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black">
+                            {{ order.full_name|slice:":1" }}
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-800 text-lg">{{ order.full_name }}</p>
+                            <p class="text-xs text-slate-500 font-medium">{{ order.email }}</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 text-sm text-slate-600">
+                            <i class="bi bi-telephone text-indigo-600"></i>
+                            <span class="font-semibold">{{ order.phone }}</span>
+                        </div>
+                        <div class="flex items-start gap-3 text-sm text-slate-600">
+                            <i class="bi bi-geo-alt text-indigo-600 mt-1"></i>
+                            <span class="font-medium">{{ order.address }}, {{ order.city }}, {{ order.postal_code }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass rounded-[2rem] p-8 shadow-lg">
+                    <h4 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-6">Payment Method</h4>
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                            <i class="bi bi-credit-card-2-front text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-800 text-lg capitalize">{{ order.payment_method }}</p>
+                            <p class="text-xs text-slate-500 font-medium">Transaction ID: {{ order.order_number }}</p>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 flex items-center gap-3">
+                        <i class="bi bi-check-circle-fill text-emerald-600 text-xl"></i>
+                        <span class="text-emerald-700 font-bold text-sm">Payment Verified</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Actions -->
+        <div class="space-y-8">
+            <!-- Status Update Card -->
+            <div class="glass rounded-[2rem] p-8 shadow-xl border-t-4 {% if order.status == 'delivered' %}border-emerald-500{% elif order.status == 'cancelled' %}border-rose-500{% else %}border-indigo-500{% endif %}">
+                <h4 class="text-lg font-bold text-slate-800 mb-6">Manage Status</h4>
+                <form action="{% url 'custom_admin:order_status_update' order.id %}" method="POST" class="space-y-6">
+                    {% csrf_token %}
+                    <div class="space-y-3">
+                        <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Current Status</label>
+                        <select name="status" class="w-full px-5 py-3 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-500 font-bold text-slate-700 transition-all">
+                            <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
+                            <option value="processing" {% if order.status == 'processing' %}selected{% endif %}>Processing</option>
+                            <option value="shipped" {% if order.status == 'shipped' %}selected{% endif %}>Shipped</option>
+                            <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Delivered</option>
+                            <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full py-4 bg-slate-900 text-white font-black rounded-2xl hover:bg-indigo-600 transition-all shadow-lg active:scale-95">
+                        Update Status
+                    </button>
+                </form>
+            </div>
+
+            <!-- Notes or History -->
+            <div class="glass rounded-[2rem] p-8 shadow-lg">
+                <h4 class="text-lg font-bold text-slate-800 mb-6">Order Activity</h4>
+                <div class="space-y-6 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-100">
+                    <div class="relative pl-10">
+                        <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-indigo-500 border-4 border-white shadow-sm"></div>
+                        <p class="text-sm font-bold text-slate-800">Order Shipped</p>
+                        <p class="text-[10px] text-slate-400">May 10, 2026 at 09:45 AM</p>
+                    </div>
+                    <div class="relative pl-10">
+                        <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-slate-200 border-4 border-white shadow-sm"></div>
+                        <p class="text-sm font-bold text-slate-400">Payment Confirmed</p>
+                        <p class="text-[10px] text-slate-400">May 09, 2026 at 10:12 PM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

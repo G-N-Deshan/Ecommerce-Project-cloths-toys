@@ -495,7 +495,7 @@
                     Rs {{ product_display_price }}
                 </div>
             </div>
-            <button {% if product.inventory and product.inventory.stock <=0 %} disabled
+            <button {% if product.inventory and product.inventory.stock <= 0 %} disabled
                 style="background:#cbd5e1;color:#64748b;font-weight:700;padding:10px 28px;border-radius:50px;border:none;cursor:not-allowed;font-size:0.9rem;white-space:nowrap;">
                 Out of Stock
                 {% else %}
@@ -903,8 +903,7 @@
                 {% endif %}
 
                 <!-- Specifications grid -->
-                {% if material or sizes_available or colors_available or dimensions or care_instructions or safety_info
-                %}
+                {% if material or sizes_available or colors_available or dimensions or care_instructions or safety_info %}
                 <div class="mb-8">
                     <h3 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
                         <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1005,8 +1004,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                         <!-- Left: big number -->
                         <div class="flex flex-col items-center justify-center text-center">
-                            <span class="text-6xl font-bold text-slate-900">{% if avg_rating %}{{ avg_rating }}{% else
-                                %}0{% endif %}</span>
+                            <span class="text-6xl font-bold text-slate-900">{% if avg_rating %}{{ avg_rating }}{% else %}0{% endif %}</span>
                             <div class="flex gap-1 my-3">
                                 {% for i in "12345" %}
                                 {% if forloop.counter <= avg_rating %} <svg class="w-6 h-6 text-amber-400"
@@ -1110,8 +1108,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-slate-700 mb-1">Your Name *</label>
-                                <input type="text" name="reviewer_name" required {% if request.user.is_authenticated
-                                    %}value="{{ request.user.get_full_name|default:request.user.username }}" {% endif %}
+                                <input type="text" name="reviewer_name" required {% if request.user.is_authenticated %}value="{{ request.user.get_full_name|default:request.user.username }}" {% endif %}
                                     class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 outline-none transition-all">
                             </div>
                             <div>

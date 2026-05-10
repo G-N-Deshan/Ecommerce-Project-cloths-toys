@@ -136,7 +136,7 @@
                             <div class="sm:col-span-2">
                                 <label class="block text-sm font-semibold text-slate-700 mb-1.5">Full Name <span class="text-red-500">*</span></label>
                                 <div class="relative">
-                                    <input type="text" name="full_name" id="full_name" required class="form-input" placeholder="John Doe" value="{{ post_data.full_name|default:last_order.full_name|default:request.user.get_full_name|default:request.user.username }}">
+                                    <input type="text" name="full_name" id="full_name" required class="form-input" placeholder="John Doe" value="{% if post_data.full_name %}{{ post_data.full_name }}{% elif last_order.full_name %}{{ last_order.full_name }}{% elif user.is_authenticated %}{{ user.get_full_name|default:user.username }}{% endif %}">
                                     <i class="bi bi-person form-icon"></i>
                                 </div>
                                 <div class="field-error-msg">Full name is required.</div>
@@ -145,7 +145,7 @@
                             <div>
                                 <label class="block text-sm font-semibold text-slate-700 mb-1.5">Email Address <span class="text-red-500">*</span></label>
                                 <div class="relative">
-                                    <input type="email" name="email" id="email" required class="form-input" placeholder="john@example.com" value="{{ post_data.email|default:last_order.email|default:request.user.email }}">
+                                    <input type="email" name="email" id="email" required class="form-input" placeholder="john@example.com" value="{% if post_data.email %}{{ post_data.email }}{% elif last_order.email %}{{ last_order.email }}{% elif user.is_authenticated %}{{ user.email }}{% endif %}">
                                     <i class="bi bi-envelope form-icon"></i>
                                 </div>
                                 <div class="field-error-msg">Valid email is required.</div>
@@ -154,7 +154,7 @@
                             <div>
                                 <label class="block text-sm font-semibold text-slate-700 mb-1.5">Phone Number <span class="text-red-500">*</span></label>
                                 <div class="relative">
-                                    <input type="tel" name="phone" id="phone" required class="form-input" placeholder="+94 76 244 0558" value="{{ post_data.phone|default:last_order.phone }}">
+                                    <input type="tel" name="phone" id="phone" required class="form-input" placeholder="+94 76 244 0558" value="{% if post_data.phone %}{{ post_data.phone }}{% elif last_order.phone %}{{ last_order.phone }}{% endif %}">
                                     <i class="bi bi-telephone form-icon"></i>
                                 </div>
                                 <div class="field-error-msg">Phone number is required.</div>
@@ -163,7 +163,7 @@
                             <div class="sm:col-span-2">
                                 <label class="block text-sm font-semibold text-slate-700 mb-1.5">Street Address <span class="text-red-500">*</span></label>
                                 <div class="relative">
-                                    <input type="text" name="address" id="address" required class="form-input" placeholder="123 Main St, Apt 4B" value="{{ post_data.address|default:last_order.address }}">
+                                    <input type="text" name="address" id="address" required class="form-input" placeholder="123 Main St, Apt 4B" value="{% if post_data.address %}{{ post_data.address }}{% elif last_order.address %}{{ last_order.address }}{% endif %}">
                                     <i class="bi bi-house form-icon"></i>
                                 </div>
                                 <div class="field-error-msg">Address is required.</div>
@@ -172,7 +172,7 @@
                             <div>
                                 <label class="block text-sm font-semibold text-slate-700 mb-1.5">City <span class="text-red-500">*</span></label>
                                 <div class="relative">
-                                    <input type="text" name="city" id="city" required class="form-input" placeholder="Colombo" value="{{ post_data.city|default:last_order.city }}">
+                                    <input type="text" name="city" id="city" required class="form-input" placeholder="Colombo" value="{% if post_data.city %}{{ post_data.city }}{% elif last_order.city %}{{ last_order.city }}{% endif %}">
                                     <i class="bi bi-building form-icon"></i>
                                 </div>
                                 <div class="field-error-msg">City is required.</div>
@@ -181,7 +181,7 @@
                             <div>
                                 <label class="block text-sm font-semibold text-slate-700 mb-1.5">Postal Code <span class="text-red-500">*</span></label>
                                 <div class="relative">
-                                    <input type="text" name="postal_code" id="postal_code" required class="form-input" placeholder="10001" value="{{ post_data.postal_code|default:last_order.postal_code }}">
+                                    <input type="text" name="postal_code" id="postal_code" required class="form-input" placeholder="10001" value="{% if post_data.postal_code %}{{ post_data.postal_code }}{% elif last_order.postal_code %}{{ last_order.postal_code }}{% endif %}">
                                     <i class="bi bi-mailbox form-icon"></i>
                                 </div>
                                 <div class="field-error-msg">Postal code is required.</div>
@@ -190,7 +190,7 @@
                             <div class="sm:col-span-2">
                                 <label class="block text-sm font-semibold text-slate-700 mb-1.5">Country <span class="text-red-500">*</span></label>
                                 <div class="relative">
-                                    <input type="text" name="country" id="country" required class="form-input" placeholder="United States" value="{{ post_data.country|default:last_order.country|default:'Sri Lanka' }}">
+                                    <input type="text" name="country" id="country" required class="form-input" placeholder="United States" value="{% if post_data.country %}{{ post_data.country }}{% elif last_order.country %}{{ last_order.country }}{% else %}Sri Lanka{% endif %}">
                                     <i class="bi bi-globe2 form-icon"></i>
                                 </div>
                                 <div class="field-error-msg">Country is required.</div>
@@ -358,6 +358,11 @@
             const dotStripe = document.getElementById('dotStripe');
             const circleStripe = document.getElementById('circleStripe');
             const btnText = document.getElementById('btnText');
+            const stripeSection = document.getElementById('stripeSection');
+            const mainSubmitBtn = document.getElementById('mainSubmitBtn');
+            const stripeSpinner = document.getElementById('stripeSpinner');
+            const overlay = document.getElementById('loaderOverlay');
+            const initialPaymentMethod = "{{ payment_method|default:'cash_on_delivery' }}";
 
             function selectPayment(method) {
                 if (method === 'cod') {
@@ -385,12 +390,54 @@
                 }
             }
 
+            function collectPaymentPayload() {
+                return {
+                    full_name: document.getElementById('full_name').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    phone: document.getElementById('phone').value.trim(),
+                    address: document.getElementById('address').value.trim(),
+                    city: document.getElementById('city').value.trim(),
+                    postal_code: document.getElementById('postal_code').value.trim(),
+                    country: document.getElementById('country').value.trim(),
+                    coupon_code: document.getElementById('coupon_code') ? document.getElementById('coupon_code').value.trim() : '',
+                };
+            }
+
+            async function handleStripePay() {
+                if (stripeSpinner) stripeSpinner.style.display = 'inline-block';
+                if (overlay) overlay.style.display = 'flex';
+                if (mainSubmitBtn) mainSubmitBtn.disabled = true;
+
+                try {
+                    const payload = collectPaymentPayload();
+                    const response = await fetch('{% url "create_checkout_session" %}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const data = await response.json();
+                    if (!response.ok || !data.url) {
+                        throw new Error(data.error || 'Unable to start card payment.');
+                    }
+
+                    window.location.href = data.url;
+                } catch (error) {
+                    if (overlay) overlay.style.display = 'none';
+                    if (stripeSpinner) stripeSpinner.style.display = 'none';
+                    if (mainSubmitBtn) mainSubmitBtn.disabled = false;
+                    alert(error.message || 'Unable to start card payment.');
+                }
+            }
+
             codCard.addEventListener('click', () => selectPayment('cod'));
             stripeCard.addEventListener('click', () => selectPayment('stripe'));
 
             // Real-time Validation & Submission
             const form = document.getElementById('checkoutForm');
-            const overlay = document.getElementById('loaderOverlay');
             let isSubmitting = false;
 
             const requiredFields = ['full_name', 'email', 'phone', 'address', 'city', 'postal_code', 'country'];
@@ -427,11 +474,23 @@
                     return;
                 }
 
+                if (stripeRadio.checked) {
+                    e.preventDefault();
+                    isSubmitting = true;
+                    handleStripePay();
+                    return;
+                }
+
                 // If valid, show loader and lock form
                 isSubmitting = true;
                 overlay.style.display = 'flex';
                 // Allow normal form submission to proceed
             });
+
+            if (initialPaymentMethod === 'card') {
+                selectPayment('stripe');
+                handleStripePay();
+            }
 
             // Coupon Logic
             const applyBtn = document.getElementById('applyCouponBtn');
