@@ -23039,3 +23039,27 @@ INFO 2026-05-11 22:19:06,532 autoreload 7852 32128 Watching for file changes wit
 INFO 2026-05-11 22:19:06,555 autoreload 16856 25360 Watching for file changes with StatReloader
 INFO 2026-05-11 22:19:06,877 autoreload 32136 32388 Watching for file changes with StatReloader
 INFO 2026-05-11 22:19:07,059 autoreload 24256 16788 Watching for file changes with StatReloader
+INFO 2026-05-11 22:31:15,127 autoreload 33360 2640 C:\Users\nipun\Desktop\Ecommerce project\myproject\settings.py changed, reloading.
+
+INFO 2026-05-11 22:31:15,144 autoreload 7852 32128 C:\Users\nipun\Desktop\Ecommerce project\myproject\settings.py changed, reloading.
+INFO 2026-05-11 22:31:15,154 autoreload 24256 16788 C:\Users\nipun\Desktop\Ecommerce project\myproject\settings.py changed, reloading.
+INFO 2026-05-11 22:31:15,352 autoreload 16856 25360 C:\Users\nipun\Desktop\Ecommerce project\myproject\settings.py changed, reloading.
+INFO 2026-05-11 22:31:15,363 autoreload 14308 8756 C:\Users\nipun\Desktop\Ecommerce project\myproject\settings.py changed, reloading.
+INFO 2026-05-11 22:31:17,396 autoreload 25724 30276 Watching for file changes with StatReloader
+INFO 2026-05-11 22:31:17,416 autoreload 24516 20352 Watching for file changes with StatReloader
+INFO 2026-05-11 22:31:17,416 autoreload 30568 32648 Watching for file changes with StatReloader
+INFO 2026-05-11 22:31:17,422 autoreload 26900 26132 Watching for file changes with StatReloader
+INFO 2026-05-11 22:31:18,074 autoreload 22228 13064 Watching for file changes with StatReloader
+INFO 2026-05-11 22:31:18,075 autoreload 32412 32324 Watching for file changes with StatReloader
+INFO 2026-05-11 22:31:58,521 autoreload 22228 13064 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 22:31:58,527 autoreload 32412 32324 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 22:31:59,314 autoreload 25724 30276 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 22:31:59,411 autoreload 24516 20352 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 22:31:59,454 autoreload 26900 26132 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 22:31:59,493 autoreload 30568 32648 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 22:32:00,571 autoreload 33516 28396 Watching for file changes with StatReloader
+INFO 2026-05-11 22:32:00,590 autoreload 25376 16280 Watching for file changes with StatReloader
+INFO 2026-05-11 22:32:01,207 autoreload 15916 9392 Watching for file changes with StatReloader
+INFO 2026-05-11 22:32:01,527 autoreload 32996 21112 Watching for file changes with StatReloader
+INFO 2026-05-11 22:32:01,547 autoreload 26884 29264 Watching for file changes with StatReloader
+INFO 2026-05-11 22:32:01,563 autoreload 30884 32792 Watching for file changes with StatReloader

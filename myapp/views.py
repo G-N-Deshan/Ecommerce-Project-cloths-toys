@@ -3819,38 +3819,39 @@ def stripe_webhook(request):
 
 
 def _send_order_confirmation_email(order, request=None):
-    """Send a rich HTML order confirmation email."""
-    try:
-        from django.utils.html import strip_tags
-        subject = f'KidZone Order Confirmed — {order.order_number}'
-        
-        tracking_url = f"/order-tracking/{order.order_number}/"
-        if request:
-            tracking_url = request.build_absolute_uri(tracking_url)
-        
-        # Context for the template
-        context = {
-            'order': order,
-            'items': order.items.all(),
-            'tracking_url': tracking_url,
-        }
-        
-        # Render HTML template
-        html_message = render_to_string('emails/order_confirmation.html', context)
-        
-        # Fallback plain text
-        plain_message = strip_tags(html_message)
-        
-        send_mail(
-            subject=subject,
-            message=plain_message,
-            from_email=django_settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[order.email],
-            fail_silently=True,
-            html_message=html_message
-        )
-    except Exception as e:
-        print(f"Failed to send order confirmation email: {e}")
+    """Send a rich HTML order confirmation email in a background thread."""
+    import threading
+    def send_email_thread():
+        try:
+            from django.utils.html import strip_tags
+            subject = f'KidZone Order Confirmed — {order.order_number}'
+            
+            tracking_url = f"/order-tracking/{order.order_number}/"
+            if request:
+                tracking_url = request.build_absolute_uri(tracking_url)
+            
+            context = {
+                'order': order,
+                'items': order.items.all(),
+                'tracking_url': tracking_url,
+            }
+            
+            html_message = render_to_string('emails/order_confirmation.html', context)
+            plain_message = strip_tags(html_message)
+            
+            send_mail(
+                subject=subject,
+                message=plain_message,
+                from_email=django_settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[order.email],
+                fail_silently=True,
+                html_message=html_message
+            )
+        except Exception as e:
+            print(f"Background email error: {e}")
+
+    # Launch in a background thread to prevent blocking the checkout UI
+    threading.Thread(target=send_email_thread, daemon=True).start()
 
 
 # ══════════════════════════════════════════════════════

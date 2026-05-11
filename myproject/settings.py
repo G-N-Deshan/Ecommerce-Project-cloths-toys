@@ -190,6 +190,7 @@ if EMAIL_HOST_USER_CONFIG and EMAIL_HOST_PASSWORD_CONFIG:
     EMAIL_USE_TLS = True
     EMAIL_HOST_USER = EMAIL_HOST_USER_CONFIG
     EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD_CONFIG
+    EMAIL_TIMEOUT = 10  # 10 second timeout to prevent hanging the checkout process
 else:
     # Fallback: print emails to console (dev with no credentials)
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
