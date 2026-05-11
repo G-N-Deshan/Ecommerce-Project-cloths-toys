@@ -3721,8 +3721,12 @@ def _finalize_order_from_stripe_session(session, user, cart, request=None):
     # Send order confirmation email
     _send_order_confirmation_email(order, request)
 
-    # Clear cart
+    # Clear cart (Database + Session)
     cart.items.all().delete()
+    if request and hasattr(request, 'session'):
+        if 'cart_id' in request.session:
+            del request.session['cart_id']
+        request.session.modified = True
     return order
 
 
@@ -3747,9 +3751,12 @@ def payment_success(request):
     # Idempotency: Check if order already exists for this session before finalizing
     existing_order = Order.objects.filter(tracking_number=session.id).first()
     if existing_order:
-        # Ensure cart is cleared even on refresh/duplicate visit
+        # Hard-clear the cart (Database + Session)
         cart = get_or_create_cart(request)
         cart.items.all().delete()
+        if 'cart_id' in request.session:
+            del request.session['cart_id']
+        request.session.modified = True
         return redirect('order_success', order_number=existing_order.order_number)
 
     # Try to recover user from metadata if logged out
