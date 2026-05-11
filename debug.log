@@ -22704,3 +22704,12 @@ INFO 2026-05-11 17:16:01,457 autoreload 27296 26728 Watching for file changes wi
 INFO 2026-05-11 17:32:33,988 autoreload 27296 26728 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
 INFO 2026-05-11 17:32:35,667 autoreload 24904 18036 Watching for file changes with StatReloader
 INFO 2026-05-11 17:34:58,872 autoreload 8948 4220 Watching for file changes with StatReloader
+ERROR 2026-05-11 17:35:02,553 middleware 8948 20284 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_men.png” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_men.png” does not exist
+WARNING 2026-05-11 17:35:02,625 log 8948 20284 Not Found: /media/backgrounds/hero_men.png
+WARNING 2026-05-11 17:35:03,324 log 8948 20284 Not Found: /favicon.ico
