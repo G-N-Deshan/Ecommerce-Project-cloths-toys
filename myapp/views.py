@@ -193,7 +193,7 @@ def redeem_loyalty_points(request):
 @csrf_exempt
 @require_POST
 def ai_chat(request):
-    """Smart Concierge AI Assistant Logic via Gemini API"""
+    """Smart Concierge AI Assistant Logic via Groq API (Free)"""
     try:
         data = json.loads(request.body)
         query = data.get('message', '').strip()
@@ -201,31 +201,36 @@ def ai_chat(request):
         if not query:
             return JsonResponse({'message': "I'm your G11 shopping assistant! How can I help you today?"})
 
-        api_key = django_settings.GEMINI_API_KEY.strip()
+        api_key = django_settings.GROQ_API_KEY.strip()
         if not api_key:
-            return JsonResponse({'message': "I'm currently running in basic mode because my AI brain (API key) isn't configured yet! Check out our New Arrivals in the meantime.", 'products': []})
+            return JsonResponse({'message': "I'm currently running in basic mode because my AI brain (Groq API key) isn't configured yet! Please check back soon.", 'products': []})
             
         import urllib.request
         
-        api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+        # Groq uses an OpenAI-compatible endpoint
+        api_url = "https://api.groq.com/openai/v1/chat/completions"
         
         prompt = f"""You are a helpful and friendly ecommerce assistant for G11 Fashion & Toys, a store selling kids clothes, men's clothes, women's clothes, and toys.
     The user says: "{query}"
 
-Analyze the request and return ONLY a valid JSON object matching this exact structure (no markdown blocks like ```json):
+Analyze the request and return ONLY a valid JSON object matching this exact structure:
 {{
-    "message": "Your friendly, conversational response to the user. Use emojis! Keep it short and helpful. Be conversational.",
+    "message": "Your friendly, conversational response to the user. Use emojis! Keep it short and helpful.",
     "search_params": {{
-        "keywords": ["list", "of", "search", "keywords", "if", "they", "are", "looking", "for", "specific", "items"],
+        "keywords": ["list", "of", "search", "keywords"],
         "category": "Identify if they want 'men', 'women', 'kids-men', 'kids-girl', 'toy', or null if unspecified",
-        "age_mentions": ["list", "of", "numbers", "if", "they", "mention", "age", "like", "5"]
+        "age_mentions": ["list", "of", "numbers"]
     }}
 }}"""
         
         payload = {
-            "contents": [{
-                "parts": [{"text": prompt}]
-            }]
+            "model": "llama-3.1-8b-instant",
+            "messages": [
+                {"role": "system", "content": "You are a helpful ecommerce assistant. Always respond in valid JSON format."},
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.5,
+            "response_format": {"type": "json_object"}
         }
         
         ai_data = None
@@ -234,13 +239,18 @@ Analyze the request and return ONLY a valid JSON object matching this exact stru
             req = urllib.request.Request(
                 api_url,
                 data=json.dumps(payload).encode('utf-8'),
-                headers={'Content-Type': 'application/json'}
+                headers={
+                    'Content-Type': 'application/json',
+                    'Authorization': f'Bearer {api_key}',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                }
             )
 
             with urllib.request.urlopen(req) as response:
                 result = json.loads(response.read().decode('utf-8'))
-                response_text = result['candidates'][0]['content']['parts'][0]['text'].strip()
+                response_text = result['choices'][0]['message']['content'].strip()
 
+            # Clean markdown if model ignores response_format
             if response_text.startswith('```json'):
                 response_text = response_text[7:]
             if response_text.startswith('```'):
@@ -248,11 +258,9 @@ Analyze the request and return ONLY a valid JSON object matching this exact stru
             if response_text.endswith('```'):
                 response_text = response_text[:-3]
 
-            try:
-                ai_data = json.loads(response_text.strip())
-            except json.JSONDecodeError:
-                ai_data = None
-        except Exception:
+            ai_data = json.loads(response_text.strip())
+        except Exception as e:
+            print(f"Groq API Error: {e}")
             ai_data = None
 
         if not ai_data:

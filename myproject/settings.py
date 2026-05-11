@@ -205,6 +205,9 @@ STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET', default='whsec_placehold
 # ── Google Gemini AI ──────────────────────────────────
 GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
 
+# ── Groq AI (Free) ──────────────────────────────────
+GROQ_API_KEY = config('GROQ_API_KEY', default='')
+
 # ── REST Framework ────────────────────────────────────
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
