@@ -22941,3 +22941,15 @@ INFO 2026-05-11 19:46:26,161 _util 28028 31516 message='Request to Stripe api' m
 INFO 2026-05-11 19:46:27,602 _util 28028 31516 message='Stripe API response' path=https://api.stripe.com/v1/checkout/sessions response_code=200
 INFO 2026-05-11 19:46:59,860 _util 28028 31516 message='Request to Stripe api' method=get url=https://api.stripe.com/v1/checkout/sessions/cs_test_b1JCW7bnjqDz3XumBblvcpWBL3lJvzJT0tRNz7zCtlEOdgGs36jHEYZfgi
 INFO 2026-05-11 19:47:00,260 _util 28028 31516 message='Stripe API response' path=https://api.stripe.com/v1/checkout/sessions/cs_test_b1JCW7bnjqDz3XumBblvcpWBL3lJvzJT0tRNz7zCtlEOdgGs36jHEYZfgi response_code=200
+INFO 2026-05-11 21:23:32,109 autoreload 3340 26348 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 21:23:32,110 autoreload 1672 25804 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 21:23:32,326 autoreload 10020 17768 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 21:23:32,376 autoreload 21540 31708 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 21:23:32,380 autoreload 30616 23236 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 21:23:32,405 autoreload 28028 27588 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 21:23:34,410 autoreload 16788 12228 Watching for file changes with StatReloader
+INFO 2026-05-11 21:23:34,410 autoreload 26008 31712 Watching for file changes with StatReloader
+INFO 2026-05-11 21:23:34,568 autoreload 14824 436 Watching for file changes with StatReloader
+INFO 2026-05-11 21:23:34,912 autoreload 8592 16820 Watching for file changes with StatReloader
+INFO 2026-05-11 21:23:35,420 autoreload 25068 30424 Watching for file changes with StatReloader
+INFO 2026-05-11 21:23:35,420 autoreload 27840 8036 Watching for file changes with StatReloader

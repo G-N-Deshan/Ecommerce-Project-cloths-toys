@@ -3744,6 +3744,11 @@ def payment_success(request):
         messages.error(request, 'Payment was not completed.')
         return redirect('payment_page')
 
+    # Idempotency: Check if order already exists for this session before finalizing
+    existing_order = Order.objects.filter(tracking_number=session.id).first()
+    if existing_order:
+        return redirect('order_success', order_number=existing_order.order_number)
+
     # Try to recover user from metadata if logged out
     user = request.user
     if not user.is_authenticated:
