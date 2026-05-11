@@ -22885,3 +22885,46 @@ Traceback (most recent call last):
     raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
 django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_toys.png” does not exist
 WARNING 2026-05-11 18:31:04,017 log 17080 14900 Not Found: /media/backgrounds/hero_toys.png
+WARNING 2026-05-11 18:36:58,100 log 17080 29308 Not Found: /favicon.ico
+WARNING 2026-05-11 19:15:03,849 log 17080 30136 Not Found: /favicon.ico
+WARNING 2026-05-11 19:17:45,883 log 17080 16992 Not Found: /favicon.ico
+WARNING 2026-05-11 19:23:40,714 log 17080 5000 Not Found: /favicon.ico
+WARNING 2026-05-11 19:23:43,912 log 17080 13128 Not Found: /favicon.ico
+ERROR 2026-05-11 19:27:51,856 middleware 17080 13128 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_men.png” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_men.png” does not exist
+WARNING 2026-05-11 19:27:51,888 log 17080 13128 Not Found: /media/backgrounds/hero_men.png
+INFO 2026-05-11 19:28:01,135 _util 17080 13128 message='Request to Stripe api' method=post url=https://api.stripe.com/v1/checkout/sessions
+INFO 2026-05-11 19:28:02,934 _util 17080 13128 message='Stripe API response' path=https://api.stripe.com/v1/checkout/sessions response_code=200
+INFO 2026-05-11 19:29:23,685 _util 17080 13128 message='Request to Stripe api' method=get url=https://api.stripe.com/v1/checkout/sessions/cs_test_b1W5SYnyqfj7drfB7tpZRwXv9HUKUPmXJgmTbX491QdcMvvZKVbvyKIDJ5
+INFO 2026-05-11 19:29:27,626 _util 17080 13128 message='Stripe API response' path=https://api.stripe.com/v1/checkout/sessions/cs_test_b1W5SYnyqfj7drfB7tpZRwXv9HUKUPmXJgmTbX491QdcMvvZKVbvyKIDJ5 response_code=200
+WARNING 2026-05-11 19:35:34,512 log 17080 8156 Not Found: /favicon.ico
+INFO 2026-05-11 19:44:06,435 autoreload 18712 2676 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 19:44:06,523 autoreload 17080 21852 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 19:44:06,898 autoreload 1608 11376 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 19:44:07,449 autoreload 26684 13448 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 19:44:07,618 autoreload 29152 17940 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 19:44:07,624 autoreload 29504 18832 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 19:44:09,713 autoreload 20052 29976 Watching for file changes with StatReloader
+INFO 2026-05-11 19:44:09,714 autoreload 30380 26248 Watching for file changes with StatReloader
+INFO 2026-05-11 19:44:09,754 autoreload 25388 14028 Watching for file changes with StatReloader
+INFO 2026-05-11 19:44:10,342 autoreload 28972 24372 Watching for file changes with StatReloader
+INFO 2026-05-11 19:44:11,543 autoreload 9220 19100 Watching for file changes with StatReloader
+INFO 2026-05-11 19:44:11,544 autoreload 17440 11836 Watching for file changes with StatReloader
+INFO 2026-05-11 19:44:40,383 autoreload 20052 29976 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 19:44:40,391 autoreload 30380 26248 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 19:44:41,095 autoreload 17440 11836 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 19:44:41,117 autoreload 9220 19100 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 19:44:41,141 autoreload 25388 14028 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 19:44:41,156 autoreload 28972 24372 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-11 19:44:42,578 autoreload 28028 27588 Watching for file changes with StatReloader
+INFO 2026-05-11 19:44:42,587 autoreload 3340 26348 Watching for file changes with StatReloader
+INFO 2026-05-11 19:44:43,681 autoreload 1300 13624 Watching for file changes with StatReloader
+INFO 2026-05-11 19:44:43,860 autoreload 1672 25804 Watching for file changes with StatReloader
+INFO 2026-05-11 19:44:44,463 autoreload 21540 31708 Watching for file changes with StatReloader
+INFO 2026-05-11 19:44:44,473 autoreload 30616 23236 Watching for file changes with StatReloader
+INFO 2026-05-11 19:45:53,725 autoreload 10020 17768 Watching for file changes with StatReloader

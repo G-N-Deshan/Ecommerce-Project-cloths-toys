@@ -3642,9 +3642,16 @@ def _finalize_order_from_stripe_session(session, user, cart, request=None):
 
     # Convert StripeObject to dict using .to_dict() to avoid AttributeError on .get()
     metadata = (session.metadata or {}).to_dict()
+    # Handle potentially unauthenticated user (AnonymousUser has no username)
+    user_name = "Guest"
+    user_email = ""
+    if user and user.is_authenticated:
+        user_name = user.get_full_name() or user.username
+        user_email = user.email
+
     shipping_info = {
-        'full_name': metadata.get('shipping_full_name', user.get_full_name() or user.username),
-        'email': metadata.get('shipping_email', user.email),
+        'full_name': metadata.get('shipping_full_name', user_name),
+        'email': metadata.get('shipping_email', user_email),
         'phone': metadata.get('shipping_phone', ''),
         'address': metadata.get('shipping_address', ''),
         'city': metadata.get('shipping_city', ''),
@@ -3737,8 +3744,19 @@ def payment_success(request):
         messages.error(request, 'Payment was not completed.')
         return redirect('payment_page')
 
+    # Try to recover user from metadata if logged out
+    user = request.user
+    if not user.is_authenticated:
+        metadata = (session.metadata or {}).to_dict()
+        user_id = metadata.get('user_id')
+        if user_id:
+            try:
+                user = User.objects.get(id=user_id)
+            except User.DoesNotExist:
+                pass
+
     cart = get_or_create_cart(request)
-    order = _finalize_order_from_stripe_session(session, request.user, cart, request)
+    order = _finalize_order_from_stripe_session(session, user, cart, request)
     
     messages.success(request, f'Payment successful! Order {order.order_number} placed.')
     return redirect('order_success', order_number=order.order_number)
