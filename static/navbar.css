@@ -1,4 +1,4 @@
-@import url("cart.css");
+/* Premium Navbar & Cart Styles */
 
 :root {
     --navbar-primary: #4f46e5;
@@ -1004,4 +1004,123 @@ body {
 #liveSearchResults::-webkit-scrollbar-thumb {
     background: #e2e8f0;
     border-radius: 3px;
+}
+
+/* ═══ Premium Floating Cart Icon ═══ */
+
+.cart-floating-wrapper {
+    position: fixed;
+    top: 12rem;
+    right: 2.5rem;
+    z-index: 2000;
+    pointer-events: none;
+}
+
+.cart-floating-btn {
+    pointer-events: auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+    text-decoration: none;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 50%;
+}
+
+.cart-glass-bg {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1.5px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    box-shadow: 
+        0 12px 35px rgba(0, 0, 0, 0.12),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    z-index: -1;
+    transition: all 0.4s ease;
+}
+
+.cart-main-icon {
+    font-size: 1.8rem;
+    color: #1e293b;
+    transition: all 0.4s ease;
+}
+
+.cart-floating-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #6366f1;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 900;
+    min-width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center;
+    line-height: 1;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.5);
+    border: 2px solid #ffffff;
+    z-index: 10;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    padding: 0;
+    margin: 0;
+}
+
+.cart-floating-btn:hover {
+    transform: scale(1.12) translateY(-8px);
+}
+
+.cart-floating-btn:hover .cart-glass-bg {
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.18);
+    border-color: #ffffff;
+}
+
+.cart-floating-btn:hover .cart-main-icon {
+    transform: rotate(-12deg) scale(1.1);
+    color: #6366f1;
+}
+
+.cart-floating-btn:active {
+    transform: scale(0.95);
+}
+
+.cart-floating-badge {
+    animation: badgePop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes badgePop {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+}
+
+@media (max-width: 768px) {
+    .cart-floating-wrapper {
+        top: auto;
+        bottom: 2.5rem;
+        right: 1.5rem;
+    }
+    
+    .cart-floating-btn {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .cart-main-icon {
+        font-size: 1.6rem;
+    }
+    
+    .cart-floating-badge {
+        min-width: 24px;
+        height: 24px;
+        font-size: 0.75rem;
+    }
 }
