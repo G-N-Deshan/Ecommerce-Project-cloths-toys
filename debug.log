@@ -22797,3 +22797,32 @@ INFO 2026-05-11 18:01:18,730 autoreload 1608 11376 Watching for file changes wit
 INFO 2026-05-11 18:01:19,239 autoreload 18712 2676 Watching for file changes with StatReloader
 INFO 2026-05-11 18:01:19,816 autoreload 29152 17940 Watching for file changes with StatReloader
 INFO 2026-05-11 18:01:19,844 autoreload 29504 18832 Watching for file changes with StatReloader
+WARNING 2026-05-11 18:03:52,544 log 31044 20236 Not Found: /favicon.ico
+ERROR 2026-05-11 18:04:19,073 middleware 31044 9372 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_kids.png” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_kids.png” does not exist
+WARNING 2026-05-11 18:04:19,116 log 31044 9372 Not Found: /media/backgrounds/hero_kids.png
+ERROR 2026-05-11 18:04:29,650 middleware 31044 9372 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_women.png” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_women.png” does not exist
+WARNING 2026-05-11 18:04:29,673 log 31044 9372 Not Found: /media/backgrounds/hero_women.png
+ERROR 2026-05-11 18:04:39,773 middleware 31044 9372 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_men.png” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_men.png” does not exist
+WARNING 2026-05-11 18:04:39,820 log 31044 9372 Not Found: /media/backgrounds/hero_men.png
+INFO 2026-05-11 18:05:13,432 _util 31044 9372 message='Request to Stripe api' method=post url=https://api.stripe.com/v1/checkout/sessions
+INFO 2026-05-11 18:05:15,178 _util 31044 9372 message='Stripe API response' path=https://api.stripe.com/v1/checkout/sessions response_code=200
+INFO 2026-05-11 18:07:37,237 _util 31044 9372 message='Request to Stripe api' method=get url=https://api.stripe.com/v1/checkout/sessions/cs_test_b1N0fHKgwUnwcCSqomgCiSayNyLmx8UrLLtcpbzsgCRzken7K7U1CeUJef
+INFO 2026-05-11 18:07:38,273 _util 31044 9372 message='Stripe API response' path=https://api.stripe.com/v1/checkout/sessions/cs_test_b1N0fHKgwUnwcCSqomgCiSayNyLmx8UrLLtcpbzsgCRzken7K7U1CeUJef response_code=200
