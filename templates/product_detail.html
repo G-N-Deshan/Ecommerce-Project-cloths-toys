@@ -545,24 +545,16 @@
             <!-- Image -->
             <div class="img-shell anim-slide-up" onclick="openZoom(this.querySelector('img').src)">
                 {% if product_type == 'cloth' and product.discount_text %}
-                <span
-                    class="absolute top-4 left-4 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{
-                    product.discount_text }}</span>
+                <span class="absolute top-4 left-4 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.discount_text }}</span>
                 {% endif %}
                 {% if product_type == 'toy' and product.discount_percentage %}
-                <span
-                    class="absolute top-4 left-4 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{
-                    product.discount_percentage }}% OFF</span>
+                <span class="absolute top-4 left-4 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.discount_percentage }}% OFF</span>
                 {% endif %}
                 {% if product_type == 'offer' and product.offers_badge %}
-                <span
-                    class="absolute top-4 left-4 z-10 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{
-                    product.offers_badge }}</span>
+                <span class="absolute top-4 left-4 z-10 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.offers_badge }}</span>
                 {% endif %}
                 {% if product_type == 'arrival' and product.offers_badge %}
-                <span
-                    class="absolute top-4 left-4 z-10 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{
-                    product.offers_badge }}</span>
+                <span class="absolute top-4 left-4 z-10 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.offers_badge }}</span>
                 {% endif %}
                 <img src="{{ product.imageUrl.url }}" alt="{{ product_name }}"
                     class="w-full h-[480px] object-contain p-8" id="mainProductImage">
@@ -660,8 +652,7 @@
                             <span class="text-3xl font-bold text-slate-900">Rs {{ product.price }}</span>
                             {% if product.original_price %}
                             <span class="text-lg text-slate-400 line-through">Rs {{ product.original_price }}</span>
-                            <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-0.5 rounded-full">Save {{
-                                product.discount_percentage }}%</span>
+                            <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-0.5 rounded-full">Save {{ product.discount_percentage }}%</span>
                             {% endif %}
                         </div>
                         {% elif product_type == 'cloth' %}
@@ -675,8 +666,7 @@
                             <span class="text-lg text-slate-400 line-through">{{ product.price2 }}</span>
                             {% endif %}
                             {% if product.discount_text %}
-                            <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-0.5 rounded-full">{{
-                                product.discount_text }}</span>
+                            <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-0.5 rounded-full">{{ product.discount_text }}</span>
                             {% endif %}
                         </div>
                         {% elif product_type == 'offer' %}
@@ -688,8 +678,7 @@
                             <span class="text-lg text-slate-400 line-through">{{ product.price2 }}</span>
                             {% endif %}
                             {% if product.stock_text %}
-                            <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-0.5 rounded-full">{{
-                                product.stock_text }}</span>
+                            <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-0.5 rounded-full">{{ product.stock_text }}</span>
                             {% endif %}
                         </div>
                         {% elif product_type == 'arrival' %}
@@ -775,8 +764,7 @@
                             {% else %}
                             <button type="button"
                                 class="variant-size-btn px-3 py-1.5 border-2 border-slate-200 rounded-lg text-sm font-medium hover:border-indigo-500 hover:text-indigo-600 transition-all"
-                                data-color="{{ color.name }}" onclick="selectVariant(this, 'color')">{{ color.name
-                                }}</button>
+                                data-color="{{ color.name }}" onclick="selectVariant(this, 'color')">{{ color.name }}</button>
                             {% endif %}
                             {% endfor %}
                         </div>
@@ -867,16 +855,14 @@
         <div class="border-b border-slate-200 mb-10 flex gap-8 anim-slide-up-d3" id="tabBar">
             <button class="tab-btn active text-sm text-slate-600 pb-3" onclick="switchTab('details')">Product
                 Details</button>
-            <button class="tab-btn text-sm text-slate-600 pb-3" onclick="switchTab('reviews')">Reviews ({{ review_count
-                }})</button>
+            <button class="tab-btn text-sm text-slate-600 pb-3" onclick="switchTab('reviews')">Reviews ({{ review_count }})</button>
         </div>
 
         <!-- ════════ TAB: DETAILS ════════ -->
         <section id="tab-details" class="mb-16 reveal">
             <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
                 <h2 class="font-['Playfair_Display'] text-2xl font-bold text-slate-900 mb-6">About this product</h2>
-                <p class="text-slate-600 leading-relaxed text-base mb-6">{{ long_description|default:product_description
-                    }}</p>
+                <p class="text-slate-600 leading-relaxed text-base mb-6">{{ long_description|default:product_description }}</p>
 
                 {% if features_list %}
                 <div class="mb-8">
@@ -1019,8 +1005,7 @@
                                     {% endif %}
                                     {% endfor %}
                             </div>
-                            <p class="text-sm text-slate-500">Based on {{ review_count }} review{{
-                                review_count|pluralize }}</p>
+                            <p class="text-sm text-slate-500">Based on {{ review_count }} review{{ review_count|pluralize }}</p>
                         </div>
                         <!-- Right: bars -->
                         <div class="space-y-3">
@@ -1097,8 +1082,7 @@
                     <h3 class="font-['Playfair_Display'] text-2xl font-bold text-slate-900 mb-6">Write a Review</h3>
 
                     {% if review_error %}
-                    <div class="bg-red-50 text-red-600 text-sm rounded-lg p-4 mb-6 border border-red-200">{{
-                        review_error }}</div>
+                    <div class="bg-red-50 text-red-600 text-sm rounded-lg p-4 mb-6 border border-red-200">{{ review_error }}</div>
                     {% endif %}
 
                     <form method="POST" class="space-y-6">

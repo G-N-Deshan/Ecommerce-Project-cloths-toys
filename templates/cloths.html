@@ -117,12 +117,9 @@
                         <label for="category">Category</label>
                         <select id="category" name="category">
                             <option value="all" {% if selected_category == 'all' %}selected{% endif %}>All</option>
-                            <option value="men" {% if selected_category == 'men' %}selected{% endif %}>Men ({{
-                                category_counts.men }})</option>
-                            <option value="women" {% if selected_category == 'women' %}selected{% endif %}>Women ({{
-                                category_counts.women }})</option>
-                            <option value="kids" {% if selected_category == 'kids' %}selected{% endif %}>Kids ({{
-                                category_counts.kids }})</option>
+                            <option value="men" {% if selected_category == 'men' %}selected{% endif %}>Men ({{ category_counts.men }})</option>
+                            <option value="women" {% if selected_category == 'women' %}selected{% endif %}>Women ({{ category_counts.women }})</option>
+                            <option value="kids" {% if selected_category == 'kids' %}selected{% endif %}>Kids ({{ category_counts.kids }})</option>
                         </select>
                     </div>
 
@@ -132,8 +129,7 @@
                             <option value="all" {% if selected_subcategory == 'all' %}selected{% endif %}>All Styles
                             </option>
                             {% for value, label in subcategory_options %}
-                            <option value="{{ value }}" {% if selected_subcategory == value %}selected{% endif %}>{{ label
-                                }}</option>
+                            <option value="{{ value }}" {% if selected_subcategory == value %}selected{% endif %}>{{ label }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -243,8 +239,7 @@
             <a href="?page={{ cloths_items.previous_page_number }}&q={{ search_query }}&category={{ selected_category }}&subcategory={{ selected_subcategory }}&sort={{ selected_sort }}"
                 class="pagination-btn">Previous</a>
             {% endif %}
-            <span class="pagination-state">Page {{ cloths_items.number }} of {{ cloths_items.paginator.num_pages
-                }}</span>
+            <span class="pagination-state">Page {{ cloths_items.number }} of {{ cloths_items.paginator.num_pages }}</span>
             {% if cloths_items.has_next %}
             <a href="?page={{ cloths_items.next_page_number }}&q={{ search_query }}&category={{ selected_category }}&subcategory={{ selected_subcategory }}&sort={{ selected_sort }}"
                 class="pagination-btn">Next</a>
@@ -303,8 +298,7 @@
                     </a>
                     <div>
                         <h3>{{ item.name }}</h3>
-                        <p>{{ item.get_category_display }}{% if item.subcategory %} - {{ item.get_subcategory_display
-                            }}{% endif %}</p>
+                        <p>{{ item.get_category_display }}{% if item.subcategory %} - {{ item.get_subcategory_display }}{% endif %}</p>
                         <span>{{ item.price2|default:item.price1|default:item.price }}</span>
                     </div>
                 </article>

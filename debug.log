@@ -22826,3 +22826,13 @@ INFO 2026-05-11 18:05:13,432 _util 31044 9372 message='Request to Stripe api' me
 INFO 2026-05-11 18:05:15,178 _util 31044 9372 message='Stripe API response' path=https://api.stripe.com/v1/checkout/sessions response_code=200
 INFO 2026-05-11 18:07:37,237 _util 31044 9372 message='Request to Stripe api' method=get url=https://api.stripe.com/v1/checkout/sessions/cs_test_b1N0fHKgwUnwcCSqomgCiSayNyLmx8UrLLtcpbzsgCRzken7K7U1CeUJef
 INFO 2026-05-11 18:07:38,273 _util 31044 9372 message='Stripe API response' path=https://api.stripe.com/v1/checkout/sessions/cs_test_b1N0fHKgwUnwcCSqomgCiSayNyLmx8UrLLtcpbzsgCRzken7K7U1CeUJef response_code=200
+WARNING 2026-05-11 18:19:10,104 log 31044 30076 Not Found: /favicon.ico
+ERROR 2026-05-11 18:19:11,375 middleware 31044 30076 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_men.png” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_men.png” does not exist
+WARNING 2026-05-11 18:19:11,422 log 31044 30076 Not Found: /media/backgrounds/hero_men.png
+INFO 2026-05-11 18:29:12,950 autoreload 26684 13448 Watching for file changes with StatReloader
