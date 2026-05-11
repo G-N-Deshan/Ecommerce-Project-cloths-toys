@@ -3747,6 +3747,9 @@ def payment_success(request):
     # Idempotency: Check if order already exists for this session before finalizing
     existing_order = Order.objects.filter(tracking_number=session.id).first()
     if existing_order:
+        # Ensure cart is cleared even on refresh/duplicate visit
+        cart = get_or_create_cart(request)
+        cart.items.all().delete()
         return redirect('order_success', order_number=existing_order.order_number)
 
     # Try to recover user from metadata if logged out
