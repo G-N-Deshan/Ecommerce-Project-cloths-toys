@@ -381,7 +381,6 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     letter-spacing: 0.02em;
 }
-}
 
 .section-0 .navbar .wishlist-count-badge {
     background: linear-gradient(135deg, var(--navbar-secondary), #d946ef);
