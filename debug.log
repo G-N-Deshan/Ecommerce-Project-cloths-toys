@@ -22836,3 +22836,52 @@ Traceback (most recent call last):
 django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_men.png” does not exist
 WARNING 2026-05-11 18:19:11,422 log 31044 30076 Not Found: /media/backgrounds/hero_men.png
 INFO 2026-05-11 18:29:12,950 autoreload 26684 13448 Watching for file changes with StatReloader
+WARNING 2026-05-11 18:29:28,964 log 17080 23080 Not Found: /favicon.ico
+ERROR 2026-05-11 18:29:30,580 middleware 17080 23080 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_women.png” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_women.png” does not exist
+WARNING 2026-05-11 18:29:30,607 log 17080 23080 Not Found: /media/backgrounds/hero_women.png
+ERROR 2026-05-11 18:30:07,615 middleware 17080 26104 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_men.png” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_men.png” does not exist
+WARNING 2026-05-11 18:30:07,645 log 17080 26104 Not Found: /media/backgrounds/hero_men.png
+ERROR 2026-05-11 18:30:24,760 middleware 17080 23080 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_kids.png” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_kids.png” does not exist
+WARNING 2026-05-11 18:30:24,788 log 17080 23080 Not Found: /media/backgrounds/hero_kids.png
+ERROR 2026-05-11 18:30:40,029 middleware 17080 26104 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_toys.png” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_toys.png” does not exist
+ERROR 2026-05-11 18:30:40,032 middleware 17080 14900 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\toys-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\toys-hero.jpg” does not exist
+WARNING 2026-05-11 18:30:40,069 log 17080 26104 Not Found: /media/backgrounds/hero_toys.png
+WARNING 2026-05-11 18:30:40,073 log 17080 14900 Not Found: /media/toys-hero.jpg
+ERROR 2026-05-11 18:31:03,980 middleware 17080 14900 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_toys.png” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_toys.png” does not exist
+WARNING 2026-05-11 18:31:04,017 log 17080 14900 Not Found: /media/backgrounds/hero_toys.png
