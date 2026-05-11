@@ -9,13 +9,14 @@
                     <img src="{%static 'bird_2.jpg'%}" alt="G11 logo" class="footer-logo" loading="lazy">
                     <div>
                         <h2 class="brand-name">G11</h2>
-                        <p class="brand-tagline">Style & Joy. Delivered Daily.</p>
+                        <p class="brand-tagline">Cloths & Toys. Delivered Daily.</p>
                     </div>
                 </div>
                 <p class="brand-description">
-                    Discover quality clothes and fun toys for kids. Everything you need to bring smiles and style to your little ones.
+                    Discover quality clothes and fun toys for kids. Everything you need to bring smiles and style to
+                    your little ones.
                 </p>
-                
+
                 <!-- Contact Info -->
                 <div class="contact-info">
                     <div class="contact-item">
@@ -31,7 +32,7 @@
                         <span>+94 76 244 0558</span>
                     </div>
                 </div>
-                
+
                 <!-- Social Media Links -->
                 <div class="social-section">
                     <h4>Follow Us</h4>
@@ -95,12 +96,14 @@
             <div class="footer-column newsletter-column">
                 <h3 class="footer-title">Newsletter</h3>
                 <p class="newsletter-text">Subscribe to get special offers and exclusive deals!</p>
-                <form class="newsletter-form newsletter-form-ajax" id="newsletterForm" action="{% url 'subscribe_newsletter' %}" method="POST">
+                <form class="newsletter-form newsletter-form-ajax" id="newsletterForm"
+                    action="{% url 'subscribe_newsletter' %}" method="POST">
                     {% csrf_token %}
                     <input type="email" name="email" id="newsletterEmail" placeholder="Enter your email" required>
                     <button type="submit" id="newsletterSubmit" class="newsletter-submit-btn">Subscribe</button>
                 </form>
-                <div id="newsletterMessage" class="newsletter-message-ajax" style="margin-top: 10px; font-size: 0.85rem; font-weight: 600; display: none;"></div>
+                <div id="newsletterMessage" class="newsletter-message-ajax"
+                    style="margin-top: 10px; font-size: 0.85rem; font-weight: 600; display: none;"></div>
                 <p class="newsletter-note">By subscribing, you agree to our Privacy Policy.</p>
             </div>
         </div>
@@ -108,60 +111,60 @@
 
     <!-- AJAX Newsletter Submission script -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const newsletterForms = document.querySelectorAll('.newsletter-form-ajax');
+        document.addEventListener('DOMContentLoaded', function () {
+            const newsletterForms = document.querySelectorAll('.newsletter-form-ajax');
 
-        newsletterForms.forEach(form => {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const submitBtn = this.querySelector('button[type="submit"]');
-                const messageDiv = this.nextElementSibling && this.nextElementSibling.classList.contains('newsletter-message-ajax') 
-                                    ? this.nextElementSibling 
-                                    : this.parentElement.querySelector('.newsletter-message-ajax');
-                
-                if (!messageDiv) return;
+            newsletterForms.forEach(form => {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
 
-                const formData = new FormData(this);
-                
-                // Disable button and show loading state
-                const originalBtnText = submitBtn.innerHTML;
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i>';
-                
-                fetch(this.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    messageDiv.style.display = 'block';
-                    messageDiv.textContent = data.message;
-                    
-                    if (data.status === 'success') {
-                        messageDiv.style.color = '#10b981'; // Emerald-500
-                        this.reset();
-                    } else if (data.status === 'info') {
-                        messageDiv.style.color = '#3b82f6'; // Blue-500
-                    } else {
-                        messageDiv.style.color = '#ef4444'; // Red-500
-                    }
-                })
-                .catch(error => {
-                    messageDiv.style.display = 'block';
-                    messageDiv.textContent = 'Something went wrong. Please try again.';
-                    messageDiv.style.color = '#ef4444';
-                })
-                .finally(() => {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalBtnText;
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const messageDiv = this.nextElementSibling && this.nextElementSibling.classList.contains('newsletter-message-ajax')
+                        ? this.nextElementSibling
+                        : this.parentElement.querySelector('.newsletter-message-ajax');
+
+                    if (!messageDiv) return;
+
+                    const formData = new FormData(this);
+
+                    // Disable button and show loading state
+                    const originalBtnText = submitBtn.innerHTML;
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i>';
+
+                    fetch(this.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            messageDiv.style.display = 'block';
+                            messageDiv.textContent = data.message;
+
+                            if (data.status === 'success') {
+                                messageDiv.style.color = '#10b981'; // Emerald-500
+                                this.reset();
+                            } else if (data.status === 'info') {
+                                messageDiv.style.color = '#3b82f6'; // Blue-500
+                            } else {
+                                messageDiv.style.color = '#ef4444'; // Red-500
+                            }
+                        })
+                        .catch(error => {
+                            messageDiv.style.display = 'block';
+                            messageDiv.textContent = 'Something went wrong. Please try again.';
+                            messageDiv.style.color = '#ef4444';
+                        })
+                        .finally(() => {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalBtnText;
+                        });
                 });
             });
         });
-    });
     </script>
 
     <!-- Footer Bottom -->
@@ -186,9 +189,9 @@
         document.querySelectorAll('.star-rating').forEach(el => {
             const rating = parseFloat(el.dataset.rating) || 0;
             let starsHtml = '';
-            for(let i=1; i<=5; i++) {
-                if(rating >= i) starsHtml += '<i class="bi bi-star-fill text-amber-400"></i>';
-                else if(rating >= i - 0.5) starsHtml += '<i class="bi bi-star-half text-amber-400"></i>';
+            for (let i = 1; i <= 5; i++) {
+                if (rating >= i) starsHtml += '<i class="bi bi-star-fill text-amber-400"></i>';
+                else if (rating >= i - 0.5) starsHtml += '<i class="bi bi-star-half text-amber-400"></i>';
                 else starsHtml += '<i class="bi bi-star text-slate-300"></i>';
             }
             el.innerHTML = starsHtml;

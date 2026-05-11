@@ -345,9 +345,9 @@
                                 <span class="sizes-badge">Sizes: {{ cloth.sizes_available }}</span>
                                 {% endif %}
                                 <div class="flex items-center gap-2 flex-wrap">
-                                    <span class="text-lg font-extrabold text-slate-900">Rs {{ cloth.price2|default:cloth.price1|default:cloth.price }}</span>
+                                    <span class="text-lg font-extrabold text-slate-900">{{ cloth.price2|default:cloth.price1|default:cloth.price }}</span>
                                     {% if cloth.price1 and cloth.price2 %}
-                                    <span class="text-sm text-slate-400 line-through">Rs {{ cloth.price1 }}</span>
+                                    <span class="text-sm text-slate-400 line-through">{{ cloth.price1 }}</span>
                                     {% endif %}
                                     {% if cloth.discount_text %}
                                     <span class="mini-badge">{{ cloth.discount_text }}</span>

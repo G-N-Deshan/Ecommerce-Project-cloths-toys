@@ -103,7 +103,7 @@
                     {% if is_in_stock == 0 %}
                     <button class="arrival-btn btn-disabled cursor-not-allowed opacity-50" disabled style="background-color: #cbd5e1; color: white;">Out of Stock</button>
                     {% else %}
-                    <a href="{% url 'add_to_cart' 'arrival' item.id %}" class="arrival-btn arrival-btn--dark" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}">Add to cart</a>
+                    <a href="{% url 'add_to_cart' 'arrival' item.id %}" class="arrival-btn arrival-btn--dark" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}" data-price="{{ item.numeric_price }}">Add to cart</a>
                     {% endif %}
                 </div>
             </div>

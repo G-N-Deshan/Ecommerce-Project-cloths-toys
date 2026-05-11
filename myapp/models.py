@@ -42,6 +42,11 @@ class Offers(models.Model):
     def __str__(self):
         return self.title
     
+    @property
+    def numeric_price(self):
+        from .models import CartItem
+        return CartItem._to_float(self.price1 or self.price2 or 0)
+    
 
 class NewArrivals(models.Model):
     
@@ -65,6 +70,11 @@ class NewArrivals(models.Model):
     
     def __str__(self):
         return self.title
+    
+    @property
+    def numeric_price(self):
+        from .models import CartItem
+        return CartItem._to_float(self.price or 0)
     
 
 class Cloths(models.Model):
@@ -104,6 +114,11 @@ class Cloths(models.Model):
     
     def __str__(self):
         return self.name
+    
+    @property
+    def numeric_price(self):
+        from .models import CartItem
+        return CartItem._to_float(self.price2 or self.price1 or self.price or 0)
     
 
 class Review(models.Model):
@@ -227,6 +242,10 @@ class Toy(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def numeric_price(self):
+        return float(self.price)
 
     @property
     def discount_percentage(self):
@@ -375,6 +394,9 @@ class CartItem(models.Model):
         s = str(value).strip()
         if not s:
             return 0.0
+
+        # Remove leading non-digits (like "Rs. ") which cause parsing errors if they contain dots
+        s = re.sub(r'^[^0-9]+', '', s)
 
         # keep digits, dot, comma, minus
         s = re.sub(r'[^0-9,.\-]', '', s).replace(',', '')

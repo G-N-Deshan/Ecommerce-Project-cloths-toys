@@ -492,7 +492,7 @@
                     style="font-weight:700;font-size:0.95rem;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:340px">
                     {{ product_name }}</div>
                 <div style="font-size:0.85rem;color:#6366f1;font-weight:600">
-                    Rs {{ product_display_price }}
+                    {{ product_display_price }}
                 </div>
             </div>
             <button {% if product.inventory and product.inventory.stock <= 0 %} disabled
@@ -504,8 +504,7 @@
                 14px rgba(99,102,241,0.4);transition:transform 0.15s,box-shadow 0.15s"
                 onmouseover="this.style.transform='scale(1.04)'"
                 onmouseout="this.style.transform='scale(1)'"
-                data-add-to-cart data-item-type="{{ product_type }}" data-item-id="{{ product.id }}" data-price="{{
-                product_display_price }}"
+                data-add-to-cart data-item-type="{{ product_type }}" data-item-id="{{ product.id }}" data-price="{{ product_numeric_price }}"
                 onclick="addToCartWithVariants(event)">
                 <i class="bi bi-cart-plus"></i> Add to Cart
                 {% endif %}
@@ -810,7 +809,7 @@
                             <a id="addToCartBtn" href="{% url 'add_to_cart' product_type product.id %}"
                                 class="btn-cart flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 px-6 rounded-xl text-center transition-all duration-300 hover:shadow-lg hover:shadow-indigo-200 flex items-center justify-center gap-2"
                                 data-add-to-cart data-item-type="{{ product_type }}" data-item-id="{{ product.id }}"
-                                data-price="{{ product_display_price }}" onclick="addToCartWithVariants(event)">
+                                data-price="{{ product_numeric_price }}" onclick="addToCartWithVariants(event)">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
@@ -1365,7 +1364,7 @@
                 id: {{ product.id }},
             type: '{{ product_type }}',
             name: '{{ product_name|escapejs }}',
-            price: '{{ product_display_price }}',
+            price: '{{ product_numeric_price }}',
             image: '{{ product.imageUrl.url }}',
             url: '/product/{{ product_type }}/{{ product.id }}/'
     });

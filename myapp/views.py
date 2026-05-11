@@ -54,6 +54,8 @@ def parse_catalog_price(raw_value):
     text = str(raw_value).strip()
     if not text:
         return 0.0
+    # Strip leading non-digits (like "Rs. ") which cause parsing errors if they contain dots
+    text = re.sub(r'^[^0-9]+', '', text)
     text = re.sub(r'[^0-9,.-]', '', text).replace(',', '')
     try:
         return float(text) if text else 0.0
@@ -928,6 +930,8 @@ def product_detail(request, product_type, product_id):
         product_display_price = getattr(product, 'price1', None) or getattr(product, 'price2', '') or ''
     else:
         product_display_price = getattr(product, 'price', '') or ''
+    
+    product_numeric_price = getattr(product, 'numeric_price', 0)
 
     # ── Gallery images ──
     gallery_images = ProductImage.objects.filter(product_type=product_type, **{fk_field: product})
@@ -1017,6 +1021,7 @@ def product_detail(request, product_type, product_id):
         'color_options': color_options,
         'inventory': inventory,
         'product_display_price': product_display_price,
+        'product_numeric_price': product_numeric_price,
     })
 
 
@@ -1047,8 +1052,7 @@ def cloths(request):
         queryset = queryset.filter(subcategory=subcategory)
 
     items = list(queryset)
-    for item in items:
-        item.numeric_price = parse_catalog_price(item.price2 or item.price1 or item.price)
+
 
     # Sort by criteria first
     if sort == 'price_asc':
@@ -1105,10 +1109,8 @@ def cloths(request):
         ).exclude(id__in=[item.id for item in recommended_items]).order_by('-id')[:8 - len(recommended_items)]
         recommended_items.extend(list(fallback_items))
 
-    for item in top_rated_qs:
-        item.numeric_price = parse_catalog_price(item.price2 or item.price1 or item.price)
-    for item in recommended_items:
-        item.numeric_price = parse_catalog_price(item.price2 or item.price1 or item.price)
+    # Numeric price is now handled by model property
+
 
     all_items = Cloths.objects.all()
     category_counts = {
@@ -1195,8 +1197,8 @@ def kids_cloths(request):
 
     all_filtered_items = list(kids_queryset)
 
-    for item in all_filtered_items:
-        item.numeric_price = parse_price(item.price2 or item.price1 or item.price)
+    # Numeric price is now handled by model property
+
 
     if min_price is not None:
         all_filtered_items = [item for item in all_filtered_items if item.numeric_price >= min_price]
@@ -1281,8 +1283,8 @@ def women_cloths(request):
         filtered = filtered.filter(subcategory=subcategory)
 
     products = list(filtered)
-    for product in products:
-        product.numeric_price = parse_catalog_price(product.price2 or product.price1 or product.price)
+    # Numeric price is now handled by model property
+
 
     if min_price is not None:
         products = [product for product in products if product.numeric_price >= min_price]
@@ -1363,8 +1365,8 @@ def mens_cloths(request):
         filtered = filtered.filter(subcategory=subcategory)
 
     products = list(filtered)
-    for product in products:
-        product.numeric_price = parse_catalog_price(product.price2 or product.price1 or product.price)
+    # Numeric price is now handled by model property
+
 
     if min_price is not None:
         products = [product for product in products if product.numeric_price >= min_price]

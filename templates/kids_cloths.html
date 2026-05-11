@@ -627,13 +627,13 @@
                         <span class="sizes-badge">Sizes: {{ cloth.sizes_available }}</span>
                         {% endif %}
                         <div class="price-row">
-                            <span class="price-now">Rs {{ cloth.price2|default:cloth.price1|default:cloth.price }}</span>
-                            {% if cloth.price1 and cloth.price2 %}<span class="price-old">Rs {{ cloth.price1 }}</span>{% endif %}
+                            <span class="price-now">{{ cloth.price2|default:cloth.price1|default:cloth.price }}</span>
+                            {% if cloth.price1 and cloth.price2 %}<span class="price-old">{{ cloth.price1 }}</span>{% endif %}
                         </div>
                         {% if cloth.discount_text %}<span class="badge">{{ cloth.discount_text }}</span>{% endif %}
                         <div class="card-actions">
                             <a class="buy-link" href="{% url 'product_detail' 'cloth' cloth.id %}">View details</a>
-                            <button class="cart-btn" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}">Add cart</button>
+                            <button class="cart-btn" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}" data-price="{{ cloth.numeric_price }}">Add cart</button>
                         </div>
                     </div>
                 </article>
@@ -678,13 +678,13 @@
                         <span class="sizes-badge">Sizes: {{ cloth.sizes_available }}</span>
                         {% endif %}
                         <div class="price-row">
-                            <span class="price-now">Rs {{ cloth.price2|default:cloth.price1|default:cloth.price }}</span>
-                            {% if cloth.price1 and cloth.price2 %}<span class="price-old">Rs {{ cloth.price1 }}</span>{% endif %}
+                            <span class="price-now">{{ cloth.price2|default:cloth.price1|default:cloth.price }}</span>
+                            {% if cloth.price1 and cloth.price2 %}<span class="price-old">{{ cloth.price1 }}</span>{% endif %}
                         </div>
                         {% if cloth.discount_text %}<span class="badge">{{ cloth.discount_text }}</span>{% endif %}
                         <div class="card-actions">
                             <a class="buy-link" href="{% url 'product_detail' 'cloth' cloth.id %}">View details</a>
-                            <button class="cart-btn" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}">Add cart</button>
+                            <button class="cart-btn" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}" data-price="{{ cloth.numeric_price }}">Add cart</button>
                         </div>
                     </div>
                 </article>

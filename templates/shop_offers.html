@@ -110,7 +110,7 @@
                     {% if is_in_stock == 0 %}
                     <button class="offer-btn btn-disabled cursor-not-allowed opacity-50" disabled style="background-color: #cbd5e1; color: white;">Out of Stock</button>
                     {% else %}
-                    <a href="{% url 'add_to_cart' 'offer' offer.id %}" class="offer-btn" data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}">{{ offer.button_text|default:'Add to cart' }}</a>
+                    <a href="{% url 'add_to_cart' 'offer' offer.id %}" class="offer-btn" data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}" data-price="{{ offer.numeric_price }}">{{ offer.button_text|default:'Add to cart' }}</a>
                     {% endif %}
                 </div>
             </div>

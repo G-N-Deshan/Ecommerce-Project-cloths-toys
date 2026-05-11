@@ -264,7 +264,7 @@
                                 </button>
                                 <button
                                     class="px-3 py-2 bg-indigo-600 text-white font-semibold rounded-full text-[10px] transform translate-y-6 group-hover:translate-y-0 transition-transform duration-400 hover:bg-indigo-700"
-                                    {% if offer.inventory and offer.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}"{% endif %}>
+                                    {% if offer.inventory and offer.inventory.stock <= 0 %}disabled{% else %}data-add-to-cart data-item-type="offer" data-item-id="{{ offer.id }}" data-price="{{ offer.numeric_price }}"{% endif %}>
                                     + Cart
                                 </button>
                                 <a href="{% url 'buy_now' 'offer' offer.id %}"
@@ -285,10 +285,10 @@
                             </div>
                             <div class="flex items-center gap-3 mb-2">
                                 {% if offer.price2 %}
-                                <span class="text-xl font-bold text-indigo-600">Rs {{ offer.price2 }}</span>
+                                <span class="text-xl font-bold text-indigo-600">{{ offer.price2 }}</span>
                                 {% endif %}
                                 {% if offer.price1 %}
-                                <span class="text-sm text-slate-400 line-through">Rs {{ offer.price1 }}</span>
+                                <span class="text-sm text-slate-400 line-through">{{ offer.price1 }}</span>
                                 {% endif %}
                             </div>
                             <div class="flex items-center justify-between">

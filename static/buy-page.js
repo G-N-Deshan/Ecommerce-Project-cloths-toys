@@ -12,7 +12,10 @@
 
     function toPrice(raw) {
         if (!raw) return 0;
-        var s = String(raw).replace(/[^0-9,.-]/g, '').replace(/,/g, '');
+        var s = String(raw).trim();
+        // Remove leading non-digits (like "Rs. ") which cause parsing errors if they contain dots
+        s = s.replace(/^[^0-9]+/, '');
+        s = s.replace(/[^0-9,.-]/g, '').replace(/,/g, '');
         var n = parseFloat(s);
         return Number.isFinite(n) ? n : 0;
     }

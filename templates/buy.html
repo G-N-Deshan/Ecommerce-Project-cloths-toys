@@ -184,7 +184,7 @@
                     class="product-card js-buy-product group bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden {% if offer.inventory and offer.inventory.stock <= 0 %}opacity-75{% endif %}"
                     data-kind="offer" data-id="{{ offer.id }}" data-category="{{ offer.category }}"
                     data-name="{{ offer.title|escape }}" data-description="{{ offer.description|escape }}"
-                    data-price="{{ offer.price1|default:offer.price2|default:'0'|escape }}"
+                    data-price="{{ offer.numeric_price }}"
                     data-rating="{{ offer.avg_rating|default:0 }}" data-image="{{ offer.imageUrl.url|escape }}"
                     data-url="{% url 'product_detail' 'offer' offer.id %}"
                     data-stock="{{ offer.stock_text|default:''|escape }}"
@@ -261,7 +261,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="arrivalsGrid">
                 {% for item in kids_arrivals %}
-                <article class="product-card js-buy-product group" data-kind="arrival" data-id="{{ item.id }}" data-category="{{ item.category }}" data-name="{{ item.title|escape }}" data-description="{{ item.description|escape }}" data-price="{{ item.price|default:'0'|escape }}" data-rating="{{ item.avg_rating|default:0 }}" data-image="{{ item.imageUrl.url|escape }}" data-url="{% url 'product_detail' 'arrival' item.id %}" data-stock="" data-badge="{{ item.offers_badge|default:''|escape }}">
+                <article class="product-card js-buy-product group" data-kind="arrival" data-id="{{ item.id }}" data-category="{{ item.category }}" data-name="{{ item.title|escape }}" data-description="{{ item.description|escape }}" data-price="{{ item.numeric_price }}" data-rating="{{ item.avg_rating|default:0 }}" data-image="{{ item.imageUrl.url|escape }}" data-url="{% url 'product_detail' 'arrival' item.id %}" data-stock="" data-badge="{{ item.offers_badge|default:''|escape }}">
                     <div class="relative overflow-hidden bg-slate-50 rounded-2xl">
                         {% if item.offers_badge %}
                         <span class="absolute top-3 left-3 z-10 px-3 py-1 bg-emerald-500 text-white text-xs font-bold rounded-full">{{ item.offers_badge }}</span>

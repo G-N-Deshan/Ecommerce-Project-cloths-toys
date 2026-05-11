@@ -334,9 +334,9 @@
                                 <span class="sizes-badge">Sizes: {{ cloth.sizes_available }}</span>
                                 {% endif %}
                                 <div class="flex items-center gap-2 flex-wrap">
-                                    <span class="text-lg font-extrabold text-slate-900">Rs {{ cloth.price2|default:cloth.price1|default:cloth.price }}</span>
+                                    <span class="text-lg font-extrabold text-slate-900">{{ cloth.price2|default:cloth.price1|default:cloth.price }}</span>
                                     {% if cloth.price1 and cloth.price2 %}
-                                    <span class="text-sm text-slate-400 line-through">Rs {{ cloth.price1 }}</span>
+                                    <span class="text-sm text-slate-400 line-through">{{ cloth.price1 }}</span>
                                     {% endif %}
                                     {% if cloth.discount_text %}
                                     <span class="pill">{{ cloth.discount_text }}</span>
@@ -344,7 +344,7 @@
                                 </div>
                                 <div class="grid grid-cols-[1fr_auto] gap-2 pt-1">
                                     <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="rounded-lg border border-rose-200 bg-rose-50 py-2 text-center text-sm font-bold text-rose-700">View</a>
-                                    <button class="rounded-lg bg-gradient-to-r from-rose-500 to-orange-400 px-3 py-2 text-sm font-bold text-white" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}">Add</button>
+                                    <button class="rounded-lg bg-gradient-to-r from-rose-500 to-orange-400 px-3 py-2 text-sm font-bold text-white" data-add-to-cart data-item-type="cloth" data-item-id="{{ cloth.id }}" data-price="{{ cloth.numeric_price }}">Add</button>
                                 </div>
                             </div>
                         </article>
