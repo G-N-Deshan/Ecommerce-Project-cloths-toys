@@ -2408,12 +2408,18 @@ def checkout(request):
             except Exception:
                 pass
             
-            cart.items.all().delete()
+            # Nuclear Clear: Delete the entire cart object and session reference
+            cart.delete()
+            if 'cart_id' in request.session:
+                del request.session['cart_id']
+            request.session.modified = True
+            
             messages.success(request, f'Order {order_number} placed successfully!')
             return redirect('order_success', order_number=order_number)
         
         except Exception as e:
-            messages.error(request, 'Something went wrong placing your order. Please try again.')
+            # More descriptive error for debugging
+            messages.error(request, f'Something went wrong: {str(e)}')
             subtotal = Decimal(str(cart.get_total()))
             tax = subtotal * Decimal('0.10')
             shipping = Decimal('10.00')
