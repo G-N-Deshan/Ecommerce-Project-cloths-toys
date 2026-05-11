@@ -230,7 +230,8 @@ Analyze the request and return ONLY a valid JSON object matching this exact stru
                 {"role": "user", "content": prompt}
             ],
             "temperature": 0.5,
-            "response_format": {"type": "json_object"}
+            "response_format": {"type": "json_object"},
+            "stream": False
         }
         
         ai_data = None
@@ -246,7 +247,10 @@ Analyze the request and return ONLY a valid JSON object matching this exact stru
                 }
             )
 
-            with urllib.request.urlopen(req) as response:
+            import ssl
+            context = ssl.create_default_context()
+            
+            with urllib.request.urlopen(req, timeout=10, context=context) as response:
                 result = json.loads(response.read().decode('utf-8'))
                 response_text = result['choices'][0]['message']['content'].strip()
 
@@ -260,7 +264,12 @@ Analyze the request and return ONLY a valid JSON object matching this exact stru
 
             ai_data = json.loads(response_text.strip())
         except Exception as e:
-            print(f"Groq API Error: {e}")
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Groq API Error ({type(e).__name__}): {str(e)}")
+            # Log the full traceback for deeper debugging on server
+            import traceback
+            logger.error(traceback.format_exc())
             ai_data = None
 
         if not ai_data:
@@ -1597,7 +1606,27 @@ def contact_us(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            form.save()
+            contact_msg = form.save()
+            
+            # Send email notification to admin
+            try:
+                from django.core.mail import send_mail
+                from django.conf import settings as django_settings
+                
+                admin_email = django_settings.EMAIL_HOST_USER
+                subject = f"New Contact Message: {contact_msg.subject}"
+                body = f"You received a new message from {contact_msg.name} ({contact_msg.email}):\n\n{contact_msg.message}\n\nPhone: {contact_msg.phone or 'N/A'}"
+                
+                send_mail(
+                    subject,
+                    body,
+                    django_settings.DEFAULT_FROM_EMAIL,
+                    [admin_email],
+                    fail_silently=True,
+                )
+            except Exception as e:
+                print(f"Error sending contact email: {e}")
+
             messages.success(request, 'Thank you! We received your message and will get back to you soon.')
             return redirect('contact_success')
     else:
