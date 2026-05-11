@@ -22076,3 +22076,5 @@ INFO 2026-05-11 15:15:25,434 autoreload 22912 18420 Watching for file changes wi
 INFO 2026-05-11 15:15:25,816 autoreload 756 13344 Watching for file changes with StatReloader
 INFO 2026-05-11 15:15:26,738 autoreload 29192 4432 Watching for file changes with StatReloader
 INFO 2026-05-11 15:18:59,809 autoreload 25092 6324 Watching for file changes with StatReloader
+WARNING 2026-05-11 15:20:00,492 log 22104 23776 Not Found: /favicon.ico
+WARNING 2026-05-11 15:20:01,870 log 22104 18652 Not Found: /favicon.ico
