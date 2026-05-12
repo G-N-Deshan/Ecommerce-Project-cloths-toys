@@ -15,7 +15,8 @@
 
 <section class="section-0">
     <!-- PROMO BANNER INSIDE STICKY CONTAINER -->
-    <div class="promo-banner" role="alert" style="display: {% if site_settings.is_sale_active %}block{% else %}none{% endif %};">
+    <div class="promo-banner" role="alert"
+        style="display: {% if site_settings.is_sale_active %}block{% else %}none{% endif %};">
         <div class="promo-content">
             <span class="promo-icon">🎉</span> {{ site_settings.sale_text|safe }} <span class="promo-icon">✨</span>
         </div>
@@ -37,7 +38,8 @@
             <div class="nav-links-container">
                 <a href="{% url 'index' %}" class="nav-link nav-link--home">Home</a>
                 <div class="nav-dropdown">
-                    <a href="{% url 'buy' %}" class="nav-link nav-link--vehicles">Shop <i class="bi bi-chevron-down text-[10px]"></i></a>
+                    <a href="{% url 'buy' %}" class="nav-link nav-link--vehicles">Shop <i
+                            class="bi bi-chevron-down text-[10px]"></i></a>
                     <div class="mega-menu">
                         <div class="mega-menu-grid">
                             <div class="mega-menu-column">
@@ -66,72 +68,93 @@
                 <a href="{% url 'contact_us' %}" class="nav-link nav-link--contact">Contact</a>
                 <a href="{% url 'about' %}" class="nav-link nav-link--about">About</a>
 
-                <!-- Search (icon-first, reveal on hover/focus) -->
-                <div class="relative">
-                    <form action="{% url 'search' %}" method="GET" class="nav-search-form" id="navSearchForm" aria-label="Search products">
-                        <input type="text" name="q" placeholder="Search products..." class="nav-search-input" id="navSearchInput"
-                            aria-label="Search query" autocomplete="off">
-                        <button type="submit" class="nav-search-btn" title="Search" aria-label="Search">
-                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                <path
-                                    d="M10.5 4a6.5 6.5 0 1 0 4.05 11.58l4.44 4.44a1 1 0 0 0 1.42-1.42l-4.44-4.44A6.5 6.5 0 0 0 10.5 4zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z">
-                                </path>
-                            </svg>
-                        </button>
-                    </form>
-                    <div id="liveSearchResults" class="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl overflow-hidden hidden z-[3000] border border-slate-100"></div>
+                <!-- Search & Action Icons Group -->
+                <div class="nav-search-wrapper">
+                    <div class="relative">
+                        <form action="{% url 'search' %}" method="GET" class="nav-search-form" id="navSearchForm"
+                            aria-label="Search products">
+                            <input type="text" name="q" placeholder="Search products..." class="nav-search-input"
+                                id="navSearchInput" aria-label="Search query" autocomplete="off">
+                            <button type="submit" class="nav-search-btn" title="Search" aria-label="Search">
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                    <path
+                                        d="M10.5 4a6.5 6.5 0 1 0 4.05 11.58l4.44 4.44a1 1 0 0 0 1.42-1.42l-4.44-4.44A6.5 6.5 0 0 0 10.5 4zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </form>
+                        <div id="liveSearchResults"
+                            class="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl overflow-hidden hidden z-[3000] border border-slate-100">
+                        </div>
+                    </div>
+
+                    <!-- Icons next to search (Desktop) -->
+                    <div class="nav-search-actions">
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'wishlist' %}" class="nav-desktop-auth nav-icon-btn" title="Wishlist">
+                            <i class="bi bi-heart"></i>
+                            <span class="wishlist-count-badge" data-wishlist-count="{{ wishlist_count|default:0 }}">{{ wishlist_count|default:0 }}</span>
+                        </a>
+                        <a href="{% url 'cart_details' %}" class="nav-desktop-auth nav-icon-btn" title="Cart">
+                            <i class="bi bi-bag-check"></i>
+                            <span class="cart-count-badge" data-cart-count="{{ cart_count|default:0 }}">{{ cart_count|default:0 }}</span>
+                        </a>
+                        <a href="{% url 'loyalty_dashboard' %}" class="nav-desktop-auth nav-icon-btn" title="Rewards">
+                            <i class="bi bi-star-fill"></i>
+                            <span class="loyalty-count-badge" data-loyalty-count="{{ loyalty_points|default:0 }}">{{ loyalty_points|default:0 }}</span>
+                        </a>
+                        {% endif %}
+                    </div>
                 </div>
 
                 <script src="{% static 'live_search.js' %}"></script>
 
-                <!-- Cart Icon - Only for authenticated users -->
-                {% if user.is_authenticated %}
-                <a href="{% url 'wishlist' %}" class="wishlist-icon-link" title="Wishlist">
-                    <i class="bi bi-heart wishlist-icon"></i>
-                    <span class="wishlist-count-badge" data-wishlist-count="{{ wishlist_count|default:0 }}">{{ wishlist_count|default:0 }}</span>
-                </a>
-                <a href="{% url 'cart_details' %}" class="cart-icon-link" title="Shopping Cart">
-                    <i class="bi bi-bag-check cart-icon"></i>
-                    <span class="cart-count-badge" data-cart-count="{{ cart_count|default:0 }}">{{ cart_count|default:0 }}</span>
-                </a>
-                <a href="{% url 'loyalty_dashboard' %}" class="loyalty-icon-link" title="G11 Rewards">
-                    <i class="bi bi-star-fill loyalty-icon"></i>
-                    <span class="loyalty-count-badge" data-loyalty-count="{{ loyalty_points|default:0 }}">{{ loyalty_points|default:0 }}</span>
-                </a>
-                {% endif %}
+                <!-- Grouped Action Icons for Mobile -->
+                <div class="nav-mobile-actions">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'wishlist' %}" class="wishlist-icon-link" title="Wishlist">
+                        <i class="bi bi-heart wishlist-icon"></i>
+                        <span class="wishlist-count-badge" data-wishlist-count="{{ wishlist_count|default:0 }}">{{ wishlist_count|default:0 }}</span>
+                    </a>
+                    <a href="{% url 'cart_details' %}" class="cart-icon-link" title="Shopping Cart">
+                        <i class="bi bi-bag-check cart-icon"></i>
+                        <span class="cart-count-badge" data-cart-count="{{ cart_count|default:0 }}">{{ cart_count|default:0 }}</span>
+                    </a>
+                    <a href="{% url 'loyalty_dashboard' %}" class="loyalty-icon-link" title="Rewards">
+                        <i class="bi bi-star-fill loyalty-icon"></i>
+                        <span class="loyalty-count-badge" data-loyalty-count="{{ loyalty_points|default:0 }}">{{ loyalty_points|default:0 }}</span>
+                    </a>
+                    <a href="{% url 'profile' %}" class="nav-icon-btn" title="Profile">
+                        <i class="bi bi-person-circle"></i>
+                    </a>
+                    <form method="post" action="{% url 'logout' %}" class="nav-icon-form">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-icon-btn nav-icon-btn--logout" title="Logout">
+                            <i class="bi bi-box-arrow-right"></i>
+                        </button>
+                    </form>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="nav-link nav-link--login">Login</a>
+                    {% endif %}
+                </div>
+            </div>
 
-                <!-- Mobile-only auth links -->
+            <!-- Right Side Icons (Desktop) -->
+            <div class="nav-desktop-auth-container">
                 {% if user.is_authenticated %}
-                <a href="{% url 'profile' %}" class="nav-mobile-auth nav-icon-btn" title="Profile" aria-label="Profile">
+                <a href="{% url 'profile' %}" class="nav-desktop-auth nav-icon-btn" title="Profile">
                     <i class="bi bi-person-circle"></i>
                 </a>
-                <form method="post" action="{% url 'logout' %}" class="nav-mobile-auth nav-icon-form">
+                <form method="post" action="{% url 'logout' %}" class="nav-desktop-auth nav-icon-form">
                     {% csrf_token %}
-                    <button type="submit" class="nav-icon-btn nav-icon-btn--logout" title="Logout" aria-label="Logout">
+                    <button type="submit" class="nav-icon-btn nav-icon-btn--logout" title="Logout">
                         <i class="bi bi-box-arrow-right"></i>
                     </button>
                 </form>
                 {% else %}
-                <button class="nav-mobile-auth"><a href="{% url 'login' %}"
-                        class="nav-link nav-link--login">Login</a></button>
+                <a href="{% url 'login' %}" class="login-btn nav-desktop-auth">Login</a>
                 {% endif %}
             </div>
-
-            <!-- Login/Logout on right (desktop) -->
-            {% if user.is_authenticated %}
-            <form method="post" action="{% url 'logout' %}" class="nav-desktop-auth nav-icon-form">
-                {% csrf_token %}
-                <button type="submit" class="nav-icon-btn nav-icon-btn--logout" title="Logout" aria-label="Logout">
-                    <i class="bi bi-box-arrow-right"></i>
-                </button>
-            </form>
-            <a href="{% url 'profile' %}" class="user-profile-btn nav-desktop-auth nav-icon-btn" title="Profile" aria-label="Profile">
-                <i class="bi bi-person-circle"></i>
-            </a>
-            {% else %}
-            <button class="login-btn nav-desktop-auth"><a href="{% url 'login' %}"
-                    class="nav-link nav-link--login">Login</a></button>
-            {% endif %}
         </div>
     </nav>
 </section>

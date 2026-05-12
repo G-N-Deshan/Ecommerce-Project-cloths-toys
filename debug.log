@@ -23063,3 +23063,242 @@ INFO 2026-05-11 22:32:01,207 autoreload 15916 9392 Watching for file changes wit
 INFO 2026-05-11 22:32:01,527 autoreload 32996 21112 Watching for file changes with StatReloader
 INFO 2026-05-11 22:32:01,547 autoreload 26884 29264 Watching for file changes with StatReloader
 INFO 2026-05-11 22:32:01,563 autoreload 30884 32792 Watching for file changes with StatReloader
+INFO 2026-05-12 07:41:35,678 autoreload 21920 15264 Watching for file changes with StatReloader
+WARNING 2026-05-12 07:43:02,507 log 33516 29736 Not Found: /favicon.ico
+WARNING 2026-05-12 07:45:09,210 log 33516 29736 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-05-12 07:45:15,416 log 33516 29736 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-05-12 07:45:23,289 log 33516 32440 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-05-12 07:45:28,022 log 33516 10316 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-05-12 07:48:28,768 log 33516 26320 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-05-12 07:50:33,394 log 33516 26320 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+ERROR 2026-05-12 07:51:25,472 middleware 33516 26320 Exception: Template: C:\Users\nipun\Desktop\Ecommerce project\templates\navbar.html, Invalid block tag on line 153: 'else'. Did you forget to register or load this tag?
+Traceback (most recent call last):
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 577, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'else'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 496, in index
+    return render(request, 'index.html', context)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\loader_tags.py", line 200, in render
+    template = context.template.engine.select_template(template_name)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\engine.py", line 228, in select_template
+    return self.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 579, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 644, in invalid_block_tag
+    raise self.error(
+    ...<3 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\nipun\Desktop\Ecommerce project\templates\navbar.html, Invalid block tag on line 153: 'else'. Did you forget to register or load this tag?
+ERROR 2026-05-12 07:51:26,045 log 33516 26320 Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 577, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'else'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 496, in index
+    return render(request, 'index.html', context)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\loader_tags.py", line 200, in render
+    template = context.template.engine.select_template(template_name)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\engine.py", line 228, in select_template
+    return self.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 579, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\template\base.py", line 644, in invalid_block_tag
+    raise self.error(
+    ...<3 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\nipun\Desktop\Ecommerce project\templates\navbar.html, Invalid block tag on line 153: 'else'. Did you forget to register or load this tag?
+WARNING 2026-05-12 07:51:26,233 log 33516 26320 Not Found: /favicon.ico
+WARNING 2026-05-12 07:56:32,129 log 33516 32008 Not Found: /favicon.ico
+WARNING 2026-05-12 08:00:38,389 log 33516 32008 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-05-12 08:01:12,436 log 33516 32008 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+ERROR 2026-05-12 10:34:02,471 middleware 33516 14580 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\toys-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\toys-hero.jpg” does not exist
+ERROR 2026-05-12 10:34:02,475 middleware 33516 2372 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_toys.png” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_toys.png” does not exist
+WARNING 2026-05-12 10:34:02,566 log 33516 14580 Not Found: /media/toys-hero.jpg
+WARNING 2026-05-12 10:34:02,570 log 33516 2372 Not Found: /media/backgrounds/hero_toys.png
+ERROR 2026-05-12 10:35:51,486 middleware 33516 34748 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_toys.png” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_toys.png” does not exist
+WARNING 2026-05-12 10:35:51,524 log 33516 34748 Not Found: /media/backgrounds/hero_toys.png
+ERROR 2026-05-12 11:25:37,070 middleware 32996 33260 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\toys-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\toys-hero.jpg” does not exist
+ERROR 2026-05-12 11:25:37,070 middleware 32996 33480 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_toys.png” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_toys.png” does not exist
+WARNING 2026-05-12 11:25:37,182 log 32996 33480 Not Found: /media/backgrounds/hero_toys.png
+WARNING 2026-05-12 11:25:37,202 log 32996 33260 Not Found: /media/toys-hero.jpg
+INFO 2026-05-13 00:26:25,870 autoreload 22040 15096 Watching for file changes with StatReloader
+WARNING 2026-05-13 00:26:30,942 log 22040 1380 Not Found: /favicon.ico
+ERROR 2026-05-13 00:26:37,527 middleware 22040 24944 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-05-13 00:26:37,579 log 22040 24944 Not Found: /media/about-hero.jpg
+ERROR 2026-05-13 00:37:21,018 middleware 22040 11464 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\nipuna.jpeg alt=” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\nipuna.jpeg alt=” does not exist
+WARNING 2026-05-13 00:37:21,057 log 22040 11464 Not Found: /media/nipuna.jpeg alt=
+ERROR 2026-05-13 00:43:58,108 middleware 22040 7260 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-05-13 00:43:58,148 log 22040 7260 Not Found: /media/about-hero.jpg
+WARNING 2026-05-13 00:44:04,085 log 22040 13444 Not Found: /favicon.ico
+ERROR 2026-05-13 00:45:28,486 middleware 22040 13444 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-05-13 00:45:28,511 log 22040 13444 Not Found: /media/about-hero.jpg
+WARNING 2026-05-13 00:45:29,036 log 22040 13444 Not Found: /favicon.ico
+ERROR 2026-05-13 00:51:19,337 middleware 22040 22844 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-05-13 00:51:19,363 log 22040 22844 Not Found: /media/about-hero.jpg
+WARNING 2026-05-13 00:51:19,813 log 22040 19168 Not Found: /favicon.ico
+ERROR 2026-05-13 00:51:22,856 middleware 22040 22844 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-05-13 00:51:22,903 log 22040 22844 Not Found: /media/about-hero.jpg
+WARNING 2026-05-13 00:51:23,140 log 22040 20700 Not Found: /favicon.ico
+INFO 2026-05-13 00:53:05,813 autoreload 9468 11208 Watching for file changes with StatReloader

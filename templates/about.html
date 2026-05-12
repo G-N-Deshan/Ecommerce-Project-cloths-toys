@@ -1,11 +1,14 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - Kids Fashion</title>
     <link rel="stylesheet" href="{% static 'navbar.css'%}">
@@ -13,6 +16,7 @@
     <link rel="stylesheet" href="{%static 'aboutus.css'%}">
     <link rel="stylesheet" href="{%static 'scroll-reveal.css'%}">
 </head>
+
 <body>
     {%include 'navbar.html'%}
 
@@ -42,8 +46,11 @@
             <div class="mission-content">
                 <span class="section-badge">Who We Are</span>
                 <h2>Dressing Dreams, One Child at a Time</h2>
-                <p>We believe every child deserves to feel confident, comfortable, and stylish. Our journey began with a simple mission: to create high-quality, affordable clothing that makes kids smile and parents proud.</p>
-                <p>From playful everyday wear to special occasion outfits, we carefully curate collections that blend comfort, durability, and the latest trends—all designed with your child's happiness in mind.</p>
+                <p>We believe every child deserves to feel confident, comfortable, and stylish. Our journey began with a
+                    simple mission: to create high-quality, affordable clothing that makes kids smile and parents proud.
+                </p>
+                <p>From playful everyday wear to special occasion outfits, we carefully curate collections that blend
+                    comfort, durability, and the latest trends—all designed with your child's happiness in mind.</p>
                 <div class="mission-stats">
                     <div class="stat-item">
                         <h3>50K+</h3>
@@ -107,7 +114,8 @@
                     <p>{{ review.comment|truncatechars:140 }}</p>
                 </article>
                 {% empty %}
-                <p class="service-review-empty">No approved service reviews yet. Be the first to share your experience.</p>
+                <p class="service-review-empty">No approved service reviews yet. Be the first to share your experience.
+                </p>
                 {% endfor %}
             </div>
 
@@ -126,17 +134,20 @@
             <div class="value-card">
                 <div class="value-icon">🌟</div>
                 <h3>Quality First</h3>
-                <p>Premium materials and expert craftsmanship ensure every piece lasts through playtime adventures and countless washes.</p>
+                <p>Premium materials and expert craftsmanship ensure every piece lasts through playtime adventures and
+                    countless washes.</p>
             </div>
             <div class="value-card">
                 <div class="value-icon">💚</div>
                 <h3>Eco-Friendly</h3>
-                <p>Sustainable fabrics and ethical manufacturing practices because we care about the world our children will inherit.</p>
+                <p>Sustainable fabrics and ethical manufacturing practices because we care about the world our children
+                    will inherit.</p>
             </div>
             <div class="value-card">
                 <div class="value-icon">😊</div>
                 <h3>Comfort Focused</h3>
-                <p>Soft, breathable fabrics with flexible fits that let kids move, play, and explore without restriction.</p>
+                <p>Soft, breathable fabrics with flexible fits that let kids move, play, and explore without
+                    restriction.</p>
             </div>
             <div class="value-card">
                 <div class="value-icon">✨</div>
@@ -146,7 +157,8 @@
             <div class="value-card">
                 <div class="value-icon">💰</div>
                 <h3>Affordable Pricing</h3>
-                <p>High-quality fashion shouldn't break the bank. We offer premium clothing at prices families can afford.</p>
+                <p>High-quality fashion shouldn't break the bank. We offer premium clothing at prices families can
+                    afford.</p>
             </div>
             <div class="value-card">
                 <div class="value-icon">🚚</div>
@@ -166,7 +178,8 @@
                 <div class="timeline-content">
                     <span class="timeline-year">2015</span>
                     <h3>The Beginning</h3>
-                    <p>Founded in a small studio in Colombo with a big dream to revolutionize kids' fashion in Sri Lanka.</p>
+                    <p>Founded in a small studio in Colombo with a big dream to revolutionize kids' fashion in Sri
+                        Lanka.</p>
                 </div>
             </div>
             <div class="timeline-item">
@@ -211,44 +224,37 @@
         <div class="team-grid">
             <div class="team-card">
                 <div class="team-image">
-                    <img src="../media/IMG_3157.HEIC" alt="Sarah Johnson" loading="lazy">
+                    <img src="../media/nipuna.jpeg" alt="Sarah Johnson" loading="lazy">
                 </div>
-                <h3>Sarah Johnson</h3>
+                <h3>Nipuna Deshan</h3>
                 <p class="team-role">Founder & CEO</p>
                 <p class="team-bio">Fashion designer with 15+ years experience in children's apparel.</p>
             </div>
             <div class="team-card">
                 <div class="team-image">
-                    <img src="../media/IMG_3157.HEIC" alt="Michael Chen" loading="lazy">
+                    <img src="../media/apoorwa.jpeg" alt="Michael Chen" loading="lazy">
                 </div>
-                <h3>Michael Chen</h3>
+                <h3>Apoorwa</h3>
                 <p class="team-role">Head of Design</p>
                 <p class="team-bio">Creating playful, innovative designs that kids absolutely love.</p>
             </div>
             <div class="team-card">
                 <div class="team-image">
-                    <img src="../media/IMG_3157.HEIC" alt="Emily Rodriguez" loading="lazy">
+                    <img src="../media/binoy.jpeg" alt="Emily Rodriguez" loading="lazy">
                 </div>
-                <h3>Emily Rodriguez</h3>
+                <h3>Binoy Mahima</h3>
                 <p class="team-role">Customer Experience</p>
                 <p class="team-bio">Ensuring every family has an exceptional shopping experience.</p>
             </div>
             <div class="team-card">
                 <div class="team-image">
-                    <img src="../media/IMG_3157.HEIC" alt="David Kim" loading="lazy">
+                    <img src="../media/maleesha.jpeg" alt="David Kim" loading="lazy">
                 </div>
-                <h3>David Kim</h3>
+                <h3>Maleesha</h3>
                 <p class="team-role">Sustainability Officer</p>
                 <p class="team-bio">Leading our eco-friendly initiatives and ethical practices.</p>
             </div>
-            <div class="team-card">
-                <div class="team-image">
-                    <img src="../media/IMG_3157.HEIC" alt="Alex Morgan" loading="lazy">
-                </div>
-                <h3>Alex Morgan</h3>
-                <p class="team-role">Operations Manager</p>
-                <p class="team-bio">Coordinating logistics and quality checks to deliver a smooth customer experience.</p>
-            </div>
+
         </div>
     </section>
 
@@ -270,4 +276,5 @@
     <script src="{% static 'global.js' %}"></script>
     <script src="{%static 'scroll-reveal.js'%}"></script>
 </body>
+
 </html>
