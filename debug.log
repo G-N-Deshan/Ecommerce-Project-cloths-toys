@@ -23302,3 +23302,21 @@ django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\ab
 WARNING 2026-05-13 00:51:22,903 log 22040 22844 Not Found: /media/about-hero.jpg
 WARNING 2026-05-13 00:51:23,140 log 22040 20700 Not Found: /favicon.ico
 INFO 2026-05-13 00:53:05,813 autoreload 9468 11208 Watching for file changes with StatReloader
+ERROR 2026-05-13 00:53:10,413 middleware 9468 10648 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-05-13 00:53:10,434 log 9468 10648 Not Found: /media/about-hero.jpg
+WARNING 2026-05-13 00:53:11,003 log 9468 5548 Not Found: /favicon.ico
+ERROR 2026-05-13 00:53:12,712 middleware 9468 5548 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp2\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-05-13 00:53:12,750 log 9468 5548 Not Found: /media/about-hero.jpg
+WARNING 2026-05-13 00:53:13,086 log 9468 14376 Not Found: /favicon.ico
