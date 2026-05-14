@@ -720,7 +720,7 @@
                 <div class="space-y-4 anim-slide-up-d2">
                     <!-- Inventory Status (live-updated) -->
                     {% if inventory %}
-                    <div class="mb-2">
+                    <div class="mb-4 flex flex-wrap gap-2 items-center">
                         {% if not inventory.is_in_stock %}
                         <span data-stock-product="{{ product_type }}-{{ product.id }}"
                             class="stock-badge stock-badge--out inline-block bg-red-100 text-red-700 text-sm font-semibold px-3 py-1 rounded-full">Out
@@ -734,6 +734,12 @@
                             class="stock-badge stock-badge--in inline-block bg-emerald-100 text-emerald-700 text-sm font-semibold px-3 py-1 rounded-full">In
                             Stock</span>
                         {% endif %}
+                        
+                        <!-- Delivery Estimate Badge -->
+                        <span class="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 text-sm font-semibold px-3 py-1 rounded-full border border-blue-100">
+                            <i class="bi bi-truck"></i>
+                            Delivery by 3-4 days
+                        </span>
                     </div>
                     {% endif %}
 

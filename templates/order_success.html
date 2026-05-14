@@ -128,6 +128,10 @@
                     <span class="font-semibold text-slate-800 text-right max-w-[200px] truncate" title="{{ order.address }}, {{ order.city }}">{{ order.city }}, {{ order.country }}</span>
                 </div>
                 <div class="flex justify-between items-center mt-4 pt-4 border-t border-slate-100">
+                    <span class="text-slate-500">Estimated Delivery</span>
+                    <span class="font-bold text-indigo-600">3-4 Business Days</span>
+                </div>
+                <div class="flex justify-between items-center mt-2">
                     <span class="text-base font-bold text-slate-900">Total Paid</span>
                     <span class="text-2xl font-extrabold text-indigo-600">Rs {{ order.total|floatformat:2 }}</span>
                 </div>
