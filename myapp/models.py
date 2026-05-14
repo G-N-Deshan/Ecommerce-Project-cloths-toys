@@ -38,6 +38,7 @@ class Offers(models.Model):
     material = models.CharField(max_length=200, blank=True, default='', help_text='e.g. 100% Cotton, Polyester blend')
     sizes_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. S, M, L, XL')
     colors_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. Red, Blue, Black')
+    view_count = models.PositiveIntegerField(default=0, editable=False, help_text='Number of times this product page was viewed')
     
     def __str__(self):
         return self.title
@@ -67,6 +68,7 @@ class NewArrivals(models.Model):
     material = models.CharField(max_length=200, blank=True, default='', help_text='e.g. 100% Cotton, Polyester blend')
     sizes_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. S, M, L, XL')
     colors_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. Red, Blue, Black')
+    view_count = models.PositiveIntegerField(default=0, editable=False, help_text='Number of times this product page was viewed')
     
     def __str__(self):
         return self.title
@@ -111,6 +113,7 @@ class Cloths(models.Model):
     care_instructions = models.TextField(blank=True, default='', help_text='Washing and care instructions')
     sizes_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. S, M, L, XL or 2T, 3T, 4T')
     colors_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. Red, Blue, Black')
+    view_count = models.PositiveIntegerField(default=0, editable=False, help_text='Number of times this product page was viewed')
     
     def __str__(self):
         return self.name
@@ -239,6 +242,7 @@ class Toy(models.Model):
     dimensions = models.CharField(max_length=200, blank=True, default='', help_text='e.g. 30cm x 20cm x 15cm')
     sizes_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. S, M, L, XL')
     colors_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. Red, Blue, Black')
+    view_count = models.PositiveIntegerField(default=0, editable=False, help_text='Number of times this product page was viewed')
 
     def __str__(self):
         return self.name

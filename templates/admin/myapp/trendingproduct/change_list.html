@@ -1,0 +1,92 @@
+{% extends "admin/change_list.html" %}
+{% load i18n %}
+
+{% block content %}
+{{ block.super }}
+
+{% if view_rankings %}
+<div style="
+    margin: 24px 0;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border-radius: 16px;
+    padding: 28px 32px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+">
+    <div style="display:flex; align-items:center; margin-bottom:20px; gap:12px;">
+        <span style="font-size:28px;">🔥</span>
+        <div>
+            <h2 style="margin:0; color:#fff; font-size:20px; font-weight:700; font-family:'Segoe UI',sans-serif;">Most-Viewed Products</h2>
+            <p style="margin:4px 0 0; color:rgba(255,255,255,0.5); font-size:13px;">Based on actual product page visits — use actions above to auto-promote top products to Trending</p>
+        </div>
+    </div>
+
+    <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:separate; border-spacing:0 6px;">
+            <thead>
+                <tr style="color:rgba(255,255,255,0.5); font-size:11px; text-transform:uppercase; letter-spacing:1px;">
+                    <th style="text-align:left; padding:8px 12px;">#</th>
+                    <th style="text-align:left; padding:8px 12px;">Product Name</th>
+                    <th style="text-align:left; padding:8px 12px;">Type</th>
+                    <th style="text-align:left; padding:8px 12px;">Category</th>
+                    <th style="text-align:right; padding:8px 12px;">👁 Views</th>
+                    <th style="text-align:center; padding:8px 12px;">Popularity Bar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in view_rankings %}
+                {% with max_views=view_rankings.0.view_count %}
+                <tr style="background:rgba(255,255,255,0.05); border-radius:8px;">
+                    <td style="padding:10px 12px; color:rgba(255,255,255,0.4); font-size:13px; font-weight:600; border-radius:8px 0 0 8px;">
+                        {% if forloop.counter == 1 %}🥇{% elif forloop.counter == 2 %}🥈{% elif forloop.counter == 3 %}🥉{% else %}{{ forloop.counter }}{% endif %}
+                    </td>
+                    <td style="padding:10px 12px; color:#fff; font-size:14px; font-weight:600; max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                        {{ item.name }}
+                    </td>
+                    <td style="padding:10px 12px;">
+                        {% if item.type == "Cloth" %}
+                        <span style="background:rgba(99,102,241,0.25); color:#a5b4fc; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600;">👕 Cloth</span>
+                        {% elif item.type == "Toy" %}
+                        <span style="background:rgba(245,158,11,0.25); color:#fcd34d; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600;">🧸 Toy</span>
+                        {% elif item.type == "Offer" %}
+                        <span style="background:rgba(239,68,68,0.25); color:#fca5a5; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600;">🏷️ Offer</span>
+                        {% else %}
+                        <span style="background:rgba(16,185,129,0.25); color:#6ee7b7; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600;">✨ New Arrival</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding:10px 12px; color:rgba(255,255,255,0.6); font-size:13px; text-transform:capitalize;">
+                        {{ item.category }}
+                    </td>
+                    <td style="padding:10px 12px; text-align:right; color:#fff; font-size:15px; font-weight:700; border-radius:0;">
+                        {{ item.view_count }}
+                    </td>
+                    <td style="padding:10px 16px; border-radius:0 8px 8px 0; min-width:160px;">
+                        {% if max_views > 0 %}
+                        {% widthratio item.view_count max_views 100 as pct %}
+                        <div style="background:rgba(255,255,255,0.1); border-radius:999px; height:8px; overflow:hidden;">
+                            <div style="
+                                height:100%;
+                                width:{{ pct }}%;
+                                background: linear-gradient(90deg,
+                                    {% if forloop.counter == 1 %}#f59e0b, #ef4444
+                                    {% elif forloop.counter == 2 %}#6366f1, #8b5cf6
+                                    {% elif forloop.counter == 3 %}#10b981, #06b6d4
+                                    {% else %}#64748b, #94a3b8{% endif %});
+                                border-radius:999px;
+                                transition:width 0.6s ease;
+                            "></div>
+                        </div>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endwith %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <p style="margin:16px 0 0; color:rgba(255,255,255,0.35); font-size:12px; font-style:italic;">
+        💡 Tip: Select any trending product above and use the "Auto-promote" action dropdown to push the most-viewed products from any category into the Trending list.
+    </p>
+</div>
+{% endif %}
+{% endblock %}

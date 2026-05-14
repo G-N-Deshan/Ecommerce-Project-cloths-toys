@@ -601,13 +601,105 @@ class NewsletterSubscriptionAdmin(admin.ModelAdmin):
 
 @admin.register(TrendingProduct)
 class TrendingProductAdmin(admin.ModelAdmin):
-    list_display = ['get_image', 'name', 'category', 'price', 'order', 'is_active']
+    list_display = ['get_image', 'name', 'category', 'price', 'order', 'is_active', 'created_at']
     list_filter = ['category', 'is_active', 'created_at']
     search_fields = ['name', 'category']
     list_editable = ['order', 'is_active', 'price']
+    ordering = ['order', '-created_at']
+    actions = ['auto_promote_top_cloths', 'auto_promote_top_toys', 'auto_promote_top_offers', 'auto_promote_top_arrivals']
     
     def get_image(self, obj):
         if obj.image:
             return format_html('<img src="{}" style="width: 50px; height: 50px; border-radius: 8px; object-fit: cover;" />', obj.image.url)
         return "-"
     get_image.short_description = 'Image'
+
+    # ── Admin actions to auto-promote top-viewed products ──
+    @admin.action(description='🔥 Auto-promote Top 5 Most-Viewed Cloths to Trending')
+    def auto_promote_top_cloths(self, request, queryset):
+        from .models import Cloths
+        self._promote_top(request, Cloths, 'cloth', 'men', 5)
+
+    @admin.action(description='🧸 Auto-promote Top 5 Most-Viewed Toys to Trending')
+    def auto_promote_top_toys(self, request, queryset):
+        from .models import Toy
+        self._promote_top(request, Toy, 'toys', 'toys', 5)
+
+    @admin.action(description='🏷️ Auto-promote Top 5 Most-Viewed Offers to Trending')
+    def auto_promote_top_offers(self, request, queryset):
+        from .models import Offers
+        self._promote_top(request, Offers, 'offer', 'men', 5)
+
+    @admin.action(description='✨ Auto-promote Top 5 Most-Viewed New Arrivals to Trending')
+    def auto_promote_top_arrivals(self, request, queryset):
+        from .models import NewArrivals
+        self._promote_top(request, NewArrivals, 'arrival', 'men', 5)
+
+    def _promote_top(self, request, model_class, src_type, default_category, count):
+        from django.contrib import messages
+        top_items = model_class.objects.order_by('-view_count')[:count]
+        created = 0
+        skipped = 0
+        for item in top_items:
+            name = getattr(item, 'name', None) or getattr(item, 'title', '')
+            price = getattr(item, 'price', None) or getattr(item, 'price2', None) or getattr(item, 'price1', '') or '0'
+            price = str(price)
+            image = item.imageUrl
+            # Determine category
+            item_cat = getattr(item, 'category', default_category)
+            trending_cat = item_cat if item_cat in ['kids', 'men', 'women', 'toys'] else default_category
+            # Build link_url
+            from django.urls import reverse
+            try:
+                link = reverse('product_detail', args=[src_type, item.id])
+            except Exception:
+                link = '/'
+            # Avoid duplicates by name
+            if TrendingProduct.objects.filter(name=name).exists():
+                skipped += 1
+                continue
+            TrendingProduct.objects.create(
+                name=name,
+                image=image,
+                price=price,
+                category=trending_cat,
+                link_url=link,
+                badge='Trending',
+                is_active=True,
+                order=0,
+            )
+            created += 1
+        messages.success(
+            request,
+            f'✅ Promoted {created} product(s) to Trending. Skipped {skipped} already existing.'
+        )
+
+    # ── Change list extra context: show view rankings ──
+    def changelist_view(self, request, extra_context=None):
+        from .models import Cloths, Toy, Offers, NewArrivals
+        extra_context = extra_context or {}
+        
+        # Top 10 most-viewed across all product types
+        top_cloths = list(Cloths.objects.order_by('-view_count').values('id', 'name', 'view_count', 'category')[:10])
+        top_toys = list(Toy.objects.order_by('-view_count').values('id', 'name', 'view_count', 'category')[:10])
+        top_offers = list(Offers.objects.order_by('-view_count').values('id', 'title', 'view_count', 'category')[:10])
+        top_arrivals = list(NewArrivals.objects.order_by('-view_count').values('id', 'title', 'view_count', 'category')[:10])
+        
+        # Normalize name field
+        for item in top_offers:
+            item['name'] = item.pop('title')
+            item['type'] = 'Offer'
+        for item in top_arrivals:
+            item['name'] = item.pop('title')
+            item['type'] = 'New Arrival'
+        for item in top_cloths:
+            item['type'] = 'Cloth'
+        for item in top_toys:
+            item['type'] = 'Toy'
+        
+        # Merge and sort
+        all_products = top_cloths + top_toys + top_offers + top_arrivals
+        all_products.sort(key=lambda x: x['view_count'], reverse=True)
+        
+        extra_context['view_rankings'] = all_products[:15]
+        return super().changelist_view(request, extra_context=extra_context)

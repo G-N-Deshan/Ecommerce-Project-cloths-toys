@@ -6,7 +6,6 @@
         align-items: center !important;
         z-index: 1100 !important;
     }
-
     .promo-banner {
         width: 100% !important;
         z-index: 1101 !important;
@@ -14,32 +13,24 @@
 </style>
 
 <section class="section-0">
-    <!-- PROMO BANNER INSIDE STICKY CONTAINER -->
+    <!-- PROMO BANNER -->
     <div class="promo-banner" role="alert"
         style="display: {% if site_settings.is_sale_active %}block{% else %}none{% endif %};">
         <div class="promo-content">
             <span class="promo-icon">🎉</span> {{ site_settings.sale_text|safe }} <span class="promo-icon">✨</span>
         </div>
     </div>
+
     <nav class="navbar">
         <div>
-            <!-- Logo on left -->
+            <!-- Logo -->
             <a href="{% url 'index' %}"><img src="{%static 'bird_2.jpg'%}" alt="logo" class="nav-logo"></a>
 
-            <!-- Hamburger Toggle Button (mobile only) -->
-            <button class="nav-hamburger" aria-label="Toggle navigation" aria-expanded="false"
-                onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('nav-open');this.setAttribute('aria-expanded',this.classList.contains('open'))">
-                <span class="hamburger-line"></span>
-                <span class="hamburger-line"></span>
-                <span class="hamburger-line"></span>
-            </button>
-
-            <!-- Navigation Links Centered -->
-            <div class="nav-links-container">
+            <!-- Desktop: Nav links centered -->
+            <div class="nav-links-container" id="navLinksContainer">
                 <a href="{% url 'index' %}" class="nav-link nav-link--home">Home</a>
                 <div class="nav-dropdown">
-                    <a href="{% url 'buy' %}" class="nav-link nav-link--vehicles">Shop <i
-                            class="bi bi-chevron-down text-[10px]"></i></a>
+                    <a href="{% url 'buy' %}" class="nav-link nav-link--vehicles">Shop <i class="bi bi-chevron-down text-[10px]"></i></a>
                     <div class="mega-menu">
                         <div class="mega-menu-grid">
                             <div class="mega-menu-column">
@@ -71,15 +62,12 @@
                 <!-- Search & Action Icons Group -->
                 <div class="nav-search-wrapper">
                     <div class="relative">
-                        <form action="{% url 'search' %}" method="GET" class="nav-search-form" id="navSearchForm"
-                            aria-label="Search products">
+                        <form action="{% url 'search' %}" method="GET" class="nav-search-form" id="navSearchForm" aria-label="Search products">
                             <input type="text" name="q" placeholder="Search products..." class="nav-search-input"
                                 id="navSearchInput" aria-label="Search query" autocomplete="off">
                             <button type="submit" class="nav-search-btn" title="Search" aria-label="Search">
                                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                    <path
-                                        d="M10.5 4a6.5 6.5 0 1 0 4.05 11.58l4.44 4.44a1 1 0 0 0 1.42-1.42l-4.44-4.44A6.5 6.5 0 0 0 10.5 4zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z">
-                                    </path>
+                                    <path d="M10.5 4a6.5 6.5 0 1 0 4.05 11.58l4.44 4.44a1 1 0 0 0 1.42-1.42l-4.44-4.44A6.5 6.5 0 0 0 10.5 4zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z"></path>
                                 </svg>
                             </button>
                         </form>
@@ -87,7 +75,6 @@
                             class="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl overflow-hidden hidden z-[3000] border border-slate-100">
                         </div>
                     </div>
-
                     <!-- Icons next to search (Desktop) -->
                     <div class="nav-search-actions">
                         {% if user.is_authenticated %}
@@ -106,37 +93,7 @@
                         {% endif %}
                     </div>
                 </div>
-
                 <script src="{% static 'live_search.js' %}"></script>
-
-                <!-- Grouped Action Icons for Mobile -->
-                <div class="nav-mobile-actions">
-                    {% if user.is_authenticated %}
-                    <a href="{% url 'wishlist' %}" class="wishlist-icon-link" title="Wishlist">
-                        <i class="bi bi-heart wishlist-icon"></i>
-                        <span class="wishlist-count-badge" data-wishlist-count="{{ wishlist_count|default:0 }}">{{ wishlist_count|default:0 }}</span>
-                    </a>
-                    <a href="{% url 'cart_details' %}" class="cart-icon-link" title="Shopping Cart">
-                        <i class="bi bi-bag-check cart-icon"></i>
-                        <span class="cart-count-badge" data-cart-count="{{ cart_count|default:0 }}">{{ cart_count|default:0 }}</span>
-                    </a>
-                    <a href="{% url 'loyalty_dashboard' %}" class="loyalty-icon-link" title="Rewards">
-                        <i class="bi bi-star-fill loyalty-icon"></i>
-                        <span class="loyalty-count-badge" data-loyalty-count="{{ loyalty_points|default:0 }}">{{ loyalty_points|default:0 }}</span>
-                    </a>
-                    <a href="{% url 'profile' %}" class="nav-icon-btn" title="Profile">
-                        <i class="bi bi-person-circle"></i>
-                    </a>
-                    <form method="post" action="{% url 'logout' %}" class="nav-icon-form">
-                        {% csrf_token %}
-                        <button type="submit" class="nav-icon-btn nav-icon-btn--logout" title="Logout">
-                            <i class="bi bi-box-arrow-right"></i>
-                        </button>
-                    </form>
-                    {% else %}
-                    <a href="{% url 'login' %}" class="nav-link nav-link--login">Login</a>
-                    {% endif %}
-                </div>
             </div>
 
             <!-- Right Side Icons (Desktop) -->
@@ -155,8 +112,203 @@
                 <a href="{% url 'login' %}" class="login-btn nav-desktop-auth">Login</a>
                 {% endif %}
             </div>
+
+            <!-- Mobile Right: Quick icons + Hamburger -->
+            <div class="mobile-header-right">
+                {% if user.is_authenticated %}
+                <a href="{% url 'cart_details' %}" class="mobile-quick-cart" title="Cart">
+                    <i class="bi bi-bag-check"></i>
+                    <span class="cart-count-badge" data-cart-count="{{ cart_count|default:0 }}">{{ cart_count|default:0 }}</span>
+                </a>
+                {% endif %}
+                <!-- Hamburger -->
+                <button class="nav-hamburger" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
         </div>
     </nav>
 </section>
+
+<!-- ══════════════════════════════════
+     MOBILE SLIDE DRAWER OVERLAY
+══════════════════════════════════ -->
+<div class="mobile-overlay" id="mobileOverlay"></div>
+
+<aside class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation" role="dialog">
+    <!-- Drawer Header -->
+    <div class="drawer-header">
+        <img src="{% static 'bird_2.jpg' %}" alt="logo" class="drawer-logo">
+        <button class="drawer-close-btn" id="drawerCloseBtn" aria-label="Close menu">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+
+    {% if user.is_authenticated %}
+    <!-- User Welcome Card -->
+    <div class="drawer-user-card">
+        <div class="drawer-avatar">
+            <i class="bi bi-person-fill"></i>
+        </div>
+        <div>
+            <p class="drawer-user-name">{{ user.first_name|default:user.username }}</p>
+            <p class="drawer-user-email">{{ user.email }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Mobile Search -->
+    <div class="drawer-search-wrap">
+        <form action="{% url 'search' %}" method="GET" class="drawer-search-form">
+            <i class="bi bi-search drawer-search-icon"></i>
+            <input type="text" name="q" placeholder="Search products..." class="drawer-search-input" autocomplete="off">
+            <button type="submit" class="drawer-search-submit" aria-label="Search">
+                <i class="bi bi-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+
+    <!-- Nav Links -->
+    <nav class="drawer-nav" aria-label="Mobile menu links">
+        <a href="{% url 'index' %}" class="drawer-link">
+            <span class="drawer-link-icon">🏠</span>
+            <span>Home</span>
+            <i class="bi bi-chevron-right drawer-link-chevron"></i>
+        </a>
+
+        <!-- Shop accordion -->
+        <div class="drawer-accordion">
+            <button class="drawer-link drawer-accordion-trigger" aria-expanded="false">
+                <span class="drawer-link-icon">🛍️</span>
+                <span>Shop</span>
+                <i class="bi bi-chevron-down drawer-link-chevron"></i>
+            </button>
+            <div class="drawer-accordion-body">
+                <p class="drawer-acc-heading">Fashion</p>
+                <a href="{% url 'women_cloths' %}" class="drawer-sub-link">👗 Women's Collection</a>
+                <a href="{% url 'mens_cloths' %}" class="drawer-sub-link">👔 Men's Collection</a>
+                <a href="{% url 'kids_cloths' %}" class="drawer-sub-link">👕 Kids' Clothing</a>
+                <p class="drawer-acc-heading">Play Time</p>
+                <a href="{% url 'toys_page' %}" class="drawer-sub-link">🧸 All Toys</a>
+                <a href="{% url 'toys_page' %}?category=educational" class="drawer-sub-link">📚 Educational Toys</a>
+                <a href="{% url 'toys_page' %}?category=building" class="drawer-sub-link">🧱 Building Sets</a>
+                <p class="drawer-acc-heading">Quick Links</p>
+                <a href="{% url 'shop_offers' %}" class="drawer-sub-link">🏷️ Hot Deals</a>
+                <a href="{% url 'trending' %}" class="drawer-sub-link">🔥 Trending Now</a>
+                <a href="{% url 'new_arrivals' %}" class="drawer-sub-link">✨ Just Landed</a>
+            </div>
+        </div>
+
+        <a href="{% url 'trending' %}" class="drawer-link">
+            <span class="drawer-link-icon">🔥</span>
+            <span>Trending</span>
+            <i class="bi bi-chevron-right drawer-link-chevron"></i>
+        </a>
+        <a href="{% url 'reviews' %}" class="drawer-link">
+            <span class="drawer-link-icon">⭐</span>
+            <span>Reviews</span>
+            <i class="bi bi-chevron-right drawer-link-chevron"></i>
+        </a>
+        <a href="{% url 'contact_us' %}" class="drawer-link">
+            <span class="drawer-link-icon">💬</span>
+            <span>Contact</span>
+            <i class="bi bi-chevron-right drawer-link-chevron"></i>
+        </a>
+        <a href="{% url 'about' %}" class="drawer-link">
+            <span class="drawer-link-icon">ℹ️</span>
+            <span>About</span>
+            <i class="bi bi-chevron-right drawer-link-chevron"></i>
+        </a>
+    </nav>
+
+    <!-- Bottom Quick Actions -->
+    <div class="drawer-actions-bar">
+        {% if user.is_authenticated %}
+        <a href="{% url 'wishlist' %}" class="drawer-action-btn">
+            <i class="bi bi-heart-fill" style="color:#ec4899;"></i>
+            <span>Wishlist</span>
+            {% if wishlist_count %}
+            <span class="drawer-action-badge">{{ wishlist_count }}</span>
+            {% endif %}
+        </a>
+        <a href="{% url 'cart_details' %}" class="drawer-action-btn">
+            <i class="bi bi-bag-check-fill" style="color:#6366f1;"></i>
+            <span>Cart</span>
+            {% if cart_count %}
+            <span class="drawer-action-badge" data-cart-count="{{ cart_count|default:0 }}">{{ cart_count }}</span>
+            {% endif %}
+        </a>
+        <a href="{% url 'loyalty_dashboard' %}" class="drawer-action-btn">
+            <i class="bi bi-star-fill" style="color:#f59e0b;"></i>
+            <span>Rewards</span>
+        </a>
+        <a href="{% url 'profile' %}" class="drawer-action-btn">
+            <i class="bi bi-person-circle" style="color:#10b981;"></i>
+            <span>Profile</span>
+        </a>
+        <form method="post" action="{% url 'logout' %}" style="display:contents;">
+            {% csrf_token %}
+            <button type="submit" class="drawer-action-btn">
+                <i class="bi bi-box-arrow-right" style="color:#ef4444;"></i>
+                <span>Logout</span>
+            </button>
+        </form>
+        {% else %}
+        <a href="{% url 'login' %}" class="drawer-login-cta">
+            <i class="bi bi-box-arrow-in-right"></i> Login to your account
+        </a>
+        {% endif %}
+    </div>
+</aside>
+
+<script>
+(function(){
+    const toggle = document.getElementById('mobileMenuToggle');
+    const drawer = document.getElementById('mobileDrawer');
+    const overlay = document.getElementById('mobileOverlay');
+    const closeBtn = document.getElementById('drawerCloseBtn');
+
+    function openDrawer() {
+        drawer.classList.add('drawer-open');
+        overlay.classList.add('overlay-visible');
+        document.body.style.overflow = 'hidden';
+        toggle.setAttribute('aria-expanded', 'true');
+    }
+    function closeDrawer() {
+        drawer.classList.remove('drawer-open');
+        overlay.classList.remove('overlay-visible');
+        document.body.style.overflow = '';
+        toggle.setAttribute('aria-expanded', 'false');
+    }
+
+    toggle.addEventListener('click', () => {
+        drawer.classList.contains('drawer-open') ? closeDrawer() : openDrawer();
+    });
+    closeBtn.addEventListener('click', closeDrawer);
+    overlay.addEventListener('click', closeDrawer);
+
+    // Accordion
+    document.querySelectorAll('.drawer-accordion-trigger').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const body = this.nextElementSibling;
+            const isOpen = body.classList.contains('acc-open');
+            document.querySelectorAll('.drawer-accordion-body').forEach(b => b.classList.remove('acc-open'));
+            document.querySelectorAll('.drawer-accordion-trigger').forEach(b => b.setAttribute('aria-expanded','false'));
+            if (!isOpen) {
+                body.classList.add('acc-open');
+                this.setAttribute('aria-expanded','true');
+            }
+        });
+    });
+
+    // Close drawer when a link is clicked
+    document.querySelectorAll('.drawer-link:not(.drawer-accordion-trigger), .drawer-sub-link').forEach(link => {
+        link.addEventListener('click', closeDrawer);
+    });
+})();
+</script>
+
 {% include 'includes/breadcrumbs.html' %}
-{% include 'cart.html' %}
+{% include 'cart.html' %}

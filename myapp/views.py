@@ -986,6 +986,14 @@ def product_detail(request, product_type, product_id):
         messages.error(request, 'Invalid product type')
         return redirect('index')
 
+    # ── Increment view count (only on GET, not POST) ──
+    if request.method == 'GET' and product is not None:
+        try:
+            from django.db.models import F
+            type(product).objects.filter(pk=product.pk).update(view_count=F('view_count') + 1)
+        except Exception:
+            pass  # Never break the page due to view count errors
+
     # ── Reviews ──
     fk_field = product_type  # FK field name matches product_type: cloth, toy, offer, arrival
     reviews = ProductReview.objects.filter(product_type=product_type, **{fk_field: product})

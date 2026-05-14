@@ -24771,3 +24771,11 @@ Traceback (most recent call last):
     raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
 django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_toys.png” does not exist
 WARNING 2026-05-14 23:05:07,317 log 22944 25268 Not Found: /media/backgrounds/hero_toys.png
+INFO 2026-05-14 23:15:58,411 autoreload 22944 19952 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-05-14 23:15:59,526 autoreload 7144 21932 Watching for file changes with StatReloader
+INFO 2026-05-14 23:17:19,903 autoreload 7144 21932 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-05-14 23:17:21,102 autoreload 8272 26616 Watching for file changes with StatReloader
+INFO 2026-05-14 23:17:40,087 autoreload 8272 26616 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-14 23:17:41,420 autoreload 24332 5712 Watching for file changes with StatReloader
+INFO 2026-05-14 23:18:19,991 autoreload 24332 5712 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-14 23:18:21,343 autoreload 12544 21568 Watching for file changes with StatReloader
