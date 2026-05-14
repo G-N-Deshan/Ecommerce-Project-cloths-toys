@@ -26605,3 +26605,4 @@ TypeError: args or kwargs must be provided.
 WARNING 2026-05-15 03:29:25,553 log 11868 24344 Not Found: /favicon.ico
 INFO 2026-05-15 03:29:42,595 autoreload 11868 1472 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
 INFO 2026-05-15 03:29:43,531 autoreload 24596 7336 Watching for file changes with StatReloader
+WARNING 2026-05-15 03:30:05,272 log 24596 26316 Not Found: /favicon.ico
