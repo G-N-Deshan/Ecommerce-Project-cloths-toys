@@ -1147,7 +1147,7 @@
                 {% for rp in related_products %}
                 <a href="{% url 'product_detail' product_type rp.id %}" class="related-card group">
                     <div class="overflow-hidden">
-                        <img src="{{ rp.imageUrl.url }}"
+                        <img src="{% if rp.imageUrl %}{{ rp.imageUrl.url }}{% elif rp.image %}{{ rp.image.url }}{% endif %}"
                             alt="{% if rp.title %}{{ rp.title }}{% else %}{{ rp.name }}{% endif %}" loading="lazy">
                     </div>
                     <div class="p-4">
@@ -1162,6 +1162,8 @@
                         <span class="text-indigo-600 font-bold text-sm">{{ rp.price1|default:"" }}</span>
                         {% elif product_type == 'arrival' %}
                         <span class="text-indigo-600 font-bold text-sm">{{ rp.price|default:"" }}</span>
+                        {% elif product_type == 'trending' %}
+                        <span class="text-indigo-600 font-bold text-sm">Rs {{ rp.price }}</span>
                         {% endif %}
                     </div>
                 </a>
