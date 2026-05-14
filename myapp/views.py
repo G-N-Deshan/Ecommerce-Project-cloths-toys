@@ -281,6 +281,7 @@ def redeem_loyalty_points(request):
             discount_type='fixed',
             discount_value=Decimal(str(discount_value)),
             min_order_amount=Decimal(str(discount_value * 5)),
+            max_uses=1,  # Strictly single-use
             valid_from=timezone.now(),
             valid_until=timezone.now() + timedelta(days=30),
             is_active=True
@@ -3242,7 +3243,11 @@ def validate_coupon(request):
 
             coupon = Coupon.objects.get(code__iexact=code)
             if not coupon.is_valid():
-                return JsonResponse({'valid': False, 'error': 'This coupon has expired or is no longer active.'})
+                if not coupon.is_active:
+                    return JsonResponse({'valid': False, 'error': 'This coupon is no longer active.'})
+                if coupon.max_uses > 0 and coupon.used_count >= coupon.max_uses:
+                    return JsonResponse({'valid': False, 'error': 'This coupon has already been used and cannot be reused.'})
+                return JsonResponse({'valid': False, 'error': 'This coupon has expired.'})
             if subtotal < coupon.min_order_amount:
                 return JsonResponse({'valid': False, 'error': f'Minimum order amount is Rs. {coupon.min_order_amount}.'})
 

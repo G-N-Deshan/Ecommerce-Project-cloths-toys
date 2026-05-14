@@ -24789,3 +24789,10 @@ WARNING 2026-05-14 23:43:48,277 log 12544 8000 Not Found: /.well-known/appspecif
 WARNING 2026-05-14 23:47:42,318 log 12544 8000 Not Found: /.well-known/appspecific/com.chrome.devtools.json
 WARNING 2026-05-14 23:47:43,830 log 12544 13972 Not Found: /favicon.ico
 WARNING 2026-05-14 23:49:10,900 log 12544 13972 Not Found: /favicon.ico
+WARNING 2026-05-14 23:58:18,974 log 12544 21180 Not Found: /favicon.ico
+WARNING 2026-05-15 00:07:57,987 log 12544 5112 Not Found: /favicon.ico
+WARNING 2026-05-15 00:12:06,343 log 12544 26492 Not Found: /favicon.ico
+INFO 2026-05-15 00:20:39,442 autoreload 12544 21568 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 00:20:41,160 autoreload 17980 2236 Watching for file changes with StatReloader
+INFO 2026-05-15 00:20:57,392 autoreload 17980 2236 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 00:20:58,509 autoreload 25424 26292 Watching for file changes with StatReloader
