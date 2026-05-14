@@ -79,7 +79,7 @@
                         <h3 class="text-lg font-bold text-slate-900 mb-1">Return Window Open</h3>
                         <p class="text-slate-500 text-sm">Not happy with your items? You can return them within 30 days of purchase.</p>
                     </div>
-                    <a href="{% url 'initiate_return' order.order_number %}" class="px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-center transition-all">
+                    <a href="{% url 'initiate_return' order.order_number %}" class="px-6 py-3 bg-[#0f766e] hover:bg-teal-800 text-white font-bold rounded-xl text-center transition-all shadow-lg shadow-teal-200">
                         Start a Return
                     </a>
                 </div>
@@ -90,7 +90,7 @@
                     </div>
                     <div class="flex-1">
                         <h3 class="font-bold text-amber-900 text-sm">Return in Progress</h3>
-                        <p class="text-amber-700 text-xs">You have an active return for this order. <a href="{% url 'my_returns' %}" class="font-bold underline">Check Status</a></p>
+                        <p class="text-amber-700 text-xs">You have an active return for this order. <a href="{% url 'my_returns' %}" class="font-bold underline text-[#0f766e]">Check Status</a></p>
                     </div>
                 </div>
                 {% else %}

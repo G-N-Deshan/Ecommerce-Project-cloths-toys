@@ -1,0 +1,156 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title %}Manage Payments | KidZone Admin{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-display font-bold text-slate-900 dark:text-white">Payments & Finance</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Track revenue and view transaction history.</p>
+        </div>
+        
+        <div class="flex gap-3">
+            <button class="px-4 py-2 bg-white dark:bg-dark-card border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-sm flex items-center gap-2">
+                <i class="bi bi-download"></i> Export Report
+            </button>
+        </div>
+    </div>
+
+    <!-- Financial Overview Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Total Revenue -->
+        <div class="glass-card rounded-2xl p-6 relative overflow-hidden group border-b-4 border-teal-500">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Lifetime Revenue</p>
+                    <h3 class="text-3xl font-display font-bold text-slate-900 dark:text-white">Rs {{ total_revenue|floatformat:2 }}</h3>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 flex items-center justify-center text-xl">
+                    <i class="bi bi-bank"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Online Revenue -->
+        <div class="glass-card rounded-2xl p-6 relative overflow-hidden group border-b-4 border-indigo-500">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Stripe / Online</p>
+                    <h3 class="text-2xl font-display font-bold text-slate-900 dark:text-white">Rs {{ online_revenue|floatformat:2 }}</h3>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-lg">
+                    <i class="bi bi-credit-card"></i>
+                </div>
+            </div>
+            <div class="mt-4 w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5">
+                <div class="bg-indigo-500 h-1.5 rounded-full" style="width: {% if total_revenue > 0 %}{{ online_revenue|floatformat:0|add:0|divisibleby:1|yesno:"0," }}{% widthratio online_revenue total_revenue 100 %}{% else %}0{% endif %}%"></div>
+            </div>
+        </div>
+
+        <!-- COD Revenue -->
+        <div class="glass-card rounded-2xl p-6 relative overflow-hidden group border-b-4 border-emerald-500">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Cash on Delivery</p>
+                    <h3 class="text-2xl font-display font-bold text-slate-900 dark:text-white">Rs {{ cod_revenue|floatformat:2 }}</h3>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg">
+                    <i class="bi bi-cash-stack"></i>
+                </div>
+            </div>
+            <div class="mt-4 w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5">
+                <div class="bg-emerald-500 h-1.5 rounded-full" style="width: {% if total_revenue > 0 %}{{ cod_revenue|floatformat:0|add:0|divisibleby:1|yesno:"0," }}{% widthratio cod_revenue total_revenue 100 %}{% else %}0{% endif %}%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transactions Table -->
+    <div class="glass-card rounded-2xl overflow-hidden mt-8">
+        <div class="p-6 border-b border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <h3 class="font-display font-bold text-slate-900 dark:text-white">Recent Transactions</h3>
+            <form method="GET" class="relative">
+                <i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" name="q" value="{{ search_query }}" placeholder="Search ID or Customer..." class="pl-9 pr-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all dark:text-white w-full sm:w-64">
+            </form>
+        </div>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider">
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Transaction ID</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Date</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Customer</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Method</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700 text-right">Amount</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
+                    {% for transaction in transactions %}
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors group">
+                        <td class="p-4">
+                            <span class="font-bold text-slate-900 dark:text-white">#TRX-{{ transaction.order_number }}</span>
+                        </td>
+                        <td class="p-4 text-slate-600 dark:text-slate-400">
+                            {{ transaction.created_at|date:"M d, Y h:i A" }}
+                        </td>
+                        <td class="p-4">
+                            <p class="font-bold text-slate-900 dark:text-white">{{ transaction.full_name }}</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">{{ transaction.email }}</p>
+                        </td>
+                        <td class="p-4">
+                            {% if transaction.payment_method == 'card' %}
+                            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400 flex items-center gap-1 w-max">
+                                <i class="bi bi-stripe"></i> Stripe
+                            </span>
+                            {% else %}
+                            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 flex items-center gap-1 w-max">
+                                <i class="bi bi-cash"></i> COD
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="p-4 text-right">
+                            <span class="font-bold text-slate-900 dark:text-white">Rs {{ transaction.total|floatformat:2 }}</span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="p-12 text-center">
+                            <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 mx-auto mb-4">
+                                <i class="bi bi-receipt text-2xl"></i>
+                            </div>
+                            <p class="text-slate-500 dark:text-slate-400 font-medium">No transactions found.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if transactions.has_other_pages %}
+        <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 flex items-center justify-between">
+            <div class="text-sm text-slate-500 dark:text-slate-400">
+                Showing <span class="font-bold text-slate-900 dark:text-white">{{ transactions.start_index }}</span> to <span class="font-bold text-slate-900 dark:text-white">{{ transactions.end_index }}</span> of <span class="font-bold text-slate-900 dark:text-white">{{ transactions.paginator.count }}</span> results
+            </div>
+            <div class="flex gap-2">
+                {% if transactions.has_previous %}
+                <a href="?page={{ transactions.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                    Previous
+                </a>
+                {% endif %}
+                
+                {% if transactions.has_next %}
+                <a href="?page={{ transactions.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                    Next
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

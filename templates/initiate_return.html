@@ -1,123 +1,287 @@
-{% extends 'base.html' %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Initiate Return - KidZone</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'footer.css' %}">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Poppins', 'sans-serif'] },
+                    colors: { primary: '#0f766e', accent: '#14b8a6' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f8fafc; color: #0f172a; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            transition: all 0.3s;
+        }
+        .form-input:focus {
+            background: #ffffff;
+            border-color: #0f766e;
+            box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.1);
+            outline: none;
+        }
+        .radio-card input:checked + div {
+            border-color: #0f766e;
+            background-color: rgba(15, 118, 110, 0.05);
+        }
+        .radio-card input:checked + div .radio-icon {
+            color: #0f766e;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+    {% include 'navbar.html' %}
 
-{% block title %}Initiate Return - KidZone{% endblock %}
-
-{% block content %}
-<div class="container mx-auto px-4 py-12">
-    <!-- Header -->
-    <div class="mb-8">
-        <h1 class="text-4xl font-bold text-gray-900">Initiate Return</h1>
-        <p class="text-gray-600 mt-2">Order {{ order.order_number }} - {{ order.created_at|date:"M d, Y" }}</p>
+    <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+        <div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-teal-50 rounded-full blur-[120px] opacity-70"></div>
+        <div class="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-emerald-50 rounded-full blur-[100px] opacity-70"></div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Return Form -->
-        <div class="lg:col-span-2">
-            <div class="bg-white rounded-lg shadow-md p-8">
-                <form method="post">
-                    {% csrf_token %}
-
-                    <!-- Select Item -->
-                    <div class="mb-6">
-                        <label class="block text-gray-900 font-semibold mb-3">
-                            <i class="bi bi-box-seam"></i> Select Item to Return
-                        </label>
-                        <select name="item_id" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-blue-600 focus:outline-none">
-                            <option value="">-- Choose an item --</option>
-                            {% for item in order_items %}
-                            <option value="{{ item.id }}">{{ item.item_name }} (Qty: {{ item.quantity }} x Rs. {{ item.price }})</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <!-- Return Reason -->
-                    <div class="mb-6">
-                        <label class="block text-gray-900 font-semibold mb-3">
-                            <i class="bi bi-question-circle"></i> Reason for Return
-                        </label>
-                        <select name="reason" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-blue-600 focus:outline-none">
-                            <option value="">-- Select a reason --</option>
-                            <option value="defective">Item is Defective/Damaged</option>
-                            <option value="not_as_described">Not as Described</option>
-                            <option value="wrong_size">Wrong Size</option>
-                            <option value="wrong_color">Wrong Color</option>
-                            <option value="changed_mind">Changed Mind</option>
-                            <option value="quality_issue">Quality Issue</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-
-                    <!-- Detailed Description -->
-                    <div class="mb-6">
-                        <label class="block text-gray-900 font-semibold mb-3">
-                            <i class="bi bi-file-text"></i> Detailed Description
-                        </label>
-                        <textarea name="description" rows="5" required placeholder="Please provide details about the issue..." 
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-blue-600 focus:outline-none"></textarea>
-                        <p class="text-xs text-gray-500 mt-2">Be specific so we can resolve your issue faster</p>
-                    </div>
-
-                    <!-- Info Box -->
-                    <div class="bg-blue-50 border-l-4 border-blue-600 p-4 rounded-lg mb-6">
-                        <p class="text-sm text-gray-700">
-                            <strong>Return Process:</strong><br>
-                            1. Submit this form to initiate return<br>
-                            2. Receive return instructions via email<br>
-                            3. Ship the item back to us<br>
-                            4. We inspect and process your refund<br>
-                            5. Refund credited within 5-7 business days
-                        </p>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="flex gap-4">
-                        <button type="submit" class="flex-1 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition font-semibold">
-                            <i class="bi bi-arrow-counterclockwise"></i> Initiate Return
-                        </button>
-                        <a href="{% url 'order_details' order.order_number %}" class="flex-1 bg-gray-200 text-gray-900 py-3 rounded-lg hover:bg-gray-300 transition font-semibold text-center">
-                            <i class="bi bi-x-circle"></i> Cancel
-                        </a>
-                    </div>
-                </form>
-            </div>
+    <main class="pt-28 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="mb-10 text-center">
+            <h1 class="text-3xl md:text-4xl font-display font-bold text-slate-900 tracking-tight">Return or Exchange Item</h1>
+            <p class="text-slate-500 mt-3 font-medium">Order #{{ order.order_number }} • Placed on {{ order.created_at|date:"M d, Y" }}</p>
         </div>
 
-        <!-- Eligibility Info -->
-        <div class="lg:col-span-1">
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <h3 class="font-bold text-gray-900 mb-4">
-                    <i class="bi bi-info-circle"></i> Return Policy
-                </h3>
-                <div class="space-y-4 text-sm text-gray-700">
-                    <div>
-                        <p class="font-semibold text-gray-900 mb-1">Return Window</p>
-                        <p>30 days from purchase date</p>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-gray-900 mb-1">Condition</p>
-                        <p>Item must be unused and in original condition</p>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-gray-900 mb-1">Refund Method</p>
-                        <p>Original payment method</p>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-gray-900 mb-1">Processing Time</p>
-                        <p>5-7 business days after inspection</p>
-                    </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            <!-- Form Section -->
+            <div class="lg:col-span-2">
+                <div class="glass-card rounded-[2rem] p-8 md:p-10">
+                    <form method="post" enctype="multipart/form-data" id="returnForm">
+                        {% csrf_token %}
+
+                        <!-- Item Selection -->
+                        <div class="mb-8">
+                            <label class="block text-sm font-bold text-slate-700 mb-3 uppercase tracking-wider">1. Select Item</label>
+                            <select name="item_id" required class="form-input text-slate-700 font-medium cursor-pointer">
+                                <option value="" disabled selected>Choose an item to return</option>
+                                {% for item in order_items %}
+                                <option value="{{ item.id }}">{{ item.item_name }} (Qty: {{ item.quantity }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Return Type -->
+                        <div class="mb-8">
+                            <label class="block text-sm font-bold text-slate-700 mb-3 uppercase tracking-wider">2. Request Type</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <label class="radio-card cursor-pointer">
+                                    <input type="radio" name="return_type" value="refund" class="hidden" checked onchange="toggleExchange(false)">
+                                    <div class="border-2 border-slate-200 rounded-2xl p-5 transition-all flex items-center gap-4 hover:border-slate-300">
+                                        <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center radio-icon text-slate-400 transition-colors">
+                                            <i class="bi bi-arrow-return-left text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-slate-900">Return & Refund</h3>
+                                            <p class="text-xs text-slate-500 mt-1">Get your money back</p>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="radio-card cursor-pointer">
+                                    <input type="radio" name="return_type" value="exchange" class="hidden" onchange="toggleExchange(true)">
+                                    <div class="border-2 border-slate-200 rounded-2xl p-5 transition-all flex items-center gap-4 hover:border-slate-300">
+                                        <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center radio-icon text-slate-400 transition-colors">
+                                            <i class="bi bi-arrow-left-right text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-slate-900">Exchange Item</h3>
+                                            <p class="text-xs text-slate-500 mt-1">Swap for size or color</p>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Exchange Options (Hidden by default) -->
+                        <div id="exchangeOptions" class="hidden mb-8 p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                            <h3 class="font-bold text-slate-900 mb-4">Exchange Details</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-wider">New Size</label>
+                                    <select name="exchange_size" class="form-input">
+                                        <option value="">Same Size</option>
+                                        <option value="XS">XS</option>
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-wider">New Color</label>
+                                    <input type="text" name="exchange_color" placeholder="e.g. Blue" class="form-input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reason -->
+                        <div class="mb-8">
+                            <label class="block text-sm font-bold text-slate-700 mb-3 uppercase tracking-wider">3. Reason & Details</label>
+                            <select name="reason" required class="form-input mb-4 text-slate-700 font-medium cursor-pointer">
+                                <option value="" disabled selected>Why are you returning this?</option>
+                                {% for value, label in return_reasons %}
+                                <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            
+                            <textarea name="description" rows="4" required placeholder="Please provide more details about the issue..." 
+                                      class="form-input resize-none"></textarea>
+                        </div>
+
+                        <!-- Image Upload -->
+                        <div class="mb-8">
+                            <label class="block text-sm font-bold text-slate-700 mb-3 uppercase tracking-wider">4. Photo Evidence (Optional)</label>
+                            <div class="border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center hover:border-primary transition-colors cursor-pointer" onclick="document.getElementById('fileUpload').click()">
+                                <input type="file" id="fileUpload" name="return_image" class="hidden" accept="image/*" onchange="updateFileName(this)">
+                                <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
+                                    <i class="bi bi-camera text-2xl"></i>
+                                </div>
+                                <p class="font-medium text-slate-700" id="fileName">Click to upload an image</p>
+                                <p class="text-xs text-slate-500 mt-1">JPG, PNG up to 5MB</p>
+                            </div>
+                        </div>
+
+                        <!-- Refund Method (Hidden if Exchange) -->
+                        <div id="refundMethodSection" class="mb-10">
+                            <label class="block text-sm font-bold text-slate-700 mb-3 uppercase tracking-wider">5. Refund Method</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <label class="radio-card cursor-pointer">
+                                    <input type="radio" name="refund_method" value="card" class="hidden" checked>
+                                    <div class="border-2 border-slate-200 rounded-xl p-4 transition-all flex items-center gap-3">
+                                        <i class="bi bi-credit-card radio-icon text-slate-400 text-xl"></i>
+                                        <span class="font-bold text-slate-700">Original Card</span>
+                                    </div>
+                                </label>
+                                <label class="radio-card cursor-pointer">
+                                    <input type="radio" name="refund_method" value="wallet" class="hidden">
+                                    <div class="border-2 border-slate-200 rounded-xl p-4 transition-all flex items-center gap-3">
+                                        <i class="bi bi-wallet2 radio-icon text-slate-400 text-xl"></i>
+                                        <span class="font-bold text-slate-700">Store Wallet</span>
+                                    </div>
+                                </label>
+                                <label class="radio-card cursor-pointer">
+                                    <input type="radio" name="refund_method" value="bank" class="hidden">
+                                    <div class="border-2 border-slate-200 rounded-xl p-4 transition-all flex items-center gap-3">
+                                        <i class="bi bi-bank radio-icon text-slate-400 text-xl"></i>
+                                        <span class="font-bold text-slate-700">Bank Transfer</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex gap-4 pt-6 border-t border-slate-100">
+                            <button type="submit" class="flex-1 bg-primary hover:bg-teal-800 text-white py-4 rounded-xl font-bold transition-all shadow-lg shadow-teal-200 hover:-translate-y-1">
+                                Submit Request
+                            </button>
+                            <a href="{% url 'order_details' order.order_number %}" class="px-8 bg-slate-100 hover:bg-slate-200 text-slate-700 py-4 rounded-xl font-bold transition-all text-center">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
                 </div>
             </div>
 
-            <div class="bg-yellow-50 border-l-4 border-yellow-600 p-4 rounded-lg mt-6">
-                <p class="font-semibold text-yellow-900 mb-2">
-                    <i class="bi bi-exclamation-circle"></i> Important
-                </p>
-                <p class="text-sm text-gray-700">
-                    Please ensure the item is in original condition with all packaging and documentation.
-                </p>
+            <!-- Sidebar -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- Policy Cards -->
+                <div class="glass-card rounded-[2rem] p-6">
+                    <h3 class="font-display font-bold text-xl text-slate-900 mb-6">Return Policy</h3>
+                    
+                    <div class="space-y-5">
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center text-primary shrink-0">
+                                <i class="bi bi-calendar-check text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm">30-Day Returns</h4>
+                                <p class="text-xs text-slate-500 mt-1">Return items within 30 days of delivery.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center text-primary shrink-0">
+                                <i class="bi bi-tag text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm">Original Condition</h4>
+                                <p class="text-xs text-slate-500 mt-1">Items must be unused with tags attached.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center text-primary shrink-0">
+                                <i class="bi bi-lightning text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm">Fast Processing</h4>
+                                <p class="text-xs text-slate-500 mt-1">Refunds processed within 5-7 business days.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WhatsApp Support -->
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-[2rem] p-6 text-white text-center shadow-xl shadow-slate-200">
+                    <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-green-500/30">
+                        <i class="bi bi-whatsapp text-3xl text-white"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-lg mb-2">Need Help?</h3>
+                    <p class="text-slate-300 text-sm mb-6">Our support team is ready to assist you with your return.</p>
+                    <a href="https://wa.me/94701234567" target="_blank" class="block w-full py-3 bg-white hover:bg-slate-50 text-slate-900 font-bold rounded-xl transition-all">
+                        Chat on WhatsApp
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-{% endblock %}
+    </main>
+
+    {% include 'footer.html' %}
+
+    <script>
+        function toggleExchange(isExchange) {
+            const exchangeOptions = document.getElementById('exchangeOptions');
+            const refundSection = document.getElementById('refundMethodSection');
+            
+            if (isExchange) {
+                exchangeOptions.classList.remove('hidden');
+                refundSection.classList.add('hidden');
+            } else {
+                exchangeOptions.classList.add('hidden');
+                refundSection.classList.remove('hidden');
+            }
+        }
+
+        function updateFileName(input) {
+            const fileName = document.getElementById('fileName');
+            if (input.files && input.files[0]) {
+                fileName.textContent = input.files[0].name;
+                fileName.classList.add('text-primary');
+            } else {
+                fileName.textContent = 'Click to upload an image';
+                fileName.classList.remove('text-primary');
+            }
+        }
+    </script>
+</body>
+</html>

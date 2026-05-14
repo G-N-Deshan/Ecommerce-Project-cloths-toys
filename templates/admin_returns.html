@@ -1,0 +1,155 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title %}Manage Returns - Admin - KidZone{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12 max-w-7xl">
+    <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+            <h1 class="text-2xl font-display font-bold text-slate-900 dark:text-white">Return Management</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Manage customer return and exchange requests.</p>
+        </div>
+        
+        <form method="GET" class="flex gap-4">
+            <select name="status" class="px-4 py-2 bg-white dark:bg-dark-card border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-slate-700 dark:text-slate-300" onchange="this.form.submit()">
+                <option value="">All Statuses</option>
+                {% for value, label in status_choices %}
+                <option value="{{ value }}" {% if status_filter == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    {% if messages %}
+    <div class="mb-8 space-y-4">
+        {% for message in messages %}
+        <div class="p-4 rounded-lg {% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="glass-card rounded-2xl overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider">
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">ID</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Customer</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Item</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Request</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Reason & Image</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Status</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
+                    {% for ret in returns %}
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors">
+                        <td class="p-4 font-bold text-slate-900 dark:text-white">#{{ ret.id }}</td>
+                        <td class="p-4">
+                            <p class="font-semibold text-slate-900 dark:text-slate-200">{{ ret.order.user.username }}</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Ord: #{{ ret.order.order_number }}</p>
+                        </td>
+                        <td class="p-4">
+                            <p class="font-semibold text-slate-900 dark:text-slate-200 line-clamp-1">{{ ret.order_item.item_name }}</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Rs. {{ ret.refund_amount }}</p>
+                        </td>
+                        <td class="p-4">
+                            {% if ret.is_exchange %}
+                            <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs font-bold uppercase tracking-wide">Exchange</span>
+                            <p class="text-xs text-gray-500 mt-1">S: {{ ret.exchange_size }}, C: {{ ret.exchange_color }}</p>
+                            {% else %}
+                            <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-bold uppercase tracking-wide">Refund</span>
+                            <p class="text-xs text-gray-500 mt-1">{{ ret.get_refund_method_display|default:'Card' }}</p>
+                            {% endif %}
+                        </td>
+                        <td class="p-4">
+                            <p class="font-semibold text-slate-700 dark:text-slate-300">{{ ret.get_reason_display }}</p>
+                            {% if ret.return_image %}
+                            <a href="{{ ret.return_image.url }}" target="_blank" class="text-xs text-primary hover:text-teal-700 dark:text-teal-400 hover:underline mt-1 inline-block flex items-center gap-1">
+                                <i class="bi bi-image"></i> View Image
+                            </a>
+                            {% endif %}
+                        </td>
+                        <td class="p-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide
+                                {% if ret.status == 'requested' %}bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400
+                                {% elif ret.status == 'approved' %}bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400
+                                {% elif ret.status == 'completed' %}bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-400
+                                {% elif ret.status == 'rejected' or ret.status == 'cancelled' %}bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400
+                                {% else %}bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300{% endif %}">
+                                {{ ret.get_status_display }}
+                            </span>
+                        </td>
+                        <td class="p-4">
+                            <form method="POST" class="flex gap-2">
+                                {% csrf_token %}
+                                <input type="hidden" name="return_id" value="{{ ret.id }}">
+                                
+                                <select name="new_status" class="px-2 py-1 bg-white dark:bg-dark-card border border-slate-300 dark:border-slate-700 rounded text-xs focus:outline-none dark:text-slate-300">
+                                    {% for value, label in status_choices %}
+                                    <option value="{{ value }}" {% if ret.status == value %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                                
+                                <button type="submit" class="px-3 py-1 bg-primary hover:bg-teal-800 text-white rounded font-bold text-xs transition-colors">
+                                    Update
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="p-8 text-center text-gray-500">
+                            <i class="bi bi-inbox text-4xl mb-3 block text-gray-300"></i>
+                            No returns found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if returns.has_other_pages %}
+        <div class="px-4 py-3 border-t border-gray-200 sm:px-6 flex items-center justify-between">
+            <div class="flex-1 flex justify-between sm:hidden">
+                {% if returns.has_previous %}
+                <a href="?page={{ returns.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"> Previous </a>
+                {% endif %}
+                {% if returns.has_next %}
+                <a href="?page={{ returns.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"> Next </a>
+                {% endif %}
+            </div>
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-sm text-gray-700">
+                        Showing page <span class="font-medium">{{ returns.number }}</span> of <span class="font-medium">{{ returns.paginator.num_pages }}</span>
+                    </p>
+                </div>
+                <div>
+                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                        {% if returns.has_previous %}
+                        <a href="?page={{ returns.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">Previous</span>
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                        {% endif %}
+                        
+                        {% if returns.has_next %}
+                        <a href="?page={{ returns.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">Next</span>
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                        {% endif %}
+                    </nav>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

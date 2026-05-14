@@ -68,6 +68,9 @@
                         <option value="cancelled" {% if status_filter == 'cancelled' %}selected{% endif %}>Cancelled</option>
                     </select>
                 </form>
+                <a href="{% url 'my_returns' %}" class="px-5 py-2.5 bg-teal-50 hover:bg-teal-100 text-[#0f766e] font-bold rounded-2xl text-sm transition-all flex items-center gap-2 border border-teal-100">
+                    <i class="bi bi-arrow-return-left"></i> My Returns
+                </a>
                 <a href="{% url 'buy' %}" class="px-5 py-2.5 bg-slate-900 hover:bg-indigo-600 text-white font-bold rounded-2xl text-sm transition-all flex items-center gap-2">
                     <i class="bi bi-bag-plus"></i> New Order
                 </a>

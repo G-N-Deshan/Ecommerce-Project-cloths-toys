@@ -59,7 +59,7 @@
             <div class="quick-shop-items">
                 {% if recommended_products %}
                 {% for item in recommended_products|slice:":3" %}
-                <div class="quick-shop-item" data-add-to-cart data-item-type="cloth" data-item-id="{{ item.id }}"
+                <div class="quick-shop-item" data-add-to-cart data-item-type="{{ item.item_type }}" data-item-id="{{ item.id }}"
                     title="Add {{ item.name }} to cart">
                     <img src="{{ item.imageUrl.url }}" alt="{{ item.name }}">
                     <div class="add-hint">
@@ -171,13 +171,14 @@
         <div class="catalog-grid">
             {% for cloth in cloths_items %}
             {% with is_in_stock=cloth.inventory.stock|default:0 %}
-            <article class="product-card {% if is_in_stock == 0 %}out-of-stock{% endif %}" data-product-card>
-                <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="product-card__image-wrap">
+            <article class="product-card {% if cloth.is_purchasable and is_in_stock == 0 %}out-of-stock{% endif %}" data-product-card>
+                <a href="{{ cloth.url }}" class="product-card__image-wrap">
                     <img src="{{ cloth.imageUrl.url }}" alt="{{ cloth.name }}" class="product-card__image"
                         loading="lazy">
                     {% if cloth.discount_text %}
                     <span class="product-badge">{{ cloth.discount_text }}</span>
                     {% endif %}
+                    {% if cloth.is_purchasable %}
                     {% if is_in_stock == 0 %}
                     <span class="out-of-stock-badge">Out of Stock</span>
                     {% elif is_in_stock == 1 %}
@@ -186,12 +187,15 @@
                         left!</span>
                         {% elif is_in_stock <= 5 %} <span class="stock-badge stock-badge-limited">Low Stock</span>
                             {% endif %}
+                    {% endif %}
                 </a>
 
                 <div class="product-card__content">
                     <div class="product-meta-top">
                         <span class="product-category">{{ cloth.get_category_display }}</span>
+                        {% if cloth.is_purchasable %}
                         {% with item_rating=cloth.avg_rating item_review_count=cloth.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
+                        {% endif %}
                     </div>
 
                     <h3>{{ cloth.name }}</h3>
@@ -205,28 +209,34 @@
                     </div>
 
                     <div class="product-actions">
-                        <a href="{% url 'product_detail' 'cloth' cloth.id %}" class="btn-view">Quick View</a>
+                        {% if cloth.is_purchasable %}
+                        <a href="{{ cloth.url }}" class="btn-view">Quick View</a>
                         {% if is_in_stock > 0 %}
-                        <button class="btn-add" data-add-to-cart data-item-type="cloth"
+                        <button class="btn-add" data-add-to-cart data-item-type="{{ cloth.item_type }}"
                             data-item-id="{{ cloth.id }}">Add to Cart</button>
                         {% else %}
                         <button class="btn-add btn-disabled" disabled title="Item is out of stock">Out of Stock</button>
                         {% endif %}
+                        {% else %}
+                        <a href="{{ cloth.url }}" class="btn-add" style="grid-column: span 2; display: flex; justify-content: center; text-decoration: none;">View Product</a>
+                        {% endif %}
                     </div>
 
+                    {% if cloth.is_purchasable %}
                     <div class="compare-row">
                         <button class="btn-compare" {% if is_in_stock == 0 %}disabled{% endif %} data-compare-toggle
                             data-product-id="{{ cloth.id }}" data-product-name="{{ cloth.name|escape }}"
                             data-product-price="{{ cloth.price2|default:cloth.price1|default:cloth.price|escape }}"
                             data-product-category="{{ cloth.get_category_display|escape }}"
-                            data-product-subcategory="{{ cloth.get_subcategory_display|default:'N/A'|escape }}"
+                            data-product-subcategory="{{ cloth.subcategory|default:'N/A'|escape }}"
                             data-product-material="{{ cloth.material|default:'N/A'|escape }}"
                             data-product-sizes="{{ cloth.sizes_available|default:'N/A'|escape }}"
                             data-product-image="{{ cloth.imageUrl.url|escape }}"
-                            data-product-url="{% url 'product_detail' 'cloth' cloth.id %}">
+                            data-product-url="{{ cloth.url }}">
                             Compare
                         </button>
                     </div>
+                    {% endif %}
                 </div>
             </article>
             {% endwith %}
@@ -266,7 +276,7 @@
             <div class="mini-grid">
                 {% for item in top_rated_products %}
                 <article class="mini-product-card">
-                    <a href="{% url 'product_detail' 'cloth' item.id %}">
+                    <a href="{{ item.url }}">
                         <img src="{{ item.imageUrl.url }}" alt="{{ item.name }}" loading="lazy">
                     </a>
                     <div>
@@ -293,12 +303,12 @@
                 {% for item in recommended_products %}
                 <article class="mini-product-card" data-recommend-item data-category="{{ item.category }}"
                     data-subcategory="{{ item.subcategory }}">
-                    <a href="{% url 'product_detail' 'cloth' item.id %}">
+                    <a href="{{ item.url }}">
                         <img src="{{ item.imageUrl.url }}" alt="{{ item.name }}" loading="lazy">
                     </a>
                     <div>
                         <h3>{{ item.name }}</h3>
-                        <p>{{ item.get_category_display }}{% if item.subcategory %} - {{ item.get_subcategory_display }}{% endif %}</p>
+                        <p>{{ item.get_category_display }}{% if item.subcategory %} - {{ item.subcategory }}{% endif %}</p>
                         <span>{{ item.price2|default:item.price1|default:item.price }}</span>
                     </div>
                 </article>

@@ -1,0 +1,112 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title %}Manage Customers | KidZone Admin{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-display font-bold text-slate-900 dark:text-white">Customers Directory</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400">View registered users and their lifetime value.</p>
+        </div>
+        
+        <form method="GET" class="flex flex-col sm:flex-row gap-3">
+            <div class="relative">
+                <i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" name="q" value="{{ search_query }}" placeholder="Search by name, email..." class="pl-9 pr-4 py-2 bg-white dark:bg-dark-card border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all dark:text-white w-full sm:w-64">
+            </div>
+            
+            {% if search_query %}
+            <a href="{% url 'admin_customers' %}" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl text-sm font-medium transition-colors flex items-center justify-center">
+                Clear
+            </a>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- Customers Table -->
+    <div class="glass-card rounded-2xl overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider">
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Customer</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Contact</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Joined</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700 text-center">Total Orders</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700 text-right">Total Spent</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
+                    {% for customer in customers %}
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors group">
+                        <td class="p-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold shadow-sm">
+                                    {{ customer.first_name|make_list|first|default:customer.username|make_list|first|upper }}
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-900 dark:text-white">{{ customer.get_full_name|default:customer.username }}</p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">@{{ customer.username }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="p-4">
+                            <p class="text-slate-600 dark:text-slate-300 flex items-center gap-2">
+                                <i class="bi bi-envelope text-slate-400"></i> {{ customer.email }}
+                            </p>
+                        </td>
+                        <td class="p-4 text-slate-600 dark:text-slate-400">
+                            {{ customer.date_joined|date:"M d, Y" }}
+                        </td>
+                        <td class="p-4 text-center">
+                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full {% if customer.total_orders_count > 0 %}bg-teal-50 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400 font-bold{% else %}bg-slate-50 text-slate-500 dark:bg-slate-800 dark:text-slate-400{% endif %}">
+                                {{ customer.total_orders_count|default:0 }}
+                            </span>
+                        </td>
+                        <td class="p-4 text-right">
+                            <span class="font-bold {% if customer.total_spent > 0 %}text-emerald-600 dark:text-emerald-400{% else %}text-slate-400{% endif %}">
+                                Rs {{ customer.total_spent|default:0|floatformat:2 }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="p-12 text-center">
+                            <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 mx-auto mb-4">
+                                <i class="bi bi-people text-2xl"></i>
+                            </div>
+                            <p class="text-slate-500 dark:text-slate-400 font-medium">No customers found.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if customers.has_other_pages %}
+        <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 flex items-center justify-between">
+            <div class="text-sm text-slate-500 dark:text-slate-400">
+                Showing <span class="font-bold text-slate-900 dark:text-white">{{ customers.start_index }}</span> to <span class="font-bold text-slate-900 dark:text-white">{{ customers.end_index }}</span> of <span class="font-bold text-slate-900 dark:text-white">{{ customers.paginator.count }}</span> results
+            </div>
+            <div class="flex gap-2">
+                {% if customers.has_previous %}
+                <a href="?page={{ customers.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                    Previous
+                </a>
+                {% endif %}
+                
+                {% if customers.has_next %}
+                <a href="?page={{ customers.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                    Next
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

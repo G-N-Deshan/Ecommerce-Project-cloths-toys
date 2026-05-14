@@ -821,22 +821,30 @@ class ViewHistory(models.Model):
 class Return(models.Model):
     """Return and refund management system"""
     STATUS_CHOICES = [
-        ('initiated', 'Initiated'),
+        ('requested', 'Requested'),
         ('approved', 'Approved'),
         ('rejected', 'Rejected'),
-        ('shipped', 'Shipped to Us'),
-        ('received', 'Received'),
-        ('processed', 'Refunded'),
+        ('pickup_scheduled', 'Pickup Scheduled'),
+        ('received', 'Item Received'),
+        ('completed', 'Refund/Exchange Completed'),
         ('cancelled', 'Cancelled'),
     ]
     
     REASON_CHOICES = [
-        ('damaged', 'Product Damaged'),
-        ('wrong_item', 'Wrong Item Received'),
-        ('not_as_described', 'Not as Described'),
-        ('defective', 'Defective'),
-        ('changed_mind', 'Changed Mind'),
+        ('wrong_size', 'Wrong size'),
+        ('damaged', 'Damaged item'),
+        ('wrong_product', 'Wrong product received'),
+        ('defective', 'Defective toy'),
+        ('quality', 'Quality issue'),
+        ('changed_mind', 'Changed mind'),
         ('other', 'Other'),
+    ]
+    
+    REFUND_METHOD_CHOICES = [
+        ('card', 'Card Refund'),
+        ('bank', 'Bank Transfer'),
+        ('wallet', 'Store Wallet'),
+        ('cash', 'Cash Refund'),
     ]
     
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='returns')
@@ -844,7 +852,14 @@ class Return(models.Model):
     
     reason = models.CharField(max_length=20, choices=REASON_CHOICES)
     description = models.TextField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='initiated')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='requested')
+    
+    # New Fields for Enhanced System
+    is_exchange = models.BooleanField(default=False)
+    exchange_size = models.CharField(max_length=20, blank=True, default='')
+    exchange_color = models.CharField(max_length=50, blank=True, default='')
+    refund_method = models.CharField(max_length=20, choices=REFUND_METHOD_CHOICES, blank=True, default='')
+    return_image = models.ImageField(upload_to='returns/', blank=True, null=True)
     
     initiated_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -858,7 +873,7 @@ class Return(models.Model):
         verbose_name_plural = 'Returns'
     
     def __str__(self):
-        return f"Return #{self.id} - {self.order.order_number} - {self.status}"
+        return f"Return #{self.id} - {self.order.order_number} - {self.get_status_display()}"
 
 
 class StockAlert(models.Model):

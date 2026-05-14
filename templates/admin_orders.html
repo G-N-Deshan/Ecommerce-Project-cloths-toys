@@ -1,0 +1,126 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title %}Manage Orders | KidZone Admin{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-display font-bold text-slate-900 dark:text-white">Orders Management</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400">View and manage customer orders.</p>
+        </div>
+        
+        <form method="GET" class="flex flex-col sm:flex-row gap-3">
+            <div class="relative">
+                <i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" name="q" value="{{ search_query }}" placeholder="Search by ID, name or email..." class="pl-9 pr-4 py-2 bg-white dark:bg-dark-card border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all dark:text-white w-full sm:w-64">
+            </div>
+            
+            <select name="status" onchange="this.form.submit()" class="px-4 py-2 bg-white dark:bg-dark-card border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary outline-none cursor-pointer">
+                <option value="">All Statuses</option>
+                {% for val, label in status_choices %}
+                <option value="{{ val }}" {% if status_filter == val %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+            
+            {% if search_query or status_filter %}
+            <a href="{% url 'admin_orders' %}" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl text-sm font-medium transition-colors flex items-center justify-center">
+                Clear Filters
+            </a>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="glass-card rounded-2xl overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider">
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Order ID</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Customer</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Date</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Total</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Status</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
+                    {% for order in orders %}
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors group">
+                        <td class="p-4">
+                            <span class="font-bold text-slate-900 dark:text-white">#{{ order.order_number }}</span>
+                        </td>
+                        <td class="p-4">
+                            <p class="font-bold text-slate-900 dark:text-slate-200">{{ order.full_name }}</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">{{ order.email }}</p>
+                        </td>
+                        <td class="p-4 text-slate-600 dark:text-slate-400">
+                            {{ order.created_at|date:"M d, Y" }}
+                        </td>
+                        <td class="p-4 font-bold text-primary dark:text-teal-400">
+                            Rs {{ order.total|floatformat:2 }}
+                        </td>
+                        <td class="p-4">
+                            <!-- Status Update Form inline -->
+                            <form method="POST" action="{% url 'admin_update_order_status' order.id %}">
+                                {% csrf_token %}
+                                <select name="status" onchange="this.form.submit()" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary
+                                    {% if order.status == 'pending' %}bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400
+                                    {% elif order.status == 'processing' %}bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400
+                                    {% elif order.status == 'shipped' %}bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400
+                                    {% elif order.status == 'delivered' %}bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400
+                                    {% elif order.status == 'cancelled' %}bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400
+                                    {% else %}bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300{% endif %}">
+                                    {% for val, label in status_choices %}
+                                    <option value="{{ val }}" {% if order.status == val %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </td>
+                        <td class="p-4">
+                            <a href="{% url 'order_details' order.order_number %}" target="_blank" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium text-xs flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i class="bi bi-eye"></i> View Details
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="p-12 text-center">
+                            <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 mx-auto mb-4">
+                                <i class="bi bi-inbox text-2xl"></i>
+                            </div>
+                            <p class="text-slate-500 dark:text-slate-400 font-medium">No orders found matching your criteria.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if orders.has_other_pages %}
+        <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 flex items-center justify-between">
+            <div class="text-sm text-slate-500 dark:text-slate-400">
+                Showing <span class="font-bold text-slate-900 dark:text-white">{{ orders.start_index }}</span> to <span class="font-bold text-slate-900 dark:text-white">{{ orders.end_index }}</span> of <span class="font-bold text-slate-900 dark:text-white">{{ orders.paginator.count }}</span> results
+            </div>
+            <div class="flex gap-2">
+                {% if orders.has_previous %}
+                <a href="?page={{ orders.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="px-3 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                    Previous
+                </a>
+                {% endif %}
+                
+                {% if orders.has_next %}
+                <a href="?page={{ orders.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="px-3 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                    Next
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

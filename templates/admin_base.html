@@ -1,0 +1,290 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Dashboard | KidZone{% endblock %}</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'], 
+                        display: ['Poppins', 'sans-serif'] 
+                    },
+                    colors: { 
+                        primary: '#0f766e', 
+                        accent: '#14b8a6',
+                        dark: {
+                            bg: '#0f172a',
+                            card: '#1e293b',
+                            border: '#334155'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Glassmorphism Classes */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .glass-card:hover {
+            box-shadow: 0 20px 40px rgba(15, 118, 110, 0.08);
+            transform: translateY(-2px);
+        }
+        .dark .glass-card:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Sidebar Transition */
+        #sidebar { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sidebar-icon { transition: transform 0.2s; }
+        .menu-item:hover .sidebar-icon { transform: scale(1.1); }
+        
+        /* Smooth general transitions */
+        body { transition: background-color 0.3s, color 0.3s; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-dark-bg text-slate-800 dark:text-slate-200 font-sans antialiased overflow-hidden flex h-screen">
+
+    <!-- Decorative Background -->
+    <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+        <div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-teal-50 dark:bg-teal-900/10 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-emerald-50 dark:bg-emerald-900/10 rounded-full blur-[100px]"></div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="w-64 h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0 z-20 absolute lg:relative transform -translate-x-full lg:translate-x-0">
+        <!-- Logo Area -->
+        <div class="h-16 flex items-center px-6 border-b border-slate-200 dark:border-slate-800 shrink-0">
+            <a href="{% url 'admin_dashboard' %}" class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white shadow-lg shadow-teal-500/30">
+                    <i class="bi bi-rocket-takeoff-fill"></i>
+                </div>
+                <span class="font-display font-bold text-xl tracking-tight text-slate-900 dark:text-white">KidZone<span class="text-primary">Admin</span></span>
+            </a>
+            <button id="closeSidebarBtn" class="lg:hidden ml-auto text-slate-400 hover:text-slate-600 dark:hover:text-white">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar py-6 px-4 space-y-1">
+            <p class="px-2 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 mt-4">Overview</p>
+            <a href="{% url 'admin_dashboard' %}" class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors {% if request.path == '/dashboard/' %}bg-teal-50 text-primary dark:bg-teal-900/30 dark:text-teal-400{% else %}text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white{% endif %}">
+                <i class="bi bi-grid-1x2-fill sidebar-icon {% if request.path == '/dashboard/' %}text-primary dark:text-teal-400{% else %}text-slate-400{% endif %}"></i>
+                <span>Dashboard</span>
+            </a>
+            
+            <p class="px-2 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 mt-6">Management</p>
+            <a href="{% url 'admin_orders' %}" class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors {% if '/dashboard/orders/' in request.path %}bg-teal-50 text-primary dark:bg-teal-900/30 dark:text-teal-400{% else %}text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white{% endif %}">
+                <i class="bi bi-bag-fill sidebar-icon text-slate-400"></i>
+                <span>Orders</span>
+            </a>
+            <a href="{% url 'admin_products' %}" class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors {% if '/dashboard/products/' in request.path %}bg-teal-50 text-primary dark:bg-teal-900/30 dark:text-teal-400{% else %}text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white{% endif %}">
+                <i class="bi bi-box-seam-fill sidebar-icon {% if '/dashboard/products/' in request.path %}text-primary dark:text-teal-400{% else %}text-slate-400{% endif %}"></i>
+                <span>Products</span>
+            </a>
+            <a href="{% url 'admin:app_list' 'myapp' %}" target="_blank" class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors">
+                <i class="bi bi-tags-fill sidebar-icon text-slate-400"></i>
+                <span>Categories <i class="bi bi-box-arrow-up-right text-[10px] ml-1"></i></span>
+            </a>
+            <a href="{% url 'admin_customers' %}" class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors {% if '/dashboard/customers/' in request.path %}bg-teal-50 text-primary dark:bg-teal-900/30 dark:text-teal-400{% else %}text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white{% endif %}">
+                <i class="bi bi-people-fill sidebar-icon {% if '/dashboard/customers/' in request.path %}text-primary dark:text-teal-400{% else %}text-slate-400{% endif %}"></i>
+                <span>Customers</span>
+            </a>
+            <a href="{% url 'admin_returns' %}" class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors {% if '/dashboard/returns/' in request.path %}bg-teal-50 text-primary dark:bg-teal-900/30 dark:text-teal-400{% else %}text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white{% endif %}">
+                <i class="bi bi-arrow-return-left sidebar-icon {% if '/dashboard/returns/' in request.path %}text-primary dark:text-teal-400{% else %}text-slate-400{% endif %}"></i>
+                <span>Returns</span>
+            </a>
+
+            <p class="px-2 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 mt-6">Finance & Analytics</p>
+            <a href="{% url 'admin_payments' %}" class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors {% if '/dashboard/payments/' in request.path %}bg-teal-50 text-primary dark:bg-teal-900/30 dark:text-teal-400{% else %}text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white{% endif %}">
+                <i class="bi bi-wallet2 sidebar-icon {% if '/dashboard/payments/' in request.path %}text-primary dark:text-teal-400{% else %}text-slate-400{% endif %}"></i>
+                <span>Payments</span>
+            </a>
+            <a href="{% url 'admin_dashboard' %}?analytics=true" class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors">
+                <i class="bi bi-graph-up-arrow sidebar-icon text-slate-400"></i>
+                <span>Analytics</span>
+            </a>
+            <a href="{% url 'admin:myapp_coupon_changelist' %}" target="_blank" class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors">
+                <i class="bi bi-megaphone-fill sidebar-icon text-slate-400"></i>
+                <span>Marketing <i class="bi bi-box-arrow-up-right text-[10px] ml-1"></i></span>
+            </a>
+
+            <p class="px-2 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 mt-6">System</p>
+            <a href="{% url 'admin:myapp_sitesettings_changelist' %}" target="_blank" class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors">
+                <i class="bi bi-gear-fill sidebar-icon text-slate-400"></i>
+                <span>Settings <i class="bi bi-box-arrow-up-right text-[10px] ml-1"></i></span>
+            </a>
+            <a href="/admin/" target="_blank" class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors">
+                <i class="bi bi-database-fill sidebar-icon text-slate-400"></i>
+                <span>Django Admin <i class="bi bi-box-arrow-up-right text-[10px] ml-1"></i></span>
+            </a>
+        </div>
+        
+        <!-- Bottom User Card as direct link -->
+        <div class="p-4 border-t border-slate-200 dark:border-slate-800">
+            <a href="{% url 'admin_profile' %}" class="flex items-center gap-3 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100 dark:border-slate-700 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold">
+                    {{ request.user.username|make_list|first|upper }}
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-bold text-slate-900 dark:text-white truncate">{{ request.user.get_full_name|default:request.user.username }}</p>
+                    <p class="text-xs text-slate-500 truncate hover:text-primary transition-colors">Manage Profile &rarr;</p>
+                </div>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        
+        <!-- Top Navbar -->
+        <header class="h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 sm:px-6 z-10 shrink-0">
+            
+            <div class="flex items-center gap-4">
+                <button id="openSidebarBtn" class="lg:hidden text-slate-500 hover:text-slate-700 dark:hover:text-white">
+                    <i class="bi bi-list text-2xl"></i>
+                </button>
+                
+                <!-- Search Bar -->
+                <div class="hidden sm:flex items-center relative">
+                    <i class="bi bi-search absolute left-3 text-slate-400"></i>
+                    <input type="text" placeholder="Search orders, products, customers..." class="w-80 pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-xl text-sm focus:ring-2 focus:ring-primary focus:bg-white dark:focus:bg-slate-700 outline-none transition-all dark:text-white placeholder-slate-400 dark:placeholder-slate-500">
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <!-- Quick Actions -->
+                <div class="hidden md:block relative group">
+                    <button class="px-4 py-2 bg-primary hover:bg-teal-800 text-white text-sm font-bold rounded-xl transition-colors shadow-lg shadow-teal-500/20 flex items-center gap-2">
+                        <i class="bi bi-plus-lg"></i> Create
+                    </button>
+                    <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all py-2 z-50">
+                        <a href="{% url 'admin:myapp_cloths_add' %}" target="_blank" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"><i class="bi bi-box-seam mr-2"></i> Add Cloths</a>
+                        <a href="{% url 'admin:myapp_toy_add' %}" target="_blank" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"><i class="bi bi-controller mr-2"></i> Add Toy</a>
+                        <a href="{% url 'admin:myapp_coupon_add' %}" target="_blank" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"><i class="bi bi-tag mr-2"></i> Create Coupon</a>
+                    </div>
+                </div>
+
+                <div class="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1 hidden sm:block"></div>
+
+                <!-- Theme Toggle -->
+                <button id="themeToggleBtn" class="w-10 h-10 flex items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">
+                    <i class="bi bi-moon-fill dark:hidden"></i>
+                    <i class="bi bi-sun-fill hidden dark:block text-yellow-400"></i>
+                </button>
+
+                <!-- Notifications -->
+                <button class="w-10 h-10 flex items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors relative">
+                    <i class="bi bi-bell-fill"></i>
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+                </button>
+                
+                <a href="{% url 'index' %}" class="w-10 h-10 flex items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors" title="View Storefront">
+                    <i class="bi bi-shop"></i>
+                </a>
+            </div>
+        </header>
+
+        <!-- Main Content Scrollable Area -->
+        <main class="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 lg:p-8 relative z-0">
+            {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                <div class="px-4 py-3 rounded-xl shadow-sm text-sm font-medium {% if message.tags == 'error' %}bg-red-50 text-red-700 border border-red-100 dark:bg-red-900/20 dark:border-red-900/50 dark:text-red-400{% else %}bg-emerald-50 text-emerald-700 border border-emerald-100 dark:bg-emerald-900/20 dark:border-emerald-900/50 dark:text-emerald-400{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-10 lg:hidden hidden"></div>
+
+    <!-- Scripts -->
+    <script>
+        // Dark Mode Logic
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const htmlElement = document.documentElement;
+
+        // Check local storage or system preference
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+        } else {
+            htmlElement.classList.remove('dark');
+        }
+
+        themeToggleBtn.addEventListener('click', function() {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                htmlElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+        });
+
+        // Mobile Sidebar Logic
+        const sidebar = document.getElementById('sidebar');
+        const openSidebarBtn = document.getElementById('openSidebarBtn');
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function openSidebar() {
+            sidebar.classList.remove('-translate-x-full');
+            sidebarOverlay.classList.remove('hidden');
+        }
+
+        function closeSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+        }
+
+        openSidebarBtn.addEventListener('click', openSidebar);
+        closeSidebarBtn.addEventListener('click', closeSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
+    </script>
+    
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

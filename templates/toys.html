@@ -101,36 +101,42 @@
         <div class="toys-grid">
             {% for toy in featured_toys %}
             <div class="toy-card">
-                {% if toy.is_bestseller %}
+                {% if toy.obj.is_bestseller %}
                 <span class="toy-badge bestseller">🔥 Bestseller</span>
                 {% endif %}
                 <div class="toy-image">
                     <img src="{{ toy.imageUrl.url }}" alt="{{ toy.name }}" loading="lazy">
                     <div class="toy-overlay">
-                        <a href="{% url 'product_detail' 'toy' toy.id %}" class="quick-view-btn">Quick View</a>
+                        <a href="{{ toy.url }}" class="quick-view-btn">Quick View</a>
                     </div>
                 </div>
                 <div class="toy-content">
                     <span class="toy-category">{{ toy.get_category_display }}</span>
-                    <h3><a href="{% url 'product_detail' 'toy' toy.id %}" style="color:inherit;text-decoration:none">{{ toy.name }}</a></h3>
+                    <h3><a href="{{ toy.url }}" style="color:inherit;text-decoration:none">{{ toy.name }}</a></h3>
                     <div class="toy-rating">
                         {% with item_rating=toy.avg_rating item_review_count=toy.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
                     </div>
-                    <p class="toy-age">Age: {{ toy.get_age_range_display }}</p>
+                    {% if toy.obj.age_range %}
+                    <p class="toy-age">Age: {{ toy.obj.get_age_range_display }}</p>
+                    {% endif %}
                     <div class="price-container">
-                        <span class="price-current">Rs {{ toy.price }}</span>
-                        {% if toy.original_price %}
-                        <span class="price-old">Rs {{ toy.original_price }}</span>
-                        <span class="discount-badge">{{ toy.discount_percentage }}% OFF</span>
+                        <span class="price-current">Rs {{ toy.price2|default:toy.price }}</span>
+                        {% if toy.price1 %}
+                        <span class="price-old">Rs {{ toy.price1 }}</span>
+                        <span class="discount-badge">{{ toy.discount_text }}</span>
                         {% endif %}
                     </div>
+                    {% if toy.is_purchasable %}
                     <a
-                        href="{% url 'add_to_cart' 'toy' toy.id %}"
+                        href="javascript:void(0)"
                         class="add-to-cart-btn"
                         data-add-to-cart
-                        data-item-type="toy"
+                        data-item-type="{{ toy.item_type }}"
                         data-item-id="{{ toy.id }}"
                     >Add to Cart</a>
+                    {% else %}
+                    <a href="{{ toy.url }}" class="add-to-cart-btn" style="text-decoration:none; text-align:center;">View Product</a>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}
@@ -146,36 +152,42 @@
         <div class="toys-grid">
             {% for toy in new_toys %}
             <div class="toy-card">
-                {% if toy.is_new %}
+                {% if toy.obj.is_new %}
                 <span class="toy-badge new">✨ New</span>
                 {% endif %}
                 <div class="toy-image">
                     <img src="{{ toy.imageUrl.url }}" alt="{{ toy.name }}" loading="lazy">
                     <div class="toy-overlay">
-                        <a href="{% url 'product_detail' 'toy' toy.id %}" class="quick-view-btn">Quick View</a>
+                        <a href="{{ toy.url }}" class="quick-view-btn">Quick View</a>
                     </div>
                 </div>
                 <div class="toy-content">
                     <span class="toy-category">{{ toy.get_category_display }}</span>
-                    <h3><a href="{% url 'product_detail' 'toy' toy.id %}" style="color:inherit;text-decoration:none">{{ toy.name }}</a></h3>
+                    <h3><a href="{{ toy.url }}" style="color:inherit;text-decoration:none">{{ toy.name }}</a></h3>
                     <div class="toy-rating">
                         {% with item_rating=toy.avg_rating item_review_count=toy.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
                     </div>
-                    <p class="toy-age">Age: {{ toy.get_age_range_display }}</p>
+                    {% if toy.obj.age_range %}
+                    <p class="toy-age">Age: {{ toy.obj.get_age_range_display }}</p>
+                    {% endif %}
                     <div class="price-container">
-                        <span class="price-current">Rs {{ toy.price }}</span>
-                        {% if toy.original_price %}
-                        <span class="price-old">Rs {{ toy.original_price }}</span>
-                        <span class="discount-badge">{{ toy.discount_percentage }}% OFF</span>
+                        <span class="price-current">Rs {{ toy.price2|default:toy.price }}</span>
+                        {% if toy.price1 %}
+                        <span class="price-old">Rs {{ toy.price1 }}</span>
+                        <span class="discount-badge">{{ toy.discount_text }}</span>
                         {% endif %}
                     </div>
+                    {% if toy.is_purchasable %}
                     <a
-                        href="{% url 'add_to_cart' 'toy' toy.id %}"
+                        href="javascript:void(0)"
                         class="add-to-cart-btn"
                         data-add-to-cart
-                        data-item-type="toy"
+                        data-item-type="{{ toy.item_type }}"
                         data-item-id="{{ toy.id }}"
                     >Add to Cart</a>
+                    {% else %}
+                    <a href="{{ toy.url }}" class="add-to-cart-btn" style="text-decoration:none; text-align:center;">View Product</a>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}
@@ -189,51 +201,57 @@
         <div class="toys-grid">
             {% for toy in toys %}
             {% with is_in_stock=toy.inventory.stock|default:0 %}
-            <div class="toy-card {% if is_in_stock == 0 %}out-of-stock{% endif %}">
-                {% if toy.is_bestseller %}
+            <div class="toy-card {% if toy.is_purchasable and is_in_stock == 0 %}out-of-stock{% endif %}">
+                {% if toy.obj.is_bestseller %}
                 <span class="toy-badge bestseller">🔥 Bestseller</span>
-                {% elif toy.is_new %}
+                {% elif toy.obj.is_new %}
                 <span class="toy-badge new">✨ New</span>
-                {% elif is_in_stock == 1 %}
+                {% elif toy.is_purchasable and is_in_stock == 1 %}
                 <span class="toy-badge low-stock last-one\">Last 1!</span>
-                {% elif is_in_stock <= 3 %}
+                {% elif toy.is_purchasable and is_in_stock <= 3 %}
                 <span class="toy-badge low-stock\">Only {{ is_in_stock }} left!</span>
-                {% elif is_in_stock <= 5 %}
+                {% elif toy.is_purchasable and is_in_stock <= 5 %}
                 <span class="toy-badge low-stock limited\">Low Stock</span>
                 {% endif %}
                 <div class="toy-image">
                     <img src="{{ toy.imageUrl.url }}" alt="{{ toy.name }}" loading="lazy">
-                    {% if is_in_stock == 0 %}
+                    {% if toy.is_purchasable and is_in_stock == 0 %}
                     <div class="toy-stock-overlay">Out of Stock</div>
                     {% endif %}
-                    <div class="toy-overlay {% if is_in_stock == 0 %}toy-overlay--visible{% endif %}">
-                        <a href="{% url 'product_detail' 'toy' toy.id %}" class="quick-view-btn">Quick View</a>
+                    <div class="toy-overlay {% if toy.is_purchasable and is_in_stock == 0 %}toy-overlay--visible{% endif %}">
+                        <a href="{{ toy.url }}" class="quick-view-btn">Quick View</a>
                     </div>
                 </div>
                 <div class="toy-content">
                     <span class="toy-category">{{ toy.get_category_display }}</span>
-                    <h3><a href="{% url 'product_detail' 'toy' toy.id %}" style="color:inherit;text-decoration:none">{{ toy.name }}</a></h3>
+                    <h3><a href="{{ toy.url }}" style="color:inherit;text-decoration:none">{{ toy.name }}</a></h3>
                     <div class="toy-rating">
                         {% with item_rating=toy.avg_rating item_review_count=toy.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
                     </div>
-                    <p class="toy-age">Age: {{ toy.get_age_range_display }}</p>
+                    {% if toy.obj.age_range %}
+                    <p class="toy-age">Age: {{ toy.obj.get_age_range_display }}</p>
+                    {% endif %}
                     <div class="price-container">
-                        <span class="price-current">Rs {{ toy.price }}</span>
-                        {% if toy.original_price %}
-                        <span class="price-old">Rs {{ toy.original_price }}</span>
-                        <span class="discount-badge">{{ toy.discount_percentage }}% OFF</span>
+                        <span class="price-current">Rs {{ toy.price2|default:toy.price }}</span>
+                        {% if toy.price1 %}
+                        <span class="price-old">Rs {{ toy.price1 }}</span>
+                        <span class="discount-badge">{{ toy.discount_text }}</span>
                         {% endif %}
                     </div>
-                    {% if is_in_stock > 0 %}
-                    <a
-                        href="{% url 'add_to_cart' 'toy' toy.id %}"
-                        class="add-to-cart-btn"
-                        data-add-to-cart
-                        data-item-type="toy"
-                        data-item-id="{{ toy.id }}"
-                    >Add to Cart</a>
+                    {% if toy.is_purchasable %}
+                        {% if is_in_stock > 0 %}
+                        <a
+                            href="javascript:void(0)"
+                            class="add-to-cart-btn"
+                            data-add-to-cart
+                            data-item-type="{{ toy.item_type }}"
+                            data-item-id="{{ toy.id }}"
+                        >Add to Cart</a>
+                        {% else %}
+                        <button class="add-to-cart-btn btn-disabled-toy" disabled title="Item is out of stock">Out of Stock</button>
+                        {% endif %}
                     {% else %}
-                    <button class="add-to-cart-btn btn-disabled-toy" disabled title="Item is out of stock">Out of Stock</button>
+                        <a href="{{ toy.url }}" class="add-to-cart-btn" style="text-decoration:none; text-align:center;">View Product</a>
                     {% endif %}
                 </div>
             </div>

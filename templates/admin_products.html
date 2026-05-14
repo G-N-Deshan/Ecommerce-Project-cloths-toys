@@ -1,0 +1,128 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title %}Manage Products | KidZone Admin{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-display font-bold text-slate-900 dark:text-white">Products Management</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400">View and manage all store items.</p>
+        </div>
+        
+        <form method="GET" class="flex flex-col sm:flex-row gap-3">
+            <div class="relative">
+                <i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" name="q" value="{{ search_query }}" placeholder="Search products..." class="pl-9 pr-4 py-2 bg-white dark:bg-dark-card border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all dark:text-white w-full sm:w-64">
+            </div>
+            
+            <select name="category" onchange="this.form.submit()" class="px-4 py-2 bg-white dark:bg-dark-card border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary outline-none cursor-pointer">
+                <option value="">All Categories</option>
+                <option value="Boys" {% if category_filter == 'Boys' %}selected{% endif %}>Boys</option>
+                <option value="Girls" {% if category_filter == 'Girls' %}selected{% endif %}>Girls</option>
+                <option value="Toy" {% if category_filter == 'Toy' %}selected{% endif %}>Toys</option>
+            </select>
+            
+            {% if search_query or category_filter %}
+            <a href="{% url 'admin_products' %}" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl text-sm font-medium transition-colors flex items-center justify-center">
+                Clear Filters
+            </a>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- Products Table -->
+    <div class="glass-card rounded-2xl overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider">
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Product</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Category</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700">Price</th>
+                        <th class="p-4 font-bold border-b border-slate-200 dark:border-slate-700 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
+                    {% for product in products %}
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors group">
+                        <td class="p-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-lg bg-slate-100 dark:bg-slate-800 flex-shrink-0 overflow-hidden border border-slate-200 dark:border-slate-700">
+                                    {% if product.image %}
+                                    <img src="{{ product.image }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+                                    {% else %}
+                                    <div class="w-full h-full flex items-center justify-center text-slate-400">
+                                        <i class="bi bi-image"></i>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-900 dark:text-white">{{ product.name }}</p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 uppercase">{{ product.type }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="p-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide
+                                {% if product.category == 'Toy' %}bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400
+                                {% elif product.category == 'Boys' %}bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400
+                                {% elif product.category == 'Girls' %}bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-400
+                                {% else %}bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300{% endif %}">
+                                {{ product.category }}
+                            </span>
+                        </td>
+                        <td class="p-4 font-bold text-slate-900 dark:text-white">
+                            Rs {{ product.price|floatformat:2 }}
+                        </td>
+                        <td class="p-4 text-right">
+                            <div class="flex justify-end gap-2">
+                                <a href="{{ product.edit_url }}" target="_blank" class="w-8 h-8 rounded-lg bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:hover:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center transition-colors" title="Edit">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="{{ product.delete_url }}" target="_blank" class="w-8 h-8 rounded-lg bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 flex items-center justify-center transition-colors" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="p-12 text-center">
+                            <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 mx-auto mb-4">
+                                <i class="bi bi-box-seam text-2xl"></i>
+                            </div>
+                            <p class="text-slate-500 dark:text-slate-400 font-medium">No products found.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if products.has_other_pages %}
+        <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 flex items-center justify-between">
+            <div class="text-sm text-slate-500 dark:text-slate-400">
+                Showing <span class="font-bold text-slate-900 dark:text-white">{{ products.start_index }}</span> to <span class="font-bold text-slate-900 dark:text-white">{{ products.end_index }}</span> of <span class="font-bold text-slate-900 dark:text-white">{{ products.paginator.count }}</span> results
+            </div>
+            <div class="flex gap-2">
+                {% if products.has_previous %}
+                <a href="?page={{ products.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}" class="px-3 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                    Previous
+                </a>
+                {% endif %}
+                
+                {% if products.has_next %}
+                <a href="?page={{ products.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}" class="px-3 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                    Next
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

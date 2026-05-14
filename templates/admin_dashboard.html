@@ -1,0 +1,325 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title %}Dashboard Overview | KidZone Admin{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-display font-bold text-slate-900 dark:text-white">Dashboard Overview</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Welcome back! Here's what's happening with your store today.</p>
+        </div>
+        <div class="flex gap-3">
+            <a href="?days=30" class="px-4 py-2 bg-white dark:bg-dark-card border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-sm flex items-center gap-2">
+                <i class="bi bi-calendar3"></i> Last 30 Days
+            </a>
+            <a href="{% url 'export_orders_csv' %}" class="px-4 py-2 bg-primary hover:bg-teal-800 text-white rounded-xl text-sm font-bold transition-colors shadow-lg shadow-teal-500/20 flex items-center gap-2">
+                <i class="bi bi-download"></i> Export Report
+            </a>
+        </div>
+    </div>
+
+    <!-- Top Summary Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Revenue -->
+        <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Total Revenue</p>
+                    <h3 class="text-2xl font-display font-bold text-slate-900 dark:text-white">Rs {{ total_revenue|floatformat:2 }}</h3>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-900/30 text-primary flex items-center justify-center text-lg">
+                    <i class="bi bi-currency-dollar"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center gap-2 text-sm">
+                <span class="text-emerald-500 font-bold flex items-center"><i class="bi bi-arrow-up-short text-lg"></i> 12.5%</span>
+                <span class="text-slate-400">vs last month</span>
+            </div>
+        </div>
+
+        <!-- Orders -->
+        <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Total Orders</p>
+                    <h3 class="text-2xl font-display font-bold text-slate-900 dark:text-white">{{ total_orders }}</h3>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-lg">
+                    <i class="bi bi-bag"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center gap-2 text-sm">
+                <span class="text-emerald-500 font-bold flex items-center"><i class="bi bi-arrow-up-short text-lg"></i> 8.2%</span>
+                <span class="text-slate-400">vs last month</span>
+            </div>
+        </div>
+
+        <!-- Customers -->
+        <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Total Customers</p>
+                    <h3 class="text-2xl font-display font-bold text-slate-900 dark:text-white">{{ total_users }}</h3>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center text-lg">
+                    <i class="bi bi-people"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center gap-2 text-sm">
+                <span class="text-emerald-500 font-bold flex items-center"><i class="bi bi-arrow-up-short text-lg"></i> 24.1%</span>
+                <span class="text-slate-400">vs last month</span>
+            </div>
+        </div>
+
+        <!-- Net Profit -->
+        <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Net Profit</p>
+                    <h3 class="text-2xl font-display font-bold text-slate-900 dark:text-white">Rs {{ net_profit|floatformat:2 }}</h3>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center gap-2 text-sm">
+                <span class="text-emerald-500 font-bold flex items-center"><i class="bi bi-arrow-up-short text-lg"></i> 5.4%</span>
+                <span class="text-slate-400">vs last month</span>
+            </div>
+        </div>
+
+        <!-- Today's Sales -->
+        <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Today's Sales</p>
+                    <h3 class="text-2xl font-display font-bold text-slate-900 dark:text-white">Rs {{ todays_sales|floatformat:2 }}</h3>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 flex items-center justify-center text-lg">
+                    <i class="bi bi-calendar2-check"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center gap-2 text-sm">
+                <span class="text-slate-500 font-medium">Live updating...</span>
+            </div>
+        </div>
+
+        <!-- Pending Orders -->
+        <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Pending Orders</p>
+                    <h3 class="text-2xl font-display font-bold text-slate-900 dark:text-white">{{ pending_orders }}</h3>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 flex items-center justify-center text-lg">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center gap-2 text-sm">
+                <a href="{% url 'admin_orders' %}?status=pending" class="text-primary hover:underline font-bold text-xs">View all &rarr;</a>
+            </div>
+        </div>
+
+        <!-- Returns -->
+        <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Return Requests</p>
+                    <h3 class="text-2xl font-display font-bold text-slate-900 dark:text-white">{{ return_requests }}</h3>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center justify-center text-lg">
+                    <i class="bi bi-arrow-return-left"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center gap-2 text-sm">
+                <a href="{% url 'admin_returns' %}?status=requested" class="text-primary hover:underline font-bold text-xs">Review now &rarr;</a>
+            </div>
+        </div>
+
+        <!-- Low Stock -->
+        <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Low Stock Items</p>
+                    <h3 class="text-2xl font-display font-bold text-slate-900 dark:text-white">{{ low_stock.count }}</h3>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center text-lg">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center gap-2 text-sm">
+                <a href="{% url 'admin_products' %}" class="text-primary hover:underline font-bold text-xs">Manage inventory &rarr;</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section 1 -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Revenue Line Chart -->
+        <div class="glass-card rounded-2xl p-6 lg:col-span-2 flex flex-col">
+            <h3 class="font-display font-bold text-slate-900 dark:text-white mb-6">Revenue Growth (Last 30 Days)</h3>
+            <div class="flex-1 relative w-full h-72">
+                <canvas id="revenueLineChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Category Pie Chart -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col">
+            <h3 class="font-display font-bold text-slate-900 dark:text-white mb-6">Sales by Category</h3>
+            <div class="flex-1 relative w-full h-72 flex items-center justify-center">
+                <canvas id="categoryPieChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section 2 -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Monthly Orders Bar Chart -->
+        <div class="glass-card rounded-2xl p-6 lg:col-span-2 flex flex-col">
+            <h3 class="font-display font-bold text-slate-900 dark:text-white mb-6">Monthly Order Volume</h3>
+            <div class="flex-1 relative w-full h-72">
+                <canvas id="ordersBarChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Order Status Donut Chart -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col">
+            <h3 class="font-display font-bold text-slate-900 dark:text-white mb-6">Order Statuses</h3>
+            <div class="flex-1 relative w-full h-72 flex items-center justify-center">
+                <canvas id="statusDonutChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Chart Defaults for Dark Mode
+    Chart.defaults.color = document.documentElement.classList.contains('dark') ? '#94a3b8' : '#64748b';
+    Chart.defaults.font.family = "'Inter', sans-serif";
+
+    const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: {
+                    usePointStyle: true,
+                    padding: 20
+                }
+            }
+        }
+    };
+
+    // 1. Revenue Line Chart (Area)
+    const revenueCtx = document.getElementById('revenueLineChart').getContext('2d');
+    
+    // Create gradient
+    let gradient = revenueCtx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(15, 118, 110, 0.5)'); // primary
+    gradient.addColorStop(1, 'rgba(15, 118, 110, 0.0)');
+
+    new Chart(revenueCtx, {
+        type: 'line',
+        data: {
+            labels: {{ daily_labels|safe }},
+            datasets: [{
+                label: 'Revenue (Rs)',
+                data: {{ daily_totals|safe }},
+                borderColor: '#0f766e',
+                backgroundColor: gradient,
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#ffffff',
+                pointBorderColor: '#0f766e',
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6
+            }]
+        },
+        options: {
+            ...commonOptions,
+            scales: {
+                y: { beginAtZero: true, grid: { borderDash: [4, 4], color: 'rgba(148, 163, 184, 0.1)' } },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // 2. Category Pie Chart
+    const categoryCtx = document.getElementById('categoryPieChart').getContext('2d');
+    new Chart(categoryCtx, {
+        type: 'pie',
+        data: {
+            labels: {{ category_sales_labels|safe|default:"['Boys', 'Girls', 'Toys']" }},
+            datasets: [{
+                data: {{ category_sales_data|safe|default:"[40, 30, 30]" }},
+                backgroundColor: ['#0f766e', '#14b8a6', '#4f46e5', '#ec4899', '#f59e0b'],
+                borderWidth: 0,
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            ...commonOptions,
+            cutout: '0%', // It's a pie
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+
+    // 3. Monthly Orders Bar Chart
+    const ordersCtx = document.getElementById('ordersBarChart').getContext('2d');
+    new Chart(ordersCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ monthly_labels|safe }},
+            datasets: [{
+                label: 'Orders',
+                data: {{ monthly_counts|safe }},
+                backgroundColor: '#14b8a6',
+                borderRadius: 6,
+                barPercentage: 0.6
+            }]
+        },
+        options: {
+            ...commonOptions,
+            scales: {
+                y: { beginAtZero: true, grid: { borderDash: [4, 4], color: 'rgba(148, 163, 184, 0.1)' } },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // 4. Order Status Donut Chart
+    const statusCtx = document.getElementById('statusDonutChart').getContext('2d');
+    const statusDataRaw = {{ status_counts|safe }};
+    const statusLabels = Object.keys(statusDataRaw).map(k => k.charAt(0).toUpperCase() + k.slice(1));
+    const statusValues = Object.values(statusDataRaw);
+    
+    new Chart(statusCtx, {
+        type: 'doughnut',
+        data: {
+            labels: statusLabels.length ? statusLabels : ['Pending', 'Delivered'],
+            datasets: [{
+                data: statusValues.length ? statusValues : [1, 1],
+                backgroundColor: ['#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ef4444'],
+                borderWidth: 0,
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            ...commonOptions,
+            cutout: '70%',
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+</script>
+{% endblock %}
