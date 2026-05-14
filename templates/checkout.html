@@ -262,11 +262,14 @@
                         <!-- Items Scroll -->
                         <div class="max-h-[250px] overflow-y-auto pr-2 mb-6 space-y-4 custom-scrollbar">
                             {% for item in cart_items %}
+                            {% with real_item=item.get_item %}
+                            {% if real_item %}
                             <div class="flex items-center gap-3">
-                                {% with real_item=item.get_item %}
                                 <div class="w-16 h-16 bg-slate-50 rounded-lg p-1 border border-slate-100 flex-shrink-0">
                                     {% if real_item.imageUrl %}
                                     <img src="{{ real_item.imageUrl.url }}" class="w-full h-full object-contain">
+                                    {% elif real_item.image %}
+                                    <img src="{{ real_item.image.url }}" class="w-full h-full object-contain">
                                     {% else %}
                                     <div class="w-full h-full flex items-center justify-center"><i class="bi bi-box text-slate-300"></i></div>
                                     {% endif %}
@@ -280,8 +283,9 @@
                                 <div class="text-right flex-shrink-0">
                                     <p class="font-bold text-slate-900 text-sm">Rs {{ item.get_subtotal|floatformat:2 }}</p>
                                 </div>
-                                {% endwith %}
                             </div>
+                            {% endif %}
+                            {% endwith %}
                             {% endfor %}
                         </div>
 

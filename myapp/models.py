@@ -348,6 +348,7 @@ class CartItem(models.Model):
         ('cloth', 'Cloth'),
         ('offer', 'Offer'),
         ('arrival', 'New Arrival'),
+        ('trending', 'Trending Product'),
     ]
     
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
@@ -357,6 +358,7 @@ class CartItem(models.Model):
     toy = models.ForeignKey('Toy', on_delete=models.CASCADE, null=True, blank=True)
     offer = models.ForeignKey('Offers', on_delete=models.CASCADE, null=True, blank=True)
     arrival = models.ForeignKey('NewArrivals', on_delete=models.CASCADE, null=True, blank=True)
+    trending = models.ForeignKey('TrendingProduct', on_delete=models.CASCADE, null=True, blank=True)
     
     # Snapshot unit price at add-to-cart time so cart totals stay stable.
     unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
@@ -383,6 +385,8 @@ class CartItem(models.Model):
             return self.offer
         elif self.arrival:
             return self.arrival
+        elif self.trending:
+            return self.trending
         return None
     
     @staticmethod
@@ -422,6 +426,8 @@ class CartItem(models.Model):
             return self._to_float(item.price1 or item.price2 or 0)
         elif self.item_type == 'arrival':
             return self._to_float(item.price or 0)
+        elif self.item_type == 'trending':
+            return self._to_float(item.price)
         return 0.0
 
     def get_price(self):
@@ -508,6 +514,7 @@ class ProductReview(models.Model):
         ('toy', 'Toy'),
         ('offer', 'Offer'),
         ('arrival', 'Arrival'),
+        ('trending', 'Trending'),
     ]
 
     product_type = models.CharField(max_length=10, choices=PRODUCT_TYPE_CHOICES)
@@ -515,6 +522,7 @@ class ProductReview(models.Model):
     toy = models.ForeignKey('Toy', on_delete=models.CASCADE, blank=True, null=True, related_name='product_reviews')
     offer = models.ForeignKey('Offers', on_delete=models.CASCADE, blank=True, null=True, related_name='product_reviews')
     arrival = models.ForeignKey('NewArrivals', on_delete=models.CASCADE, blank=True, null=True, related_name='product_reviews')
+    trending = models.ForeignKey('TrendingProduct', on_delete=models.CASCADE, blank=True, null=True, related_name='product_reviews')
 
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=100)
@@ -540,6 +548,7 @@ class ProductImage(models.Model):
         ('toy', 'Toy'),
         ('offer', 'Offer'),
         ('arrival', 'Arrival'),
+        ('trending', 'Trending'),
     ]
 
     product_type = models.CharField(max_length=10, choices=PRODUCT_TYPE_CHOICES)
@@ -547,6 +556,7 @@ class ProductImage(models.Model):
     toy = models.ForeignKey('Toy', on_delete=models.CASCADE, blank=True, null=True, related_name='gallery_images')
     offer = models.ForeignKey('Offers', on_delete=models.CASCADE, blank=True, null=True, related_name='gallery_images')
     arrival = models.ForeignKey('NewArrivals', on_delete=models.CASCADE, blank=True, null=True, related_name='gallery_images')
+    trending = models.ForeignKey('TrendingProduct', on_delete=models.CASCADE, blank=True, null=True, related_name='gallery_images')
 
     image = models.ImageField(upload_to='product_gallery/')
     alt_text = models.CharField(max_length=200, blank=True)
@@ -571,6 +581,7 @@ class Inventory(models.Model):
         ('toy', 'Toy'),
         ('offer', 'Offer'),
         ('arrival', 'Arrival'),
+        ('trending', 'Trending'),
     ]
 
     product_type = models.CharField(max_length=10, choices=PRODUCT_TYPE_CHOICES)
@@ -578,6 +589,7 @@ class Inventory(models.Model):
     toy = models.OneToOneField('Toy', on_delete=models.CASCADE, blank=True, null=True, related_name='inventory')
     offer = models.OneToOneField('Offers', on_delete=models.CASCADE, blank=True, null=True, related_name='inventory')
     arrival = models.OneToOneField('NewArrivals', on_delete=models.CASCADE, blank=True, null=True, related_name='inventory')
+    trending = models.OneToOneField('TrendingProduct', on_delete=models.CASCADE, blank=True, null=True, related_name='inventory')
 
     stock = models.PositiveIntegerField(default=0)
     low_stock_threshold = models.PositiveIntegerField(default=5)
@@ -596,7 +608,7 @@ class Inventory(models.Model):
         return 0 < self.stock <= self.low_stock_threshold
 
     def get_product(self):
-        return self.cloth or self.toy or self.offer or self.arrival
+        return self.cloth or self.toy or self.offer or self.arrival or self.trending
 
     def __str__(self):
         product = self.get_product()
@@ -928,7 +940,12 @@ class CartAbandon(models.Model):
 
 
 class TrendingProduct(models.Model):
-    """Curated products that show up in the Trending section"""
+    """Curated products that show up in the Trending section.
+
+    Supports two modes:
+      1. FK mode  – link cloth/toy/offer/arrival directly for full cart/stock/ratings support.
+      2. URL mode – legacy link_url fallback; shows a SHOP NOW link only.
+    """
     CATEGORY_CHOICES = [
         ('kids', 'Kids'),
         ('men', 'Men'),
@@ -936,18 +953,42 @@ class TrendingProduct(models.Model):
         ('toys', 'Toys'),
     ]
 
-    name = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='trending/')
-    price = models.CharField(max_length=50)
+    # ── Display / Metadata ──────────────────────────────────────────────────
+    name          = models.CharField(max_length=200)
+    image         = models.ImageField(upload_to='trending/')
+    price         = models.CharField(max_length=50)
     original_price = models.CharField(max_length=50, blank=True, null=True)
-    badge = models.CharField(max_length=50, default='Trending', blank=True)
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
-    link_url = models.CharField(max_length=500, help_text="Paste the full URL to the product detail page here")
-    
-    is_active = models.BooleanField(default=True)
-    order = models.PositiveIntegerField(default=0)
+    badge         = models.CharField(max_length=50, default='Trending', blank=True)
+    category      = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    link_url      = models.CharField(max_length=500, blank=True,
+                                     help_text="Optional legacy URL. Leave blank when using a product link below.")
+
+    # ── Product Links (choose at most one) ──────────────────────────────────
+    cloth   = models.ForeignKey('Cloths',      on_delete=models.SET_NULL,
+                                null=True, blank=True, related_name='trending_entries')
+    toy     = models.ForeignKey('Toy',         on_delete=models.SET_NULL,
+                                null=True, blank=True, related_name='trending_entries')
+    offer   = models.ForeignKey('Offers',      on_delete=models.SET_NULL,
+                                null=True, blank=True, related_name='trending_entries')
+    arrival = models.ForeignKey('NewArrivals', on_delete=models.SET_NULL,
+                                null=True, blank=True, related_name='trending_entries')
+
+    # ── Control ─────────────────────────────────────────────────────────────
+    is_active  = models.BooleanField(default=True)
+    order      = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    # ── Detailed Info for Product Detail Page ──
+    long_description = models.TextField(blank=True, default='', help_text='Detailed description shown on the product detail page')
+    features = models.TextField(blank=True, default='', help_text='Key features, one per line')
+    material = models.CharField(max_length=200, blank=True, default='', help_text='e.g. 100% Cotton, Polyester blend')
+    care_instructions = models.TextField(blank=True, default='', help_text='Washing/Care instructions')
+    sizes_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. S, M, L, XL')
+    colors_available = models.CharField(max_length=200, blank=True, default='', help_text='e.g. Red, Blue, Black')
+    safety_info = models.TextField(blank=True, default='', help_text='Safety warnings for toys')
+    dimensions = models.CharField(max_length=100, blank=True, default='', help_text='e.g. 10x20x30 cm')
+    view_count = models.PositiveIntegerField(default=0, editable=False, help_text='Number of times this product page was viewed')
 
     class Meta:
         ordering = ['order', '-created_at']
@@ -956,3 +997,85 @@ class TrendingProduct(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.category})"
+
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('product_detail', args=['trending', self.id])
+
+    # ── Helpers ─────────────────────────────────────────────────────────────
+
+    def get_linked_product(self):
+        """Return the first set FK object, or None."""
+        return self.cloth or self.toy or self.offer or self.arrival
+
+    @property
+    def resolved_item_type(self):
+        if self.cloth_id:   return 'cloth'
+        if self.toy_id:     return 'toy'
+        if self.offer_id:   return 'offer'
+        if self.arrival_id: return 'arrival'
+        return None
+
+    @property
+    def resolved_item_id(self):
+        if self.cloth_id:   return self.cloth_id
+        if self.toy_id:     return self.toy_id
+        if self.offer_id:   return self.offer_id
+        if self.arrival_id: return self.arrival_id
+        return None
+
+    @property
+    def resolved_link_url(self):
+        """Auto-generate the product detail URL when a FK is set."""
+        if self.resolved_item_type and self.resolved_item_id:
+            from django.urls import reverse
+            try:
+                return reverse('product_detail', args=[self.resolved_item_type, self.resolved_item_id])
+            except Exception:
+                pass
+        return self.link_url or self.get_absolute_url()
+
+    @property
+    def resolved_name(self):
+        p = self.get_linked_product()
+        if p:
+            return getattr(p, 'name', None) or getattr(p, 'title', self.name)
+        return self.name
+
+    @property
+    def resolved_image(self):
+        p = self.get_linked_product()
+        if p and hasattr(p, 'imageUrl') and p.imageUrl:
+            return p.imageUrl
+        return self.image
+
+    @property
+    def resolved_price(self):
+        p = self.get_linked_product()
+        if p:
+            return (getattr(p, 'price2', None) or getattr(p, 'price1', None)
+                    or getattr(p, 'price', None) or self.price)
+        return self.price
+
+    @property
+    def live_stock(self):
+        """Return the Inventory object from the linked product, or None."""
+        p = self.get_linked_product()
+        if p:
+            return getattr(p, 'inventory', None)
+        return None
+
+    @property
+    def avg_rating(self):
+        """Return average rating from linked product's reviews."""
+        p = self.get_linked_product()
+        if p:
+            return getattr(p, 'avg_rating', None)
+        return None
+
+    @property
+    def review_count(self):
+        p = self.get_linked_product()
+        if p:
+            return getattr(p, 'review_count', 0)
+        return 0

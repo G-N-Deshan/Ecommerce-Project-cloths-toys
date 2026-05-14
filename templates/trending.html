@@ -6,53 +6,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trending Now - G11 Fashion & Toys</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800;900&display=swap"
-        rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{% static 'navbar.css' %}">
     <link rel="stylesheet" href="{% static 'footer.css' %}">
-    <link rel="stylesheet" href="{% static 'buy.css' %}">
-    <link rel="stylesheet" href="{% static 'hero-effects.css' %}">
     <link rel="stylesheet" href="{% static 'scroll-reveal.css' %}">
-    <script>
-        tailwind.config = {
-            theme: { extend: { fontFamily: { inter: ['Inter'], playfair: ['Playfair Display'] } } }
+    <style>
+        .hero-scroll-x {
+            animation: scrollBackground 60s linear infinite;
         }
-    </script>
+
+        @keyframes scrollBackground {
+            from { background-position: 0 0; }
+            to { background-position: 100% 0; }
+        }
+    </style>
 </head>
 
-<body class="font-inter bg-[#fafafa] text-slate-800">
+<body class="bg-slate-50 font-sans overflow-x-hidden">
 
     <!-- Toast Container -->
     <div id="toastContainer" class="fixed top-5 right-5 z-[9999] max-w-sm space-y-2 pointer-events-none"></div>
 
+    <!-- ── Loading Overlay ── -->
+    <div id="loadingOverlay"
+        class="fixed inset-0 z-[10000] bg-white/80 backdrop-blur-sm flex items-center justify-center hidden">
+        <div class="flex flex-col items-center gap-3">
+            <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+            <span class="text-sm font-medium text-slate-600">Loading...</span>
+        </div>
+    </div>
+
+    <!-- ── Quick-View Modal ── -->
+    <div id="quickViewModal" class="fixed inset-0 z-[8000] hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeQuickView()"></div>
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl max-w-2xl w-[95%] max-h-[90vh] overflow-y-auto p-6">
+            <button onclick="closeQuickView()"
+                class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-red-100 flex items-center justify-center text-slate-500 hover:text-red-500 transition text-lg font-bold">&times;</button>
+            <div id="quickViewContent" class="flex flex-col md:flex-row gap-6">
+                <div class="md:w-1/2">
+                    <img id="qvImage" src="" alt="" class="w-full rounded-xl object-cover aspect-square" loading="lazy">
+                </div>
+                <div class="md:w-1/2 flex flex-col gap-3">
+                    <span id="qvBadge"
+                        class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-indigo-100 text-indigo-700 w-fit uppercase tracking-wide"></span>
+                    <h2 id="qvName" class="text-xl font-bold text-slate-900"></h2>
+                    <p id="qvDesc" class="text-sm text-slate-600 line-clamp-4"></p>
+                    <div class="flex items-center gap-3">
+                        <span id="qvPrice" class="text-2xl font-bold text-indigo-600"></span>
+                        <span id="qvOldPrice" class="text-sm text-slate-400 line-through"></span>
+                    </div>
+                    <div id="qvStock" class="text-sm font-semibold"></div>
+                    <div class="flex gap-2 mt-auto pt-2">
+                        <a id="qvDetailLink" href="#"
+                            class="flex-1 py-3 text-center rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition">View
+                            Full Details</a>
+                        <button id="qvCartBtn" onclick="quickAddToCart()"
+                            class="flex-1 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm transition">&#128722;
+                            Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {% include 'navbar.html' %}
 
     <!-- ═══ TRENDING HERO ═══ -->
-    <section class="relative pt-48 pb-64 md:pb-80 bg-slate-900 overflow-hidden">
-        <!-- Scrolling Background -->
-        <div class="absolute inset-0 z-0 opacity-40 hero-scroll-x" style="background-image: url('/media/backgrounds/hero_trending.png'); background-size: cover;"></div>
-        
-        <div class="absolute inset-0 opacity-20">
-            <div class="absolute top-0 left-0 w-64 h-64 bg-indigo-500 rounded-full blur-[120px]"></div>
-            <div class="absolute bottom-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[120px]"></div>
+    <section style="position:relative; background-color:#0f172a; overflow:hidden; min-height:380px; display:flex; align-items:center;">
+        <!-- Background image -->
+        <div style="position:absolute; inset:0; background-image:url('/media/backgrounds/hero_trending.png'); background-size:cover; background-position:center; opacity:0.4;"></div>
+        <!-- Glow blobs -->
+        <div style="position:absolute; inset:0; pointer-events:none;">
+            <div style="position:absolute; top:0; left:0; width:300px; height:300px; background:rgba(99,102,241,0.25); border-radius:9999px; filter:blur(100px);"></div>
+            <div style="position:absolute; bottom:0; right:0; width:280px; height:280px; background:rgba(168,85,247,0.25); border-radius:9999px; filter:blur(90px);"></div>
         </div>
-        <div class="container mx-auto px-6 relative z-50 text-center max-w-5xl">
-            <span class="inline-block px-4 py-1 bg-indigo-500/20 text-indigo-200 border border-indigo-500/30 rounded-full text-xs font-bold uppercase tracking-widest mb-10 animate-pulse shadow-lg shadow-indigo-950/20">🔥 What's Hot Right Now</span>
-            <h1 class="text-5xl md:text-8xl font-black text-white font-playfair mb-8 leading-tight drop-shadow-[0_10px_24px_rgba(0,0,0,0.45)]">Trending Now</h1>
-            <p class="text-slate-100/95 text-lg max-w-2xl mx-auto leading-relaxed drop-shadow-[0_6px_16px_rgba(0,0,0,0.45)]">Discover the most popular products validated by our community. <br class="hidden md:block"> Curated styles and favorites that are flying off the shelves.</p>
+        <!-- Content — padding-top pushes below the fixed navbar (promo bar ~36px + nav ~64px) -->
+        <div style="position:relative; z-index:10; width:100%; text-align:center; padding: 110px 24px 60px;">
+            <span style="display:inline-block; padding:6px 18px; background:rgba(99,102,241,0.2); color:#a5b4fc; border:1px solid rgba(99,102,241,0.35); border-radius:9999px; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; margin-bottom:20px;">
+                🔥 What's Hot Right Now
+            </span>
+            <h1 style="font-size:clamp(2.5rem,8vw,5rem); font-weight:900; color:#ffffff; margin:0 0 20px; line-height:1.05;">Trending Now</h1>
+            <p style="color:#94a3b8; font-size:1.1rem; max-width:600px; margin:0 auto; line-height:1.7;">
+                Discover the most popular products validated by our community.<br>
+                Curated styles and favorites that are flying off the shelves.
+            </p>
         </div>
     </section>
 
     <!-- ═══ TRENDING GRID ═══ -->
-    <section class="relative z-30 -mt-8 md:-mt-12 pb-24">
+    <section style="padding-bottom: 60px; padding-top: 0;">
         <div class="container mx-auto px-6">
-            <!-- Filter Chips Shell -->
-            <div class="bg-white rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-4 md:p-6 mb-16 border border-slate-100 flex flex-wrap justify-center gap-3 relative z-40 mt-6 md:mt-8">
+            <!-- Filter Chips -->
+            <div style="margin-top:-20px; position:relative; z-index:10;" class="bg-white rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] p-4 md:p-5 mb-10 border border-slate-100 flex flex-wrap justify-center gap-3">
                 <a href="{% url 'trending' %}" class="px-6 py-3 rounded-2xl text-sm font-bold transition-all {% if not current_category %}bg-slate-900 text-white shadow-xl shadow-slate-900/20{% else %}text-slate-500 hover:bg-slate-50 hover:text-indigo-600{% endif %}">
                     All Trends
                 </a>
@@ -72,35 +119,93 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 justify-center">
                 {% for item in trending_products %}
+                {% with has_link=item.resolved_item_type %}
                 <article class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-slate-100 flex flex-col h-full" data-reveal="up">
                     <div class="relative overflow-hidden aspect-[4/5]">
-                        <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <a href="{{ item.resolved_link_url }}">
+                            <img src="{{ item.resolved_image.url }}" alt="{{ item.resolved_name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        </a>
+                        
+                        <!-- Badge -->
                         {% if item.badge %}
                         <span class="absolute top-4 left-4 z-10 px-3 py-1 bg-indigo-600 text-white text-[10px] font-bold rounded-full shadow-lg uppercase tracking-wider">{{ item.badge }}</span>
                         {% endif %}
+
+                        <!-- Stock Badge -->
+                        {% if item.live_stock %}
+                        <span class="absolute top-4 right-4 z-10 px-3 py-1 {% if item.live_stock.stock > 5 %}bg-emerald-500{% else %}bg-amber-500{% endif %} text-white text-[10px] font-bold rounded-full shadow-lg uppercase">
+                            {% if item.live_stock.stock > 0 %}In Stock{% else %}Out of Stock{% endif %}
+                        </span>
+                        {% endif %}
                         
                         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
-                            <a href="{{ item.link_url }}" class="w-12 h-12 flex items-center justify-center bg-white rounded-full text-slate-900 hover:bg-indigo-600 hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 shadow-xl">
-                                <i class="bi bi-link-45deg text-xl"></i>
-                            </a>
+                            <div class="flex flex-col gap-3">
+                                <button data-add-to-cart 
+                                    data-item-type="{% if item.resolved_item_type %}{{ item.resolved_item_type }}{% else %}trending{% endif %}" 
+                                    data-item-id="{% if item.resolved_item_id %}{{ item.resolved_item_id }}{% else %}{{ item.id }}{% endif %}" 
+                                    data-price="{{ item.price }}"
+                                    class="w-12 h-12 flex items-center justify-center bg-indigo-600 text-white rounded-full hover:bg-white hover:text-indigo-600 transition-all transform translate-y-4 group-hover:translate-y-0 shadow-xl delay-75">
+                                    <i class="bi bi-cart-plus text-xl"></i>
+                                </button>
+                                
+                                <button onclick="fetchQuickView('{% if item.resolved_item_type %}{{ item.resolved_item_type }}{% else %}trending{% endif %}', {% if item.resolved_item_id %}{{ item.resolved_item_id }}{% else %}{{ item.id }}{% endif %}); return false;" class="w-12 h-12 flex items-center justify-center bg-white text-slate-900 rounded-full hover:bg-indigo-600 hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 shadow-xl">
+                                    <i class="bi bi-eye text-xl"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
+
                     <div class="p-6 flex flex-col flex-grow">
-                        <span class="text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-2 block">{{ item.category }}</span>
-                        <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">
-                            <a href="{{ item.link_url }}">{{ item.name }}</a>
-                        </h3>
-                        <div class="mt-auto pt-4 flex items-center justify-between border-t border-slate-50">
-                            <div class="flex flex-col">
-                                <span class="text-xl font-black text-slate-900">Rs {{ item.price }}</span>
-                                {% if item.original_price %}
-                                <span class="text-xs text-slate-400 line-through">Rs {{ item.original_price }}</span>
-                                {% endif %}
+                        <span class="text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-2 block">{{ item.get_category_display }}</span>
+                        
+                        <!-- Ratings -->
+                        {% if item.avg_rating %}
+                        <div class="flex items-center gap-1 mb-2">
+                            <div class="flex text-[10px] text-amber-400">
+                                {% with r=item.avg_rating %}
+                                <i class="bi bi-star-fill"></i>{% if r >= 2 %}<i class="bi bi-star-fill"></i>{% endif %}{% if r >= 3 %}<i class="bi bi-star-fill"></i>{% endif %}{% if r >= 4 %}<i class="bi bi-star-fill"></i>{% endif %}{% if r >= 5 %}<i class="bi bi-star-fill"></i>{% endif %}
+                                {% endwith %}
                             </div>
-                            <a href="{{ item.link_url }}" class="px-5 py-2.5 bg-slate-900 text-white text-xs font-bold rounded-xl hover:bg-indigo-600 transition-all shadow-lg hover:shadow-indigo-500/30">SHOP NOW</a>
+                            <span class="text-[10px] text-slate-400">({{ item.review_count }})</span>
+                        </div>
+                        {% endif %}
+
+                        <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">
+                            <a href="{{ item.resolved_link_url }}">{{ item.resolved_name }}</a>
+                        </h3>
+
+                        <div class="mt-auto pt-4 flex flex-col gap-3 border-t border-slate-50">
+                            <div class="flex items-center justify-between">
+                                <div class="flex flex-col">
+                                    <span class="text-xl font-black text-slate-900">Rs {{ item.resolved_price }}</span>
+                                    {% if item.original_price %}
+                                    <span class="text-xs text-slate-400 line-through">Rs {{ item.original_price }}</span>
+                                    {% endif %}
+                                </div>
+                                <a href="{{ item.resolved_link_url }}" class="px-5 py-2.5 bg-slate-900 text-white text-xs font-bold rounded-xl hover:bg-indigo-600 transition-all shadow-lg hover:shadow-indigo-500/30 uppercase">SHOP NOW</a>
+                            </div>
+
+                             <div class="grid grid-cols-2 gap-2 mt-1">
+                                <button data-add-to-cart 
+                                    data-item-type="{% if item.resolved_item_type %}{{ item.resolved_item_type }}{% else %}trending{% endif %}" 
+                                    data-item-id="{% if item.resolved_item_id %}{{ item.resolved_item_id }}{% else %}{{ item.id }}{% endif %}" 
+                                    data-price="{{ item.price }}"
+                                    class="py-2 bg-slate-100 text-slate-600 text-[10px] font-bold rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition-all flex items-center justify-center gap-1">
+                                    <i class="bi bi-cart-plus"></i> Add to Cart
+                                </button>
+                                
+                                <button onclick="fetchQuickView('{% if item.resolved_item_type %}{{ item.resolved_item_type }}{% else %}trending{% endif %}', {% if item.resolved_item_id %}{{ item.resolved_item_id }}{% else %}{{ item.id }}{% endif %}); return false;"
+                                    class="py-2 bg-indigo-600 text-white text-[10px] font-bold rounded-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-1 shadow-md">
+                                    <i class="bi bi-eye"></i> Quick View
+                                </button>
+                                <a href="{% if item.resolved_item_type %}{% url 'buy_now' item.resolved_item_type item.resolved_item_id %}{% else %}{% url 'buy_now' 'trending' item.id %}{% endif %}" class="py-2 bg-indigo-50 text-indigo-600 text-[10px] font-bold rounded-lg hover:bg-indigo-600 hover:text-white transition-all flex items-center justify-center gap-1">
+                                    ⚡ Buy Now
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </article>
+                {% endwith %}
                 {% empty %}
                 <div class="col-span-full py-20 text-center">
                     <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -131,6 +236,7 @@
 
     {% include 'footer.html' %}
 
+    <script src="{% static 'cart_utils.js' %}"></script>
     <script src="{% static 'global.js' %}"></script>
     <script src="{% static 'scroll-reveal.js' %}"></script>
 </body>

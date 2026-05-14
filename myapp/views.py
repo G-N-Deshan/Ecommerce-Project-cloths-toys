@@ -531,21 +531,38 @@ def subscribe_newsletter(request):
 
 
 def trending_page(request):
-    """View to display all trending products with category filtering"""
+    """View to display all trending products with category filtering."""
+    from django.db.models import Avg, Count
     category = request.GET.get('category', '')
-    trending_qs = TrendingProduct.objects.filter(is_active=True)
-    
+    trending_qs = TrendingProduct.objects.filter(is_active=True).select_related(
+        'cloth', 'toy', 'offer', 'arrival'
+    )
+
     if category:
         trending_qs = trending_qs.filter(category=category)
-    
+
+    # Count totals for stats bar
+    total_count = TrendingProduct.objects.filter(is_active=True).count()
+
     # Pagination
     paginator = Paginator(trending_qs, 12)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    
+
+    # Enrich each trending item with a rank number and pre-fetch linked product ratings
+    for rank, item in enumerate(page_obj, start=1):
+        item.rank = rank + (page_obj.number - 1) * paginator.per_page
+        linked = item.get_linked_product()
+        if linked and not hasattr(linked, 'avg_rating'):
+            from django.db.models import Avg as _Avg
+            rating = linked.product_reviews.aggregate(r=_Avg('rating'))['r']
+            linked.avg_rating = rating or 0
+            linked.review_count = linked.product_reviews.count()
+
     context = {
         'trending_products': page_obj,
         'current_category': category,
+        'total_count': total_count,
         'cart_count': get_or_create_cart(request).get_item_count(),
     }
     return render(request, 'trending.html', context)
@@ -554,7 +571,15 @@ def trending_page(request):
 def index(request):
     offers = Offers.objects.annotate(avg_rating=Avg('product_reviews__rating')).all()
     arrivals = NewArrivals.objects.annotate(avg_rating=Avg('product_reviews__rating')).all()
-    trending_products = TrendingProduct.objects.filter(is_active=True)[:4]
+    trending_products = TrendingProduct.objects.filter(is_active=True).select_related('cloth', 'toy', 'offer', 'arrival')[:4]
+    
+    # Pre-fetch ratings for homepage trending items
+    for item in trending_products:
+        linked = item.get_linked_product()
+        if linked and not hasattr(linked, 'avg_rating'):
+            rating = linked.product_reviews.aggregate(r=Avg('rating'))['r']
+            linked.avg_rating = rating or 0
+            linked.review_count = linked.product_reviews.count()
     cards = Card.objects.all()
     wishlist_items = []
     wishlist_count = 0
@@ -931,6 +956,13 @@ def profile(request):
     return render(request, 'profile.html', context)
 
 def product_detail(request, product_type, product_id):
+    # Normalize product_type for legacy/manual links (e.g. 'toys' -> 'toy')
+    product_type = product_type.lower().strip()
+    if product_type == 'toys':
+        product_type = 'toy'
+    elif product_type == 'cloths':
+        product_type = 'cloth'
+
     product = None
     back_url = '/'
     back_label = 'Home'
@@ -983,6 +1015,15 @@ def product_detail(request, product_type, product_id):
         related_products = list(
             Cloths.objects.filter(category=product.category).exclude(id=product.id)[:4]
         )
+    elif product_type == 'trending':
+        from .models import TrendingProduct
+        product = get_object_or_404(TrendingProduct, id=product_id)
+        back_url = '/trending/'
+        back_label = 'Trending'
+        category_label = product.get_category_display()
+        related_products = list(
+            TrendingProduct.objects.filter(category=product.category).exclude(id=product.id)[:4]
+        )
     else:
         messages.error(request, 'Invalid product type')
         return redirect('index')
@@ -996,7 +1037,7 @@ def product_detail(request, product_type, product_id):
             pass  # Never break the page due to view count errors
 
     # ── Reviews ──
-    fk_field = product_type  # FK field name matches product_type: cloth, toy, offer, arrival
+    fk_field = product_type  # FK field name matches product_type: cloth, toy, offer, arrival, trending
     reviews = ProductReview.objects.filter(product_type=product_type, **{fk_field: product})
     review_count = reviews.count()
     avg_rating = 0
@@ -1053,10 +1094,19 @@ def product_detail(request, product_type, product_id):
         product_display_price = getattr(product, 'price1', None) or getattr(product, 'price', '') or ''
     elif product_type == 'offer':
         product_display_price = getattr(product, 'price1', None) or getattr(product, 'price2', '') or ''
+    elif product_type == 'trending':
+        product_display_price = getattr(product, 'price', '') or ''
     else:
         product_display_price = getattr(product, 'price', '') or ''
     
     product_numeric_price = getattr(product, 'numeric_price', 0)
+
+    # ── Resolve Image URL ──
+    product_image_url = ''
+    if hasattr(product, 'imageUrl') and product.imageUrl:
+        product_image_url = product.imageUrl.url
+    elif hasattr(product, 'image') and product.image:
+        product_image_url = product.image.url
 
     # ── Gallery images ──
     gallery_images = ProductImage.objects.filter(product_type=product_type, **{fk_field: product})
@@ -1119,6 +1169,7 @@ def product_detail(request, product_type, product_id):
         'product': product,
         'product_type': product_type,
         'product_name': product_name,
+        'product_image_url': product_image_url,
         'product_description': product_description,
         'back_url': back_url,
         'back_label': back_label,
@@ -1851,28 +1902,46 @@ def cart_page(request):
     cart = get_or_create_cart(request)
     cart_items = cart.items.all()
     
-    items_data = []
-    for item in cart_items:
-        product = item.get_item()
-        items_data.append({
-            'id': item.id,
-            'name': product.name if hasattr(product, 'name') else product.title,
-            'price': item.get_price(),
-            'quantity': item.quantity,
-            'subtotal': item.get_subtotal(),
-            'image': product.imageUrl.url if product.imageUrl else '',
-            'item_type': item.item_type,
-        })
+    try:
+        items_data = []
+        for item in cart_items:
+            product = item.get_item()
+            if not product:
+                continue
+            img_url = ''
+            if hasattr(product, 'imageUrl') and product.imageUrl:
+                img_url = product.imageUrl.url
+            elif hasattr(product, 'image') and product.image:
+                img_url = product.image.url
+                
+            items_data.append({
+                'id': item.id,
+                'name': product.name if hasattr(product, 'name') else product.title,
+                'price': item.get_price(),
+                'quantity': item.quantity,
+                'subtotal': item.get_subtotal(),
+                'image': img_url,
+                'item_type': item.item_type,
+            })
+        
+        context = {
+            'cart_items': items_data,
+            'cart_count': cart.get_item_count(),
+            'subtotal': cart.get_total(),
+            'tax': float(cart.get_total()) * 0.1,
+            'total': float(cart.get_total()) * 1.1,
+        }
+    except Exception as e:
+        context = {
+            'cart_items': [],
+            'cart_count': 0,
+            'subtotal': 0,
+            'tax': 0,
+            'total': 0,
+            'error': str(e)
+        }
     
-    context = {
-        'cart_items': items_data,
-        'cart_count': cart.get_item_count(),
-        'subtotal': cart.get_total(),
-        'tax': float(cart.get_total()) * 0.1,
-        'total': float(cart.get_total()) * 1.1,
-    }
-    
-    return render(request, 'cart.html', context)
+    return render(request, 'cart_details_page.html', context)
 
 
 def _wants_json(request):
@@ -2014,6 +2083,19 @@ def add_to_cart(request, item_type, item_id):
                 if inv and cart_item.quantity + requested_qty > inv.stock:
                     return _stock_error_response(request, f'Only {inv.stock} left in stock.')
                 cart_item.quantity += requested_qty
+        elif item_type == 'trending':
+            item = get_object_or_404(TrendingProduct, id=item_id)
+            # Trending products usually don't have linked inventory if unlinked
+            cart_item = CartItem.objects.filter(
+                cart=cart,
+                item_type='trending',
+                trending=item
+            ).first()
+            created = cart_item is None
+            if not cart_item:
+                cart_item = CartItem(cart=cart, item_type='trending', trending=item, quantity=requested_qty)
+            else:
+                cart_item.quantity += requested_qty
         else:
             if _wants_json(request):
                 return JsonResponse({'success': False, 'error': 'Invalid item type'}, status=400)
@@ -2069,6 +2151,9 @@ def buy_now(request, item_type, item_id):
         elif item_type == 'arrival':
             item = get_object_or_404(NewArrivals, id=item_id)
             cart_item, created = CartItem.objects.get_or_create(cart=cart, item_type='arrival', arrival=item)
+        elif item_type == 'trending':
+            item = get_object_or_404(TrendingProduct, id=item_id)
+            cart_item, created = CartItem.objects.get_or_create(cart=cart, item_type='trending', trending=item)
         else:
             messages.error(request, 'Invalid item type')
             return redirect('index')
@@ -2176,13 +2261,19 @@ def get_cart_data(request):
                     continue
                 product_name = product.name if hasattr(product, 'name') else product.title
                 product_url = f'/product/{item.item_type}/{product.id}/'
+                img_url = ''
+                if hasattr(product, 'imageUrl') and product.imageUrl:
+                    img_url = product.imageUrl.url
+                elif hasattr(product, 'image') and product.image:
+                    img_url = product.image.url
+
                 items_data.append({
                     'id': item.id,
                     'name': product_name,
                     'price': float(item.get_price()),
                     'quantity': int(item.quantity),
                     'subtotal': float(item.get_subtotal()),
-                    'image': product.imageUrl.url if getattr(product, 'imageUrl', None) else '',
+                    'image': img_url,
                     'item_type': item.item_type,
                     'product_url': product_url,
                 })
@@ -3973,8 +4064,10 @@ def create_checkout_session(request):
         if price_cents <= 0:
             continue
         images = []
-        if getattr(product, 'imageUrl', None):
+        if getattr(product, 'imageUrl', None) and product.imageUrl:
             images = [request.build_absolute_uri(product.imageUrl.url)]
+        elif getattr(product, 'image', None) and product.image:
+            images = [request.build_absolute_uri(product.image.url)]
         line_items.append({
             'price_data': {
                 'currency': 'lkr',
@@ -4450,6 +4543,10 @@ def quick_view_api(request, item_type, item_id):
     """Return product data as JSON for the Quick View modal."""
     from .models import Cloths, Toy, Offers, NewArrivals
 
+    item_type = item_type.lower().strip()
+    if item_type == 'toys': item_type = 'toy'
+    elif item_type == 'cloths': item_type = 'cloth'
+
     try:
         if item_type == 'cloth':
             item = Cloths.objects.get(id=item_id)
@@ -4471,8 +4568,20 @@ def quick_view_api(request, item_type, item_id):
             title = item.title
             price = item.price
             desc = item.description
+        elif item_type == 'trending':
+            from .models import TrendingProduct
+            item = TrendingProduct.objects.get(id=item_id)
+            title = item.name
+            price = item.price
+            desc = item.link_url # Or fallback
         else:
             return JsonResponse({'error': 'Invalid item type'}, status=400)
+
+        img_url = ''
+        if hasattr(item, 'imageUrl') and item.imageUrl:
+            img_url = item.imageUrl.url
+        elif hasattr(item, 'image') and item.image:
+            img_url = item.image.url
 
         data = {
             'id': item.id,
@@ -4480,7 +4589,7 @@ def quick_view_api(request, item_type, item_id):
             'title': title,
             'price': str(price),
             'description': desc,
-            'image_url': item.imageUrl.url if item.imageUrl else '',
+            'image_url': img_url,
         }
         return JsonResponse(data)
     except Exception as e:

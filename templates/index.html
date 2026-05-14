@@ -431,31 +431,62 @@
                     <div
                         class="card-inner bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group border border-slate-100">
                         <div class="relative overflow-hidden h-72">
-                            <img src="{{ t_prod.image.url }}" alt="{{ t_prod.name }}"
-                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <a href="{{ t_prod.resolved_link_url }}">
+                                <img src="{{ t_prod.resolved_image.url }}" alt="{{ t_prod.resolved_name }}"
+                                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            </a>
                             <span
                                 class="absolute top-4 left-4 z-10 px-3 py-1 bg-indigo-600 text-white text-[11px] font-bold rounded-full shadow-lg">{{ t_prod.badge }}</span>
                             <div
                                 class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
-                                <a href="{{ t_prod.link_url }}"
+                                <a href="{{ t_prod.resolved_link_url }}"
                                     class="px-6 py-2 bg-white text-indigo-600 font-bold rounded-full text-sm hover:bg-indigo-600 hover:text-white transition-colors">View
                                     Details</a>
                             </div>
                         </div>
                         <div class="p-6">
                             <span class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest mb-1 block">{{ t_prod.get_category_display }}</span>
-                            <h3 class="font-bold text-slate-800 text-lg mb-2 line-clamp-1">{{ t_prod.name }}</h3>
+                            {% if t_prod.avg_rating %}
+                            <div class="flex items-center gap-1 mb-1">
+                                <div class="flex text-[10px] text-amber-400">
+                                    {% with r=t_prod.avg_rating %}
+                                    <i class="bi bi-star{% if r >= 1 %}-fill{% endif %}"></i>
+                                    <i class="bi bi-star{% if r >= 2 %}-fill{% endif %}"></i>
+                                    <i class="bi bi-star{% if r >= 3 %}-fill{% endif %}"></i>
+                                    <i class="bi bi-star{% if r >= 4 %}-fill{% endif %}"></i>
+                                    <i class="bi bi-star{% if r >= 5 %}-fill{% endif %}"></i>
+                                    {% endwith %}
+                                </div>
+                                <span class="text-[10px] text-slate-400">({{ t_prod.review_count }})</span>
+                            </div>
+                            {% endif %}
+                            <h3 class="font-bold text-slate-800 text-lg mb-2 line-clamp-1">{{ t_prod.resolved_name }}</h3>
                             <div class="flex items-center justify-between">
                                 <div class="flex flex-col">
-                                    <span class="text-xl font-bold text-slate-900">Rs {{ t_prod.price }}</span>
+                                    <span class="text-xl font-bold text-slate-900">Rs {{ t_prod.resolved_price }}</span>
                                     {% if t_prod.original_price %}
                                     <span class="text-xs text-slate-400 line-through">Rs {{ t_prod.original_price }}</span>
                                     {% endif %}
                                 </div>
-                                <a href="{{ t_prod.link_url }}"
+                                
+                                {% if t_prod.resolved_item_type and t_prod.resolved_item_id %}
+                                <div class="flex gap-2">
+                                    <button 
+                                        data-add-to-cart 
+                                        data-item-type="{{ t_prod.resolved_item_type }}" 
+                                        data-item-id="{{ t_prod.resolved_item_id }}" 
+                                        data-price="{{ t_prod.resolved_price }}"
+                                        class="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-indigo-600 hover:shadow-[0_0_15px_rgba(99,102,241,0.5)] transition-all transform active:scale-90"
+                                        title="Add to Cart">
+                                        <i class="bi bi-cart-plus"></i>
+                                    </button>
+                                </div>
+                                {% else %}
+                                <a href="{{ t_prod.resolved_link_url }}"
                                     class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
                                     <i class="bi bi-arrow-right"></i>
                                 </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

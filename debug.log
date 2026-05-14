@@ -24797,3 +24797,381 @@ INFO 2026-05-15 00:20:41,160 autoreload 17980 2236 Watching for file changes wit
 INFO 2026-05-15 00:20:57,392 autoreload 17980 2236 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
 INFO 2026-05-15 00:20:58,509 autoreload 25424 26292 Watching for file changes with StatReloader
 WARNING 2026-05-15 00:23:54,907 log 25424 12424 Not Found: /favicon.ico
+WARNING 2026-05-15 00:28:12,685 log 25424 12424 Not Found: /favicon.ico
+INFO 2026-05-15 00:32:55,312 autoreload 25424 26292 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 00:32:56,691 autoreload 23916 12284 Watching for file changes with StatReloader
+INFO 2026-05-15 00:33:52,984 autoreload 23916 12284 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 00:33:54,200 autoreload 22060 22368 Watching for file changes with StatReloader
+WARNING 2026-05-15 00:35:03,405 log 22060 25868 Not Found: /favicon.ico
+WARNING 2026-05-15 00:35:05,748 log 22060 25868 Bad Request: /cart/add/toys/2/
+WARNING 2026-05-15 00:35:09,632 log 22060 11212 Bad Request: /cart/add/toys/2/
+INFO 2026-05-15 00:39:06,170 autoreload 22060 22368 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-05-15 00:39:07,397 autoreload 25996 25556 Watching for file changes with StatReloader
+INFO 2026-05-15 00:40:21,022 autoreload 25996 25556 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-15 00:40:22,088 autoreload 19684 25772 Watching for file changes with StatReloader
+INFO 2026-05-15 00:40:49,201 autoreload 19684 25772 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 00:40:50,269 autoreload 7036 12756 Watching for file changes with StatReloader
+ERROR 2026-05-15 00:47:33,304 middleware 7036 24632 Exception: Template: C:\Users\nipun\Desktop\Ecommerce project\templates\trending.html, Variables and attributes may not begin with underscores: 'item._live_stock'
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 890, in __init__
+    self.literal = float(var)
+                   ~~~~~^^^^^
+ValueError: could not convert string to float: 'item._live_stock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 906, in __init__
+    self.literal = mark_safe(unescape_string_literal(var))
+                             ~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\functional.py", line 231, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\text.py", line 464, in unescape_string_literal
+    raise ValueError("Not a string literal: %r" % s)
+ValueError: Not a string literal: 'item._live_stock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 578, in trending_page
+    return render(request, 'trending.html', context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\defaulttags.py", line 894, in do_for
+    nodelist_loop = parser.parse(
+        (
+    ...<2 lines>...
+        )
+    )
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\defaulttags.py", line 1676, in do_with
+    extra_context = token_kwargs(remaining_bits, parser, support_legacy=True)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1202, in token_kwargs
+    kwargs[key] = parser.compile_filter(value)
+                  ~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 676, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 763, in __init__
+    var_obj = Variable(var)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 911, in __init__
+    raise TemplateSyntaxError(
+    ...<2 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\nipun\Desktop\Ecommerce project\templates\trending.html, Variables and attributes may not begin with underscores: 'item._live_stock'
+ERROR 2026-05-15 00:47:33,480 log 7036 24632 Internal Server Error: /trending/
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 890, in __init__
+    self.literal = float(var)
+                   ~~~~~^^^^^
+ValueError: could not convert string to float: 'item._live_stock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 906, in __init__
+    self.literal = mark_safe(unescape_string_literal(var))
+                             ~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\functional.py", line 231, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\text.py", line 464, in unescape_string_literal
+    raise ValueError("Not a string literal: %r" % s)
+ValueError: Not a string literal: 'item._live_stock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 578, in trending_page
+    return render(request, 'trending.html', context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\defaulttags.py", line 894, in do_for
+    nodelist_loop = parser.parse(
+        (
+    ...<2 lines>...
+        )
+    )
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\defaulttags.py", line 1676, in do_with
+    extra_context = token_kwargs(remaining_bits, parser, support_legacy=True)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1202, in token_kwargs
+    kwargs[key] = parser.compile_filter(value)
+                  ~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 676, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 763, in __init__
+    var_obj = Variable(var)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 911, in __init__
+    raise TemplateSyntaxError(
+    ...<2 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\nipun\Desktop\Ecommerce project\templates\trending.html, Variables and attributes may not begin with underscores: 'item._live_stock'
+WARNING 2026-05-15 00:47:34,080 log 7036 24632 Not Found: /favicon.ico
+INFO 2026-05-15 00:48:07,692 autoreload 7036 12756 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 00:48:09,071 autoreload 12280 1824 Watching for file changes with StatReloader
+WARNING 2026-05-15 00:49:10,219 log 12280 6240 Not Found: /favicon.ico
+INFO 2026-05-15 00:49:51,623 autoreload 12280 1824 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-05-15 00:49:53,253 autoreload 25856 10788 Watching for file changes with StatReloader
+INFO 2026-05-15 00:50:11,993 autoreload 22168 11884 Watching for file changes with StatReloader
+INFO 2026-05-15 00:50:41,319 autoreload 22168 11884 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 00:50:42,569 autoreload 21016 16556 Watching for file changes with StatReloader
+INFO 2026-05-15 00:51:03,948 autoreload 21016 16556 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 00:51:05,066 autoreload 16744 24292 Watching for file changes with StatReloader
+INFO 2026-05-15 00:52:25,543 autoreload 16744 24292 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 00:52:26,830 autoreload 3620 12764 Watching for file changes with StatReloader
+ERROR 2026-05-15 00:53:23,475 middleware 3620 25764 Exception: Invalid field name(s) given in select_related: 'toy', 'offer', 'cloth', 'arrival'. Choices are: (none)
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 577, in index
+    for item in trending_products:
+                ^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\query.py", line 390, in __iter__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\compiler.py", line 1611, in execute_sql
+    sql, params = self.as_sql()
+                  ~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\compiler.py", line 767, in as_sql
+    extra_select, order_by, group_by = self.pre_sql_setup(
+                                       ~~~~~~~~~~~~~~~~~~^
+        with_col_aliases=with_col_aliases or bool(combinator),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\compiler.py", line 86, in pre_sql_setup
+    self.setup_query(with_col_aliases=with_col_aliases)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\compiler.py", line 75, in setup_query
+    self.select, self.klass_info, self.annotation_col_map = self.get_select(
+                                                            ~~~~~~~~~~~~~~~^
+        with_col_aliases=with_col_aliases,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\compiler.py", line 300, in get_select
+    related_klass_infos = self.get_related_selections(select, select_mask)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\compiler.py", line 1397, in get_related_selections
+    raise FieldError(
+    ...<6 lines>...
+    )
+django.core.exceptions.FieldError: Invalid field name(s) given in select_related: 'toy', 'offer', 'cloth', 'arrival'. Choices are: (none)
+ERROR 2026-05-15 00:53:23,621 log 3620 25764 Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 577, in index
+    for item in trending_products:
+                ^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\query.py", line 390, in __iter__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\query.py", line 2000, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\compiler.py", line 1611, in execute_sql
+    sql, params = self.as_sql()
+                  ~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\compiler.py", line 767, in as_sql
+    extra_select, order_by, group_by = self.pre_sql_setup(
+                                       ~~~~~~~~~~~~~~~~~~^
+        with_col_aliases=with_col_aliases or bool(combinator),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\compiler.py", line 86, in pre_sql_setup
+    self.setup_query(with_col_aliases=with_col_aliases)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\compiler.py", line 75, in setup_query
+    self.select, self.klass_info, self.annotation_col_map = self.get_select(
+                                                            ~~~~~~~~~~~~~~~^
+        with_col_aliases=with_col_aliases,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\compiler.py", line 300, in get_select
+    related_klass_infos = self.get_related_selections(select, select_mask)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\compiler.py", line 1397, in get_related_selections
+    raise FieldError(
+    ...<6 lines>...
+    )
+django.core.exceptions.FieldError: Invalid field name(s) given in select_related: 'toy', 'offer', 'cloth', 'arrival'. Choices are: (none)
+WARNING 2026-05-15 00:53:23,853 log 3620 25764 Not Found: /favicon.ico
+INFO 2026-05-15 00:54:07,723 autoreload 3620 12764 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-05-15 00:54:08,686 autoreload 15240 9928 Watching for file changes with StatReloader
+INFO 2026-05-15 00:54:41,238 autoreload 15240 9928 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-15 00:54:42,505 autoreload 14340 15544 Watching for file changes with StatReloader
+ERROR 2026-05-15 00:54:59,426 middleware 14340 18632 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_toys.png” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_toys.png” does not exist
+ERROR 2026-05-15 00:54:59,428 middleware 14340 13540 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\toys-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\toys-hero.jpg” does not exist
+WARNING 2026-05-15 00:54:59,474 log 14340 18632 Not Found: /media/backgrounds/hero_toys.png
+WARNING 2026-05-15 00:54:59,476 log 14340 13540 Not Found: /media/toys-hero.jpg
+WARNING 2026-05-15 00:58:57,459 log 14340 20500 Not Found: /favicon.ico
+WARNING 2026-05-15 00:59:56,906 log 14340 15840 Not Found: /favicon.ico
+WARNING 2026-05-15 01:02:57,964 log 14340 20500 Not Found: /favicon.ico
+WARNING 2026-05-15 01:03:15,222 log 14340 20500 Not Found: /favicon.ico
+WARNING 2026-05-15 01:05:52,036 log 14340 19428 Not Found: /favicon.ico
+WARNING 2026-05-15 01:18:24,660 log 14340 24644 Not Found: /favicon.ico
+WARNING 2026-05-15 01:22:00,619 log 14340 26372 Not Found: /favicon.ico
+INFO 2026-05-15 01:29:47,959 autoreload 14340 15544 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 01:29:49,600 autoreload 25648 23632 Watching for file changes with StatReloader
+WARNING 2026-05-15 01:35:50,946 log 25648 26616 Bad Request: /api/quick-view/toys/3/
+INFO 2026-05-15 01:37:19,328 autoreload 25648 23632 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 01:37:21,258 autoreload 8856 23464 Watching for file changes with StatReloader
+WARNING 2026-05-15 01:49:53,507 log 8856 23320 Not Found: /favicon.ico
+INFO 2026-05-15 01:52:26,781 autoreload 8856 23464 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-05-15 01:52:27,758 autoreload 22532 7340 Watching for file changes with StatReloader
+ERROR 2026-05-15 01:52:28,355 middleware 22532 26212 Error in CartTransferMiddleware: (1054, "Unknown column 'myapp_cartitem.trending_id' in 'field list'")
+ERROR 2026-05-15 01:52:35,346 middleware 22532 26212 Error in CartTransferMiddleware: (1054, "Unknown column 'myapp_cartitem.trending_id' in 'field list'")
+INFO 2026-05-15 01:52:51,836 autoreload 22532 7340 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 01:52:52,755 autoreload 24184 10416 Watching for file changes with StatReloader
+ERROR 2026-05-15 01:59:30,737 middleware 24184 17140 Exception: 'TrendingProduct' object has no attribute 'imageUrl'
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 1895, in cart_page
+    'image': product.imageUrl.url if product.imageUrl else '',
+                                     ^^^^^^^^^^^^^^^^
+AttributeError: 'TrendingProduct' object has no attribute 'imageUrl'
+ERROR 2026-05-15 01:59:31,051 log 24184 17140 Internal Server Error: /cart/
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 1895, in cart_page
+    'image': product.imageUrl.url if product.imageUrl else '',
+                                     ^^^^^^^^^^^^^^^^
+AttributeError: 'TrendingProduct' object has no attribute 'imageUrl'
+INFO 2026-05-15 02:02:00,691 autoreload 24184 10416 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 02:02:02,047 autoreload 17480 17252 Watching for file changes with StatReloader
+INFO 2026-05-15 02:05:38,461 autoreload 17480 17252 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 02:05:39,790 autoreload 25828 11336 Watching for file changes with StatReloader
+INFO 2026-05-15 02:05:52,294 autoreload 25828 11336 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 02:05:53,324 autoreload 25512 7668 Watching for file changes with StatReloader
+INFO 2026-05-15 02:11:39,680 autoreload 25512 7668 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 02:11:40,770 autoreload 15568 25556 Watching for file changes with StatReloader
+INFO 2026-05-15 02:17:21,762 autoreload 15568 25556 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 02:17:23,033 autoreload 17252 23240 Watching for file changes with StatReloader
+INFO 2026-05-15 02:17:29,768 autoreload 17252 23240 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 02:17:31,085 autoreload 26300 21124 Watching for file changes with StatReloader
+WARNING 2026-05-15 02:19:41,626 log 26300 23692 Not Found: /favicon.ico
+ERROR 2026-05-15 02:24:11,115 middleware 26300 20652 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-05-15 02:24:11,166 log 26300 20652 Not Found: /media/about-hero.jpg
+WARNING 2026-05-15 02:24:11,386 log 26300 23652 Not Found: /favicon.ico
+WARNING 2026-05-15 02:27:58,659 log 26300 9840 Not Found: /favicon.ico
+INFO 2026-05-15 02:36:30,764 autoreload 26300 21124 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-05-15 02:36:32,398 autoreload 25728 26396 Watching for file changes with StatReloader
+INFO 2026-05-15 02:36:43,025 autoreload 25728 26396 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-05-15 02:36:44,209 autoreload 19112 20704 Watching for file changes with StatReloader
+INFO 2026-05-15 02:36:57,236 autoreload 19112 20704 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-05-15 02:36:58,874 autoreload 25076 23692 Watching for file changes with StatReloader
+INFO 2026-05-15 02:37:31,518 autoreload 25076 23692 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-05-15 02:37:32,754 autoreload 9288 2576 Watching for file changes with StatReloader
+INFO 2026-05-15 02:37:43,533 autoreload 9288 2576 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 02:37:45,009 autoreload 20012 9640 Watching for file changes with StatReloader
+INFO 2026-05-15 02:45:03,311 autoreload 20012 9640 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 02:45:04,802 autoreload 1484 18256 Watching for file changes with StatReloader
+INFO 2026-05-15 02:45:15,787 autoreload 1484 18256 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 02:45:17,021 autoreload 12620 6284 Watching for file changes with StatReloader
