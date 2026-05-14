@@ -26650,3 +26650,4 @@ INFO 2026-05-15 04:33:30,016 autoreload 13536 28956 C:\Users\nipun\Desktop\Ecomm
 INFO 2026-05-15 04:33:31,215 autoreload 26976 24004 Watching for file changes with StatReloader
 INFO 2026-05-15 04:34:12,715 autoreload 26976 24004 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
 INFO 2026-05-15 04:34:13,749 autoreload 23896 24948 Watching for file changes with StatReloader
+WARNING 2026-05-15 04:35:31,430 log 23896 26632 Not Found: /favicon.ico
