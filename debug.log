@@ -24779,3 +24779,13 @@ INFO 2026-05-14 23:17:40,087 autoreload 8272 26616 C:\Users\nipun\Desktop\Ecomme
 INFO 2026-05-14 23:17:41,420 autoreload 24332 5712 Watching for file changes with StatReloader
 INFO 2026-05-14 23:18:19,991 autoreload 24332 5712 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
 INFO 2026-05-14 23:18:21,343 autoreload 12544 21568 Watching for file changes with StatReloader
+WARNING 2026-05-14 23:39:26,566 log 12544 24596 Not Found: /favicon.ico
+WARNING 2026-05-14 23:39:39,077 log 12544 24596 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-05-14 23:40:33,564 log 12544 24596 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-05-14 23:43:19,438 log 12544 25572 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-05-14 23:43:21,001 log 12544 8000 Not Found: /favicon.ico
+WARNING 2026-05-14 23:43:30,654 log 12544 8000 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-05-14 23:43:48,277 log 12544 8000 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-05-14 23:47:42,318 log 12544 8000 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-05-14 23:47:43,830 log 12544 13972 Not Found: /favicon.ico
+WARNING 2026-05-14 23:49:10,900 log 12544 13972 Not Found: /favicon.ico
