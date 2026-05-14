@@ -18,13 +18,13 @@
 
     <section class="srv-hero" data-reveal="up">
         <div class="srv-hero__content">
-            <p class="srv-eyebrow">Service Trust Center</p>
-            <h1>Real Feedback About Delivery, Support, and Service</h1>
-            <p>Read honest experiences from customers and share your own to help others decide with confidence.</p>
+            <p class="srv-eyebrow">⭐ Service Trust Center</p>
+            <h1>Real Feedback About Delivery,<br>Support &amp; Service</h1>
+            <p class="srv-hero__sub">Read honest experiences from customers and share your own to help others decide with confidence.</p>
             <div class="srv-stats">
-                <article><strong>{{ avg_rating }}</strong><span>Average service score</span></article>
-                <article><strong>{{ total_reviews }}</strong><span>Approved reviews</span></article>
-                <article><strong>{% if total_reviews %}{{ total_reviews }}{% else %}0{% endif %}</strong><span>Community voices</span></article>
+                <article><strong>{{ avg_rating }}</strong><span>Avg. Score</span></article>
+                <article><strong>{{ total_reviews }}</strong><span>Approved</span></article>
+                <article><strong>{% if total_reviews %}{{ total_reviews }}{% else %}0{% endif %}</strong><span>Voices</span></article>
             </div>
         </div>
     </section>
@@ -32,8 +32,8 @@
     <section class="srv-shell" data-reveal="up">
         <div class="srv-grid">
             <div class="srv-form-card" id="write-review">
-                <h2>Share Service Review</h2>
-                <p>Your feedback helps improve delivery and support quality.</p>
+                <h2>Share Your Review</h2>
+                <p>Your feedback helps improve delivery and support quality for everyone.</p>
 
                 {% if messages %}
                 <div class="srv-alerts">
@@ -46,23 +46,39 @@
                 {% if user.is_authenticated %}
                 <form method="post" class="srv-form">
                     {% csrf_token %}
-                    <label>Name {{ form.name }}</label>
-                    <label>Email {{ form.email }}</label>
-                    <label>Primary Topic {{ form.topic }}</label>
+                    <label>Your Name
+                        {{ form.name }}
+                    </label>
+                    <label>Email Address
+                        {{ form.email }}
+                    </label>
+                    <label>Primary Topic
+                        {{ form.topic }}
+                    </label>
                     <div class="srv-rating-grid">
-                        <label>Delivery {{ form.delivery_rating }}</label>
-                        <label>Packaging {{ form.packaging_rating }}</label>
-                        <label>Support {{ form.support_rating }}</label>
-                        <label>Returns {{ form.returns_rating }}</label>
+                        <label>Delivery
+                            {{ form.delivery_rating }}
+                        </label>
+                        <label>Packaging
+                            {{ form.packaging_rating }}
+                        </label>
+                        <label>Support
+                            {{ form.support_rating }}
+                        </label>
+                        <label>Returns
+                            {{ form.returns_rating }}
+                        </label>
                     </div>
-                    <label>Experience {{ form.comment }}</label>
-                    <button type="submit" class="srv-btn srv-btn--primary">Submit Service Review</button>
+                    <label>Your Experience
+                        {{ form.comment }}
+                    </label>
+                    <button type="submit" class="srv-btn srv-btn--primary">🚀 Submit Service Review</button>
                 </form>
                 {% else %}
                 <div class="srv-login-card">
                     <h3>Login Required</h3>
-                    <p>You can read service reviews without an account. Please log in to submit your own.</p>
-                    <a href="{% url 'login' %}?next={{ request.path }}" class="srv-btn srv-btn--primary">Login to Add Service Review</a>
+                    <p>You can read service reviews without an account. Please log in to share your own experience.</p>
+                    <a href="{% url 'login' %}?next={{ request.path }}" class="srv-btn srv-btn--primary">Login to Add Review</a>
                 </div>
                 {% endif %}
             </div>

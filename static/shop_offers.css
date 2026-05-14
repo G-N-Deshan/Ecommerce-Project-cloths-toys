@@ -238,6 +238,7 @@ body {
 
 .toolbar-btn--primary:hover {
     box-shadow: 0 6px 20px rgba(255, 107, 26, 0.48);
+    filter: brightness(1.08);
 }
 
 .toolbar-btn--ghost {
@@ -248,6 +249,7 @@ body {
 
 .toolbar-btn--ghost:hover {
     border-color: #9ca3af;
+    background: #f8fafc;
     color: #111;
 }
 
