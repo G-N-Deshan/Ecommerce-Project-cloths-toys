@@ -481,12 +481,14 @@ html::-webkit-scrollbar {
 .team-grid {
     max-width: 1400px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 30px;
 }
 
 .team-card {
+    flex: 0 1 300px;
     background: #ffffff;
     border-radius: 16px;
     overflow: hidden;
@@ -766,9 +768,7 @@ html::-webkit-scrollbar {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .team-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+
 
     .service-trust-stats {
         grid-template-columns: repeat(2, 1fr);

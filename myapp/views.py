@@ -2324,22 +2324,36 @@ def cart_details(request):
 # Wishlist views
 @login_required(login_url='login')
 def wishlist(request):
-    wishlist_items = WishlistItem.objects.filter(user=request.user).select_related('cloth', 'toy')
+    wishlist_items = WishlistItem.objects.filter(user=request.user).select_related(
+        'cloth', 'toy', 'offer', 'arrival', 'trending'
+    )
 
-    cloth_items = wishlist_items.filter(item_type='cloth').select_related('cloth')
-    toy_items = wishlist_items.filter(item_type='toy').select_related('toy')
+    cloth_items = wishlist_items.filter(item_type='cloth')
+    toy_items = wishlist_items.filter(item_type='toy')
+    offer_items = wishlist_items.filter(item_type='offer')
+    arrival_items = wishlist_items.filter(item_type='arrival')
+    trending_items = wishlist_items.filter(item_type='trending')
     
     total_count = wishlist_items.count()
     cloth_count = cloth_items.count()
     toy_count = toy_items.count()
+    offer_count = offer_items.count()
+    arrival_count = arrival_items.count()
+    trending_count = trending_items.count()
     
     context = {
         'wishlist_items': wishlist_items,
         'cloth_items': cloth_items,
         'toy_items': toy_items,
+        'offer_items': offer_items,
+        'arrival_items': arrival_items,
+        'trending_items': trending_items,
         'total_count': total_count,
         'cloth_count': cloth_count,
         'toy_count': toy_count,
+        'offer_count': offer_count,
+        'arrival_count': arrival_count,
+        'trending_count': trending_count,
     }
     
     return render(request, 'wishlist.html', context)
@@ -2348,45 +2362,53 @@ def wishlist(request):
 @login_required(login_url='login')
 def add_to_wishlist(request, item_type, item_id):
     try:
-        
         if item_type == 'cloth':
             item = get_object_or_404(Cloths, id=item_id)
-            
-            
             wishlist_item, created = WishlistItem.objects.get_or_create(
                 user=request.user,
                 item_type='cloth',
                 cloth=item
             )
-        
         elif item_type == 'toy':
             item = get_object_or_404(Toy, id=item_id)
-            
-            
             wishlist_item, created = WishlistItem.objects.get_or_create(
                 user=request.user,
                 item_type='toy',
                 toy=item
             )
-        
+        elif item_type == 'offer':
+            item = get_object_or_404(Offers, id=item_id)
+            wishlist_item, created = WishlistItem.objects.get_or_create(
+                user=request.user,
+                item_type='offer',
+                offer=item
+            )
+        elif item_type == 'arrival':
+            item = get_object_or_404(NewArrivals, id=item_id)
+            wishlist_item, created = WishlistItem.objects.get_or_create(
+                user=request.user,
+                item_type='arrival',
+                arrival=item
+            )
+        elif item_type == 'trending':
+            item = get_object_or_404(TrendingProduct, id=item_id)
+            wishlist_item, created = WishlistItem.objects.get_or_create(
+                user=request.user,
+                item_type='trending',
+                trending=item
+            )
         else:
             messages.error(request, 'Invalid item type')
             return redirect('wishlist')
         
+        product_name = wishlist_item.get_product_name()
         if created:
-            messages.success(request, f'✓ Added {item.name} to wishlist!')
+            messages.success(request, f'✓ Added {product_name} to wishlist!')
         else:
-            messages.info(request, f'{item.name} is already in your wishlist')
-            
+            messages.info(request, f'{product_name} is already in your wishlist')
             
         return redirect('wishlist')
     
-    except Cloths.DoesNotExist:
-        messages.error(request, 'Cloth product not found')
-        return redirect('buy')
-    except Toy.DoesNotExist:
-        messages.error(request, 'Toy product not found')
-        return redirect('toys')
     except Exception as e:
         messages.error(request, f'Error: {str(e)}')
         return redirect('wishlist')
@@ -2425,7 +2447,7 @@ def move_to_cart(request, wishlist_id):
         )
         
         item = wishlist_item.get_item()
-        product_name = item.name
+        product_name = wishlist_item.get_product_name()
 
         inv = _get_inventory(item)
         if inv and inv.stock <= 0:
@@ -2447,6 +2469,27 @@ def move_to_cart(request, wishlist_id):
                 cart=cart,
                 item_type='toy',
                 toy=wishlist_item.toy,
+                defaults={'quantity': 1}
+            )
+        elif wishlist_item.item_type == 'offer':
+            cart_item, created = CartItem.objects.get_or_create(
+                cart=cart,
+                item_type='offer',
+                offer=wishlist_item.offer,
+                defaults={'quantity': 1}
+            )
+        elif wishlist_item.item_type == 'arrival':
+            cart_item, created = CartItem.objects.get_or_create(
+                cart=cart,
+                item_type='arrival',
+                arrival=wishlist_item.arrival,
+                defaults={'quantity': 1}
+            )
+        elif wishlist_item.item_type == 'trending':
+            cart_item, created = CartItem.objects.get_or_create(
+                cart=cart,
+                item_type='trending',
+                trending=wishlist_item.trending,
                 defaults={'quantity': 1}
             )
         

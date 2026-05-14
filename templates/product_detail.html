@@ -542,49 +542,53 @@
         <!-- ════════ PRODUCT HERO ════════ -->
         <section class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16" data-reveal="up">
 
-            <!-- Image -->
-            <div class="img-shell anim-slide-up" onclick="openZoom(this.querySelector('img').src)">
-                {% if product_type == 'cloth' and product.discount_text %}
-                <span class="absolute top-4 left-4 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.discount_text }}</span>
-                {% endif %}
-                {% if product_type == 'toy' and product.discount_percentage %}
-                <span class="absolute top-4 left-4 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.discount_percentage }}% OFF</span>
-                {% endif %}
-                {% if product_type == 'offer' and product.offers_badge %}
-                <span class="absolute top-4 left-4 z-10 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.offers_badge }}</span>
-                {% endif %}
-                {% if product_type == 'arrival' and product.offers_badge %}
-                <span class="absolute top-4 left-4 z-10 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.offers_badge }}</span>
-                {% endif %}
-                {% if product_type == 'trending' and product.badge %}
-                <span class="absolute top-4 left-4 z-10 bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.badge }}</span>
-                {% endif %}
-                <img src="{{ product_image_url }}" alt="{{ product_name }}"
-                    class="w-full h-[480px] object-contain p-8" id="mainProductImage">
-                <div
-                    class="absolute bottom-4 right-4 bg-white/80 backdrop-blur rounded-lg px-3 py-1.5 text-xs text-slate-500 flex items-center gap-1.5">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                    </svg>
-                    Click to zoom
+            <!-- Left Column: Image & Gallery -->
+            <div class="lg:sticky lg:top-24 self-start">
+                <!-- Image -->
+                <div class="img-shell anim-slide-up" onclick="openZoom(this.querySelector('img').src)">
+                    {% if product_type == 'cloth' and product.discount_text %}
+                    <span class="absolute top-4 left-4 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.discount_text }}</span>
+                    {% endif %}
+                    {% if product_type == 'toy' and product.discount_percentage %}
+                    <span class="absolute top-4 left-4 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.discount_percentage }}% OFF</span>
+                    {% endif %}
+                    {% if product_type == 'offer' and product.offers_badge %}
+                    <span class="absolute top-4 left-4 z-10 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.offers_badge }}</span>
+                    {% endif %}
+                    {% if product_type == 'arrival' and product.offers_badge %}
+                    <span class="absolute top-4 left-4 z-10 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.offers_badge }}</span>
+                    {% endif %}
+                    {% if product_type == 'trending' and product.badge %}
+                    <span class="absolute top-4 left-4 z-10 bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{{ product.badge }}</span>
+                    {% endif %}
+                    <img src="{{ product_image_url }}" alt="{{ product_name }}"
+                        class="w-full h-[480px] object-contain p-8" id="mainProductImage">
+                    <div
+                        class="absolute bottom-4 right-4 bg-white/80 backdrop-blur rounded-lg px-3 py-1.5 text-xs text-slate-500 flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                        </svg>
+                        Click to zoom
+                    </div>
                 </div>
+
+                {% if gallery_images %}
+                <div class="flex gap-2 mt-3 overflow-x-auto pb-2">
+                    <div class="w-16 h-16 rounded-lg overflow-hidden cursor-pointer border-2 border-indigo-500 flex-shrink-0"
+                        onclick="switchImage('{{ product_image_url }}', this)">
+                        <img src="{{ product_image_url }}" alt="Main" class="w-full h-full object-cover">
+                    </div>
+                    {% for gimg in gallery_images %}
+                    <div class="w-16 h-16 rounded-lg overflow-hidden cursor-pointer border-2 border-transparent hover:border-indigo-300 flex-shrink-0"
+                        onclick="switchImage('{{ gimg.image.url }}', this)">
+                        <img src="{{ gimg.image.url }}" alt="{{ gimg.alt_text|default:product_name }}"
+                            class="w-full h-full object-cover" loading="lazy">
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
             </div>
-            {% if gallery_images %}
-            <div class="flex gap-2 mt-3 overflow-x-auto pb-2" style="grid-column:1">
-                <div class="w-16 h-16 rounded-lg overflow-hidden cursor-pointer border-2 border-indigo-500 flex-shrink-0"
-                    onclick="switchImage('{{ product_image_url }}', this)">
-                    <img src="{{ product_image_url }}" alt="Main" class="w-full h-full object-cover">
-                </div>
-                {% for gimg in gallery_images %}
-                <div class="w-16 h-16 rounded-lg overflow-hidden cursor-pointer border-2 border-transparent hover:border-indigo-300 flex-shrink-0"
-                    onclick="switchImage('{{ gimg.image.url }}', this)">
-                    <img src="{{ gimg.image.url }}" alt="{{ gimg.alt_text|default:product_name }}"
-                        class="w-full h-full object-cover" loading="lazy">
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
 
             <!-- Info -->
             <div class="flex flex-col justify-between anim-slide-up-d1">
@@ -815,7 +819,7 @@
                             </a>
                             {% endif %}
                             <!-- Wishlist -->
-                            {% if product_type == 'cloth' or product_type == 'toy' %}
+
                             <a href="{% url 'add_to_wishlist' product_type product.id %}"
                                 class="border-2 {% if in_wishlist %}border-red-400 bg-red-50 text-red-500{% else %}border-slate-200 text-slate-500 hover:border-red-300 hover:text-red-500 hover:bg-red-50{% endif %} font-semibold py-4 px-5 rounded-xl transition-all duration-300 flex items-center justify-center"
                                 title="{% if in_wishlist %}In Wishlist{% else %}Add to Wishlist{% endif %}">
@@ -825,7 +829,7 @@
                                         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                 </svg>
                             </a>
-                            {% endif %}
+
                     </div>
 
                     <!-- Trust badges -->

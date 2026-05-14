@@ -266,6 +266,9 @@ class WishlistItem(models.Model):
     ITEM_TYPE_CHOICES = [
         ('toy', 'Toy'),
         ('cloth', 'Cloth'),
+        ('offer', 'Offer'),
+        ('arrival', 'New Arrival'),
+        ('trending', 'Trending Product'),
     ]
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wishlist_items')
@@ -273,8 +276,10 @@ class WishlistItem(models.Model):
     item_type = models.CharField(max_length=10, choices=ITEM_TYPE_CHOICES)
     
     cloth = models.ForeignKey('Cloths', on_delete=models.CASCADE, blank=True, null=True, related_name='wishlisted_by')
-    
     toy = models.ForeignKey('Toy', on_delete=models.CASCADE, blank=True, null=True, related_name='wishlisted_by')
+    offer = models.ForeignKey('Offers', on_delete=models.CASCADE, blank=True, null=True, related_name='wishlisted_by')
+    arrival = models.ForeignKey('NewArrivals', on_delete=models.CASCADE, blank=True, null=True, related_name='wishlisted_by')
+    trending = models.ForeignKey('TrendingProduct', on_delete=models.CASCADE, blank=True, null=True, related_name='wishlisted_by')
     
     alert_threshold_percent = models.PositiveIntegerField(default=0)
     is_shared = models.BooleanField(default=False)
@@ -285,33 +290,56 @@ class WishlistItem(models.Model):
     
     added_at = models.DateTimeField(auto_now_add=True)
     
-    
     class Meta:
-        unique_together = [('user', 'cloth'), ('user', 'toy'),]
+        unique_together = [
+            ('user', 'cloth'), 
+            ('user', 'toy'),
+            ('user', 'offer'),
+            ('user', 'arrival'),
+            ('user', 'trending'),
+        ]
         
         ordering = ['-added_at']
         verbose_name = 'Wishlist Item'
         verbose_name_plural = 'Wishlist Items'
-      
-        
     
     def __str__(self):
-        item = self.get_item()
-        item_name = item.name if item else 'Unknown'
+        item_name = self.get_product_name()
         return f"{self.user.username} - {item_name}"
     
     def get_item(self):
-        return self.cloth if self.cloth else self.toy
+        if self.cloth: return self.cloth
+        if self.toy: return self.toy
+        if self.offer: return self.offer
+        if self.arrival: return self.arrival
+        if self.trending: return self.trending
+        return None
+    
+    def get_product_name(self):
+        item = self.get_item()
+        if not item: return "Unknown Product"
+        return getattr(item, 'name', None) or getattr(item, 'title', 'Unnamed Product')
     
     def get_price(self):
+        item = self.get_item()
+        if not item: return "0.00"
+        
         if self.item_type == 'cloth':
-            return self.cloth.price2 or self.cloth.price1 or self.cloth.price
-        else:
-            return str(self.toy.price)
+            return item.price2 or item.price1 or item.price
+        elif self.item_type == 'toy':
+            return str(item.price)
+        elif self.item_type == 'offer':
+            return item.price1 or item.price2 or "0.00"
+        elif self.item_type == 'arrival':
+            return item.price or "0.00"
+        elif self.item_type == 'trending':
+            return item.price or "0.00"
+        return "0.00"
     
     def get_category(self):
         item = self.get_item()
-        return item.get_category_display() if hasattr(item, 'get_category_display') else item.category
+        if not item: return "General"
+        return item.get_category_display() if hasattr(item, 'get_category_display') else getattr(item, 'category', 'General')
 
 
 class Cart(models.Model):

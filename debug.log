@@ -26606,3 +26606,47 @@ WARNING 2026-05-15 03:29:25,553 log 11868 24344 Not Found: /favicon.ico
 INFO 2026-05-15 03:29:42,595 autoreload 11868 1472 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
 INFO 2026-05-15 03:29:43,531 autoreload 24596 7336 Watching for file changes with StatReloader
 WARNING 2026-05-15 03:30:05,272 log 24596 26316 Not Found: /favicon.ico
+WARNING 2026-05-15 03:35:36,962 log 24596 25888 Not Found: /favicon.ico
+WARNING 2026-05-15 03:38:32,713 log 24596 24180 Not Found: /favicon.ico
+WARNING 2026-05-15 04:05:37,188 log 24596 28572 Not Found: /favicon.ico
+WARNING 2026-05-15 04:06:12,958 log 24596 26112 Not Found: /favicon.ico
+ERROR 2026-05-15 04:06:21,815 middleware 24596 26112 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_women.png” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_women.png” does not exist
+WARNING 2026-05-15 04:06:21,916 log 24596 26112 Not Found: /media/backgrounds/hero_women.png
+ERROR 2026-05-15 04:12:47,502 middleware 24596 14000 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-05-15 04:12:47,525 log 24596 14000 Not Found: /media/about-hero.jpg
+ERROR 2026-05-15 04:14:53,304 middleware 24596 28868 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-05-15 04:14:53,317 log 24596 28868 Not Found: /media/about-hero.jpg
+WARNING 2026-05-15 04:14:53,520 log 24596 26368 Not Found: /favicon.ico
+ERROR 2026-05-15 04:24:24,155 middleware 24596 29212 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-05-15 04:24:24,175 log 24596 29212 Not Found: /media/about-hero.jpg
+WARNING 2026-05-15 04:24:24,576 log 24596 29212 Not Found: /favicon.ico
+INFO 2026-05-15 04:32:43,699 autoreload 24596 7336 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-05-15 04:32:45,138 autoreload 13536 28956 Watching for file changes with StatReloader
+INFO 2026-05-15 04:33:30,016 autoreload 13536 28956 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 04:33:31,215 autoreload 26976 24004 Watching for file changes with StatReloader
+INFO 2026-05-15 04:34:12,715 autoreload 26976 24004 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 04:34:13,749 autoreload 23896 24948 Watching for file changes with StatReloader

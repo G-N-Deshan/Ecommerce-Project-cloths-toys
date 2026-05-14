@@ -38,8 +38,11 @@
             <p class="wishlist-hero-subtitle">Save what you love. Move items to cart anytime.</p>
             <div class="wishlist-hero-stats">
                 <span>Total: <strong>{{ total_count }}</strong></span>
-                <span>Cloths: <strong>{{ cloth_count }}</strong></span>
-                <span>Toys: <strong>{{ toy_count }}</strong></span>
+                {% if cloth_count > 0 %}<span>Cloths: <strong>{{ cloth_count }}</strong></span>{% endif %}
+                {% if toy_count > 0 %}<span>Toys: <strong>{{ toy_count }}</strong></span>{% endif %}
+                {% if offer_count > 0 %}<span>Offers: <strong>{{ offer_count }}</strong></span>{% endif %}
+                {% if arrival_count > 0 %}<span>New Arrivals: <strong>{{ arrival_count }}</strong></span>{% endif %}
+                {% if trending_count > 0 %}<span>Trending: <strong>{{ trending_count }}</strong></span>{% endif %}
             </div>
         </section>
 
@@ -65,6 +68,16 @@
             <button class="wishlist-tab" data-tab="toy" role="tab" aria-selected="false">
                 Toys <span class="tab-badge">{{ toy_count }}</span>
             </button>
+            {% if offer_count > 0 %}
+            <button class="wishlist-tab" data-tab="offer" role="tab" aria-selected="false">
+                Offers <span class="tab-badge">{{ offer_count }}</span>
+            </button>
+            {% endif %}
+            {% if arrival_count > 0 %}
+            <button class="wishlist-tab" data-tab="arrival" role="tab" aria-selected="false">
+                New Arrivals <span class="tab-badge">{{ arrival_count }}</span>
+            </button>
+            {% endif %}
         </div>
 
         <!-- Content Section -->
@@ -87,16 +100,16 @@
                     {% for item in wishlist_items %}
                     <article class="wishlist-card" data-type="{{ item.item_type }}">
                         <div class="wishlist-card-media">
-                            <img src="{{ item.get_item.imageUrl.url }}" alt="{{ item.get_item.name }}" loading="lazy">
+                            <img src="{{ item.get_item.imageUrl.url }}" alt="{{ item.get_product_name }}" loading="lazy">
                             <span class="type-chip">{{ item.get_item_type_display }}</span>
                         </div>
 
                         <div class="wishlist-card-body">
-                            <h3 class="wishlist-card-title">{{ item.get_item.name }}</h3>
+                            <h3 class="wishlist-card-title">{{ item.get_product_name }}</h3>
 
                             <div class="wishlist-card-meta">
                                 <span class="category">{{ item.get_category }}</span>
-                                <span class="wishlist-card-price">${{ item.get_price }}</span>
+                                <span class="wishlist-card-price">Rs {{ item.get_price }}</span>
                             </div>
 
                             <div class="wishlist-card-actions">
@@ -139,7 +152,7 @@
 
                             <div class="wishlist-card-meta">
                                 <span class="category">{{ item.cloth.get_category_display }}</span>
-                                <span class="wishlist-card-price">${{ item.cloth.price2 }}</span>
+                                <span class="wishlist-card-price">Rs {{ item.cloth.price2 }}</span>
                             </div>
 
                             <div class="wishlist-card-actions">
@@ -178,7 +191,7 @@
 
                             <div class="wishlist-card-meta">
                                 <span class="category">{{ item.toy.get_category_display }}</span>
-                                <span class="wishlist-card-price">${{ item.toy.price }}</span>
+                                <span class="wishlist-card-price">Rs {{ item.toy.price }}</span>
                             </div>
 
                             <div class="wishlist-card-actions">
