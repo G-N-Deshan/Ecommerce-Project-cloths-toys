@@ -999,8 +999,7 @@ class TrendingProduct(models.Model):
         return f"{self.name} ({self.category})"
 
     def get_absolute_url(self):
-        from django.urls import reverse
-        return reverse('product_detail', args=['trending', self.id])
+        return f"/product/trending/{self.id}/"
 
     # ── Helpers ─────────────────────────────────────────────────────────────
 
@@ -1027,12 +1026,10 @@ class TrendingProduct(models.Model):
     @property
     def resolved_link_url(self):
         """Auto-generate the product detail URL when a FK is set."""
-        if self.resolved_item_type and self.resolved_item_id:
-            from django.urls import reverse
-            try:
-                return reverse('product_detail', args=[self.resolved_item_type, self.resolved_item_id])
-            except Exception:
-                pass
+        if self.cloth_id:   return f"/product/cloth/{self.cloth_id}/"
+        if self.toy_id:     return f"/product/toy/{self.toy_id}/"
+        if self.offer_id:   return f"/product/offer/{self.offer_id}/"
+        if self.arrival_id: return f"/product/arrival/{self.arrival_id}/"
         return self.link_url or self.get_absolute_url()
 
     @property

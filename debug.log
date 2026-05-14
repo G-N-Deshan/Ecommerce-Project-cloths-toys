@@ -25176,3 +25176,1432 @@ INFO 2026-05-15 02:45:04,802 autoreload 1484 18256 Watching for file changes wit
 INFO 2026-05-15 02:45:15,787 autoreload 1484 18256 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
 INFO 2026-05-15 02:45:17,021 autoreload 12620 6284 Watching for file changes with StatReloader
 WARNING 2026-05-15 02:58:51,042 log 12620 20856 Not Found: /favicon.ico
+WARNING 2026-05-15 03:27:38,002 log 12620 26052 Not Found: /favicon.ico
+ERROR 2026-05-15 03:27:40,561 middleware 12620 26052 Exception: args or kwargs must be provided.
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 684, in get_field
+    return self.fields_map[field_name]
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 293, in lookup_field
+    f = _get_non_gfk_field(opts, name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 333, in _get_non_gfk_field
+    field = opts.get_field(name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 686, in get_field
+    raise FieldDoesNotExist(
+        "%s has no field named '%s'" % (self.object_name, field_name)
+    )
+django.core.exceptions.FieldDoesNotExist: TrendingProduct has no field named 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 221, in _get_response
+    response = response.render()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1150, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 788, in resolve
+    obj = self.var.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 928, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1000, in _resolve_lookup
+    current = current()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 82, in super
+    return mark_safe(self.render(self.context))
+                     ~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\base.py", line 47, in render
+    return super().render(context)
+           ~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\library.py", line 363, in render
+    _dict = self.func(*resolved_args, **resolved_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 357, in result_list
+    "results": list(results(cl)),
+               ~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 330, in results
+    yield ResultList(form, items_for_result(cl, res, form))
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 324, in __init__
+    super().__init__(*items)
+    ~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 221, in items_for_result
+    f, attr, value = lookup_field(field_name, result, cl.model_admin)
+                     ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 302, in lookup_field
+    value = attr(obj)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py", line 652, in get_linked_product_label
+    return format_html('<span style="color:#94a3b8;font-size:11px">URL only</span>')
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\html.py", line 137, in format_html
+    raise TypeError("args or kwargs must be provided.")
+TypeError: args or kwargs must be provided.
+ERROR 2026-05-15 03:27:41,121 log 12620 26052 Internal Server Error: /admin/myapp/trendingproduct/
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 684, in get_field
+    return self.fields_map[field_name]
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 293, in lookup_field
+    f = _get_non_gfk_field(opts, name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 333, in _get_non_gfk_field
+    field = opts.get_field(name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 686, in get_field
+    raise FieldDoesNotExist(
+        "%s has no field named '%s'" % (self.object_name, field_name)
+    )
+django.core.exceptions.FieldDoesNotExist: TrendingProduct has no field named 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 221, in _get_response
+    response = response.render()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1150, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 788, in resolve
+    obj = self.var.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 928, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1000, in _resolve_lookup
+    current = current()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 82, in super
+    return mark_safe(self.render(self.context))
+                     ~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\base.py", line 47, in render
+    return super().render(context)
+           ~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\library.py", line 363, in render
+    _dict = self.func(*resolved_args, **resolved_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 357, in result_list
+    "results": list(results(cl)),
+               ~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 330, in results
+    yield ResultList(form, items_for_result(cl, res, form))
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 324, in __init__
+    super().__init__(*items)
+    ~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 221, in items_for_result
+    f, attr, value = lookup_field(field_name, result, cl.model_admin)
+                     ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 302, in lookup_field
+    value = attr(obj)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py", line 652, in get_linked_product_label
+    return format_html('<span style="color:#94a3b8;font-size:11px">URL only</span>')
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\html.py", line 137, in format_html
+    raise TypeError("args or kwargs must be provided.")
+TypeError: args or kwargs must be provided.
+ERROR 2026-05-15 03:28:29,824 middleware 12620 26052 Exception: args or kwargs must be provided.
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 684, in get_field
+    return self.fields_map[field_name]
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 293, in lookup_field
+    f = _get_non_gfk_field(opts, name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 333, in _get_non_gfk_field
+    field = opts.get_field(name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 686, in get_field
+    raise FieldDoesNotExist(
+        "%s has no field named '%s'" % (self.object_name, field_name)
+    )
+django.core.exceptions.FieldDoesNotExist: TrendingProduct has no field named 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 221, in _get_response
+    response = response.render()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1150, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 788, in resolve
+    obj = self.var.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 928, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1000, in _resolve_lookup
+    current = current()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 82, in super
+    return mark_safe(self.render(self.context))
+                     ~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\base.py", line 47, in render
+    return super().render(context)
+           ~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\library.py", line 363, in render
+    _dict = self.func(*resolved_args, **resolved_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 357, in result_list
+    "results": list(results(cl)),
+               ~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 330, in results
+    yield ResultList(form, items_for_result(cl, res, form))
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 324, in __init__
+    super().__init__(*items)
+    ~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 221, in items_for_result
+    f, attr, value = lookup_field(field_name, result, cl.model_admin)
+                     ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 302, in lookup_field
+    value = attr(obj)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py", line 652, in get_linked_product_label
+    return format_html('<span style="color:#94a3b8;font-size:11px">URL only</span>')
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\html.py", line 137, in format_html
+    raise TypeError("args or kwargs must be provided.")
+TypeError: args or kwargs must be provided.
+ERROR 2026-05-15 03:28:30,097 log 12620 26052 Internal Server Error: /admin/myapp/trendingproduct/
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 684, in get_field
+    return self.fields_map[field_name]
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 293, in lookup_field
+    f = _get_non_gfk_field(opts, name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 333, in _get_non_gfk_field
+    field = opts.get_field(name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 686, in get_field
+    raise FieldDoesNotExist(
+        "%s has no field named '%s'" % (self.object_name, field_name)
+    )
+django.core.exceptions.FieldDoesNotExist: TrendingProduct has no field named 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 221, in _get_response
+    response = response.render()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1150, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 788, in resolve
+    obj = self.var.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 928, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1000, in _resolve_lookup
+    current = current()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 82, in super
+    return mark_safe(self.render(self.context))
+                     ~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\base.py", line 47, in render
+    return super().render(context)
+           ~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\library.py", line 363, in render
+    _dict = self.func(*resolved_args, **resolved_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 357, in result_list
+    "results": list(results(cl)),
+               ~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 330, in results
+    yield ResultList(form, items_for_result(cl, res, form))
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 324, in __init__
+    super().__init__(*items)
+    ~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 221, in items_for_result
+    f, attr, value = lookup_field(field_name, result, cl.model_admin)
+                     ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 302, in lookup_field
+    value = attr(obj)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py", line 652, in get_linked_product_label
+    return format_html('<span style="color:#94a3b8;font-size:11px">URL only</span>')
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\html.py", line 137, in format_html
+    raise TypeError("args or kwargs must be provided.")
+TypeError: args or kwargs must be provided.
+WARNING 2026-05-15 03:28:30,257 log 12620 26052 Not Found: /favicon.ico
+ERROR 2026-05-15 03:28:34,811 middleware 12620 26052 Exception: args or kwargs must be provided.
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 684, in get_field
+    return self.fields_map[field_name]
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 293, in lookup_field
+    f = _get_non_gfk_field(opts, name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 333, in _get_non_gfk_field
+    field = opts.get_field(name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 686, in get_field
+    raise FieldDoesNotExist(
+        "%s has no field named '%s'" % (self.object_name, field_name)
+    )
+django.core.exceptions.FieldDoesNotExist: TrendingProduct has no field named 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 221, in _get_response
+    response = response.render()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1150, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 788, in resolve
+    obj = self.var.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 928, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1000, in _resolve_lookup
+    current = current()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 82, in super
+    return mark_safe(self.render(self.context))
+                     ~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\base.py", line 47, in render
+    return super().render(context)
+           ~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\library.py", line 363, in render
+    _dict = self.func(*resolved_args, **resolved_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 357, in result_list
+    "results": list(results(cl)),
+               ~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 330, in results
+    yield ResultList(form, items_for_result(cl, res, form))
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 324, in __init__
+    super().__init__(*items)
+    ~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 221, in items_for_result
+    f, attr, value = lookup_field(field_name, result, cl.model_admin)
+                     ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 302, in lookup_field
+    value = attr(obj)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py", line 652, in get_linked_product_label
+    return format_html('<span style="color:#94a3b8;font-size:11px">URL only</span>')
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\html.py", line 137, in format_html
+    raise TypeError("args or kwargs must be provided.")
+TypeError: args or kwargs must be provided.
+ERROR 2026-05-15 03:28:35,093 log 12620 26052 Internal Server Error: /admin/myapp/trendingproduct/
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 684, in get_field
+    return self.fields_map[field_name]
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 293, in lookup_field
+    f = _get_non_gfk_field(opts, name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 333, in _get_non_gfk_field
+    field = opts.get_field(name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 686, in get_field
+    raise FieldDoesNotExist(
+        "%s has no field named '%s'" % (self.object_name, field_name)
+    )
+django.core.exceptions.FieldDoesNotExist: TrendingProduct has no field named 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 221, in _get_response
+    response = response.render()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1150, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 788, in resolve
+    obj = self.var.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 928, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1000, in _resolve_lookup
+    current = current()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 82, in super
+    return mark_safe(self.render(self.context))
+                     ~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\base.py", line 47, in render
+    return super().render(context)
+           ~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\library.py", line 363, in render
+    _dict = self.func(*resolved_args, **resolved_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 357, in result_list
+    "results": list(results(cl)),
+               ~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 330, in results
+    yield ResultList(form, items_for_result(cl, res, form))
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 324, in __init__
+    super().__init__(*items)
+    ~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 221, in items_for_result
+    f, attr, value = lookup_field(field_name, result, cl.model_admin)
+                     ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 302, in lookup_field
+    value = attr(obj)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py", line 652, in get_linked_product_label
+    return format_html('<span style="color:#94a3b8;font-size:11px">URL only</span>')
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\html.py", line 137, in format_html
+    raise TypeError("args or kwargs must be provided.")
+TypeError: args or kwargs must be provided.
+INFO 2026-05-15 03:28:52,798 autoreload 12620 6284 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-05-15 03:28:54,379 autoreload 26352 21040 Watching for file changes with StatReloader
+INFO 2026-05-15 03:29:07,261 autoreload 26352 21040 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-15 03:29:08,232 autoreload 11868 1472 Watching for file changes with StatReloader
+ERROR 2026-05-15 03:29:22,474 middleware 11868 24344 Exception: args or kwargs must be provided.
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 684, in get_field
+    return self.fields_map[field_name]
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 293, in lookup_field
+    f = _get_non_gfk_field(opts, name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 333, in _get_non_gfk_field
+    field = opts.get_field(name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 686, in get_field
+    raise FieldDoesNotExist(
+        "%s has no field named '%s'" % (self.object_name, field_name)
+    )
+django.core.exceptions.FieldDoesNotExist: TrendingProduct has no field named 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 221, in _get_response
+    response = response.render()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1150, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 788, in resolve
+    obj = self.var.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 928, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1000, in _resolve_lookup
+    current = current()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 82, in super
+    return mark_safe(self.render(self.context))
+                     ~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\base.py", line 47, in render
+    return super().render(context)
+           ~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\library.py", line 363, in render
+    _dict = self.func(*resolved_args, **resolved_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 357, in result_list
+    "results": list(results(cl)),
+               ~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 330, in results
+    yield ResultList(form, items_for_result(cl, res, form))
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 324, in __init__
+    super().__init__(*items)
+    ~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 221, in items_for_result
+    f, attr, value = lookup_field(field_name, result, cl.model_admin)
+                     ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 302, in lookup_field
+    value = attr(obj)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py", line 657, in get_linked_product_label
+    return format_html('<span style="color:#94a3b8;font-size:11px">Local Only</span>')
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\html.py", line 137, in format_html
+    raise TypeError("args or kwargs must be provided.")
+TypeError: args or kwargs must be provided.
+ERROR 2026-05-15 03:29:22,757 log 11868 24344 Internal Server Error: /admin/myapp/trendingproduct/
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 684, in get_field
+    return self.fields_map[field_name]
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 293, in lookup_field
+    f = _get_non_gfk_field(opts, name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 333, in _get_non_gfk_field
+    field = opts.get_field(name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 686, in get_field
+    raise FieldDoesNotExist(
+        "%s has no field named '%s'" % (self.object_name, field_name)
+    )
+django.core.exceptions.FieldDoesNotExist: TrendingProduct has no field named 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 221, in _get_response
+    response = response.render()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1150, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 788, in resolve
+    obj = self.var.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 928, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1000, in _resolve_lookup
+    current = current()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 82, in super
+    return mark_safe(self.render(self.context))
+                     ~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\base.py", line 47, in render
+    return super().render(context)
+           ~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\library.py", line 363, in render
+    _dict = self.func(*resolved_args, **resolved_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 357, in result_list
+    "results": list(results(cl)),
+               ~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 330, in results
+    yield ResultList(form, items_for_result(cl, res, form))
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 324, in __init__
+    super().__init__(*items)
+    ~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 221, in items_for_result
+    f, attr, value = lookup_field(field_name, result, cl.model_admin)
+                     ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 302, in lookup_field
+    value = attr(obj)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py", line 657, in get_linked_product_label
+    return format_html('<span style="color:#94a3b8;font-size:11px">Local Only</span>')
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\html.py", line 137, in format_html
+    raise TypeError("args or kwargs must be provided.")
+TypeError: args or kwargs must be provided.
+ERROR 2026-05-15 03:29:25,158 middleware 11868 24344 Exception: args or kwargs must be provided.
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 684, in get_field
+    return self.fields_map[field_name]
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 293, in lookup_field
+    f = _get_non_gfk_field(opts, name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 333, in _get_non_gfk_field
+    field = opts.get_field(name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 686, in get_field
+    raise FieldDoesNotExist(
+        "%s has no field named '%s'" % (self.object_name, field_name)
+    )
+django.core.exceptions.FieldDoesNotExist: TrendingProduct has no field named 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 221, in _get_response
+    response = response.render()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1150, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 788, in resolve
+    obj = self.var.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 928, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1000, in _resolve_lookup
+    current = current()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 82, in super
+    return mark_safe(self.render(self.context))
+                     ~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\base.py", line 47, in render
+    return super().render(context)
+           ~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\library.py", line 363, in render
+    _dict = self.func(*resolved_args, **resolved_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 357, in result_list
+    "results": list(results(cl)),
+               ~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 330, in results
+    yield ResultList(form, items_for_result(cl, res, form))
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 324, in __init__
+    super().__init__(*items)
+    ~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 221, in items_for_result
+    f, attr, value = lookup_field(field_name, result, cl.model_admin)
+                     ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 302, in lookup_field
+    value = attr(obj)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py", line 657, in get_linked_product_label
+    return format_html('<span style="color:#94a3b8;font-size:11px">Local Only</span>')
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\html.py", line 137, in format_html
+    raise TypeError("args or kwargs must be provided.")
+TypeError: args or kwargs must be provided.
+ERROR 2026-05-15 03:29:25,409 log 11868 24344 Internal Server Error: /admin/myapp/trendingproduct/
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 684, in get_field
+    return self.fields_map[field_name]
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 293, in lookup_field
+    f = _get_non_gfk_field(opts, name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 333, in _get_non_gfk_field
+    field = opts.get_field(name)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\options.py", line 686, in get_field
+    raise FieldDoesNotExist(
+        "%s has no field named '%s'" % (self.object_name, field_name)
+    )
+django.core.exceptions.FieldDoesNotExist: TrendingProduct has no field named 'get_linked_product_label'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 221, in _get_response
+    response = response.render()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1150, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 788, in resolve
+    obj = self.var.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 928, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1000, in _resolve_lookup
+    current = current()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 82, in super
+    return mark_safe(self.render(self.context))
+                     ~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\base.py", line 47, in render
+    return super().render(context)
+           ~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\library.py", line 363, in render
+    _dict = self.func(*resolved_args, **resolved_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 357, in result_list
+    "results": list(results(cl)),
+               ~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 330, in results
+    yield ResultList(form, items_for_result(cl, res, form))
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 324, in __init__
+    super().__init__(*items)
+    ~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 221, in items_for_result
+    f, attr, value = lookup_field(field_name, result, cl.model_admin)
+                     ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\utils.py", line 302, in lookup_field
+    value = attr(obj)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py", line 657, in get_linked_product_label
+    return format_html('<span style="color:#94a3b8;font-size:11px">Local Only</span>')
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\html.py", line 137, in format_html
+    raise TypeError("args or kwargs must be provided.")
+TypeError: args or kwargs must be provided.
+WARNING 2026-05-15 03:29:25,553 log 11868 24344 Not Found: /favicon.ico
+INFO 2026-05-15 03:29:42,595 autoreload 11868 1472 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-15 03:29:43,531 autoreload 24596 7336 Watching for file changes with StatReloader

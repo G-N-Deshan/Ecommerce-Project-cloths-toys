@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.utils.html import format_html
+from django.utils.html import format_html, mark_safe
 from .models import (Card, Cloths, Offers, NewArrivals, Review, ContactMessage, Toy,
                      WishlistItem, Cart, CartItem, Order, OrderItem, ProductReview,
                      ProductImage, Inventory, Coupon, ProductVariant, OrderTracking,
@@ -616,8 +616,13 @@ class TrendingProductAdmin(admin.ModelAdmin):
             'fields': ('cloth', 'toy', 'offer', 'arrival'),
             'description': (
                 '⚡ Pick ONE product from below. This enables Add to Cart, Buy Now, '
-                'live stock, and ratings automatically. Leave all blank to use the legacy URL.'
+                'live stock, and ratings automatically. Leave all blank to use the local detail page.'
             ),
+        }),
+        ('Product Detail Page Content (Local Only)', {
+            'fields': ('long_description', 'features', 'material', 'care_instructions', 'sizes_available', 'colors_available', 'safety_info', 'dimensions'),
+            'description': 'These fields appear on the product detail page if no real product is linked above.',
+            'classes': ('collapse',),
         }),
         ('Legacy Fallback URL', {
             'fields': ('link_url',),
@@ -631,7 +636,7 @@ class TrendingProductAdmin(admin.ModelAdmin):
 
     def get_image(self, obj):
         img = obj.resolved_image
-        if img:
+        if img and hasattr(img, 'url'):
             try:
                 return format_html('<img src="{}" style="width:50px;height:50px;border-radius:8px;object-fit:cover;" />', img.url)
             except Exception:
@@ -644,12 +649,12 @@ class TrendingProductAdmin(admin.ModelAdmin):
         if t:
             p = obj.get_linked_product()
             label = getattr(p, 'name', None) or getattr(p, 'title', '?')
-            colors = {'cloth': '#6366f1', 'toy': '#f59e0b', 'offer': '#ef4444', 'arrival': '#10b981'}
+            colors = {'cloth': '#6366f1', 'toy': '#f59e0b', 'offer': '#ef4444', 'arrival': '#10b981', 'trending': '#64748b'}
             return format_html(
                 '<span style="background:{};color:#fff;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700">{}</span> {}',
                 colors.get(t, '#64748b'), t.upper(), label
             )
-        return format_html('<span style="color:#94a3b8;font-size:11px">URL only</span>')
+        return mark_safe('<span style="color:#94a3b8;font-size:11px">Local Only</span>')
     get_linked_product_label.short_description = 'Linked Product'
 
     # ── Admin actions to auto-promote top-viewed products ──────────────────
