@@ -80,6 +80,7 @@
             <span class="offer-badge">{{ offer.offers_badge }}</span>
             {% if is_in_stock == 0 %}
             <span class="stock-alert out-of-stock-badge">Out of Stock</span>
+            <span class="out-of-stock-label">Out of Stock</span>
             {% elif is_in_stock == 1 %}
             <span class="stock-alert last-one">Last 1!</span>
             {% elif is_in_stock <= 3 %}

@@ -1,4 +1,4 @@
-from .models import Cart, WishlistItem, LoyaltyProfile, SiteSettings
+from .models import Cart, WishlistItem, LoyaltyProfile, SiteSettings, Order
 
 def global_context(request):
     cart_count = 0
@@ -16,6 +16,12 @@ def global_context(request):
             profile = LoyaltyProfile.objects.filter(user=request.user).first()
             if profile:
                 loyalty_points = int(profile.current_points)
+            
+            # Add order count for navbar badge
+            order_count = Order.objects.filter(user=request.user).exclude(status='delivered').count()
+            # If no active orders, show total count or just keep it simple
+            if order_count == 0:
+                order_count = Order.objects.filter(user=request.user).count()
         else:
             session_key = getattr(request.session, 'session_key', None)
             if session_key:
@@ -34,6 +40,7 @@ def global_context(request):
         'cart_count': cart_count,
         'wishlist_count': wishlist_count,
         'loyalty_points': loyalty_points,
+        'order_count': order_count if request.user.is_authenticated else 0,
         'site_settings': settings_obj,
     }
 

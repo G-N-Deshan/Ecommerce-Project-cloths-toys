@@ -27493,3 +27493,33 @@ Traceback (most recent call last):
     raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
 django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_toys.png” does not exist
 WARNING 2026-05-15 05:30:53,784 log 25956 27828 Not Found: /media/backgrounds/hero_toys.png
+WARNING 2026-05-15 05:46:06,420 log 25956 28120 Not Found: /favicon.ico
+INFO 2026-05-15 05:49:06,067 autoreload 25956 26588 C:\Users\nipun\Desktop\Ecommerce project\myapp\context_processors.py changed, reloading.
+INFO 2026-05-15 05:49:07,352 autoreload 29664 10580 Watching for file changes with StatReloader
+WARNING 2026-05-15 05:59:12,682 log 27160 20052 Not Found: /favicon.ico
+ERROR 2026-05-15 05:59:59,045 middleware 27160 7144 Exception: 'TrendingProduct' object has no attribute 'imageUrl'
+Traceback (most recent call last):
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 615, in index
+    'image': wish_real_item.imageUrl.url if wish_real_item.imageUrl else '',
+                                            ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TrendingProduct' object has no attribute 'imageUrl'
+ERROR 2026-05-15 05:59:59,146 log 27160 7144 Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 615, in index
+    'image': wish_real_item.imageUrl.url if wish_real_item.imageUrl else '',
+                                            ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TrendingProduct' object has no attribute 'imageUrl'
+INFO 2026-05-15 06:00:58,087 autoreload 27160 20600 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:00:58,580 autoreload 29664 10580 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:00:59,459 autoreload 25572 13232 Watching for file changes with StatReloader
+INFO 2026-05-15 06:00:59,617 autoreload 9312 17504 Watching for file changes with StatReloader
+INFO 2026-05-15 06:02:30,161 autoreload 25572 13232 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:02:30,194 autoreload 9312 17504 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:02:31,277 autoreload 26736 3240 Watching for file changes with StatReloader
+INFO 2026-05-15 06:02:31,572 autoreload 21704 26036 Watching for file changes with StatReloader

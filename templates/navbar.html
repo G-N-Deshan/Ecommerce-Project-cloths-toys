@@ -56,6 +56,9 @@
                 </div>
                 <a href="{% url 'trending' %}" class="nav-link nav-link--trending">Trending</a>
                 <a href="{% url 'reviews' %}" class="nav-link nav-link--reviews"> Reviews</a>
+                {% if user.is_authenticated %}
+                <a href="{% url 'my_orders' %}" class="nav-link nav-link--orders">Orders</a>
+                {% endif %}
                 <a href="{% url 'contact_us' %}" class="nav-link nav-link--contact">Contact</a>
                 <a href="{% url 'about' %}" class="nav-link nav-link--about">About</a>
 
@@ -89,6 +92,10 @@
                         <a href="{% url 'loyalty_dashboard' %}" class="nav-desktop-auth nav-icon-btn" title="Rewards">
                             <i class="bi bi-star-fill"></i>
                             <span class="loyalty-count-badge" data-loyalty-count="{{ loyalty_points|default:0 }}">{{ loyalty_points|default:0 }}</span>
+                        </a>
+                        <a href="{% url 'my_orders' %}" class="nav-desktop-auth nav-icon-btn" title="My Orders">
+                            <i class="bi bi-receipt"></i>
+                            <span class="order-count-badge" data-order-count="{{ order_count|default:0 }}">{{ order_count|default:0 }}</span>
                         </a>
                         {% endif %}
                     </div>
@@ -243,6 +250,13 @@
         <a href="{% url 'loyalty_dashboard' %}" class="drawer-action-btn">
             <i class="bi bi-star-fill" style="color:#f59e0b;"></i>
             <span>Rewards</span>
+        </a>
+        <a href="{% url 'my_orders' %}" class="drawer-action-btn">
+            <i class="bi bi-box-seam-fill" style="color:#0ea5e9;"></i>
+            <span>Orders</span>
+            {% if order_count %}
+            <span class="drawer-action-badge" style="background:#0ea5e9;">{{ order_count }}</span>
+            {% endif %}
         </a>
         <a href="{% url 'profile' %}" class="drawer-action-btn">
             <i class="bi bi-person-circle" style="color:#10b981;"></i>

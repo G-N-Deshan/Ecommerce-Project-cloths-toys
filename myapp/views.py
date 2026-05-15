@@ -610,9 +610,9 @@ def index(request):
             if wish_real_item:
                 wishlist_items.append({
                     'id': item.id,
-                    'name': wish_real_item.name if hasattr(wish_real_item, 'name') else wish_real_item.title,
+                    'name': item.get_product_name(),
                     'price': item.get_price(),
-                    'image': wish_real_item.imageUrl.url if wish_real_item.imageUrl else '',
+                    'image': item.get_image_url(),
                     'category': item.get_category(),
                     'item_type': item.item_type,
                 })

@@ -115,6 +115,11 @@
                 {% endif %}
                 <div class="toy-image">
                     <img src="{{ toy.imageUrl.url }}" alt="{{ toy.name }}" loading="lazy">
+                    {% with is_in_stock=toy.obj.inventory.stock|default:999 %}
+                    {% if toy.is_purchasable and is_in_stock == 0 %}
+                    <span class="out-of-stock-label">Out of Stock</span>
+                    {% endif %}
+                    {% endwith %}
                     <div class="toy-overlay">
                         <a href="{{ toy.url }}" class="quick-view-btn">Quick View</a>
                     </div>
@@ -171,7 +176,7 @@
                         <div class="toy-image">
                             <img src="{{ toy.imageUrl.url }}" alt="{{ toy.name }}" loading="lazy">
                             {% if toy.is_purchasable and is_in_stock == 0 %}
-                            <div class="toy-stock-overlay">Out of Stock</div>
+                            <span class="out-of-stock-label">Out of Stock</span>
                             {% endif %}
                             <div
                                 class="toy-overlay {% if toy.is_purchasable and is_in_stock == 0 %}toy-overlay--visible{% endif %}">

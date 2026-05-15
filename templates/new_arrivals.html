@@ -82,6 +82,7 @@
                 {% if item.offers_badge %}<span class="arrival-badge">{{ item.offers_badge }}</span>{% endif %}
                 {% if is_in_stock == 0 %}
                 <span class="stock-alert out-of-stock-badge">Out of Stock</span>
+                <span class="out-of-stock-label">Out of Stock</span>
                 {% elif is_in_stock == 1 %}
                 <span class="stock-alert last-one">Last 1!</span>
                 {% elif is_in_stock <= 3 %}
@@ -101,9 +102,9 @@
                 <div class="arrival-actions">
                     <a href="{% url 'product_detail' 'arrival' item.id %}" class="arrival-link">View details</a>
                     {% if is_in_stock == 0 %}
-                    <button class="arrival-btn btn-disabled cursor-not-allowed opacity-50" disabled style="background-color: #cbd5e1; color: white;">Out of Stock</button>
+                    <button class="arrivals-btn btn-disabled cursor-not-allowed opacity-50" disabled style="background-color: #cbd5e1; color: white;">Out of Stock</button>
                     {% else %}
-                    <a href="{% url 'add_to_cart' 'arrival' item.id %}" class="arrival-btn arrival-btn--dark" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}" data-price="{{ item.numeric_price }}">Add to cart</a>
+                    <a href="{% url 'add_to_cart' 'arrival' item.id %}" class="arrivals-btn arrivals-btn--dark" data-add-to-cart data-item-type="arrival" data-item-id="{{ item.id }}" data-price="{{ item.numeric_price }}">Add to cart</a>
                     {% endif %}
                 </div>
             </div>

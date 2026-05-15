@@ -255,6 +255,10 @@
                             <span
                                 class="live-viewers absolute bottom-3 left-3 z-10 px-2 py-1 bg-black/60 backdrop-blur-sm text-white text-[10px] font-semibold rounded-full"></span>
 
+                            {% if offer.inventory and offer.inventory.stock <= 0 %}
+                            <span class="out-of-stock-label">Out of Stock</span>
+                            {% endif %}
+
                             <!-- Overlay Actions -->
                             <div
                                 class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex items-end justify-center pb-5 gap-3">
@@ -358,6 +362,10 @@
                             <!-- Live viewers -->
                             <span
                                 class="live-viewers absolute bottom-3 left-3 z-10 px-2 py-1 bg-black/60 backdrop-blur-sm text-white text-[10px] font-semibold rounded-full"></span>
+
+                            {% if arrival.inventory and arrival.inventory.stock <= 0 %}
+                            <span class="out-of-stock-label">Out of Stock</span>
+                            {% endif %}
 
                             <!-- Overlay Actions -->
                             <div

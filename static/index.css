@@ -270,3 +270,21 @@ body {
 .opacity-75, .out-of-stock { opacity: 0.75; }
 .btn-disabled, button[disabled] { opacity: 0.5; cursor: not-allowed; pointer-events: none; background-color: #cbd5e1 !important; color: #64748b !important; }
 
+/* Out of Stock label */
+.out-of-stock-label {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(4px);
+    color: #fff;
+    padding: 5px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 999px;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border: 1px solid rgba(255,255,255,0.2);
+}
