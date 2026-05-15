@@ -220,7 +220,13 @@
                     </div>
                     <div class="form-group">
                         <label>Profile Picture</label>
-                        <input type="file" class="form-input" name="image" accept="image/*">
+                        <div class="profile-upload-wrapper" style="display:flex; align-items:center; gap:10px;">
+                            <input type="file" class="form-input" name="image" accept="image/*" style="flex:1">
+                            {% if user.profile.image %}
+                            <button type="button" id="removePhotoBtn" class="btn-remove-photo" title="Remove current photo" style="background:#fee2e2; color:#ef4444; border:1px solid #fecaca; padding:8px 12px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s;">Remove</button>
+                            {% endif %}
+                        </div>
+                        <input type="hidden" name="remove_image" id="removeImageFlag" value="false">
                         <p class="input-help">Upload a new profile picture (JPG, PNG)</p>
                     </div>
                     <div class="modal-actions">
@@ -474,6 +480,19 @@
                 };
 
                 // Edit Profile Form
+                // Add logic for photo removal button
+                const removeBtn = document.getElementById('removePhotoBtn');
+                const removeFlag = document.getElementById('removeImageFlag');
+                if (removeBtn && removeFlag) {
+                    removeBtn.addEventListener('click', () => {
+                        removeFlag.value = 'true';
+                        removeBtn.style.background = '#ef4444';
+                        removeBtn.style.color = '#ffffff';
+                        removeBtn.innerText = 'Marked for Removal';
+                        showToast('Photo marked for removal. Save changes to confirm.');
+                    });
+                }
+
                 const editForm = document.getElementById('editProfileForm');
                 if (editForm) {
                     editForm.addEventListener('submit', async (e) => {
@@ -488,6 +507,7 @@
                                 },
                                 body: formData
                             });
+                            
                             const result = await response.json();
                             if (result.success) {
                                 showToast(result.message);

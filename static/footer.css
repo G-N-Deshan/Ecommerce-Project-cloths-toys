@@ -100,7 +100,16 @@ body{
 }
 
 .contact-icon {
-    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: rgba(129, 140, 248, 0.1);
+    border-radius: 8px;
+    color: #818cf8;
+    font-size: 0.9rem;
+    flex-shrink: 0;
 }
 
 /* Social Section */

@@ -27898,3 +27898,12 @@ INFO 2026-05-15 06:55:23,287 autoreload 14676 7164 C:\Users\nipun\Desktop\Ecomme
 INFO 2026-05-15 06:55:24,240 autoreload 26464 11212 Watching for file changes with StatReloader
 INFO 2026-05-15 06:55:24,458 autoreload 19636 24004 Watching for file changes with StatReloader
 WARNING 2026-05-15 06:59:48,532 log 26464 2664 Not Found: /favicon.ico
+INFO 2026-05-15 07:06:07,054 autoreload 26464 11212 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 07:06:07,081 autoreload 19636 24004 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 07:06:08,339 autoreload 22212 29064 Watching for file changes with StatReloader
+INFO 2026-05-15 07:06:08,741 autoreload 26592 26760 Watching for file changes with StatReloader
+WARNING 2026-05-15 07:10:40,280 log 22212 21360 Not Found: /favicon.ico
+INFO 2026-05-15 07:15:37,130 autoreload 22212 29064 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 07:15:37,620 autoreload 26592 26760 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 07:15:38,219 autoreload 27620 15476 Watching for file changes with StatReloader
+INFO 2026-05-15 07:15:39,035 autoreload 24056 18860 Watching for file changes with StatReloader

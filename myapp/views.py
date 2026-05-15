@@ -2800,6 +2800,8 @@ def update_profile(request):
             # Handle profile image
             if 'image' in request.FILES:
                 profile.image = request.FILES['image']
+            elif data.get('remove_image') == 'true':
+                profile.image = None
                 
             profile.save()
             
@@ -4448,11 +4450,17 @@ def _send_order_confirmation_email(order, request=None):
             html_message = render_to_string('emails/order_confirmation.html', context)
             plain_message = strip_tags(html_message)
             
+            # Send to both customer and admin
+            recipient_list = [order.email]
+            admin_email = getattr(django_settings, 'EMAIL_HOST_USER', None)
+            if admin_email and admin_email not in recipient_list:
+                recipient_list.append(admin_email)
+
             send_mail(
                 subject=subject,
                 message=plain_message,
                 from_email=django_settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[order.email],
+                recipient_list=recipient_list,
                 fail_silently=True,
                 html_message=html_message
             )
