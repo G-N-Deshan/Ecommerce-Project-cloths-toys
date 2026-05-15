@@ -27927,3 +27927,4 @@ INFO 2026-05-15 08:39:40,978 autoreload 11164 1668 Watching for file changes wit
 INFO 2026-05-15 08:39:40,211 autoreload 1748 29220 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
 INFO 2026-05-15 08:39:48,994 autoreload 24220 18172 Watching for file changes with StatReloader
 INFO 2026-05-15 13:57:55,926 autoreload 10696 2444 Watching for file changes with StatReloader
+WARNING 2026-05-15 14:00:24,601 log 11164 21132 Not Found: /favicon.ico
