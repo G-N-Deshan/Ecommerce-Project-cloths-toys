@@ -2589,9 +2589,17 @@ def checkout(request):
                 except Coupon.DoesNotExist:
                     messages.warning(request, 'Invalid coupon code.')
             
-            tax = (subtotal - discount) * Decimal('0.10')
+            # Apply loyalty discount for Gold members (10% off)
+            loyalty_discount = Decimal('0')
+            profile = get_loyalty_profile(request.user)
+            if profile.effective_tier == 'gold':
+                loyalty_discount = (subtotal - discount) * Decimal('0.10')
+            
+            tax = (subtotal - discount - loyalty_discount) * Decimal('0.10')
             shipping = Decimal('10.00')
-            total = subtotal - discount + tax + shipping
+            if profile.effective_tier == 'gold':
+                shipping = Decimal('0.00')
+            total = subtotal - discount - loyalty_discount + tax + shipping
             
             if payment_method == 'card':
                 # Store shipping info so the Stripe session can be created from the same checkout page.
@@ -2611,6 +2619,7 @@ def checkout(request):
                     'subtotal': float(subtotal),
                     'tax': float(tax),
                     'shipping': float(shipping),
+                    'loyalty_discount': float(loyalty_discount),
                     'total': float(total),
                     'coupons_available': Coupon.objects.filter(is_active=True).exists(),
                     'post_data': request.POST,
@@ -2633,6 +2642,7 @@ def checkout(request):
                 tax=tax,
                 shipping=shipping,
                 discount=discount,
+                loyalty_discount=loyalty_discount,
                 coupon_code=applied_coupon,
                 total=total,
                 payment_method=payment_method
@@ -2705,8 +2715,17 @@ def checkout(request):
             # More descriptive error for debugging
             messages.error(request, f'Something went wrong: {str(e)}')
             subtotal = Decimal(str(cart.get_total()))
-            tax = subtotal * Decimal('0.10')
+            loyalty_discount = Decimal('0')
+            profile = get_loyalty_profile(request.user)
+            if profile.effective_tier == 'gold':
+                loyalty_discount = subtotal * Decimal('0.10')
+                
+            tax = (subtotal - loyalty_discount) * Decimal('0.10')
             shipping = Decimal('10.00')
+            if profile.effective_tier == 'gold':
+                shipping = Decimal('0.00')
+            total = subtotal - loyalty_discount + tax + shipping
+            
             last_order = Order.objects.filter(user=request.user).order_by('-created_at').first()
             return render(request, 'checkout.html', {
                 'cart': cart,
@@ -2714,16 +2733,28 @@ def checkout(request):
                 'subtotal': float(subtotal),
                 'tax': float(tax),
                 'shipping': float(shipping),
-                'total': float(subtotal + tax + shipping),
+                'loyalty_discount': float(loyalty_discount),
+                'total': float(total),
                 'coupons_available': Coupon.objects.filter(is_active=True).exists(),
                 'post_data': request.POST,
                 'last_order': last_order,
             })
     
     subtotal = Decimal(str(cart.get_total()))
-    tax = subtotal * Decimal('0.10')
+    loyalty_discount = Decimal('0')
+    if request.user.is_authenticated:
+        profile = get_loyalty_profile(request.user)
+        if profile.tier == 'gold':
+            loyalty_discount = subtotal * Decimal('0.10')
+            
+    tax = (subtotal - loyalty_discount) * Decimal('0.10')
     shipping = Decimal('10.00')
-    total = subtotal + tax + shipping
+    if request.user.is_authenticated:
+        profile = get_loyalty_profile(request.user)
+        if profile.effective_tier == 'gold':
+            shipping = Decimal('0.00')
+            
+    total = subtotal - loyalty_discount + tax + shipping
     
     context = {
         'cart': cart,
@@ -2731,6 +2762,7 @@ def checkout(request):
         'subtotal': float(subtotal),
         'tax': float(tax),
         'shipping': float(shipping),
+        'loyalty_discount': float(loyalty_discount),
         'total': float(total),
         'coupons_available': Coupon.objects.filter(is_active=True).exists(),
         'last_order': Order.objects.filter(user=request.user).order_by('-created_at').first() if request.user.is_authenticated else None,
@@ -3751,8 +3783,8 @@ def admin_customers(request):
     search_query = request.GET.get('q', '').strip()
     
     customers_query = User.objects.filter(is_staff=False).annotate(
-        total_orders_count=Count('order'),
-        total_spent=Sum('order__total')
+        total_orders_count=Count('orders'),
+        total_spent=Sum('orders__total')
     ).order_by('-date_joined')
     
     if search_query:
@@ -3889,27 +3921,29 @@ def admin_dashboard(request):
         .order_by('date')
     )
 
-    # 4. STATUS & TOP PRODUCTS
+    # 4. STATUS & REAL CATEGORY SALES
     status_counts = {
         s['status']: s['count']
         for s in Order.objects.values('status').annotate(count=Count('id'))
     }
 
-    top_products = list(
-        OrderItem.objects.values('item_name')
-        .annotate(total_qty=models_sum('quantity'), total_revenue=models_sum('subtotal'))
-        .order_by('-total_qty')[:10]
-    )
-    for p in top_products:
-        p['total_revenue'] = float(p.get('total_revenue') or 0)
-        p['total_qty'] = int(p.get('total_qty') or 0)
-        
+    # Real Category Sales calculation
+    from .models import OrderItem
     category_sales = {
-        'Boys Clothes': 450,
-        'Girls Clothes': 380,
-        'Toys': 620,
-        'Accessories': 150
-    } # Using dummy data for category sales due to complex reverse relations
+        'Clothing': float(OrderItem.objects.filter(item_type='cloth').aggregate(total=models_sum('subtotal'))['total'] or 0),
+        'Toys': float(OrderItem.objects.filter(item_type='toy').aggregate(total=models_sum('subtotal'))['total'] or 0),
+        'Offers': float(OrderItem.objects.filter(item_type='offer').aggregate(total=models_sum('subtotal'))['total'] or 0),
+        'New Arrivals': float(OrderItem.objects.filter(item_type='arrival').aggregate(total=models_sum('subtotal'))['total'] or 0),
+    }
+
+    # 4.1 LOYALTY RETENTION (Earned vs Redeemed)
+    from .models import LoyaltyHistory
+    loyalty_earned = LoyaltyHistory.objects.filter(points__gt=0).aggregate(total=models_sum('points'))['total'] or 0
+    loyalty_redeemed = abs(LoyaltyHistory.objects.filter(points__lt=0).aggregate(total=models_sum('points'))['total'] or 0)
+    loyalty_retention = {
+        'Earned': int(loyalty_earned),
+        'Redeemed': int(loyalty_redeemed)
+    }
 
     # 5. CUSTOMER BEHAVIOR (Top Spenders)
     top_spenders = User.objects.annotate(
@@ -3969,6 +4003,15 @@ def admin_dashboard(request):
 
     recent_orders = Order.objects.prefetch_related('user').order_by('-created_at')[:20]
 
+    top_products = list(
+        OrderItem.objects.values('item_name')
+        .annotate(total_qty=models_sum('quantity'), total_revenue=models_sum('subtotal'))
+        .order_by('-total_qty')[:10]
+    )
+    for p in top_products:
+        p['total_revenue'] = float(p.get('total_revenue') or 0)
+        p['total_qty'] = int(p.get('total_qty') or 0)
+
     context = {
         'monthly_labels': json.dumps([m['month'].strftime('%b %Y') for m in monthly_revenue]),
         'monthly_revenue': json.dumps([float(m['total'] or 0) for m in monthly_revenue]),
@@ -3981,6 +4024,8 @@ def admin_dashboard(request):
         'daily_counts': json.dumps([d['count'] for d in daily_orders]),
         'category_sales_labels': json.dumps(list(category_sales.keys())),
         'category_sales_data': json.dumps(list(category_sales.values())),
+        'loyalty_retention_labels': json.dumps(list(loyalty_retention.keys())),
+        'loyalty_retention_data': json.dumps(list(loyalty_retention.values())),
         'low_stock': low_stock,
         'total_orders': total_orders,
         'total_revenue': float(total_revenue),
@@ -3998,7 +4043,6 @@ def admin_dashboard(request):
         'top_loyalty_users': top_loyalty_users,
         'active_banners': active_banners,
         'site_settings': site_settings,
-        'low_stock': low_stock,
     }
     return render(request, 'admin_dashboard.html', context)
 
@@ -4173,9 +4217,10 @@ def create_checkout_session(request):
     except Exception:
         body = {}
 
-    # [NEW] Handle Coupon logic for Stripe charging
+    # [NEW] Handle Loyalty & Coupon logic for Stripe charging
     subtotal = float(cart.get_total())
     discount = 0.0
+    loyalty_discount = 0.0
     coupon_code = body.get('coupon_code', '')
     
     if coupon_code:
@@ -4187,20 +4232,34 @@ def create_checkout_session(request):
         except Exception:
             pass
 
-    discounted_subtotal = max(0, subtotal - discount)
+    # Loyalty Discount for Gold Members
+    profile = get_loyalty_profile(request.user)
+    if profile.effective_tier == 'gold':
+        loyalty_discount = (subtotal - discount) * 0.10
+
+    discounted_subtotal = max(0, subtotal - discount - loyalty_discount)
     tax = discounted_subtotal * 0.10
-    shipping = 1000.0
+    shipping = 10.0
+    if profile.effective_tier == 'gold':
+        shipping = 0.0
     total_payable = discounted_subtotal + tax + shipping
 
     # Stripe does not allow negative line items. 
-    # If a discount is applied, we'll send a single consolidated line item for the total.
-    if discount > 0:
+    # If a discount or loyalty reward is applied, we'll send a single consolidated line item for the total.
+    if discount > 0 or loyalty_discount > 0:
+        desc_parts = [f'Original: Rs. {subtotal:.2f}']
+        if discount > 0: desc_parts.append(f'Coupon: -Rs. {discount:.2f}')
+        if loyalty_discount > 0: desc_parts.append(f'Gold Reward: -Rs. {loyalty_discount:.2f}')
+        desc_parts.append(f'Tax: Rs. {tax:.2f}')
+        desc_parts.append(f'Shipping: Rs. {shipping:.2f}')
+        
         line_items = [{
             'price_data': {
                 'currency': 'lkr',
                 'product_data': {
-                    'name': f'Order Total (Discount {coupon_code} applied)',
-                    'description': f'Original: Rs. {subtotal:.2f}, Discount: Rs. {discount:.2f}, Tax: Rs. {tax:.2f}',
+                    'name': 'Order Total (Discounts Applied)' if discount > 0 and loyalty_discount > 0 else 
+                            (f'Order Total (Gold Reward Applied)' if loyalty_discount > 0 else f'Order Total (Coupon {coupon_code} applied)'),
+                    'description': ', '.join(desc_parts),
                 },
                 'unit_amount': int(total_payable * 100),
             },
@@ -4237,6 +4296,7 @@ def create_checkout_session(request):
         'country': body.get('country', ''),
         'coupon_code': coupon_code,
         'discount_amount': str(discount),
+        'loyalty_discount': str(loyalty_discount),
     }
     request.session['checkout_shipping'] = shipping_data
 
@@ -4306,9 +4366,21 @@ def _finalize_order_from_stripe_session(session, user, cart, request=None):
         except Coupon.DoesNotExist:
             pass
 
-    tax = (subtotal - discount) * Decimal('0.10')
+    # Apply loyalty discount for Gold members
+    loyalty_discount = Decimal('0')
+    if user and user.is_authenticated:
+        profile = get_loyalty_profile(user)
+        if profile.tier == 'gold':
+            loyalty_discount = (subtotal - discount) * Decimal('0.10')
+
+    tax = (subtotal - discount - loyalty_discount) * Decimal('0.10')
     shipping = Decimal('10.00')
-    total = subtotal - discount + tax + shipping
+    if user and user.is_authenticated:
+        profile = get_loyalty_profile(user)
+        if profile.effective_tier == 'gold':
+            shipping = Decimal('0.00')
+            
+    total = subtotal - discount - loyalty_discount + tax + shipping
 
     order = Order.objects.create(
         user=user,
@@ -4324,6 +4396,7 @@ def _finalize_order_from_stripe_session(session, user, cart, request=None):
         tax=tax,
         shipping=shipping,
         discount=discount,
+        loyalty_discount=loyalty_discount,
         coupon_code=coupon_code,
         total=total,
         payment_method='stripe',

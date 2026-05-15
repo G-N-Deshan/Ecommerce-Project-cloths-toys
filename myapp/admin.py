@@ -4,13 +4,17 @@ from .models import (Card, Cloths, Offers, NewArrivals, Review, ContactMessage, 
                      WishlistItem, Cart, CartItem, Order, OrderItem, ProductReview,
                      ProductImage, Inventory, Coupon, ProductVariant, OrderTracking,
                      SiteBanner, SiteSettings, ViewHistory, Return, StockAlert, CartAbandon,
-                     NewsletterSubscription, TrendingProduct)
+                     NewsletterSubscription, TrendingProduct, LoyaltyProfile, LoyaltyHistory)
 from .models import ServiceReview
 
 # Admin site branding
 admin.site.site_header = 'KidZone Admin Dashboard'
 admin.site.site_title = 'KidZone Admin'
 admin.site.index_title = 'Manage Your Store'
+
+
+
+
 
 
 @admin.register(Card)
@@ -771,3 +775,26 @@ class TrendingProductAdmin(admin.ModelAdmin):
 
         extra_context['view_rankings'] = all_products[:15]
         return super().changelist_view(request, extra_context=extra_context)
+@admin.register(LoyaltyProfile)
+class LoyaltyProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'tier', 'current_points', 'total_points_earned', 'gold_expiry', 'tier_badge']
+    list_filter = ['tier', 'gold_expiry']
+    search_fields = ['user__username', 'user__email']
+    readonly_fields = ['total_points_earned']
+    ordering = ['-total_points_earned']
+
+    def tier_badge(self, obj):
+        colors = {'bronze': '#8a5a2e', 'silver': '#94a3b8', 'gold': '#daa520'}
+        return format_html(
+            '<span style="background:{};color:#fff;padding:4px 10px;border-radius:12px;font-weight:800;font-size:10px;text-transform:uppercase">{}</span>',
+            colors.get(obj.tier, '#ccc'), obj.tier
+        )
+    tier_badge.short_description = 'Tier Status'
+
+@admin.register(LoyaltyHistory)
+class LoyaltyHistoryAdmin(admin.ModelAdmin):
+    list_display = ['profile', 'points', 'description', 'created_at']
+    list_filter = ['created_at', 'points']
+    search_fields = ['profile__user__username', 'description']
+    readonly_fields = ['created_at']
+    ordering = ['-created_at']

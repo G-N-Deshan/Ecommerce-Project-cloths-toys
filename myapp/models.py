@@ -515,6 +515,7 @@ class Order(models.Model):
     tax = models.DecimalField(max_digits=10, decimal_places=2)
     shipping = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     discount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    loyalty_discount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     coupon_code = models.CharField(max_length=30, blank=True, default='')
     total = models.DecimalField(max_digits=10, decimal_places=2)
     
@@ -789,14 +790,38 @@ class LoyaltyProfile(models.Model):
     total_points_earned = models.PositiveIntegerField(default=0)
     current_points = models.PositiveIntegerField(default=0)
     tier = models.CharField(max_length=10, choices=TIER_CHOICES, default='bronze')
+    gold_expiry = models.DateTimeField(null=True, blank=True, help_text="Expiry date for Gold Tier")
     
+    @property
+    def effective_tier(self):
+        """Returns the current tier, checking for Gold expiry."""
+        if self.tier == 'gold' and self.gold_expiry:
+            if timezone.now() > self.gold_expiry:
+                # Gold has expired. Re-evaluate tier based on points.
+                if self.total_points_earned >= 1000:
+                    new_tier = 'silver'
+                else:
+                    new_tier = 'bronze'
+                
+                # Update database without triggering infinite recursion if possible
+                LoyaltyProfile.objects.filter(pk=self.pk).update(tier=new_tier, gold_expiry=None)
+                self.tier = new_tier
+                self.gold_expiry = None
+        return self.tier
+
     def update_tier(self):
-        if self.total_points_earned >= 5000:
-            self.tier = 'gold'
+        # Only upgrade to Gold if not already Gold or if Gold has expired
+        if self.total_points_earned >= 10000:
+            if self.tier != 'gold':
+                self.tier = 'gold'
+                # Gold status lasts for 2 months (60 days)
+                self.gold_expiry = timezone.now() + timezone.timedelta(days=60)
         elif self.total_points_earned >= 1000:
-            self.tier = 'silver'
+            if self.tier != 'gold':
+                self.tier = 'silver'
         else:
-            self.tier = 'bronze'
+            if self.tier != 'gold':
+                self.tier = 'bronze'
         self.save()
 
     def __str__(self):

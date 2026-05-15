@@ -27928,3 +27928,488 @@ INFO 2026-05-15 08:39:40,211 autoreload 1748 29220 C:\Users\nipun\Desktop\Ecomme
 INFO 2026-05-15 08:39:48,994 autoreload 24220 18172 Watching for file changes with StatReloader
 INFO 2026-05-15 13:57:55,926 autoreload 10696 2444 Watching for file changes with StatReloader
 WARNING 2026-05-15 14:00:24,601 log 11164 21132 Not Found: /favicon.ico
+INFO 2026-05-15 14:38:42,863 autoreload 11164 1668 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 14:38:42,867 autoreload 10696 2444 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 14:38:44,239 autoreload 9828 14372 Watching for file changes with StatReloader
+INFO 2026-05-15 14:38:44,677 autoreload 12112 4872 Watching for file changes with StatReloader
+INFO 2026-05-15 14:39:41,459 autoreload 9828 14372 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 14:39:41,495 autoreload 12112 4872 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 14:39:42,420 autoreload 24960 10768 Watching for file changes with StatReloader
+INFO 2026-05-15 14:39:42,761 autoreload 17048 23868 Watching for file changes with StatReloader
+WARNING 2026-05-15 14:45:34,035 log 24960 26400 Not Found: /favicon.ico
+WARNING 2026-05-15 14:56:47,189 log 24960 27732 Not Found: /admin_dashboard/
+WARNING 2026-05-15 14:57:19,974 log 24960 27732 Method Not Allowed (GET): /logout/
+WARNING 2026-05-15 15:04:24,502 log 24960 6992 Method Not Allowed (GET): /admin/logout/
+WARNING 2026-05-15 15:04:36,222 log 24960 6992 Method Not Allowed (GET): /admin/logout/
+WARNING 2026-05-15 15:04:38,753 log 24960 6992 Method Not Allowed (GET): /admin/logout/
+WARNING 2026-05-15 15:04:42,248 log 24960 6992 Method Not Allowed (GET): /admin/logout/
+WARNING 2026-05-15 15:08:42,264 log 24960 2176 Not Found: /favicon.ico
+INFO 2026-05-15 15:10:53,559 autoreload 24960 10768 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-15 15:10:53,572 autoreload 17048 23868 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-15 15:10:55,929 autoreload 11920 23004 Watching for file changes with StatReloader
+INFO 2026-05-15 15:10:57,938 autoreload 16564 4596 Watching for file changes with StatReloader
+WARNING 2026-05-15 15:12:08,546 log 11920 20468 Not Found: /favicon.ico
+ERROR 2026-05-15 15:21:39,654 middleware 11920 20468 Exception: Cannot resolve keyword 'order' into field. Choices are: cart, cartabandon, date_joined, email, emailaddress, first_name, groups, id, is_active, is_staff, is_superuser, last_login, last_name, logentry, loyalty_profile, orders, password, productreview, profile, socialaccount, stock_alerts, user_permissions, username, view_history, wishlist_items
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 3753, in admin_customers
+    customers_query = User.objects.filter(is_staff=False).annotate(
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        total_orders_count=Count('order'),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        total_spent=Sum('order__total')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ).order_by('-date_joined')
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\query.py", line 1699, in annotate
+    return self._annotate(args, kwargs, select=True)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\query.py", line 1751, in _annotate
+    clone.query.add_annotation(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        annotation,
+        ^^^^^^^^^^^
+        alias,
+        ^^^^^^
+        select=select,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\query.py", line 1247, in add_annotation
+    annotation = annotation.resolve_expression(self, allow_joins=True, reuse=None)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\aggregates.py", line 261, in resolve_expression
+    result = super().resolve_expression(*args, **kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\aggregates.py", line 122, in resolve_expression
+    c = super().resolve_expression(query, allow_joins, reuse, summarize)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\expressions.py", line 301, in resolve_expression
+    expr.resolve_expression(query, allow_joins, reuse, summarize, for_save)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\expressions.py", line 904, in resolve_expression
+    return query.resolve_ref(self.name, allow_joins, reuse, summarize)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\query.py", line 2087, in resolve_ref
+    join_info = self.setup_joins(
+        field_list, self.get_meta(), self.get_initial_alias(), can_reuse=reuse
+    )
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\query.py", line 1937, in setup_joins
+    path, final_field, targets, rest = self.names_to_path(
+                                       ~~~~~~~~~~~~~~~~~~^
+        names[:pivot],
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        fail_on_missing=True,
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\query.py", line 1842, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'order' into field. Choices are: cart, cartabandon, date_joined, email, emailaddress, first_name, groups, id, is_active, is_staff, is_superuser, last_login, last_name, logentry, loyalty_profile, orders, password, productreview, profile, socialaccount, stock_alerts, user_permissions, username, view_history, wishlist_items
+ERROR 2026-05-15 15:21:39,978 log 11920 20468 Internal Server Error: /dashboard/customers/
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 3753, in admin_customers
+    customers_query = User.objects.filter(is_staff=False).annotate(
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        total_orders_count=Count('order'),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        total_spent=Sum('order__total')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ).order_by('-date_joined')
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\query.py", line 1699, in annotate
+    return self._annotate(args, kwargs, select=True)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\query.py", line 1751, in _annotate
+    clone.query.add_annotation(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        annotation,
+        ^^^^^^^^^^^
+        alias,
+        ^^^^^^
+        select=select,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\query.py", line 1247, in add_annotation
+    annotation = annotation.resolve_expression(self, allow_joins=True, reuse=None)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\aggregates.py", line 261, in resolve_expression
+    result = super().resolve_expression(*args, **kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\aggregates.py", line 122, in resolve_expression
+    c = super().resolve_expression(query, allow_joins, reuse, summarize)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\expressions.py", line 301, in resolve_expression
+    expr.resolve_expression(query, allow_joins, reuse, summarize, for_save)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\expressions.py", line 904, in resolve_expression
+    return query.resolve_ref(self.name, allow_joins, reuse, summarize)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\query.py", line 2087, in resolve_ref
+    join_info = self.setup_joins(
+        field_list, self.get_meta(), self.get_initial_alias(), can_reuse=reuse
+    )
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\query.py", line 1937, in setup_joins
+    path, final_field, targets, rest = self.names_to_path(
+                                       ~~~~~~~~~~~~~~~~~~^
+        names[:pivot],
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        fail_on_missing=True,
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\query.py", line 1842, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'order' into field. Choices are: cart, cartabandon, date_joined, email, emailaddress, first_name, groups, id, is_active, is_staff, is_superuser, last_login, last_name, logentry, loyalty_profile, orders, password, productreview, profile, socialaccount, stock_alerts, user_permissions, username, view_history, wishlist_items
+ERROR 2026-05-15 15:23:32,264 middleware 11920 26804 Exception: Cannot resolve keyword 'order' into field. Choices are: cart, cartabandon, date_joined, email, emailaddress, first_name, groups, id, is_active, is_staff, is_superuser, last_login, last_name, logentry, loyalty_profile, orders, password, productreview, profile, socialaccount, stock_alerts, user_permissions, username, view_history, wishlist_items
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 3753, in admin_customers
+    customers_query = User.objects.filter(is_staff=False).annotate(
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        total_orders_count=Count('order'),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        total_spent=Sum('order__total')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ).order_by('-date_joined')
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\query.py", line 1699, in annotate
+    return self._annotate(args, kwargs, select=True)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\query.py", line 1751, in _annotate
+    clone.query.add_annotation(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        annotation,
+        ^^^^^^^^^^^
+        alias,
+        ^^^^^^
+        select=select,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\query.py", line 1247, in add_annotation
+    annotation = annotation.resolve_expression(self, allow_joins=True, reuse=None)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\aggregates.py", line 261, in resolve_expression
+    result = super().resolve_expression(*args, **kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\aggregates.py", line 122, in resolve_expression
+    c = super().resolve_expression(query, allow_joins, reuse, summarize)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\expressions.py", line 301, in resolve_expression
+    expr.resolve_expression(query, allow_joins, reuse, summarize, for_save)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\expressions.py", line 904, in resolve_expression
+    return query.resolve_ref(self.name, allow_joins, reuse, summarize)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\query.py", line 2087, in resolve_ref
+    join_info = self.setup_joins(
+        field_list, self.get_meta(), self.get_initial_alias(), can_reuse=reuse
+    )
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\query.py", line 1937, in setup_joins
+    path, final_field, targets, rest = self.names_to_path(
+                                       ~~~~~~~~~~~~~~~~~~^
+        names[:pivot],
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        fail_on_missing=True,
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\query.py", line 1842, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'order' into field. Choices are: cart, cartabandon, date_joined, email, emailaddress, first_name, groups, id, is_active, is_staff, is_superuser, last_login, last_name, logentry, loyalty_profile, orders, password, productreview, profile, socialaccount, stock_alerts, user_permissions, username, view_history, wishlist_items
+ERROR 2026-05-15 15:23:32,386 log 11920 26804 Internal Server Error: /dashboard/customers/
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 3753, in admin_customers
+    customers_query = User.objects.filter(is_staff=False).annotate(
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        total_orders_count=Count('order'),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        total_spent=Sum('order__total')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ).order_by('-date_joined')
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\query.py", line 1699, in annotate
+    return self._annotate(args, kwargs, select=True)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\query.py", line 1751, in _annotate
+    clone.query.add_annotation(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        annotation,
+        ^^^^^^^^^^^
+        alias,
+        ^^^^^^
+        select=select,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\query.py", line 1247, in add_annotation
+    annotation = annotation.resolve_expression(self, allow_joins=True, reuse=None)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\aggregates.py", line 261, in resolve_expression
+    result = super().resolve_expression(*args, **kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\aggregates.py", line 122, in resolve_expression
+    c = super().resolve_expression(query, allow_joins, reuse, summarize)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\expressions.py", line 301, in resolve_expression
+    expr.resolve_expression(query, allow_joins, reuse, summarize, for_save)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\expressions.py", line 904, in resolve_expression
+    return query.resolve_ref(self.name, allow_joins, reuse, summarize)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\query.py", line 2087, in resolve_ref
+    join_info = self.setup_joins(
+        field_list, self.get_meta(), self.get_initial_alias(), can_reuse=reuse
+    )
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\query.py", line 1937, in setup_joins
+    path, final_field, targets, rest = self.names_to_path(
+                                       ~~~~~~~~~~~~~~~~~~^
+        names[:pivot],
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        fail_on_missing=True,
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\query.py", line 1842, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'order' into field. Choices are: cart, cartabandon, date_joined, email, emailaddress, first_name, groups, id, is_active, is_staff, is_superuser, last_login, last_name, logentry, loyalty_profile, orders, password, productreview, profile, socialaccount, stock_alerts, user_permissions, username, view_history, wishlist_items
+INFO 2026-05-15 15:28:43,720 autoreload 11920 23004 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 15:28:43,723 autoreload 16564 4596 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 15:28:45,134 autoreload 23332 22112 Watching for file changes with StatReloader
+INFO 2026-05-15 15:28:45,213 autoreload 21016 20168 Watching for file changes with StatReloader
+WARNING 2026-05-15 15:40:22,475 log 23332 20688 Not Found: /favicon.ico
+WARNING 2026-05-15 15:42:25,430 log 23332 21312 Method Not Allowed (GET): /admin/logout/
+ERROR 2026-05-15 15:59:52,041 middleware 23332 16648 Exception: The 'imageUrl' attribute has no file associated with it.
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 964, in _resolve_lookup
+    raise TypeError
+TypeError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 1346, in cloths
+    return render(request, 'cloths.html', {
+        'cloths_items': page_obj,
+    ...<12 lines>...
+        'cart_count': cart_count,
+    })
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\defaulttags.py", line 333, in render
+    return nodelist.render(context)
+           ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\defaulttags.py", line 249, in render
+    nodelist.append(node.render_annotated(context))
+                    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\defaulttags.py", line 581, in render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1150, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 788, in resolve
+    obj = self.var.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 928, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 976, in _resolve_lookup
+    current = getattr(current, bit)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\fields\files.py", line 68, in url
+    self._require_file()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\fields\files.py", line 43, in _require_file
+    raise ValueError(
+        "The '%s' attribute has no file associated with it." % self.field.name
+    )
+ValueError: The 'imageUrl' attribute has no file associated with it.
+ERROR 2026-05-15 15:59:52,320 log 23332 16648 Internal Server Error: /cloths/
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 964, in _resolve_lookup
+    raise TypeError
+TypeError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py", line 1346, in cloths
+    return render(request, 'cloths.html', {
+        'cloths_items': page_obj,
+    ...<12 lines>...
+        'cart_count': cart_count,
+    })
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\defaulttags.py", line 333, in render
+    return nodelist.render(context)
+           ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\defaulttags.py", line 249, in render
+    nodelist.append(node.render_annotated(context))
+                    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\defaulttags.py", line 581, in render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 1150, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 788, in resolve
+    obj = self.var.resolve(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 928, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\template\base.py", line 976, in _resolve_lookup
+    current = getattr(current, bit)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\fields\files.py", line 68, in url
+    self._require_file()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\fields\files.py", line 43, in _require_file
+    raise ValueError(
+        "The '%s' attribute has no file associated with it." % self.field.name
+    )
+ValueError: The 'imageUrl' attribute has no file associated with it.
+WARNING 2026-05-15 15:59:52,562 log 23332 16648 Not Found: /favicon.ico
+INFO 2026-05-15 16:10:52,807 autoreload 23332 22112 C:\Users\nipun\Desktop\Ecommerce project\myapp\context_processors.py changed, reloading.
+INFO 2026-05-15 16:10:55,931 autoreload 6840 31280 Watching for file changes with StatReloader
+INFO 2026-05-15 17:23:18,630 autoreload 6840 31280 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+
+INFO 2026-05-15 17:23:21,030 autoreload 13848 24592 Watching for file changes with StatReloader
+INFO 2026-05-15 17:23:21,506 autoreload 16448 16748 Watching for file changes with StatReloader
+INFO 2026-05-15 17:41:14,964 autoreload 13848 24592 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 17:41:14,964 autoreload 16448 16748 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 17:41:16,096 autoreload 18512 21944 Watching for file changes with StatReloader
+INFO 2026-05-15 17:41:16,427 autoreload 24896 23056 Watching for file changes with StatReloader
+INFO 2026-05-15 17:43:17,693 autoreload 18512 21944 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 17:43:17,701 autoreload 24896 23056 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 17:43:18,879 autoreload 30024 8524 Watching for file changes with StatReloader
+INFO 2026-05-15 17:43:19,396 autoreload 20640 8232 Watching for file changes with StatReloader
+INFO 2026-05-15 17:46:13,671 autoreload 30024 8524 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 17:46:13,678 autoreload 20640 8232 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 17:46:14,861 autoreload 24320 28136 Watching for file changes with StatReloader
+INFO 2026-05-15 17:46:15,144 autoreload 10836 27152 Watching for file changes with StatReloader
+INFO 2026-05-15 17:46:42,857 autoreload 10836 27152 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 17:46:42,864 autoreload 24320 28136 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 17:46:43,994 autoreload 27064 18844 Watching for file changes with StatReloader
+INFO 2026-05-15 17:46:44,284 autoreload 15060 22336 Watching for file changes with StatReloader
+INFO 2026-05-15 17:47:53,187 autoreload 15060 22336 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 17:47:53,202 autoreload 27064 18844 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 17:47:54,400 autoreload 19528 30272 Watching for file changes with StatReloader
+INFO 2026-05-15 17:47:54,632 autoreload 7380 24980 Watching for file changes with StatReloader
+WARNING 2026-05-15 17:48:31,153 log 19528 21552 Not Found: /favicon.ico
+WARNING 2026-05-15 18:27:30,236 log 19528 29360 Not Found: /favicon.ico
+WARNING 2026-05-15 18:28:02,554 log 19528 29360 Not Found: /favicon.ico
+INFO 2026-05-15 18:32:12,210 autoreload 19528 30272 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 18:32:12,290 autoreload 7380 24980 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 18:32:13,905 autoreload 380 21920 Watching for file changes with StatReloader
+INFO 2026-05-15 18:32:14,281 autoreload 2476 31372 Watching for file changes with StatReloader
+WARNING 2026-05-15 18:36:52,077 log 380 29892 Not Found: /favicon.ico
+INFO 2026-05-15 19:39:33,557 autoreload 380 21920 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-05-15 19:39:33,558 autoreload 2476 31372 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-05-15 19:39:35,250 autoreload 21944 25944 Watching for file changes with StatReloader
+INFO 2026-05-15 19:39:35,734 autoreload 14856 18692 Watching for file changes with StatReloader
+INFO 2026-05-15 19:44:29,911 autoreload 14856 18692 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 19:44:29,926 autoreload 21944 25944 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 19:44:31,253 autoreload 17072 16448 Watching for file changes with StatReloader
+INFO 2026-05-15 19:44:31,586 autoreload 8088 13456 Watching for file changes with StatReloader
+INFO 2026-05-15 19:48:50,863 autoreload 8088 13456 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 19:48:50,870 autoreload 17072 16448 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 19:48:52,180 autoreload 10144 7352 Watching for file changes with StatReloader
+INFO 2026-05-15 19:48:52,482 autoreload 30276 24888 Watching for file changes with StatReloader
+INFO 2026-05-15 19:55:00,510 autoreload 30276 24888 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-15 19:55:01,013 autoreload 10144 7352 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-15 19:55:01,952 autoreload 5600 30240 Watching for file changes with StatReloader
+INFO 2026-05-15 19:55:02,354 autoreload 29056 27512 Watching for file changes with StatReloader
+INFO 2026-05-15 20:14:45,716 autoreload 15560 19468 Watching for file changes with StatReloader
+INFO 2026-05-15 20:24:15,378 autoreload 30336 26484 Watching for file changes with StatReloader
+WARNING 2026-05-15 20:25:14,857 log 30336 18404 Not Found: /favicon.ico
+INFO 2026-05-15 20:31:16,585 autoreload 30336 26484 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-05-15 20:31:16,972 autoreload 5600 30240 C:\Users\nipun\Desktop\Ecommerce project\myapp\models.py changed, reloading.
+INFO 2026-05-15 20:31:17,924 autoreload 26172 388 Watching for file changes with StatReloader
+INFO 2026-05-15 20:31:18,498 autoreload 31176 30712 Watching for file changes with StatReloader

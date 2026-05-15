@@ -47,6 +47,158 @@
         </div>
     </div>
 
+    <!-- ── Gold Member Exclusive Popup (Standard CSS for Site-wide Compatibility) ── -->
+    {% if loyalty_tier == 'gold' %}
+    <style>
+        .gold-reward-modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+        }
+        .gold-modal-content {
+            background: #ffffff;
+            border-radius: 2.5rem;
+            max-width: 450px;
+            width: 100%;
+            overflow: hidden;
+            box-shadow: 0 35px 100px -15px rgba(218, 165, 32, 0.4);
+            border: 4px solid #daa520;
+            position: relative;
+            animation: modalPopUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+        .gold-modal-header {
+            height: 180px;
+            background: linear-gradient(135deg, #b8860b, #ffd700, #daa520);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .gold-modal-icon-wrap {
+            width: 90px; height: 90px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .gold-modal-body {
+            padding: 2.5rem;
+            text-align: center;
+            background: white;
+        }
+        .gold-modal-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: #fffbeb;
+            color: #b45309;
+            border-radius: 99px;
+            font-size: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border: 1px solid #fde68a;
+            margin-bottom: 1rem;
+        }
+        .gold-modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: #0f172a;
+            margin-bottom: 0.75rem;
+        }
+        .gold-modal-desc {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+        .gold-modal-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(90deg, #b8860b, #daa520);
+            color: #2c1d01;
+            font-weight: 900;
+            padding: 1.25rem;
+            border-radius: 1.25rem;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(184, 134, 11, 0.2);
+        }
+        .gold-modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(184, 134, 11, 0.3);
+            filter: brightness(1.1);
+        }
+        @keyframes modalPopUp {
+            from { opacity: 0; transform: scale(0.8) translateY(50px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+    </style>
+
+    <div id="goldRewardPopup" class="gold-reward-modal">
+        <div class="gold-modal-content">
+            <div class="gold-modal-header">
+                <div class="gold-modal-icon-wrap">
+                    <i class="bi bi-award-fill" style="font-size: 3rem; color: #2c1d01;"></i>
+                </div>
+            </div>
+            <div class="gold-modal-body">
+                <span class="gold-modal-badge">Exclusive Reward Unlocked</span>
+                <h2 class="gold-modal-title">Welcome Back, Gold Member!</h2>
+                <p class="gold-modal-desc">
+                    Your elite status grants you <strong style="color: #b45309;">10% OFF site-wide</strong> 
+                    and <strong style="color: #b45309;">FREE Shipping</strong> on every purchase!
+                </p>
+                <button type="button" id="claimBenefitsBtn" class="gold-modal-btn">
+                    Claim My Benefits
+                </button>
+                <p style="margin-top: 1rem; font-size: 11px; color: #94a3b8; font-weight: 500;">
+                    Applied automatically at checkout
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function closeGoldPopup() {
+            const popup = document.getElementById('goldRewardPopup');
+            if (popup) {
+                popup.style.display = 'none';
+            }
+            sessionStorage.setItem('gold_popup_shown', 'true');
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const claimBtn = document.getElementById('claimBenefitsBtn');
+            if (claimBtn) {
+                claimBtn.addEventListener('click', closeGoldPopup);
+            }
+
+            if (!sessionStorage.getItem('gold_popup_shown')) {
+                setTimeout(() => {
+                    const popup = document.getElementById('goldRewardPopup');
+                    if (popup) {
+                        popup.style.display = 'flex';
+                    }
+                }, 2000);
+            }
+        });
+    </script>
+    {% endif %}
+
     <nav class="navbar">
         <div>
             <!-- Logo -->

@@ -40,6 +40,10 @@ def global_context(request):
         'cart_count': cart_count,
         'wishlist_count': wishlist_count,
         'loyalty_points': loyalty_points,
+        'loyalty_tier': profile.effective_tier if request.user.is_authenticated and 'profile' in locals() and profile else 'none',
+        'loyalty_profile': profile if request.user.is_authenticated and 'profile' in locals() and profile else None,
+        'gold_progress': min(100, (profile.total_points_earned / 10000) * 100) if request.user.is_authenticated and 'profile' in locals() and profile else 0,
+        'points_until_gold': max(0, 10000 - profile.total_points_earned) if request.user.is_authenticated and 'profile' in locals() and profile else 10000,
         'order_count': order_count if request.user.is_authenticated else 0,
         'site_settings': settings_obj,
     }

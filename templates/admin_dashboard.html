@@ -158,11 +158,11 @@
 
     <!-- Charts Section 1 -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Revenue Line Chart -->
+        <!-- Monthly Revenue Trends -->
         <div class="glass-card rounded-2xl p-6 lg:col-span-2 flex flex-col">
-            <h3 class="font-display font-bold text-slate-900 dark:text-white mb-6">Revenue Growth (Last 30 Days)</h3>
+            <h3 class="font-display font-bold text-slate-900 dark:text-white mb-6">Monthly Revenue Trends</h3>
             <div class="flex-1 relative w-full h-72">
-                <canvas id="revenueLineChart"></canvas>
+                <canvas id="monthlyRevenueChart"></canvas>
             </div>
         </div>
 
@@ -177,19 +177,78 @@
 
     <!-- Charts Section 2 -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Monthly Orders Bar Chart -->
+        <!-- Revenue Line Chart (30 Days) -->
         <div class="glass-card rounded-2xl p-6 lg:col-span-2 flex flex-col">
-            <h3 class="font-display font-bold text-slate-900 dark:text-white mb-6">Monthly Order Volume</h3>
+            <h3 class="font-display font-bold text-slate-900 dark:text-white mb-6">Revenue Growth (Last 30 Days)</h3>
             <div class="flex-1 relative w-full h-72">
-                <canvas id="ordersBarChart"></canvas>
+                <canvas id="revenueLineChart"></canvas>
             </div>
         </div>
 
-        <!-- Order Status Donut Chart -->
+        <!-- Customer Retention (Loyalty) -->
         <div class="glass-card rounded-2xl p-6 flex flex-col">
-            <h3 class="font-display font-bold text-slate-900 dark:text-white mb-6">Order Statuses</h3>
+            <h3 class="font-display font-bold text-slate-900 dark:text-white mb-6">Customer Retention (Loyalty)</h3>
             <div class="flex-1 relative w-full h-72 flex items-center justify-center">
-                <canvas id="statusDonutChart"></canvas>
+                <canvas id="loyaltyRetentionChart"></canvas>
+            </div>
+    <!-- Loyalty & Activity Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Recent Loyalty Activity -->
+        <div class="glass-card rounded-2xl p-6 lg:col-span-2">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-display font-bold text-slate-900 dark:text-white">Recent Loyalty Activity</h3>
+                <a href="/admin/myapp/loyaltyhistory/" class="text-xs text-primary font-bold hover:underline">View All &rarr;</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800">
+                            <th class="pb-3 px-2">Customer</th>
+                            <th class="pb-3 px-2">Points</th>
+                            <th class="pb-3 px-2">Action</th>
+                            <th class="pb-3 px-2 text-right">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
+                        {% for history in top_loyalty_users|slice:":5" %}
+                        <tr class="text-sm">
+                            <td class="py-3 px-2 font-medium text-slate-900 dark:text-white">{{ history.user.username }}</td>
+                            <td class="py-3 px-2">
+                                <span class="{% if history.points > 0 %}text-emerald-500{% else %}text-amber-500{% endif %} font-bold">
+                                    {{ history.current_points }} pts
+                                </span>
+                            </td>
+                            <td class="py-3 px-2 text-slate-500 dark:text-slate-400 text-xs">{{ history.get_tier_display }} Tier</td>
+                            <td class="py-3 px-2 text-right text-slate-400 text-xs">Recently active</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="4" class="py-10 text-center text-slate-400">No recent loyalty activity</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Quick Loyalty Management -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col">
+            <h3 class="font-display font-bold text-slate-900 dark:text-white mb-6">Loyalty Controls</h3>
+            <div class="space-y-4 flex-1">
+                <div class="p-4 bg-teal-50 dark:bg-teal-900/20 rounded-xl border border-teal-100 dark:border-teal-900/50">
+                    <p class="text-xs text-teal-700 dark:text-teal-400 font-bold mb-1">Active Profiles</p>
+                    <p class="text-2xl font-bold text-teal-900 dark:text-white">{{ total_users }} Users</p>
+                </div>
+                <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl border border-indigo-100 dark:border-indigo-900/50">
+                    <p class="text-xs text-indigo-700 dark:text-indigo-400 font-bold mb-1">Total Points Awarded</p>
+                    <p class="text-2xl font-bold text-indigo-900 dark:text-white">{{ total_points_awarded }} pts</p>
+                </div>
+            </div>
+            <div class="mt-6 space-y-2">
+                <a href="/admin/myapp/loyaltyprofile/" class="block w-full py-2.5 text-center bg-primary hover:bg-teal-800 text-white text-sm font-bold rounded-xl transition-all shadow-lg shadow-teal-500/20">
+                    <i class="bi bi-person-gear mr-2"></i> Manage Profiles
+                </a>
+                <a href="/admin/myapp/loyaltyhistory/" class="block w-full py-2.5 text-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-sm font-bold rounded-xl hover:bg-slate-50 transition-all">
+                    <i class="bi bi-clock-history mr-2"></i> Points History
+                </a>
             </div>
         </div>
     </div>
@@ -215,31 +274,18 @@
         }
     };
 
-    // 1. Revenue Line Chart (Area)
-    const revenueCtx = document.getElementById('revenueLineChart').getContext('2d');
-    
-    // Create gradient
-    let gradient = revenueCtx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, 'rgba(15, 118, 110, 0.5)'); // primary
-    gradient.addColorStop(1, 'rgba(15, 118, 110, 0.0)');
-
-    new Chart(revenueCtx, {
-        type: 'line',
+    // 1. Monthly Revenue Trends (Bar)
+    const monthlyCtx = document.getElementById('monthlyRevenueChart').getContext('2d');
+    new Chart(monthlyCtx, {
+        type: 'bar',
         data: {
-            labels: {{ daily_labels|safe }},
+            labels: {{ monthly_labels|safe }},
             datasets: [{
                 label: 'Revenue (Rs)',
-                data: {{ daily_totals|safe }},
-                borderColor: '#0f766e',
-                backgroundColor: gradient,
-                borderWidth: 3,
-                fill: true,
-                tension: 0.4,
-                pointBackgroundColor: '#ffffff',
-                pointBorderColor: '#0f766e',
-                pointBorderWidth: 2,
-                pointRadius: 4,
-                pointHoverRadius: 6
+                data: {{ monthly_revenue|safe }},
+                backgroundColor: '#14b8a6',
+                borderRadius: 8,
+                barPercentage: 0.5
             }]
         },
         options: {
@@ -256,35 +302,43 @@
     new Chart(categoryCtx, {
         type: 'pie',
         data: {
-            labels: {{ category_sales_labels|safe|default:"['Boys', 'Girls', 'Toys']" }},
+            labels: {{ category_sales_labels|safe }},
             datasets: [{
-                data: {{ category_sales_data|safe|default:"[40, 30, 30]" }},
+                data: {{ category_sales_data|safe }},
                 backgroundColor: ['#0f766e', '#14b8a6', '#4f46e5', '#ec4899', '#f59e0b'],
                 borderWidth: 0,
-                hoverOffset: 4
+                hoverOffset: 10
             }]
         },
         options: {
             ...commonOptions,
-            cutout: '0%', // It's a pie
             plugins: {
                 legend: { position: 'bottom' }
             }
         }
     });
 
-    // 3. Monthly Orders Bar Chart
-    const ordersCtx = document.getElementById('ordersBarChart').getContext('2d');
-    new Chart(ordersCtx, {
-        type: 'bar',
+    // 3. Daily Revenue Line Chart (Area)
+    const revenueCtx = document.getElementById('revenueLineChart').getContext('2d');
+    let gradient = revenueCtx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(15, 118, 110, 0.5)'); 
+    gradient.addColorStop(1, 'rgba(15, 118, 110, 0.0)');
+
+    new Chart(revenueCtx, {
+        type: 'line',
         data: {
-            labels: {{ monthly_labels|safe }},
+            labels: {{ daily_labels|safe }},
             datasets: [{
-                label: 'Orders',
-                data: {{ monthly_counts|safe }},
-                backgroundColor: '#14b8a6',
-                borderRadius: 6,
-                barPercentage: 0.6
+                label: 'Daily Revenue (Rs)',
+                data: {{ daily_totals|safe }},
+                borderColor: '#0f766e',
+                backgroundColor: gradient,
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#ffffff',
+                pointBorderColor: '#0f766e',
+                pointRadius: 3
             }]
         },
         options: {
@@ -296,21 +350,17 @@
         }
     });
 
-    // 4. Order Status Donut Chart
-    const statusCtx = document.getElementById('statusDonutChart').getContext('2d');
-    const statusDataRaw = {{ status_counts|safe }};
-    const statusLabels = Object.keys(statusDataRaw).map(k => k.charAt(0).toUpperCase() + k.slice(1));
-    const statusValues = Object.values(statusDataRaw);
-    
-    new Chart(statusCtx, {
+    // 4. Customer Retention (Loyalty) Donut
+    const loyaltyCtx = document.getElementById('loyaltyRetentionChart').getContext('2d');
+    new Chart(loyaltyCtx, {
         type: 'doughnut',
         data: {
-            labels: statusLabels.length ? statusLabels : ['Pending', 'Delivered'],
+            labels: {{ loyalty_retention_labels|safe }},
             datasets: [{
-                data: statusValues.length ? statusValues : [1, 1],
-                backgroundColor: ['#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ef4444'],
+                data: {{ loyalty_retention_data|safe }},
+                backgroundColor: ['#10b981', '#f59e0b'], // Earned vs Redeemed
                 borderWidth: 0,
-                hoverOffset: 4
+                hoverOffset: 10
             }]
         },
         options: {

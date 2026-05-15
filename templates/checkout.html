@@ -295,6 +295,15 @@
                                 <span>Subtotal</span>
                                 <span class="font-semibold text-slate-800">Rs {{ subtotal|floatformat:2 }}</span>
                             </div>
+                            {% if loyalty_discount > 0 %}
+                            <div class="flex justify-between text-amber-600">
+                                <span class="flex items-center gap-1">
+                                    <i class="bi bi-award-fill"></i>
+                                    Gold Loyalty Reward (10%)
+                                </span>
+                                <span class="font-semibold">-Rs {{ loyalty_discount|floatformat:2 }}</span>
+                            </div>
+                            {% endif %}
                             <div class="flex justify-between text-slate-600">
                                 <span>Tax (10%)</span>
                                 <span class="font-semibold text-slate-800">Rs {{ tax|floatformat:2 }}</span>
@@ -304,7 +313,7 @@
                                 {% if shipping > 0 %}
                                 <span class="font-semibold text-slate-800">Rs {{ shipping|floatformat:2 }}</span>
                                 {% else %}
-                                <span class="font-semibold text-emerald-600">FREE</span>
+                                <span class="font-semibold text-emerald-600">FREE {% if loyalty_tier == 'gold' %}<span class="ml-1 text-[8px] bg-amber-100 text-amber-600 px-1.5 py-0.5 rounded-full border border-amber-200 uppercase tracking-tighter">Gold Perk</span>{% endif %}</span>
                                 {% endif %}
                             </div>
                             <div class="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest pt-1">

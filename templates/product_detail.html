@@ -818,6 +818,15 @@
                                 </svg>
                                 Add to Cart
                             </a>
+
+                            <!-- Buy Now Button -->
+                            <a href="{% url 'buy_now' product_type product.id %}"
+                                class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-4 px-6 rounded-xl text-center transition-all duration-300 hover:shadow-lg hover:shadow-emerald-200 flex items-center justify-center gap-2"
+                                data-buy-now data-item-type="{{ product_type }}" data-item-id="{{ product.id }}"
+                                onclick="buyNowWithVariants(event)">
+                                <i class="bi bi-lightning-fill"></i>
+                                Buy Now
+                            </a>
                             {% endif %}
                             <!-- Wishlist -->
 
@@ -1301,6 +1310,59 @@
                 window.addToCart(itemType, itemId, btn, unitPrice, options);
             } else {
                 window.location.href = `/cart/add/${itemType}/${itemId}/`;
+            }
+        }
+
+        async function buyNowWithVariants(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            const btn = event && (event.currentTarget || event.target);
+            if (!btn) return;
+
+            const itemType = btn.dataset.itemType;
+            const itemId = btn.dataset.itemId;
+            const sizeRequired = document.querySelectorAll('#sizeOptions button').length > 0;
+            const colorRequired = document.querySelectorAll('#colorOptions button').length > 0;
+
+            if (sizeRequired && !selectedVariants.size) {
+                showVariantToast('Please select a size.');
+                return;
+            }
+            if (colorRequired && !selectedVariants.color) {
+                showVariantToast('Please select a color.');
+                return;
+            }
+            if (selectedVariants.stock !== null && selectedVariants.stock <= 0) {
+                showVariantToast('This variant is out of stock.');
+                return;
+            }
+
+            const qtyInput = document.getElementById('qtyInput');
+            const quantity = qtyInput ? parseInt(qtyInput.value, 10) || 1 : 1;
+            const options = {
+                size: selectedVariants.size,
+                color: selectedVariants.color,
+                variant_extra_price: selectedVariants.extraPrice,
+                quantity: quantity
+            };
+
+            if (window.addToCart) {
+                // Change button style temporarily
+                const origBg = btn.style.background;
+                btn.innerHTML = '<span class="cart-spinner" style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:cartSpin .5s linear infinite;vertical-align:middle;margin-right:6px;"></span> Redirecting...';
+                btn.style.background = '#059669'; // darker emerald
+                
+                const success = await window.addToCart(itemType, itemId, null, null, options);
+                if (success) {
+                    window.location.href = '/checkout/';
+                } else {
+                    btn.innerHTML = '<i class="bi bi-lightning-fill"></i> Buy Now';
+                    btn.style.background = origBg;
+                }
+            } else {
+                window.location.href = `/buy-now/${itemType}/${itemId}/`;
             }
         }
 
