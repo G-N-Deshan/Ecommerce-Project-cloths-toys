@@ -27916,3 +27916,14 @@ Traceback (most recent call last):
     raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
 django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
 WARNING 2026-05-15 07:22:56,398 log 27620 20952 Not Found: /media/about-hero.jpg
+INFO 2026-05-15 07:36:24,685 autoreload 18292 28704 Watching for file changes with StatReloader
+INFO 2026-05-15 07:56:09,129 autoreload 27620 15476 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 07:56:10,136 autoreload 24056 18860 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 07:57:11,541 autoreload 1748 29220 Watching for file changes with StatReloader
+INFO 2026-05-15 07:57:14,809 autoreload 13332 26672 Watching for file changes with StatReloader
+WARNING 2026-05-15 08:06:38,273 log 13332 21944 Not Found: /favicon.ico
+INFO 2026-05-15 08:39:37,463 autoreload 13332 26672 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 08:39:40,978 autoreload 11164 1668 Watching for file changes with StatReloader
+INFO 2026-05-15 08:39:40,211 autoreload 1748 29220 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 08:39:48,994 autoreload 24220 18172 Watching for file changes with StatReloader
+INFO 2026-05-15 13:57:55,926 autoreload 10696 2444 Watching for file changes with StatReloader

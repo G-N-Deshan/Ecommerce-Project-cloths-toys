@@ -58,24 +58,37 @@
                 <div class="nav-dropdown">
                     <a href="{% url 'buy' %}" class="nav-link nav-link--vehicles">Shop <i class="bi bi-chevron-down text-[10px]"></i></a>
                     <div class="mega-menu">
-                        <div class="mega-menu-grid">
-                            <div class="mega-menu-column">
-                                <h3>Fashion</h3>
-                                <a href="{% url 'women_cloths' %}">Women's Collection</a>
-                                <a href="{% url 'mens_cloths' %}">Men's Collection</a>
-                                <a href="{% url 'kids_cloths' %}">Kids' Clothing</a>
+                        <div class="mega-menu-container">
+                            <div class="mega-menu-grid">
+                                <div class="mega-menu-column">
+                                    <h3><i class="bi bi-person-heart"></i> Fashion</h3>
+                                    <a href="{% url 'women_cloths' %}">Women's Collection</a>
+                                    <a href="{% url 'mens_cloths' %}">Men's Collection</a>
+                                    <a href="{% url 'kids_cloths' %}">Kids' Clothing</a>
+                                </div>
+                                <div class="mega-menu-column">
+                                    <h3><i class="bi bi-controller"></i> Play time</h3>
+                                    <a href="{% url 'toys_page' %}">All Toys</a>
+                                    <a href="{% url 'toys_page' %}?category=educational">Educational Toys</a>
+                                    <a href="{% url 'toys_page' %}?category=building">Building Sets</a>
+                                </div>
+                                <div class="mega-menu-column">
+                                    <h3><i class="bi bi-lightning-charge"></i> Quick Links</h3>
+                                    <a href="{% url 'shop_offers' %}">Hot Deals</a>
+                                    <a href="{% url 'trending' %}">Trending Now</a>
+                                    <a href="{% url 'new_arrivals' %}">Just Landed</a>
+                                </div>
                             </div>
-                            <div class="mega-menu-column">
-                                <h3>Play time</h3>
-                                <a href="{% url 'toys_page' %}">All Toys</a>
-                                <a href="{% url 'toys_page' %}?category=educational">Educational Toys</a>
-                                <a href="{% url 'toys_page' %}?category=building">Building Sets</a>
-                            </div>
-                            <div class="mega-menu-column">
-                                <h3>Quick Links</h3>
-                                <a href="{% url 'shop_offers' %}">Hot Deals</a>
-                                <a href="{% url 'trending' %}">Trending Now</a>
-                                <a href="{% url 'new_arrivals' %}">Just Landed</a>
+                            <div class="mega-menu-promo">
+                                <div class="promo-image-wrapper">
+                                    <img src="{% static 'mega_menu_promo.png' %}" alt="Featured Collection">
+                                    <div class="promo-overlay">
+                                        <span class="promo-tag">New Season</span>
+                                        <h4>Elevate Your Style</h4>
+                                        <p>Discover our latest arrivals in fashion and play.</p>
+                                        <a href="{% url 'buy' %}" class="promo-btn">Shop Now <i class="bi bi-arrow-right"></i></a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -224,15 +237,15 @@
                 <i class="bi bi-chevron-down drawer-link-chevron"></i>
             </button>
             <div class="drawer-accordion-body">
-                <p class="drawer-acc-heading">Fashion</p>
+                <p class="drawer-acc-heading"><i class="bi bi-person-heart"></i> Fashion</p>
                 <a href="{% url 'women_cloths' %}" class="drawer-sub-link">👗 Women's Collection</a>
                 <a href="{% url 'mens_cloths' %}" class="drawer-sub-link">👔 Men's Collection</a>
                 <a href="{% url 'kids_cloths' %}" class="drawer-sub-link">👕 Kids' Clothing</a>
-                <p class="drawer-acc-heading">Play Time</p>
+                <p class="drawer-acc-heading"><i class="bi bi-controller"></i> Play Time</p>
                 <a href="{% url 'toys_page' %}" class="drawer-sub-link">🧸 All Toys</a>
                 <a href="{% url 'toys_page' %}?category=educational" class="drawer-sub-link">📚 Educational Toys</a>
                 <a href="{% url 'toys_page' %}?category=building" class="drawer-sub-link">🧱 Building Sets</a>
-                <p class="drawer-acc-heading">Quick Links</p>
+                <p class="drawer-acc-heading"><i class="bi bi-lightning-charge"></i> Quick Links</p>
                 <a href="{% url 'shop_offers' %}" class="drawer-sub-link">🏷️ Hot Deals</a>
                 <a href="{% url 'trending' %}" class="drawer-sub-link">🔥 Trending Now</a>
                 <a href="{% url 'new_arrivals' %}" class="drawer-sub-link">✨ Just Landed</a>

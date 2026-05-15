@@ -3238,46 +3238,61 @@ def add_stock_alert(request, product_type, product_id):
 def live_search(request):
     query = request.GET.get('q', '').strip()
     results = []
-    if len(query) >= 2:
-        cloths = Cloths.objects.filter(Q(name__icontains=query))[:3]
-        toys = Toy.objects.filter(Q(name__icontains=query))[:3]
-        offers = Offers.objects.filter(Q(title__icontains=query))[:3]
-        arrivals = NewArrivals.objects.filter(Q(title__icontains=query))[:3]
+    
+    # If empty query, return trending and categories
+    if not query:
+        trending = [
+            {'name': "Women's Collection", 'url': '/women_cloths/', 'type': 'Trending', 'icon': 'bi-gender-female'},
+            {'name': "Men's Fashion", 'url': '/mens_cloths/', 'type': 'Trending', 'icon': 'bi-gender-male'},
+            {'name': 'Educational Toys', 'url': '/toys/?category=educational', 'type': 'Trending', 'icon': 'bi-book'},
+            {'name': 'Hot Deals', 'url': '/shop-offers/', 'type': 'Trending', 'icon': 'bi-fire'},
+        ]
+        return JsonResponse({'trending': trending, 'results': []})
+
+    if len(query) >= 1:
+        cloths = Cloths.objects.filter(Q(name__icontains=query) | Q(category__icontains=query))[:3]
+        toys = Toy.objects.filter(Q(name__icontains=query) | Q(category__icontains=query))[:3]
+        offers = Offers.objects.filter(Q(title__icontains=query) | Q(category__icontains=query))[:2]
+        arrivals = NewArrivals.objects.filter(Q(title__icontains=query) | Q(category__icontains=query))[:2]
 
         for item in cloths:
             results.append({
                 'name': item.name,
-                'price': f"Rs {item.price2 or item.price or item.price1}",
+                'price': f"{item.price2 or item.price or item.price1}",
                 'image': item.imageUrl.url if item.imageUrl else '',
-                'url': f'/product/cloth/{item.id}/',
-                'type': 'Clothing'
+                'url': reverse('product_detail', args=['cloth', item.id]),
+                'type': 'Clothing',
+                'category': item.get_category_display() if hasattr(item, 'get_category_display') else item.category
             })
         for item in toys:
             results.append({
                 'name': item.name,
-                'price': f"Rs {item.price}",
+                'price': f"{item.price}",
                 'image': item.imageUrl.url if item.imageUrl else '',
-                'url': f'/product/toy/{item.id}/',
-                'type': 'Toy'
+                'url': reverse('product_detail', args=['toy', item.id]),
+                'type': 'Toy',
+                'category': item.get_category_display() if hasattr(item, 'get_category_display') else item.category
             })
         for item in offers:
             results.append({
                 'name': item.title,
-                'price': f"Rs {item.price2 or item.price1}",
+                'price': f"{item.price2 or item.price1}",
                 'image': item.imageUrl.url if item.imageUrl else '',
-                'url': f'/product/offer/{item.id}/',
-                'type': 'Offer'
+                'url': reverse('product_detail', args=['offer', item.id]),
+                'type': 'Offer',
+                'category': 'Sale'
             })
         for item in arrivals:
             results.append({
                 'name': item.title,
-                'price': f"Rs {item.price}",
+                'price': f"{item.price}",
                 'image': item.imageUrl.url if item.imageUrl else '',
-                'url': f'/product/arrival/{item.id}/',
-                'type': 'New Arrival'
+                'url': reverse('product_detail', args=['arrival', item.id]),
+                'type': 'New Arrival',
+                'category': 'New'
             })
 
-    return JsonResponse({'results': results[:8]})
+    return JsonResponse({'results': results[:10]})
 
 
 def search(request):
