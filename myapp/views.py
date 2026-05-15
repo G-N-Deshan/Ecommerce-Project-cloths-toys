@@ -8,6 +8,7 @@ from .models import (Card, Offers, NewArrivals, Cloths, Review, ContactMessage, 
                      LoyaltyProfile, LoyaltyHistory, SiteBanner, SiteSettings,
                      ViewHistory, Return, StockAlert, CartAbandon, TrendingProduct)
 from .forms import ReviewForm, ContactForm, ServiceReviewForm
+from accounts.models import Profile
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -30,6 +31,9 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.db.models import Sum
 from django.urls import reverse
+import logging
+
+logger = logging.getLogger('myapp')
 
 
 # Helper function for cart management
@@ -525,6 +529,10 @@ def subscribe_newsletter(request):
             return JsonResponse({'status': 'info', 'message': 'You are already subscribed!'})
             
         NewsletterSubscription.objects.create(email=email)
+        
+        # Send Welcome Email
+        _send_welcome_email(email, request)
+        
         return JsonResponse({'status': 'success', 'message': 'Thank you for subscribing! Check your inbox soon.'})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': 'Something went wrong. Please try again later.'}, status=500)
@@ -2760,25 +2768,46 @@ def order_success_latest(request):
 # Profile Management Views
 @login_required(login_url='login')
 def update_profile(request):
-    """AJAX endpoint to update user profile"""
+    """AJAX endpoint to update user profile and profile picture"""
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)
-            
-            # Update user fields
             user = request.user
+            profile, created = Profile.objects.get_or_create(user=user)
+            
+            # Handle both JSON (legacy) and Multipart (for images)
+            if request.content_type == 'application/json':
+                data = json.loads(request.body)
+            else:
+                data = request.POST
+                
+            # Update user fields
             if 'first_name' in data:
                 user.first_name = data['first_name']
             if 'last_name' in data:
                 user.last_name = data['last_name']
             if 'email' in data:
-                # Check if email is already taken by another user
                 if User.objects.exclude(pk=user.pk).filter(email=data['email']).exists():
                     return JsonResponse({'success': False, 'error': 'Email already in use'}, status=400)
                 user.email = data['email']
             user.save()
             
-            return JsonResponse({'success': True, 'message': 'Profile updated successfully!'})
+            # Update profile fields (address, phone)
+            if 'address' in data:
+                profile.address = data['address']
+            if 'phone' in data:
+                profile.phone = data['phone']
+            
+            # Handle profile image
+            if 'image' in request.FILES:
+                profile.image = request.FILES['image']
+                
+            profile.save()
+            
+            return JsonResponse({
+                'success': True, 
+                'message': 'Profile updated successfully!',
+                'image_url': profile.image.url if profile.image else None
+            })
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     
@@ -2829,27 +2858,39 @@ def change_password(request):
 
 @login_required(login_url='login')
 def notification_preferences(request):
-    """AJAX endpoint to update notification preferences"""
+    """AJAX endpoint to update notification preferences in the database"""
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
             
-            # Store notification preferences in session (or could use a UserProfile model)
-            request.session['notify_orders'] = data.get('notify_orders', True)
-            request.session['notify_promotions'] = data.get('notify_promotions', True)
-            request.session['notify_new_arrivals'] = data.get('notify_new_arrivals', True)
-            request.session['notify_reviews'] = data.get('notify_reviews', True)
+            # Persist to database Profile model
+            profile.notify_orders = data.get('notify_orders', True)
+            profile.notify_promotions = data.get('notify_promotions', True)
+            profile.notify_new_arrivals = data.get('notify_new_arrivals', True)
+            profile.notify_reviews = data.get('notify_reviews', True)
             
-            return JsonResponse({'success': True, 'message': 'Notification preferences updated!'})
+            # Handle categories list
+            categories = data.get('notified_categories', [])
+            if isinstance(categories, list):
+                profile.notified_categories = ','.join(categories)
+            
+            profile.save()
+            
+            # Send a notification email about the change
+            _send_notification_pref_update_email(request.user, profile)
+                
+            return JsonResponse({'success': True, 'message': 'Notification preferences saved securely!'})
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     
-    # GET request - return current preferences
+    # GET request - return current preferences from database
     preferences = {
-        'notify_orders': request.session.get('notify_orders', True),
-        'notify_promotions': request.session.get('notify_promotions', True),
-        'notify_new_arrivals': request.session.get('notify_new_arrivals', True),
-        'notify_reviews': request.session.get('notify_reviews', True),
+        'notify_orders': profile.notify_orders,
+        'notify_promotions': profile.notify_promotions,
+        'notify_new_arrivals': profile.notify_new_arrivals,
+        'notify_reviews': profile.notify_reviews,
     }
     return JsonResponse({'success': True, 'preferences': preferences})
 
@@ -3984,7 +4025,9 @@ def admin_update_order_status(request, order_id):
         )
 
         # Automated Email Notification
-        if new_status in ['shipped', 'delivered']:
+        profile = getattr(order.user, 'profile', None)
+        # Notify for any status change if preferences allow (orders preference enabled or guest)
+        if profile is None or profile.notify_orders:
             from django.core.mail import send_mail
             from django.template.loader import render_to_string
             from django.utils.html import strip_tags
@@ -4006,13 +4049,14 @@ def admin_update_order_status(request, order_id):
                 send_mail(
                     subject,
                     plain_message,
-                    getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@kidzone.com'),
+                    settings.EMAIL_HOST_USER,
                     [order.email],
                     html_message=html_message,
-                    fail_silently=True
+                    fail_silently=False
                 )
-            except Exception as mail_err:
-                pass # Fail silently if email backend is not configured correctly
+                logger.info(f"Order update email sent to {order.email}")
+            except Exception as e:
+                logger.error(f"Order update email error: {e}")
 
         if is_json:
             return JsonResponse({'success': True, 'message': f'Order {order.order_number} status updated to {order.get_status_display()}'})
@@ -4287,8 +4331,10 @@ def _finalize_order_from_stripe_session(session, user, cart, request=None):
 
     OrderTracking.objects.create(order=order, status='pending', note='Order placed — payment confirmed via Stripe.')
 
-    # Send order confirmation email
-    _send_order_confirmation_email(order, request)
+    # Send order confirmation email if preferences allow
+    profile = getattr(user, 'profile', None)
+    if profile is None or profile.notify_orders:
+        _send_order_confirmation_email(order, request)
 
     # Nuclear Clear: Delete the entire cart object and session reference
     cart.delete()
@@ -4415,6 +4461,171 @@ def _send_order_confirmation_email(order, request=None):
 
     # Launch in a background thread to prevent blocking the checkout UI
     threading.Thread(target=send_email_thread, daemon=True).start()
+
+
+def _send_welcome_email(email, request=None):
+    """Send a welcome email to new newsletter subscribers."""
+    import threading
+    
+    site_url = "https://g11fashion.com"
+    if request:
+        site_url = request.build_absolute_uri('/')
+        
+    def send_email_thread(target_email, url):
+        try:
+            from django.utils.html import strip_tags
+            subject = 'Welcome to G11 Fashion & Toys ✨'
+            
+            context = {
+                'site_url': url,
+            }
+            
+            html_message = render_to_string('emails/newsletter_welcome.html', context)
+            plain_message = strip_tags(html_message)
+            
+            send_mail(
+                subject=subject,
+                message=plain_message,
+                from_email=django_settings.EMAIL_HOST_USER,
+                recipient_list=[target_email],
+                fail_silently=False,
+                html_message=html_message
+            )
+            logger.info(f"Welcome email sent successfully to {target_email}")
+        except Exception as e:
+            logger.error(f"Welcome email error for {target_email}: {e}")
+
+    threading.Thread(target=send_email_thread, args=(email, site_url), daemon=True).start()
+
+
+def _send_notification_pref_update_email(user, profile):
+    """Notify user that their notification preferences were updated."""
+    import threading
+    
+    # Extract data needed for email before entering thread
+    user_email = user.email
+    user_name = user.first_name or user.username
+    
+    # Create a dict of preferences to avoid accessing profile in thread (LazyObject issues)
+    prefs = {
+        'notify_orders': profile.notify_orders,
+        'notify_promotions': profile.notify_promotions,
+        'notify_new_arrivals': profile.notify_new_arrivals,
+        'notify_reviews': profile.notify_reviews,
+    }
+
+    def send_email_thread(email, name, preferences):
+        try:
+            from django.utils.html import strip_tags
+            subject = 'Your Notification Preferences Updated 🔔'
+            
+            context = {
+                'user_name': name,
+                'preferences': preferences,
+            }
+            
+            html_message = render_to_string('emails/preferences_updated.html', context)
+            plain_message = strip_tags(html_message)
+            
+            send_mail(
+                subject=subject,
+                message=plain_message,
+                from_email=django_settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False,
+                html_message=html_message
+            )
+            logger.info(f"Notification preference update email sent to {email}")
+        except Exception as e:
+            logger.error(f"Preference update email error for {email}: {e}")
+
+    threading.Thread(target=send_email_thread, args=(user_email, user_name, prefs), daemon=True).start()
+
+
+def _notify_users_of_new_product(product, product_type='cloth', request=None):
+    """
+    Notify all users who have 'notify_new_arrivals' enabled about a new product,
+    filtered by their preferred categories.
+    """
+    import threading
+    from accounts.models import Profile
+    
+    # Map product category to simplified notification categories
+    raw_cat = getattr(product, 'category', '').lower()
+    mapping = {
+        'men': 'men',
+        'women': 'women',
+        'kids': 'kids',
+        'kids-men': 'kids',
+        'kids-girl': 'kids',
+    }
+    
+    cat_to_check = mapping.get(raw_cat, 'kids')
+    if product_type == 'toy':
+        cat_to_check = 'toys'
+    
+    # Get all users who want to be notified and subscribed to this category
+    profiles = Profile.objects.filter(
+        notify_new_arrivals=True,
+        notified_categories__icontains=cat_to_check
+    ).select_related('user')
+    
+    recipient_emails = [p.user.email for p in profiles if p.user.email]
+    
+    if not recipient_emails:
+        return
+
+    # Extract product data
+    product_name = getattr(product, 'name', getattr(product, 'title', 'New Item'))
+    product_price = getattr(product, 'price2', getattr(product, 'price1', getattr(product, 'price', 'TBA')))
+    product_desc = getattr(product, 'desccription', getattr(product, 'description', 'Check out our latest arrival!'))
+    
+    product_image_url = ""
+    if product.imageUrl:
+        product_image_url = product.imageUrl.url
+        if request and not product_image_url.startswith('http'):
+            product_image_url = request.build_absolute_uri(product_image_url)
+    
+    product_url = "https://g11fashion.com" # Fallback
+    if request:
+        # Construct URL based on product type
+        url_path = f"/product/{product_type}/{product.id}/"
+        product_url = request.build_absolute_uri(url_path)
+
+    def send_bulk_email_thread(emails, name, price, desc, img_url, url):
+        try:
+            from django.utils.html import strip_tags
+            subject = f'✨ New Arrival: {name} is here!'
+            
+            context = {
+                'product_name': name,
+                'product_price': price,
+                'product_description': desc,
+                'product_image_url': img_url,
+                'product_url': url,
+                'site_url': "https://g11fashion.com",
+            }
+            
+            html_message = render_to_string('emails/new_product_alert.html', context)
+            plain_message = strip_tags(html_message)
+            
+            # Send in batches of 50 to avoid SMTP limits (simple implementation)
+            batch_size = 50
+            for i in range(0, len(emails), batch_size):
+                batch = emails[i:i + batch_size]
+                send_mail(
+                    subject=subject,
+                    message=plain_message,
+                    from_email=django_settings.EMAIL_HOST_USER,
+                    recipient_list=batch,
+                    fail_silently=False,
+                    html_message=html_message
+                )
+            logger.info(f"New product notification sent to {len(emails)} users for {name}")
+        except Exception as e:
+            logger.error(f"New product notification error for {name}: {e}")
+
+    threading.Thread(target=send_bulk_email_thread, args=(recipient_emails, product_name, product_price, product_desc, product_image_url, product_url), daemon=True).start()
 
 
 # ══════════════════════════════════════════════════════

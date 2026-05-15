@@ -10,6 +10,32 @@
         width: 100% !important;
         z-index: 1101 !important;
     }
+    .nav-profile-img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1.5px solid #6366f1;
+        transition: transform 0.2s ease;
+    }
+    .nav-icon-btn--profile:hover .nav-profile-img {
+        transform: scale(1.1);
+    }
+    .drawer-profile-img {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ffffff;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+    .drawer-avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: 50%;
+    }
 </style>
 
 <section class="section-0">
@@ -106,8 +132,12 @@
             <!-- Right Side Icons (Desktop) -->
             <div class="nav-desktop-auth-container">
                 {% if user.is_authenticated %}
-                <a href="{% url 'profile' %}" class="nav-desktop-auth nav-icon-btn" title="Profile">
+                <a href="{% url 'profile' %}" class="nav-desktop-auth nav-icon-btn nav-icon-btn--profile" title="Profile">
+                    {% if user.profile.image %}
+                    <img src="{{ user.profile.image.url }}" alt="Profile" class="nav-profile-img">
+                    {% else %}
                     <i class="bi bi-person-circle"></i>
+                    {% endif %}
                 </a>
                 <form method="post" action="{% url 'logout' %}" class="nav-desktop-auth nav-icon-form">
                     {% csrf_token %}
@@ -157,7 +187,11 @@
     <!-- User Welcome Card -->
     <div class="drawer-user-card">
         <div class="drawer-avatar">
+            {% if user.profile.image %}
+            <img src="{{ user.profile.image.url }}" alt="Profile" class="drawer-profile-img">
+            {% else %}
             <i class="bi bi-person-fill"></i>
+            {% endif %}
         </div>
         <div>
             <p class="drawer-user-name">{{ user.first_name|default:user.username }}</p>
@@ -259,7 +293,11 @@
             {% endif %}
         </a>
         <a href="{% url 'profile' %}" class="drawer-action-btn">
+            {% if user.profile.image %}
+            <img src="{{ user.profile.image.url }}" alt="Profile" style="width:24px; height:24px; border-radius:50%; object-fit:cover; border:1px solid #10b981;">
+            {% else %}
             <i class="bi bi-person-circle" style="color:#10b981;"></i>
+            {% endif %}
             <span>Profile</span>
         </a>
         <form method="post" action="{% url 'logout' %}" style="display:contents;">

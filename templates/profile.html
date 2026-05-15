@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="{% static 'bird_2.jpg' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -40,7 +41,11 @@
 
                 <div class="profile-info">
                     <div class="profile-avatar">
+                        {% if user.profile.image %}
+                        <img src="{{ user.profile.image.url }}" alt="{{ user.username }}" id="profileAvatarImg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        {% else %}
                         <span class="avatar-initial">{{ user.username|first|upper }}</span>
+                        {% endif %}
                     </div>
 
                     <div class="profile-details">
@@ -213,6 +218,11 @@
                         <label>Email Address</label>
                         <input type="email" class="form-input" name="email" value="{{ user.email|default:'' }}">
                     </div>
+                    <div class="form-group">
+                        <label>Profile Picture</label>
+                        <input type="file" class="form-input" name="image" accept="image/*">
+                        <p class="input-help">Upload a new profile picture (JPG, PNG)</p>
+                    </div>
                     <div class="modal-actions">
                         <button type="button" class="btn-cancel" id="cancelEditBtn">Cancel</button>
                         <button type="submit" class="btn-save">Save Changes</button>
@@ -297,10 +307,33 @@
                     </div>
                     <div class="form-group">
                         <label class="checkbox-label">
-                            <input type="checkbox" name="notify_new_arrivals" checked>
+                            <input type="checkbox" name="notify_new_arrivals" id="notifyNewArrivals" checked>
                             <span>New Arrivals</span>
                         </label>
                         <p class="input-help">Be the first to know about new products</p>
+                        
+                        <!-- Granular Category Selection -->
+                        <div id="categoryPreferences" style="margin-left: 28px; margin-top: 5px; margin-bottom: 20px; border-left: 2px solid #e2e8f0; padding-left: 15px;">
+                            <p style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.025em;">Interested Categories:</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+                                <label class="checkbox-label" style="font-size: 0.85rem;">
+                                    <input type="checkbox" name="cat_pref" value="men" checked>
+                                    <span>Men</span>
+                                </label>
+                                <label class="checkbox-label" style="font-size: 0.85rem;">
+                                    <input type="checkbox" name="cat_pref" value="women" checked>
+                                    <span>Women</span>
+                                </label>
+                                <label class="checkbox-label" style="font-size: 0.85rem;">
+                                    <input type="checkbox" name="cat_pref" value="kids" checked>
+                                    <span>Kids</span>
+                                </label>
+                                <label class="checkbox-label" style="font-size: 0.85rem;">
+                                    <input type="checkbox" name="cat_pref" value="toys" checked>
+                                    <span>Toys</span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="checkbox-label">
@@ -401,6 +434,16 @@
                                     form.notify_promotions.checked = data.preferences.notify_promotions;
                                     form.notify_new_arrivals.checked = data.preferences.notify_new_arrivals;
                                     form.notify_reviews.checked = data.preferences.notify_reviews;
+                                    
+                                    // Load category preferences
+                                    const cats = data.preferences.notified_categories ? data.preferences.notified_categories.split(',') : [];
+                                    form.querySelectorAll('input[name="cat_pref"]').forEach(cb => {
+                                        cb.checked = cats.includes(cb.value);
+                                    });
+                                    
+                                    // Show/hide categories based on main toggle
+                                    const catDiv = document.getElementById('categoryPreferences');
+                                    catDiv.style.display = data.preferences.notify_new_arrivals ? 'block' : 'none';
                                 }
                             });
                         notifModal.classList.add('active');
@@ -436,22 +479,27 @@
                     editForm.addEventListener('submit', async (e) => {
                         e.preventDefault();
                         const formData = new FormData(editForm);
-                        const data = Object.fromEntries(formData);
 
                         try {
                             const response = await fetch('{% url "update_profile" %}', {
                                 method: 'POST',
                                 headers: {
-                                    'Content-Type': 'application/json',
                                     'X-CSRFToken': '{{ csrf_token }}'
                                 },
-                                body: JSON.stringify(data)
+                                body: formData
                             });
                             const result = await response.json();
                             if (result.success) {
                                 showToast(result.message);
                                 editModal.classList.remove('active');
-                                setTimeout(() => location.reload(), 1000);
+                                
+                                // Update image in UI if changed
+                                if (result.image_url) {
+                                    const avatarContainer = document.querySelector('.profile-avatar');
+                                    avatarContainer.innerHTML = `<img src="${result.image_url}" alt="{{ user.username }}" id="profileAvatarImg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+                                }
+                                
+                                setTimeout(() => location.reload(), 1500);
                             } else {
                                 showToast(result.error, false);
                             }
@@ -528,12 +576,12 @@
                 if (notifForm) {
                     notifForm.addEventListener('submit', async (e) => {
                         e.preventDefault();
-                        const formData = new FormData(notifForm);
                         const data = {
-                            notify_orders: formData.has('notify_orders'),
-                            notify_promotions: formData.has('notify_promotions'),
-                            notify_new_arrivals: formData.has('notify_new_arrivals'),
-                            notify_reviews: formData.has('notify_reviews')
+                            notify_orders: notifForm.notify_orders.checked,
+                            notify_promotions: notifForm.notify_promotions.checked,
+                            notify_new_arrivals: notifForm.notify_new_arrivals.checked,
+                            notify_reviews: notifForm.notify_reviews.checked,
+                            notified_categories: Array.from(notifForm.querySelectorAll('input[name="cat_pref"]:checked')).map(cb => cb.value)
                         };
 
                         try {
@@ -555,6 +603,15 @@
                         } catch (error) {
                             showToast('An error occurred. Please try again.', false);
                         }
+                    });
+                }
+
+                // Toggle category display based on New Arrivals checkbox
+                const mainToggle = document.getElementById('notifyNewArrivals');
+                const catContainer = document.getElementById('categoryPreferences');
+                if (mainToggle && catContainer) {
+                    mainToggle.addEventListener('change', () => {
+                        catContainer.style.display = mainToggle.checked ? 'block' : 'none';
                     });
                 }
             });

@@ -27524,3 +27524,377 @@ INFO 2026-05-15 06:02:30,194 autoreload 9312 17504 C:\Users\nipun\Desktop\Ecomme
 INFO 2026-05-15 06:02:31,277 autoreload 26736 3240 Watching for file changes with StatReloader
 INFO 2026-05-15 06:02:31,572 autoreload 21704 26036 Watching for file changes with StatReloader
 WARNING 2026-05-15 06:02:58,499 log 26736 25416 Not Found: /favicon.ico
+INFO 2026-05-15 06:21:44,700 autoreload 21704 26036 C:\Users\nipun\Desktop\Ecommerce project\accounts\models.py changed, reloading.
+INFO 2026-05-15 06:21:45,529 autoreload 26736 3240 C:\Users\nipun\Desktop\Ecommerce project\accounts\models.py changed, reloading.
+INFO 2026-05-15 06:21:46,237 autoreload 26004 25820 Watching for file changes with StatReloader
+INFO 2026-05-15 06:21:46,798 autoreload 26992 9924 Watching for file changes with StatReloader
+INFO 2026-05-15 06:22:19,143 autoreload 26004 25820 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:22:19,593 autoreload 26992 9924 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:22:20,605 autoreload 25624 28572 Watching for file changes with StatReloader
+INFO 2026-05-15 06:22:20,763 autoreload 28912 28104 Watching for file changes with StatReloader
+INFO 2026-05-15 06:23:03,236 autoreload 25624 28572 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:23:03,429 autoreload 28912 28104 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:23:04,720 autoreload 20780 26156 Watching for file changes with StatReloader
+INFO 2026-05-15 06:23:04,750 autoreload 7776 28420 Watching for file changes with StatReloader
+ERROR 2026-05-15 06:26:26,914 middleware 20780 15556 Exception: (1364, "Field 'stock_quantity' doesn't have a default value")
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1364, "Field 'stock_quantity' doesn't have a default value")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\options.py", line 710, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\sites.py", line 247, in inner
+    return view(request, *args, **kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\options.py", line 1942, in add_view
+    return self.changeform_view(request, None, form_url, extra_context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\options.py", line 1801, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\options.py", line 1852, in _changeform_view
+    self.save_model(request, new_object, form, not add)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\options.py", line 1272, in save_model
+    obj.save()
+    ~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\base.py", line 874, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\base.py", line 966, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, insert_fields, returning_fields, raw
+    )
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\base.py", line 1220, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\query.py", line 1918, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\compiler.py", line 1925, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+django.db.utils.OperationalError: (1364, "Field 'stock_quantity' doesn't have a default value")
+ERROR 2026-05-15 06:26:27,178 log 20780 15556 Internal Server Error: /admin/myapp/cloths/add/
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1364, "Field 'stock_quantity' doesn't have a default value")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\options.py", line 710, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\sites.py", line 247, in inner
+    return view(request, *args, **kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\options.py", line 1942, in add_view
+    return self.changeform_view(request, None, form_url, extra_context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\options.py", line 1801, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\options.py", line 1852, in _changeform_view
+    self.save_model(request, new_object, form, not add)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\contrib\admin\options.py", line 1272, in save_model
+    obj.save()
+    ~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\base.py", line 874, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\base.py", line 966, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, insert_fields, returning_fields, raw
+    )
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\base.py", line 1220, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\query.py", line 1918, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\models\sql\compiler.py", line 1925, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+django.db.utils.OperationalError: (1364, "Field 'stock_quantity' doesn't have a default value")
+WARNING 2026-05-15 06:32:38,497 log 20780 8976 Not Found: /favicon.ico
+INFO 2026-05-15 06:37:56,637 autoreload 20780 26156 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:37:57,000 autoreload 7776 28420 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:37:57,680 autoreload 8916 16004 Watching for file changes with StatReloader
+INFO 2026-05-15 06:37:58,307 autoreload 5964 29336 Watching for file changes with StatReloader
+INFO 2026-05-15 06:38:54,631 autoreload 5964 29336 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:38:55,090 autoreload 8916 16004 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:38:56,133 autoreload 4836 26828 Watching for file changes with StatReloader
+INFO 2026-05-15 06:38:56,213 autoreload 22888 25332 Watching for file changes with StatReloader
+INFO 2026-05-15 06:39:27,896 autoreload 4836 26828 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:39:27,929 autoreload 22888 25332 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:39:29,042 autoreload 21928 19916 Watching for file changes with StatReloader
+INFO 2026-05-15 06:39:29,374 autoreload 26804 19308 Watching for file changes with StatReloader
+INFO 2026-05-15 06:41:28,520 autoreload 26804 19308 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:41:29,271 autoreload 21928 19916 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:41:29,813 autoreload 12204 28948 Watching for file changes with StatReloader
+INFO 2026-05-15 06:41:30,268 autoreload 21884 28744 Watching for file changes with StatReloader
+INFO 2026-05-15 06:41:37,981 autoreload 12204 28948 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-15 06:41:38,387 autoreload 21884 28744 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-15 06:41:39,300 autoreload 17336 1484 Watching for file changes with StatReloader
+INFO 2026-05-15 06:41:39,366 autoreload 10132 11716 Watching for file changes with StatReloader
+INFO 2026-05-15 06:42:20,586 autoreload 17336 1484 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-15 06:42:20,611 autoreload 10132 11716 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-15 06:42:21,677 autoreload 26928 26952 Watching for file changes with StatReloader
+INFO 2026-05-15 06:42:21,953 autoreload 3988 21620 Watching for file changes with StatReloader
+INFO 2026-05-15 06:42:30,873 autoreload 26928 26952 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-15 06:42:31,146 autoreload 3988 21620 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-15 06:42:31,822 autoreload 9516 28236 Watching for file changes with StatReloader
+INFO 2026-05-15 06:42:32,409 autoreload 28084 22092 Watching for file changes with StatReloader
+INFO 2026-05-15 06:42:39,941 autoreload 9516 28236 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-15 06:42:40,491 autoreload 28084 22092 C:\Users\nipun\Desktop\Ecommerce project\myapp\admin.py changed, reloading.
+INFO 2026-05-15 06:42:40,883 autoreload 26240 16328 Watching for file changes with StatReloader
+INFO 2026-05-15 06:42:41,732 autoreload 26840 29224 Watching for file changes with StatReloader
+INFO 2026-05-15 06:45:45,327 autoreload 26840 29224 C:\Users\nipun\Desktop\Ecommerce project\accounts\models.py changed, reloading.
+INFO 2026-05-15 06:45:45,641 autoreload 26240 16328 C:\Users\nipun\Desktop\Ecommerce project\accounts\models.py changed, reloading.
+INFO 2026-05-15 06:45:46,725 autoreload 19756 19972 Watching for file changes with StatReloader
+INFO 2026-05-15 06:45:46,762 autoreload 28356 1488 Watching for file changes with StatReloader
+INFO 2026-05-15 06:45:54,911 autoreload 19756 19972 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:45:54,962 autoreload 28356 1488 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:45:55,951 autoreload 28636 24368 Watching for file changes with StatReloader
+INFO 2026-05-15 06:45:56,268 autoreload 12380 27860 Watching for file changes with StatReloader
+INFO 2026-05-15 06:46:06,370 autoreload 28636 24368 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:46:06,580 autoreload 12380 27860 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:46:07,404 autoreload 28080 29200 Watching for file changes with StatReloader
+INFO 2026-05-15 06:46:07,864 autoreload 26972 18144 Watching for file changes with StatReloader
+WARNING 2026-05-15 06:48:26,818 log 28080 10952 Not Found: /favicon.ico
+INFO 2026-05-15 06:48:46,958 views 28080 20064 Notification preference update email sent to ndsf999@gmail.com
+INFO 2026-05-15 06:49:14,587 views 28080 23384 New product notification sent to 1 users for jojouijo
+INFO 2026-05-15 06:51:17,763 autoreload 28080 29200 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:51:18,031 autoreload 26972 18144 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:51:18,881 autoreload 24948 1316 Watching for file changes with StatReloader
+INFO 2026-05-15 06:51:19,413 autoreload 27988 21852 Watching for file changes with StatReloader
+INFO 2026-05-15 06:51:59,927 views 24948 7812 New product notification sent to 1 users for sdfsdfsdf
+INFO 2026-05-15 06:55:01,374 autoreload 24948 1316 C:\Users\nipun\Desktop\Ecommerce project\accounts\models.py changed, reloading.
+INFO 2026-05-15 06:55:02,019 autoreload 27988 21852 C:\Users\nipun\Desktop\Ecommerce project\accounts\models.py changed, reloading.
+INFO 2026-05-15 06:55:02,405 autoreload 14676 7164 Watching for file changes with StatReloader
+INFO 2026-05-15 06:55:03,388 autoreload 26664 17952 Watching for file changes with StatReloader
+INFO 2026-05-15 06:55:23,179 autoreload 26664 17952 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:55:23,287 autoreload 14676 7164 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 06:55:24,240 autoreload 26464 11212 Watching for file changes with StatReloader
+INFO 2026-05-15 06:55:24,458 autoreload 19636 24004 Watching for file changes with StatReloader
+WARNING 2026-05-15 06:59:48,532 log 26464 2664 Not Found: /favicon.ico

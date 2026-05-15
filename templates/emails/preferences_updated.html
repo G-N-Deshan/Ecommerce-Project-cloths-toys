@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Preferences Updated</title>
+    <style>
+        body { font-family: 'Inter', Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #eee; border-radius: 12px; }
+        .header { text-align: center; padding-bottom: 20px; border-bottom: 2px solid #6366f1; }
+        .header h1 { color: #6366f1; margin: 0; }
+        .content { padding: 30px 0; }
+        .pref-item { margin: 10px 0; padding: 10px; background: #f8fafc; border-radius: 6px; }
+        .footer { text-align: center; font-size: 0.8rem; color: #777; border-top: 1px solid #eee; padding-top: 20px; }
+        .emoji { font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Settings Updated <span class="emoji">🔔</span></h1>
+        </div>
+        <div class="content">
+            <p>Hello {{ user_name }},</p>
+            <p>Your notification preferences have been successfully updated. Here is your current configuration:</p>
+            
+            <div class="pref-item">
+                <strong>Order Updates:</strong> {{ preferences.notify_orders|yesno:"Enabled,Disabled" }}
+            </div>
+            <div class="pref-item">
+                <strong>Promotions & Deals:</strong> {{ preferences.notify_promotions|yesno:"Enabled,Disabled" }}
+            </div>
+            <div class="pref-item">
+                <strong>New Arrivals:</strong> {{ preferences.notify_new_arrivals|yesno:"Enabled,Disabled" }}
+            </div>
+            <div class="pref-item">
+                <strong>Review Responses:</strong> {{ preferences.notify_reviews|yesno:"Enabled,Disabled" }}
+            </div>
+
+            <p>You can change these settings at any time from your profile page.</p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2026 G11 Fashion & Toys. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

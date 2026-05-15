@@ -46,6 +46,13 @@ class OffersAdmin(admin.ModelAdmin):
         }),
     )
 
+    def save_model(self, request, obj, form, change):
+        is_new = obj.pk is None
+        super().save_model(request, obj, form, change)
+        if is_new:
+            from .views import _notify_users_of_new_product
+            _notify_users_of_new_product(obj, product_type='offer', request=request)
+
 
 @admin.register(NewArrivals)
 class NewArrivalsAdmin(admin.ModelAdmin):
@@ -64,6 +71,13 @@ class NewArrivalsAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
+
+    def save_model(self, request, obj, form, change):
+        is_new = obj.pk is None
+        super().save_model(request, obj, form, change)
+        if is_new:
+            from .views import _notify_users_of_new_product
+            _notify_users_of_new_product(obj, product_type='arrival', request=request)
 
 
 class ProductVariantInline(admin.TabularInline):
@@ -94,6 +108,13 @@ class ClothsAdmin(admin.ModelAdmin):
         }),
     )
     inlines = [ProductVariantInline]
+
+    def save_model(self, request, obj, form, change):
+        is_new = obj.pk is None
+        super().save_model(request, obj, form, change)
+        if is_new:
+            from .views import _notify_users_of_new_product
+            _notify_users_of_new_product(obj, product_type='cloth', request=request)
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
@@ -163,6 +184,13 @@ class ToyAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
+
+    def save_model(self, request, obj, form, change):
+        is_new = obj.pk is None
+        super().save_model(request, obj, form, change)
+        if is_new:
+            from .views import _notify_users_of_new_product
+            _notify_users_of_new_product(obj, product_type='toy', request=request)
 
 
     
