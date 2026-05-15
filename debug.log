@@ -28438,3 +28438,33 @@ Traceback (most recent call last):
 django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\backgrounds\hero_toys.png” does not exist
 WARNING 2026-05-15 20:40:06,203 log 26172 13024 Not Found: /media/toys-hero.jpg
 WARNING 2026-05-15 20:40:06,218 log 26172 6624 Not Found: /media/backgrounds/hero_toys.png
+INFO 2026-05-15 21:09:43,818 autoreload 13576 7120 Watching for file changes with StatReloader
+WARNING 2026-05-15 21:09:59,201 log 31176 20300 Not Found: /favicon.ico
+INFO 2026-05-15 21:17:28,233 autoreload 13576 7120 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 21:17:28,467 autoreload 31176 30712 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 21:17:29,587 autoreload 13512 14636 Watching for file changes with StatReloader
+INFO 2026-05-15 21:17:30,410 autoreload 952 21064 Watching for file changes with StatReloader
+INFO 2026-05-15 21:17:43,378 autoreload 13512 14636 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 21:17:43,981 autoreload 952 21064 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 21:17:44,699 autoreload 9892 27356 Watching for file changes with StatReloader
+INFO 2026-05-15 21:17:45,650 autoreload 13336 4812 Watching for file changes with StatReloader
+INFO 2026-05-15 21:20:59,079 autoreload 13336 4812 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 21:20:59,441 autoreload 9892 27356 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 21:21:00,740 autoreload 3416 1152 Watching for file changes with StatReloader
+INFO 2026-05-15 21:21:00,781 autoreload 26748 11372 Watching for file changes with StatReloader
+INFO 2026-05-15 21:22:23,225 views 23416 7104 Notification preference update email sent to ndsf999@gmail.com
+INFO 2026-05-15 21:22:23,477 views 23416 29384 Welcome email sent successfully to ndsf999@gmail.com
+INFO 2026-05-15 21:22:23,483 views 23416 19368 New product notification sent to 1 users for Easy Shopping
+INFO 2026-05-15 21:22:25,038 views 23416 13848 Order confirmation email sent successfully for ORD-5BFFFF61
+INFO 2026-05-15 21:23:06,882 autoreload 3416 1152 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 21:23:06,969 autoreload 26748 11372 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 21:23:08,304 autoreload 18988 28392 Watching for file changes with StatReloader
+INFO 2026-05-15 21:23:08,794 autoreload 30500 11452 Watching for file changes with StatReloader
+INFO 2026-05-15 21:38:44,509 autoreload 18988 28392 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 21:38:44,926 autoreload 30500 11452 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
+INFO 2026-05-15 21:38:46,207 autoreload 19032 18868 Watching for file changes with StatReloader
+INFO 2026-05-15 21:38:47,220 autoreload 19256 25516 Watching for file changes with StatReloader
+INFO 2026-05-15 21:41:05,698 views 19032 10780 Order confirmation email sent successfully for ORD-0B5E8F5E
+INFO 2026-05-15 21:42:32,974 views 19032 17016 New product notification sent to 1 users for Wide Selection
+INFO 2026-05-15 21:43:19,423 views 19032 10124 Notification preference update email sent to nipunadeshanganewaththa@gmail.com
+INFO 2026-05-15 21:44:28,393 views 19032 2436 New product notification sent to 2 users for nipuna deshan

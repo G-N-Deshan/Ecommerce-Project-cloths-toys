@@ -1830,10 +1830,11 @@ def contact_us(request):
                     body,
                     django_settings.DEFAULT_FROM_EMAIL,
                     [admin_email],
-                    fail_silently=True,
+                    fail_silently=False,
                 )
+                logger.info(f"Contact notification email sent to admin for message from {contact_msg.email}")
             except Exception as e:
-                print(f"Error sending contact email: {e}")
+                logger.error(f"Error sending contact email for {contact_msg.email}: {e}")
 
             messages.success(request, 'Thank you! We received your message and will get back to you soon.')
             return redirect('contact_success')
@@ -2675,7 +2676,7 @@ def checkout(request):
             OrderTracking.objects.create(order=order, status='pending', note='Order placed successfully.')
             
             # Send order confirmation email
-            _send_order_confirmation_email(order)
+            _send_order_confirmation_email(order, request)
             
             # Award Loyalty Points
             try:
@@ -4520,122 +4521,144 @@ def stripe_webhook(request):
 def _send_order_confirmation_email(order, request=None):
     """Send a rich HTML order confirmation email in a background thread."""
     import threading
-    def send_email_thread():
+    from django.utils.html import strip_tags
+    
+    # 1. Pre-calculate data outside the thread to avoid LazyObject/DB connection issues
+    subject = f'KidZone Order Confirmed — {order.order_number}'
+    tracking_url = f"/order-tracking/{order.order_number}/"
+    if request:
+        tracking_url = request.build_absolute_uri(tracking_url)
+    
+    recipient_email = order.email
+    admin_email = getattr(django_settings, 'EMAIL_HOST_USER', None)
+    
+    # Pre-fetch items to avoid DB access in thread
+    items_list = list(order.items.all())
+    
+    context = {
+        'order': order,
+        'items': items_list,
+        'tracking_url': tracking_url,
+    }
+    
+    try:
+        html_message = render_to_string('emails/order_confirmation.html', context)
+        plain_message = strip_tags(html_message)
+    except Exception as e:
+        logger.error(f"Template rendering error for order {order.order_number}: {e}")
+        return
+
+    def send_email_thread(subj, plain, html, recipient, admin):
         try:
-            from django.utils.html import strip_tags
-            subject = f'KidZone Order Confirmed — {order.order_number}'
-            
-            tracking_url = f"/order-tracking/{order.order_number}/"
-            if request:
-                tracking_url = request.build_absolute_uri(tracking_url)
-            
-            context = {
-                'order': order,
-                'items': order.items.all(),
-                'tracking_url': tracking_url,
-            }
-            
-            html_message = render_to_string('emails/order_confirmation.html', context)
-            plain_message = strip_tags(html_message)
-            
-            # Send to both customer and admin
-            recipient_list = [order.email]
-            admin_email = getattr(django_settings, 'EMAIL_HOST_USER', None)
-            if admin_email and admin_email not in recipient_list:
-                recipient_list.append(admin_email)
+            recipient_list = [recipient]
+            if admin and admin not in recipient_list:
+                recipient_list.append(admin)
 
             send_mail(
-                subject=subject,
-                message=plain_message,
+                subject=subj,
+                message=plain,
                 from_email=django_settings.DEFAULT_FROM_EMAIL,
                 recipient_list=recipient_list,
-                fail_silently=True,
-                html_message=html_message
+                fail_silently=False,
+                html_message=html
             )
+            logger.info(f"Order confirmation email sent successfully for {order.order_number}")
         except Exception as e:
-            print(f"Background email error: {e}")
+            logger.error(f"Background order confirmation email error for {order.order_number}: {e}")
 
-    # Launch in a background thread to prevent blocking the checkout UI
-    threading.Thread(target=send_email_thread, daemon=True).start()
+    # Launch in a background thread
+    threading.Thread(
+        target=send_email_thread, 
+        args=(subject, plain_message, html_message, recipient_email, admin_email),
+        daemon=True
+    ).start()
 
 
 def _send_welcome_email(email, request=None):
     """Send a welcome email to new newsletter subscribers."""
     import threading
+    from django.utils.html import strip_tags
     
     site_url = "https://g11fashion.com"
     if request:
         site_url = request.build_absolute_uri('/')
         
-    def send_email_thread(target_email, url):
+    subject = 'Welcome to G11 Fashion & Toys ✨'
+    context = {'site_url': site_url}
+    
+    try:
+        html_message = render_to_string('emails/newsletter_welcome.html', context)
+        plain_message = strip_tags(html_message)
+    except Exception as e:
+        logger.error(f"Welcome email template error for {email}: {e}")
+        return
+
+    def send_email_thread(target_email, subj, plain, html):
         try:
-            from django.utils.html import strip_tags
-            subject = 'Welcome to G11 Fashion & Toys ✨'
-            
-            context = {
-                'site_url': url,
-            }
-            
-            html_message = render_to_string('emails/newsletter_welcome.html', context)
-            plain_message = strip_tags(html_message)
-            
             send_mail(
-                subject=subject,
-                message=plain_message,
+                subject=subj,
+                message=plain,
                 from_email=django_settings.EMAIL_HOST_USER,
                 recipient_list=[target_email],
                 fail_silently=False,
-                html_message=html_message
+                html_message=html
             )
             logger.info(f"Welcome email sent successfully to {target_email}")
         except Exception as e:
             logger.error(f"Welcome email error for {target_email}: {e}")
 
-    threading.Thread(target=send_email_thread, args=(email, site_url), daemon=True).start()
+    threading.Thread(
+        target=send_email_thread, 
+        args=(email, subject, plain_message, html_message), 
+        daemon=True
+    ).start()
 
 
 def _send_notification_pref_update_email(user, profile):
     """Notify user that their notification preferences were updated."""
     import threading
+    from django.utils.html import strip_tags
     
     # Extract data needed for email before entering thread
     user_email = user.email
     user_name = user.first_name or user.username
     
-    # Create a dict of preferences to avoid accessing profile in thread (LazyObject issues)
     prefs = {
         'notify_orders': profile.notify_orders,
         'notify_promotions': profile.notify_promotions,
         'notify_new_arrivals': profile.notify_new_arrivals,
         'notify_reviews': profile.notify_reviews,
     }
+    
+    subject = 'Your Notification Preferences Updated 🔔'
+    context = {'user_name': user_name, 'preferences': prefs}
+    
+    try:
+        html_message = render_to_string('emails/preferences_updated.html', context)
+        plain_message = strip_tags(html_message)
+    except Exception as e:
+        logger.error(f"Pref update template error for {user_email}: {e}")
+        return
 
-    def send_email_thread(email, name, preferences):
+    def send_email_thread(email, subj, plain, html):
         try:
-            from django.utils.html import strip_tags
-            subject = 'Your Notification Preferences Updated 🔔'
-            
-            context = {
-                'user_name': name,
-                'preferences': preferences,
-            }
-            
-            html_message = render_to_string('emails/preferences_updated.html', context)
-            plain_message = strip_tags(html_message)
-            
             send_mail(
-                subject=subject,
-                message=plain_message,
+                subject=subj,
+                message=plain,
                 from_email=django_settings.EMAIL_HOST_USER,
                 recipient_list=[email],
                 fail_silently=False,
-                html_message=html_message
+                html_message=html
             )
             logger.info(f"Notification preference update email sent to {email}")
         except Exception as e:
             logger.error(f"Preference update email error for {email}: {e}")
 
-    threading.Thread(target=send_email_thread, args=(user_email, user_name, prefs), daemon=True).start()
+    threading.Thread(
+        target=send_email_thread, 
+        args=(user_email, subject, plain_message, html_message), 
+        daemon=True
+    ).start()
 
 
 def _notify_users_of_new_product(product, product_type='cloth', request=None):
@@ -4645,29 +4668,25 @@ def _notify_users_of_new_product(product, product_type='cloth', request=None):
     """
     import threading
     from accounts.models import Profile
+    from django.utils.html import strip_tags
     
     # Map product category to simplified notification categories
     raw_cat = getattr(product, 'category', '').lower()
     mapping = {
-        'men': 'men',
-        'women': 'women',
-        'kids': 'kids',
-        'kids-men': 'kids',
-        'kids-girl': 'kids',
+        'men': 'men', 'women': 'women', 'kids': 'kids',
+        'kids-men': 'kids', 'kids-girl': 'kids',
     }
     
     cat_to_check = mapping.get(raw_cat, 'kids')
     if product_type == 'toy':
         cat_to_check = 'toys'
     
-    # Get all users who want to be notified and subscribed to this category
     profiles = Profile.objects.filter(
         notify_new_arrivals=True,
         notified_categories__icontains=cat_to_check
     ).select_related('user')
     
     recipient_emails = [p.user.email for p in profiles if p.user.email]
-    
     if not recipient_emails:
         return
 
@@ -4682,46 +4701,52 @@ def _notify_users_of_new_product(product, product_type='cloth', request=None):
         if request and not product_image_url.startswith('http'):
             product_image_url = request.build_absolute_uri(product_image_url)
     
-    product_url = "https://g11fashion.com" # Fallback
+    product_url = "https://g11fashion.com"
     if request:
-        # Construct URL based on product type
         url_path = f"/product/{product_type}/{product.id}/"
         product_url = request.build_absolute_uri(url_path)
 
-    def send_bulk_email_thread(emails, name, price, desc, img_url, url):
+    subject = f'✨ New Arrival: {product_name} is here!'
+    context = {
+        'product_name': product_name,
+        'product_price': product_price,
+        'product_description': product_desc,
+        'product_image_url': product_image_url,
+        'product_url': product_url,
+        'site_url': "https://g11fashion.com",
+    }
+    
+    try:
+        html_message = render_to_string('emails/new_product_alert.html', context)
+        plain_message = strip_tags(html_message)
+    except Exception as e:
+        logger.error(f"New product alert template error for {product_name}: {e}")
+        return
+
+    def send_bulk_email_thread(emails, subj, plain, html, name):
         try:
-            from django.utils.html import strip_tags
-            subject = f'✨ New Arrival: {name} is here!'
-            
-            context = {
-                'product_name': name,
-                'product_price': price,
-                'product_description': desc,
-                'product_image_url': img_url,
-                'product_url': url,
-                'site_url': "https://g11fashion.com",
-            }
-            
-            html_message = render_to_string('emails/new_product_alert.html', context)
-            plain_message = strip_tags(html_message)
-            
-            # Send in batches of 50 to avoid SMTP limits (simple implementation)
             batch_size = 50
+            total_sent = 0
             for i in range(0, len(emails), batch_size):
                 batch = emails[i:i + batch_size]
                 send_mail(
-                    subject=subject,
-                    message=plain_message,
+                    subject=subj,
+                    message=plain,
                     from_email=django_settings.EMAIL_HOST_USER,
                     recipient_list=batch,
                     fail_silently=False,
-                    html_message=html_message
+                    html_message=html
                 )
-            logger.info(f"New product notification sent to {len(emails)} users for {name}")
+                total_sent += len(batch)
+            logger.info(f"New product notification sent to {total_sent} users for {name}")
         except Exception as e:
             logger.error(f"New product notification error for {name}: {e}")
 
-    threading.Thread(target=send_bulk_email_thread, args=(recipient_emails, product_name, product_price, product_desc, product_image_url, product_url), daemon=True).start()
+    threading.Thread(
+        target=send_bulk_email_thread, 
+        args=(recipient_emails, subject, plain_message, html_message, product_name), 
+        daemon=True
+    ).start()
 
 
 # ══════════════════════════════════════════════════════
