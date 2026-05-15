@@ -1,11 +1,14 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kids Toys - Fun & Learning</title>
     <link rel="stylesheet" href="{% static 'navbar.css'%}">
@@ -15,13 +18,15 @@
     <link rel="stylesheet" href="{% static 'toys.css'%}">
     <link rel="stylesheet" href="{% static 'scroll-reveal.css'%}">
 </head>
+
 <body>
 
     {%include 'navbar.html'%}
 
     <section class="toys-hero relative overflow-hidden">
         <div class="toys-hero__overlay absolute inset-0 z-10 bg-black/40"></div>
-        <div class="absolute inset-0 z-0 hero-scroll-x" style="background-image: url('/media/backgrounds/hero_toys.png'); background-size: cover;"></div>
+        <div class="absolute inset-0 z-0 hero-scroll-x"
+            style="background-image: url('/media/backgrounds/hero_toys.png'); background-size: cover;"></div>
         <!-- 3D Floating Shapes -->
         <div class="hero-shapes" aria-hidden="true">
             <div class="shape shape--circle"></div>
@@ -54,7 +59,8 @@
                     <span class="filter-icon">🎯</span>
                     All Toys
                 </a>
-                <a href="?category=educational" class="filter-btn {% if selected_category == 'educational' %}active{% endif %}">
+                <a href="?category=educational"
+                    class="filter-btn {% if selected_category == 'educational' %}active{% endif %}">
                     <span class="filter-icon">📚</span>
                     Educational
                 </a>
@@ -62,11 +68,13 @@
                     <span class="filter-icon">⚽</span>
                     Outdoor
                 </a>
-                <a href="?category=creative" class="filter-btn {% if selected_category == 'creative' %}active{% endif %}">
+                <a href="?category=creative"
+                    class="filter-btn {% if selected_category == 'creative' %}active{% endif %}">
                     <span class="filter-icon">🎨</span>
                     Creative
                 </a>
-                <a href="?category=electronic" class="filter-btn {% if selected_category == 'electronic' %}active{% endif %}">
+                <a href="?category=electronic"
+                    class="filter-btn {% if selected_category == 'electronic' %}active{% endif %}">
                     <span class="filter-icon">🎮</span>
                     Electronic
                 </a>
@@ -74,7 +82,8 @@
                     <span class="filter-icon">🧸</span>
                     Plush
                 </a>
-                <a href="?category=building" class="filter-btn {% if selected_category == 'building' %}active{% endif %}">
+                <a href="?category=building"
+                    class="filter-btn {% if selected_category == 'building' %}active{% endif %}">
                     <span class="filter-icon">🧱</span>
                     Building
                 </a>
@@ -127,15 +136,11 @@
                         {% endif %}
                     </div>
                     {% if toy.is_purchasable %}
-                    <a
-                        href="javascript:void(0)"
-                        class="add-to-cart-btn"
-                        data-add-to-cart
-                        data-item-type="{{ toy.item_type }}"
-                        data-item-id="{{ toy.id }}"
-                    >Add to Cart</a>
+                    <a href="javascript:void(0)" class="add-to-cart-btn" data-add-to-cart
+                        data-item-type="{{ toy.item_type }}" data-item-id="{{ toy.id }}">Add to Cart</a>
                     {% else %}
-                    <a href="{{ toy.url }}" class="add-to-cart-btn" style="text-decoration:none; text-align:center;">View Product</a>
+                    <a href="{{ toy.url }}" class="add-to-cart-btn"
+                        style="text-decoration:none; text-align:center;">View Product</a>
                     {% endif %}
                 </div>
             </div>
@@ -143,61 +148,11 @@
         </div>
     </section>
 
-    {% include 'includes/promo_strip.html' with variant="green" %}
-
-    <!-- New Arrivals Section -->
-    <section class="new-arrivals-section" data-reveal="right">
-        <h2 class="section-title">🎁 New Arrivals</h2>
-        <p class="section-subtitle">Fresh toys just added to our collection</p>
-        <div class="toys-grid">
-            {% for toy in new_toys %}
-            <div class="toy-card">
-                {% if toy.obj.is_new %}
-                <span class="toy-badge new">✨ New</span>
-                {% endif %}
-                <div class="toy-image">
-                    <img src="{{ toy.imageUrl.url }}" alt="{{ toy.name }}" loading="lazy">
-                    <div class="toy-overlay">
-                        <a href="{{ toy.url }}" class="quick-view-btn">Quick View</a>
-                    </div>
-                </div>
-                <div class="toy-content">
-                    <span class="toy-category">{{ toy.get_category_display }}</span>
-                    <h3><a href="{{ toy.url }}" style="color:inherit;text-decoration:none">{{ toy.name }}</a></h3>
-                    <div class="toy-rating">
-                        {% with item_rating=toy.avg_rating item_review_count=toy.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
-                    </div>
-                    {% if toy.obj.age_range %}
-                    <p class="toy-age">Age: {{ toy.obj.get_age_range_display }}</p>
-                    {% endif %}
-                    <div class="price-container">
-                        <span class="price-current">Rs {{ toy.price2|default:toy.price }}</span>
-                        {% if toy.price1 %}
-                        <span class="price-old">Rs {{ toy.price1 }}</span>
-                        <span class="discount-badge">{{ toy.discount_text }}</span>
-                        {% endif %}
-                    </div>
-                    {% if toy.is_purchasable %}
-                    <a
-                        href="javascript:void(0)"
-                        class="add-to-cart-btn"
-                        data-add-to-cart
-                        data-item-type="{{ toy.item_type }}"
-                        data-item-id="{{ toy.id }}"
-                    >Add to Cart</a>
-                    {% else %}
-                    <a href="{{ toy.url }}" class="add-to-cart-btn" style="text-decoration:none; text-align:center;">View Product</a>
-                    {% endif %}
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </section>
 
     <!-- All Toys Section -->
     <section class="all-toys-section" id="all-toys" data-reveal="up">
         <h2 class="section-title">🎪 All Toys</h2>
-        <p class="section-subtitle">{{ toys.count }} amazing toys to choose from</p>
+        <p class="section-subtitle">{{ toys.paginator.count }} amazing toys to choose from</p>
         <div class="toys-grid">
             {% for toy in toys %}
             {% with is_in_stock=toy.inventory.stock|default:0 %}
@@ -207,53 +162,52 @@
                 {% elif toy.obj.is_new %}
                 <span class="toy-badge new">✨ New</span>
                 {% elif toy.is_purchasable and is_in_stock == 1 %}
-                <span class="toy-badge low-stock last-one\">Last 1!</span>
-                {% elif toy.is_purchasable and is_in_stock <= 3 %}
-                <span class="toy-badge low-stock\">Only {{ is_in_stock }} left!</span>
-                {% elif toy.is_purchasable and is_in_stock <= 5 %}
-                <span class="toy-badge low-stock limited\">Low Stock</span>
+                <span class="toy-badge low-stock last-one">Last 1!</span>
+                {% elif toy.is_purchasable and is_in_stock <= 3 %} 
+                <span class="toy-badge low-stock">Only {{ is_in_stock }} left!</span>
+                {% elif toy.is_purchasable and is_in_stock <= 5 %} 
+                <span class="toy-badge low-stock limited">Low Stock</span>
                 {% endif %}
-                <div class="toy-image">
-                    <img src="{{ toy.imageUrl.url }}" alt="{{ toy.name }}" loading="lazy">
-                    {% if toy.is_purchasable and is_in_stock == 0 %}
-                    <div class="toy-stock-overlay">Out of Stock</div>
-                    {% endif %}
-                    <div class="toy-overlay {% if toy.is_purchasable and is_in_stock == 0 %}toy-overlay--visible{% endif %}">
-                        <a href="{{ toy.url }}" class="quick-view-btn">Quick View</a>
-                    </div>
-                </div>
-                <div class="toy-content">
-                    <span class="toy-category">{{ toy.get_category_display }}</span>
-                    <h3><a href="{{ toy.url }}" style="color:inherit;text-decoration:none">{{ toy.name }}</a></h3>
-                    <div class="toy-rating">
-                        {% with item_rating=toy.avg_rating item_review_count=toy.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
-                    </div>
-                    {% if toy.obj.age_range %}
-                    <p class="toy-age">Age: {{ toy.obj.get_age_range_display }}</p>
-                    {% endif %}
-                    <div class="price-container">
-                        <span class="price-current">Rs {{ toy.price2|default:toy.price }}</span>
-                        {% if toy.price1 %}
-                        <span class="price-old">Rs {{ toy.price1 }}</span>
-                        <span class="discount-badge">{{ toy.discount_text }}</span>
-                        {% endif %}
-                    </div>
-                    {% if toy.is_purchasable %}
-                        {% if is_in_stock > 0 %}
-                        <a
-                            href="javascript:void(0)"
-                            class="add-to-cart-btn"
-                            data-add-to-cart
-                            data-item-type="{{ toy.item_type }}"
-                            data-item-id="{{ toy.id }}"
-                        >Add to Cart</a>
-                        {% else %}
-                        <button class="add-to-cart-btn btn-disabled-toy" disabled title="Item is out of stock">Out of Stock</button>
-                        {% endif %}
-                    {% else %}
-                        <a href="{{ toy.url }}" class="add-to-cart-btn" style="text-decoration:none; text-align:center;">View Product</a>
-                    {% endif %}
-                </div>
+                        <div class="toy-image">
+                            <img src="{{ toy.imageUrl.url }}" alt="{{ toy.name }}" loading="lazy">
+                            {% if toy.is_purchasable and is_in_stock == 0 %}
+                            <div class="toy-stock-overlay">Out of Stock</div>
+                            {% endif %}
+                            <div
+                                class="toy-overlay {% if toy.is_purchasable and is_in_stock == 0 %}toy-overlay--visible{% endif %}">
+                                <a href="{{ toy.url }}" class="quick-view-btn">Quick View</a>
+                            </div>
+                        </div>
+                        <div class="toy-content">
+                            <span class="toy-category">{{ toy.get_category_display }}</span>
+                            <h3><a href="{{ toy.url }}" style="color:inherit;text-decoration:none">{{ toy.name }}</a>
+                            </h3>
+                            <div class="toy-rating">
+                                {% with item_rating=toy.avg_rating item_review_count=toy.review_count %}{% include 'includes/star_rating.html' %}{% endwith %}
+                            </div>
+                            {% if toy.obj.age_range %}
+                            <p class="toy-age">Age: {{ toy.obj.get_age_range_display }}</p>
+                            {% endif %}
+                            <div class="price-container">
+                                <span class="price-current">Rs {{ toy.price2|default:toy.price }}</span>
+                                {% if toy.price1 %}
+                                <span class="price-old">Rs {{ toy.price1 }}</span>
+                                <span class="discount-badge">{{ toy.discount_text }}</span>
+                                {% endif %}
+                            </div>
+                            {% if toy.is_purchasable %}
+                            {% if is_in_stock > 0 %}
+                            <a href="javascript:void(0)" class="add-to-cart-btn" data-add-to-cart
+                                data-item-type="{{ toy.item_type }}" data-item-id="{{ toy.id }}">Add to Cart</a>
+                            {% else %}
+                            <button class="add-to-cart-btn btn-disabled-toy" disabled title="Item is out of stock">Out
+                                of Stock</button>
+                            {% endif %}
+                            {% else %}
+                            <a href="{{ toy.url }}" class="add-to-cart-btn"
+                                style="text-decoration:none; text-align:center;">View Product</a>
+                            {% endif %}
+                        </div>
             </div>
             {% endwith %}
             {% empty %}
@@ -302,4 +256,5 @@
     <script src="{% static 'global.js' %}"></script>
     <script src="{%static 'scroll-reveal.js'%}"></script>
 </body>
+
 </html>

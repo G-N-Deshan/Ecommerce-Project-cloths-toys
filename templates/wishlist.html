@@ -78,6 +78,11 @@
                 New Arrivals <span class="tab-badge">{{ arrival_count }}</span>
             </button>
             {% endif %}
+            {% if trending_count > 0 %}
+            <button class="wishlist-tab" data-tab="trending" role="tab" aria-selected="false">
+                Trending <span class="tab-badge">{{ trending_count }}</span>
+            </button>
+            {% endif %}
         </div>
 
         <!-- Content Section -->
@@ -100,7 +105,7 @@
                     {% for item in wishlist_items %}
                     <article class="wishlist-card" data-type="{{ item.item_type }}">
                         <div class="wishlist-card-media">
-                            <img src="{{ item.get_item.imageUrl.url }}" alt="{{ item.get_product_name }}" loading="lazy">
+                            <img src="{{ item.get_image_url }}" alt="{{ item.get_product_name }}" loading="lazy">
                             <span class="type-chip">{{ item.get_item_type_display }}</span>
                         </div>
 
@@ -143,7 +148,7 @@
                     {% for item in cloth_items %}
                     <article class="wishlist-card" data-type="cloth">
                         <div class="wishlist-card-media">
-                            <img src="{{ item.cloth.imageUrl.url }}" alt="{{ item.cloth.name }}" loading="lazy">
+                            <img src="{{ item.get_image_url }}" alt="{{ item.cloth.name }}" loading="lazy">
                             <span class="type-chip">Cloth</span>
                         </div>
 
@@ -182,16 +187,133 @@
                     {% for item in toy_items %}
                     <article class="wishlist-card" data-type="toy">
                         <div class="wishlist-card-media">
-                            <img src="{{ item.toy.imageUrl.url }}" alt="{{ item.toy.name }}" loading="lazy">
+                            <img src="{{ item.get_image_url }}" alt="{{ item.get_product_name }}" loading="lazy">
                             <span class="type-chip">Toy</span>
                         </div>
 
                         <div class="wishlist-card-body">
-                            <h3 class="wishlist-card-title">{{ item.toy.name }}</h3>
+                            <h3 class="wishlist-card-title">{{ item.get_product_name }}</h3>
 
                             <div class="wishlist-card-meta">
                                 <span class="category">{{ item.toy.get_category_display }}</span>
                                 <span class="wishlist-card-price">Rs {{ item.toy.price }}</span>
+                            </div>
+
+                            <div class="wishlist-card-actions">
+                                <form method="POST" action="{% url 'move_to_cart' item.id %}" style="flex: 1;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-sm primary"
+                                        style="width: 100%; cursor: pointer;">🛒 Move to Cart</button>
+                                </form>
+
+                                <form method="POST" action="{% url 'remove_from_wishlist' item.id %}" style="flex: 1;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-sm danger" style="width: 100%; cursor: pointer;"
+                                        onclick="return confirm('Remove from wishlist?')">✕ Remove</button>
+                                </form>
+                            </div>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Offers Section -->
+            {% if offer_count > 0 %}
+            <div id="tab-offer" class="wishlist-tab-pane" style="display: none;">
+                <div class="wishlist-grid">
+                    {% for item in offer_items %}
+                    <article class="wishlist-card" data-type="offer">
+                        <div class="wishlist-card-media">
+                            <img src="{{ item.get_image_url }}" alt="{{ item.get_product_name }}" loading="lazy">
+                            <span class="type-chip">Offer</span>
+                        </div>
+
+                        <div class="wishlist-card-body">
+                            <h3 class="wishlist-card-title">{{ item.get_product_name }}</h3>
+
+                            <div class="wishlist-card-meta">
+                                <span class="category">{{ item.get_category }}</span>
+                                <span class="wishlist-card-price">Rs {{ item.get_price }}</span>
+                            </div>
+
+                            <div class="wishlist-card-actions">
+                                <form method="POST" action="{% url 'move_to_cart' item.id %}" style="flex: 1;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-sm primary"
+                                        style="width: 100%; cursor: pointer;">🛒 Move to Cart</button>
+                                </form>
+
+                                <form method="POST" action="{% url 'remove_from_wishlist' item.id %}" style="flex: 1;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-sm danger" style="width: 100%; cursor: pointer;"
+                                        onclick="return confirm('Remove from wishlist?')">✕ Remove</button>
+                                </form>
+                            </div>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Arrivals Section -->
+            {% if arrival_count > 0 %}
+            <div id="tab-arrival" class="wishlist-tab-pane" style="display: none;">
+                <div class="wishlist-grid">
+                    {% for item in arrival_items %}
+                    <article class="wishlist-card" data-type="arrival">
+                        <div class="wishlist-card-media">
+                            <img src="{{ item.get_image_url }}" alt="{{ item.get_product_name }}" loading="lazy">
+                            <span class="type-chip">New Arrival</span>
+                        </div>
+
+                        <div class="wishlist-card-body">
+                            <h3 class="wishlist-card-title">{{ item.get_product_name }}</h3>
+
+                            <div class="wishlist-card-meta">
+                                <span class="category">{{ item.get_category }}</span>
+                                <span class="wishlist-card-price">Rs {{ item.get_price }}</span>
+                            </div>
+
+                            <div class="wishlist-card-actions">
+                                <form method="POST" action="{% url 'move_to_cart' item.id %}" style="flex: 1;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-sm primary"
+                                        style="width: 100%; cursor: pointer;">🛒 Move to Cart</button>
+                                </form>
+
+                                <form method="POST" action="{% url 'remove_from_wishlist' item.id %}" style="flex: 1;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-sm danger" style="width: 100%; cursor: pointer;"
+                                        onclick="return confirm('Remove from wishlist?')">✕ Remove</button>
+                                </form>
+                            </div>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Trending Section -->
+            {% if trending_count > 0 %}
+            <div id="tab-trending" class="wishlist-tab-pane" style="display: none;">
+                <div class="wishlist-grid">
+                    {% for item in trending_items %}
+                    <article class="wishlist-card" data-type="trending">
+                        <div class="wishlist-card-media">
+                            <img src="{{ item.get_image_url }}" alt="{{ item.get_product_name }}" loading="lazy">
+                            <span class="type-chip">Trending</span>
+                        </div>
+
+                        <div class="wishlist-card-body">
+                            <h3 class="wishlist-card-title">{{ item.get_product_name }}</h3>
+
+                            <div class="wishlist-card-meta">
+                                <span class="category">{{ item.get_category }}</span>
+                                <span class="wishlist-card-price">Rs {{ item.get_price }}</span>
                             </div>
 
                             <div class="wishlist-card-actions">

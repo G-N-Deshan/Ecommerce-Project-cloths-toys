@@ -320,6 +320,17 @@ class WishlistItem(models.Model):
         if not item: return "Unknown Product"
         return getattr(item, 'name', None) or getattr(item, 'title', 'Unnamed Product')
     
+    def get_image_url(self):
+        item = self.get_item()
+        if not item: return ""
+        
+        # TrendingProduct uses 'image', others use 'imageUrl'
+        if hasattr(item, 'image') and item.image:
+            return item.image.url
+        if hasattr(item, 'imageUrl') and item.imageUrl:
+            return item.imageUrl.url
+        return ""
+
     def get_price(self):
         item = self.get_item()
         if not item: return "0.00"

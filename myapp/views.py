@@ -1869,33 +1869,20 @@ def toys_page(request):
     items = [UnifiedItem(t, 'toy') for t in toy_qs.order_by('-id')]
     items += [UnifiedItem(tr, 'trending') for tr in trending_qs.order_by('-id')]
     
-    # Apply stock-based sorting
     items = sort_items_by_stock(items)
-    
-    # Get featured toys
     featured_toy_qs = Toy.objects.filter(is_bestseller=True).annotate(avg_rating=Avg('product_reviews__rating'), review_count=Count('product_reviews'))[:4]
     featured_toys = [UnifiedItem(t, 'toy') for t in featured_toy_qs]
     featured_toys = sort_items_by_stock(featured_toys)
-    
-    new_toy_qs = Toy.objects.filter(is_new=True).annotate(avg_rating=Avg('product_reviews__rating'), review_count=Count('product_reviews'))[:4]
-    new_toys = [UnifiedItem(t, 'toy') for t in new_toy_qs]
-    new_toys = sort_items_by_stock(new_toys)
-    
-    # Pagination
     paginator = Paginator(items, 12)
     page_obj = paginator.get_page(request.GET.get('page'))
-
     context = {
         'toys': page_obj,
         'featured_toys': featured_toys,
-        'new_toys': new_toys,
         'selected_category': category,
         'selected_age': age_range,
         'is_paginated': paginator.num_pages > 1,
     }
-    
     return render(request, 'toys.html', context)
-
 
 # Cart views
 def cart_page(request):

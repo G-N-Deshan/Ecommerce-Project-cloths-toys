@@ -437,6 +437,13 @@
                             </a>
                             <span
                                 class="absolute top-4 left-4 z-10 px-3 py-1 bg-indigo-600 text-white text-[11px] font-bold rounded-full shadow-lg">{{ t_prod.badge }}</span>
+                            
+                            <!-- Wishlist Heart Button -->
+                            <button onclick="window.location.href='{% url 'add_to_wishlist' 'trending' t_prod.id %}'"
+                                class="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full text-slate-400 hover:text-pink-500 hover:bg-pink-50 shadow-md transition-all active:scale-90"
+                                title="Add to Wishlist">
+                                <i class="bi bi-heart-fill"></i>
+                            </button>
                             <div
                                 class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
                                 <a href="{{ t_prod.resolved_link_url }}"
