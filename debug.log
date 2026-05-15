@@ -27907,3 +27907,12 @@ INFO 2026-05-15 07:15:37,130 autoreload 22212 29064 C:\Users\nipun\Desktop\Ecomm
 INFO 2026-05-15 07:15:37,620 autoreload 26592 26760 C:\Users\nipun\Desktop\Ecommerce project\myapp\views.py changed, reloading.
 INFO 2026-05-15 07:15:38,219 autoreload 27620 15476 Watching for file changes with StatReloader
 INFO 2026-05-15 07:15:39,035 autoreload 24056 18860 Watching for file changes with StatReloader
+WARNING 2026-05-15 07:22:55,111 log 27620 13768 Not Found: /favicon.ico
+ERROR 2026-05-15 07:22:56,353 middleware 27620 20952 Exception: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+Traceback (most recent call last):
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\nipun\Envs\myapp\Lib\site-packages\django\views\static.py", line 51, in serve
+    raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+django.http.response.Http404: “C:\Users\nipun\Desktop\Ecommerce project\media\about-hero.jpg” does not exist
+WARNING 2026-05-15 07:22:56,398 log 27620 20952 Not Found: /media/about-hero.jpg
